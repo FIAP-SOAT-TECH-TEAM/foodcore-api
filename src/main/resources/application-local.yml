@@ -1,0 +1,70 @@
+# Configurações do servidor
+server:
+  port: 8083
+
+# Configurações do Spring
+spring:
+  # Configuração do JPA para desenvolvimento
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  # Configuração de datasource (funciona com variáveis de ambiente e fallback para desenvolvimento local)
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/fastfood}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  # Liquibase para migrações de banco de dados
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    contexts: local
+  # Configuração para upload de arquivos
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+  # Configurações do Swagger/OpenAPI
+  springdoc:
+    api-docs:
+      path: /api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      enabled: true
+    show-actuator: true
+  # Excluir configurações problemáticas para o Spring Modulith
+  autoconfigure:
+    exclude:
+      - org.springframework.modulith.events.jdbc.JdbcEventPublicationAutoConfiguration
+  data:
+    # Redis para cache
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      timeout: 2000
+
+# Configurações de log para desenvolvimento
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.fastfood: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Configuração de CDN
+app:
+  cdn:
+    root-path: ${APP_CDN_ROOT_PATH:/app/cdn}
+    public-url: ${APP_CDN_PUBLIC_URL:http://localhost:8082}
+
+# Habilitar todos endpoints do actuator em local
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" 

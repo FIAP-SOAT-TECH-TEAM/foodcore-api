@@ -1,0 +1,55 @@
+spring:
+  # Configuração do JPA para produção
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  # Usar apenas o contexto de produção
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    contexts: prod
+
+  # Limitar endpoints do actuator em produção
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics
+    endpoint:
+      health:
+        show-details: when_authorized
+  data:
+    # Redis para cache
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
+      password: ${SPRING_REDIS_PASSWORD:}
+      timeout: 10000
+
+# Configurações do servidor
+server:
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 20
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain
+    min-response-size: 2048
+
+# Configurações da aplicação
+app:
+  # Configurações do CDN para produção
+  cdn:
+    root-path: ${APP_CDN_ROOT_PATH:/app/cdn}
+    public-url: ${APP_CDN_PUBLIC_URL}
+
+# Configurações de log para produção
+logging:
+  level:
+    root: WARN
+    com.fastfood: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN

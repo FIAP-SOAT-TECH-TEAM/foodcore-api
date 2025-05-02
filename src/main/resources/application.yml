@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: food-core-api
+  # Perfil padrão (development)
+  profiles:
+    active: local
+  # Configurações de banco de dados
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fastfood
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  # JPA / Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    show-sql: false
+  # Liquibase
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    contexts: prod  # Contexto padrão é prod (será sobrescrito em local)
+  # Redis para cache e mensageria
+  springdoc:
+    api-docs:
+      path: /api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      enabled: true
+  data:
+    # Configuração do Redis
+    redis:
+      host: localhost
+      timeout: 2000
+      port: 6379
+
+# Configurações de logging
+logging:
+  level:
+    root: INFO
+    com.fastfood: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+
+server:
+  port: 8083
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+
+app:
+  cdn:
+    root-path: ./docker/cdn/public
+    public-url: http://localhost:8082 
