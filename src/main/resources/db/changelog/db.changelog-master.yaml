@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - preConditions:
+    - runningAs:
+        username: postgres
+
+  # Shared types
+  - include:
+      file: db/changelog/shared/00-init-schema.sql
+      
+  # Spring Modulith
+  - include:
+      file: db/changelog/shared/01-modulith-tables.sql
+
+  # Product Module
+  - include:
+      file: db/changelog/modules/product/01-product-tables.sql
+  - include:
+      file: db/changelog/modules/product/02-product-indexes.sql
+
+  # Customer Module  
+  - include:
+      file: db/changelog/modules/customer/01-customer-tables.sql
+  - include:
+      file: db/changelog/modules/customer/02-customer-indexes.sql
+
+  # Order Module
+  - include:
+      file: db/changelog/modules/order/01-order-tables.sql
+  - include:
+      file: db/changelog/modules/order/02-order-indexes.sql
+
+  # Payment Module
+  - include:
+      file: db/changelog/modules/payment/01-payment-tables.sql
+  - include:
+      file: db/changelog/modules/payment/02-payment-indexes.sql
+
+  # Seed Data
+  - include:
+      file: db/changelog/modules/product/03-product-seed.sql
+  - include:
+      file: db/changelog/modules/customer/03-customer-seed.sql
+  - include:
+      file: db/changelog/modules/order/03-order-seed.sql
+  - include:
+      file: db/changelog/modules/payment/03-payment-seed.sql 
