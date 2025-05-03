@@ -25,9 +25,9 @@ spring:
     # Redis para cache
     redis:
       host: ${SPRING_REDIS_HOST}
-      port: ${SPRING_REDIS_PORT}
+      port: ${SPRING_REDIS_PORT:6379}
       password: ${SPRING_REDIS_PASSWORD:}
-      timeout: 10000
+      timeout: 2000
 
 # Configurações do servidor
 server:
@@ -38,6 +38,7 @@ server:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/plain
     min-response-size: 2048
+  port: ${SERVER_PORT:8080}
 
 # Configurações da aplicação
 app:
@@ -45,6 +46,7 @@ app:
   cdn:
     root-path: ${APP_CDN_ROOT_PATH:/app/cdn}
     public-url: ${APP_CDN_PUBLIC_URL}
+    base-url: ${CDN_BASE_URL}
 
 # Configurações de log para produção
 logging:
@@ -53,3 +55,5 @@ logging:
     com.fastfood: INFO
     org.springframework.web: WARN
     org.hibernate: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN

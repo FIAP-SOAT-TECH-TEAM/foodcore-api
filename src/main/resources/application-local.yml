@@ -1,70 +1,68 @@
-# Configurações do servidor
-server:
-  port: 8083
-
 # Configurações do Spring
 spring:
   # Configuração do JPA para desenvolvimento
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-  # Configuração de datasource (funciona com variáveis de ambiente e fallback para desenvolvimento local)
+  # Configuração de datasource
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/fastfood}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  # Liquibase para migrações de banco de dados
+  # Liquibase
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    contexts: local
-  # Configuração para upload de arquivos
+    contexts: local,test,prod
+  # Upload de arquivos
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 15MB
-  # Configurações do Swagger/OpenAPI
+  # Swagger/OpenAPI
   springdoc:
     api-docs:
-      path: /api-docs
-    swagger-ui:
-      path: /swagger-ui.html
       enabled: true
-    show-actuator: true
-  # Excluir configurações problemáticas para o Spring Modulith
+  # Spring Modulith
   autoconfigure:
     exclude:
       - org.springframework.modulith.events.jdbc.JdbcEventPublicationAutoConfiguration
+  # Redis
   data:
-    # Redis para cache
     redis:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
       timeout: 2000
+  # Cache
+  cache:
+    type: simple
 
-# Configurações de log para desenvolvimento
+# Logging
 logging:
   level:
     root: INFO
     org.springframework: INFO
-    com.fastfood: DEBUG
+    com.soat.fiap.food.core.api: DEBUG
+    com.soat.fiap.food.core.api.product: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: INFO
+    org.springdoc: DEBUG
 
-# Configuração de CDN
+# CDN
 app:
   cdn:
-    root-path: ${APP_CDN_ROOT_PATH:/app/cdn}
-    public-url: ${APP_CDN_PUBLIC_URL:http://localhost:8082}
+    base-url: ${APP_CDN_BASE_URL:http://localhost:8082}
+    storage-directory: ${APP_CDN_STORAGE_DIRECTORY:${user.home}/cdn-storage}
 
-# Habilitar todos endpoints do actuator em local
+# Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: "*" 
+        include: "*"
