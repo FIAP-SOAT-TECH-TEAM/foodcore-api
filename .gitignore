@@ -35,14 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
-/docs/0-modulith.md
-/docs/1-requisitos-e-historias.md
-/docs/2-arquitetura-ddd.md
-/docs/3-estrutura-projeto.md
-/docs/4-apis-e-integracao.md
-/docs/5-deployment-e-infraestrutura.md
-/docs/6-spike-cdn-fake.md
-/docs/README.md
-/docs/SOAT Tech Challenge Fast Food - FASE 1.md
-/docs/SOAT Tech Challenge Fast Food - FASE 1.pdf
-/docs/todo.md
+/docs/
+/logs/food-core-api.log
