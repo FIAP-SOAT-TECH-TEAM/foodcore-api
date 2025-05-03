@@ -14,30 +14,39 @@ databaseChangeLog:
   # Product Module
   - include:
       file: db/changelog/modules/product/01-product-tables.sql
+      relativeToChangelogFile: false
   - include:
       file: db/changelog/modules/product/02-product-indexes.sql
+      relativeToChangelogFile: false
 
   # Customer Module  
   - include:
       file: db/changelog/modules/customer/01-customer-tables.sql
+      relativeToChangelogFile: false
   - include:
       file: db/changelog/modules/customer/02-customer-indexes.sql
+      relativeToChangelogFile: false
 
   # Order Module
   - include:
       file: db/changelog/modules/order/01-order-tables.sql
+      relativeToChangelogFile: false
   - include:
       file: db/changelog/modules/order/02-order-indexes.sql
+      relativeToChangelogFile: false
 
   # Payment Module
   - include:
       file: db/changelog/modules/payment/01-payment-tables.sql
+      relativeToChangelogFile: false
   - include:
       file: db/changelog/modules/payment/02-payment-indexes.sql
+      relativeToChangelogFile: false
 
   # Seed Data
   - include:
       file: db/changelog/modules/product/03-product-seed.sql
+      relativeToChangelogFile: false
   - include:
       file: db/changelog/modules/customer/03-customer-seed.sql
   - include:
