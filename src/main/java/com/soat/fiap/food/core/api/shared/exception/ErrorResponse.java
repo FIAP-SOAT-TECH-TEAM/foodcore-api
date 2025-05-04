@@ -1,20 +1,17 @@
 package com.soat.fiap.food.core.api.shared.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 /**
- * Classe que representa uma resposta de erro
+ * Resposta de erro padrão
  */
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class ErrorResponse {
-    private LocalDateTime timestamp;
-    private int status;
-    private String message;
-    private String path;
+    private final LocalDateTime timestamp;
+    private final int status;
+    private final String message;
+    private final String path;
 } 
