@@ -2,10 +2,14 @@ package com.soat.fiap.food.core.api.product.application.services;
 
 import com.soat.fiap.food.core.api.product.application.ports.in.CategoryUseCase;
 import com.soat.fiap.food.core.api.product.application.ports.out.CategoryRepository;
+import com.soat.fiap.food.core.api.product.application.ports.out.ProductRepository;
 import com.soat.fiap.food.core.api.product.domain.model.Category;
+import com.soat.fiap.food.core.api.product.domain.model.Product;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.product.mapper.CategoryDtoMapper;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
 import org.springframework.stereotype.Service;
@@ -22,15 +26,18 @@ import java.util.Optional;
 public class CategoryService implements CategoryUseCase {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final CategoryDtoMapper categoryDtoMapper;
     private final ImageStorageService imageStorageService;
     private final CustomLogger logger;
 
     public CategoryService(
             CategoryRepository categoryRepository,
+            ProductRepository productRepository,
             CategoryDtoMapper categoryDtoMapper,
             ImageStorageService imageStorageService) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
         this.categoryDtoMapper = categoryDtoMapper;
         this.imageStorageService = imageStorageService;
         this.logger = CustomLogger.getLogger(getClass());
@@ -42,24 +49,25 @@ public class CategoryService implements CategoryUseCase {
         logger.debug("Criando categoria: {}", category.getName());
         category.activate();
         Category savedCategory = categoryRepository.save(category);
-        logger.debug("Categoria criada com sucesso: {}", savedCategory.getId());
+        logger.debug("Categoria criada com sucesso. ID: {}", savedCategory.getId());
         return savedCategory;
     }
 
     @Override
     @Transactional
     public Category updateCategory(Long id, Category category) {
-        logger.debug("Atualizando categoria com ID {}: {}", id, category.getName());
-        Optional<Category> existingCategory = categoryRepository.findById(id);
+        logger.debug("Atualizando categoria ID {}: {}", id, category.getName());
         
+        Optional<Category> existingCategory = categoryRepository.findById(id);
         if (existingCategory.isEmpty()) {
             logger.warn("Categoria não encontrada com ID: {}", id);
-            throw new RuntimeException("Categoria não encontrada com ID: " + id);
+            throw new ResourceNotFoundException("Categoria", "id", id);
         }
         
         category.setId(id);
         Category updatedCategory = categoryRepository.save(category);
-        logger.debug("Categoria atualizada com sucesso: {}", updatedCategory.getId());
+        logger.debug("Categoria atualizada com sucesso. ID: {}", updatedCategory.getId());
+        
         return updatedCategory;
     }
 
@@ -89,6 +97,23 @@ public class CategoryService implements CategoryUseCase {
     @Transactional
     public void deleteCategory(Long id) {
         logger.debug("Removendo categoria com ID: {}", id);
+        
+        Optional<Category> categoryOpt = categoryRepository.findById(id);
+        if (categoryOpt.isEmpty()) {
+            logger.warn("Tentativa de excluir categoria inexistente. ID: {}", id);
+            throw new ResourceNotFoundException("Categoria", "id", id);
+        }
+        
+        List<Product> productsInCategory = productRepository.findByCategory(id);
+        if (!productsInCategory.isEmpty()) {
+            logger.warn("Não é possível excluir categoria ID {} porque existem {} produtos associados", 
+                id, productsInCategory.size());
+            throw new BusinessException(
+                "Não é possível excluir esta categoria porque existem produtos associados a ela. " +
+                "Remova ou reclassifique os produtos antes de excluir a categoria."
+            );
+        }
+        
         categoryRepository.delete(id);
         logger.debug("Categoria removida com sucesso, ID: {}", id);
     }
@@ -120,7 +145,7 @@ public class CategoryService implements CategoryUseCase {
     public Category createCategoryFromRequest(CategoryRequest request) {
         logger.debug("Convertendo request para categoria: {}", request.getName());
         Category category = categoryDtoMapper.toDomain(request);
-        logger.debug("Categoria convertida: {}", category.getName());
+        logger.debug("Categoria convertida, criando no banco");
         return createCategory(category);
     }
     

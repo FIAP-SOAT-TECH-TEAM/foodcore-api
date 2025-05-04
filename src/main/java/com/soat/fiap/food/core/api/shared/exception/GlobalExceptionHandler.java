@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.shared.exception;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -99,5 +100,74 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+    
+    /**
+     * Trata erros de regra de negócio
+     */
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(
+            BusinessException ex, HttpServletRequest request) {
+        
+        logger.error("Erro de regra de negócio: {}", ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
+    /**
+     * Trata erros de conflito de recursos (ex: CPF duplicado)
+     */
+    @ExceptionHandler(ResourceConflictException.class)
+    public ResponseEntity<ErrorResponse> handleResourceConflictException(
+            ResourceConflictException ex, HttpServletRequest request) {
+        
+        logger.error("Conflito de recurso: {}", ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+    
+    /**
+     * Trata erros de integridade de dados (ex: violação de chave estrangeira)
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, HttpServletRequest request) {
+        
+        logger.error("Erro de integridade de dados: {}", ex.getMessage());
+        
+        String mensagem = ex.getMessage();
+        
+        if (mensagem != null && mensagem.contains("products_category_id_fkey")) {
+            mensagem = "Não é possível excluir esta categoria porque existem produtos associados a ela";
+        }
+        else if (mensagem != null && mensagem.contains("customers_document_key")) {
+            mensagem = "Já existe um cliente cadastrado com este documento/CPF";
+        }
+        else {
+            mensagem = "Operação não permitida: viola regras de integridade de dados";
+        }
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                mensagem,
+                request.getRequestURI()
+        );
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 } 
