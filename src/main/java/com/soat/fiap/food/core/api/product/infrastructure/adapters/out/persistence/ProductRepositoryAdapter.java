@@ -7,6 +7,8 @@ import com.soat.fiap.food.core.api.product.infrastructure.adapters.out.persisten
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.out.persistence.repository.SpringDataCategoryRepository;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.out.persistence.repository.SpringDataProductRepository;
 import org.springframework.stereotype.Component;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
     private final SpringDataProductRepository springDataProductRepository;
     private final SpringDataCategoryRepository springDataCategoryRepository;
     private final ProductEntityMapper productEntityMapper;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public ProductRepositoryAdapter(
             SpringDataProductRepository springDataProductRepository,
@@ -39,8 +44,18 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Optional<Product> findById(Long id) {
-        return springDataProductRepository.findById(id)
-                .map(productEntityMapper::toDomain);
+        var query = entityManager.createQuery(
+            "SELECT p FROM ProductEntity p JOIN FETCH p.category WHERE p.id = :id", 
+            com.soat.fiap.food.core.api.product.infrastructure.adapters.out.persistence.entity.ProductEntity.class
+        );
+        query.setParameter("id", id);
+        
+        try {
+            var entity = query.getSingleResult();
+            return Optional.of(productEntityMapper.toDomain(entity));
+        } catch (jakarta.persistence.NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
