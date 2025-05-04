@@ -58,7 +58,7 @@ logging:
 app:
   cdn:
     base-url: ${APP_CDN_BASE_URL:http://localhost:8082}
-    storage-directory: ${APP_CDN_STORAGE_DIRECTORY:${user.home}/cdn-storage}
+    storage-directory: ${APP_CDN_STORAGE_DIRECTORY:${user.dir}/docker/cdn/public}
 
 # Actuator
 management:

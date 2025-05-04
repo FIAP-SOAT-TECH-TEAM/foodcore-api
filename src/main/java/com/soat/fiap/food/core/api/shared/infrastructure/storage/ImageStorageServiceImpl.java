@@ -31,11 +31,13 @@ public class ImageStorageServiceImpl implements ImageStorageService {
             String filename = UUID.randomUUID().toString() + fileExtension;
             String relativePath = path + "/" + filename;
             
-            Path targetPath = Paths.get(storageDirectory, relativePath);
-            Files.createDirectories(targetPath.getParent());
-            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+            Path targetPath = Paths.get(storageDirectory, path);
+            Files.createDirectories(targetPath);
             
-            log.info("Imagem armazenada em: {}", targetPath);
+            Path fullTargetPath = targetPath.resolve(filename);
+            Files.copy(file.getInputStream(), fullTargetPath, StandardCopyOption.REPLACE_EXISTING);
+            
+            log.info("Imagem armazenada em: {}", fullTargetPath);
             return relativePath;
         } catch (IOException e) {
             log.error("Falha ao armazenar imagem", e);
