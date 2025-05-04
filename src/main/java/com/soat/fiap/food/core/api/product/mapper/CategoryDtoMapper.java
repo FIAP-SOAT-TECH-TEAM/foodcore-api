@@ -82,7 +82,13 @@ public class CategoryDtoMapper {
         
         category.setName(request.getName());
         category.setDescription(request.getDescription());
-        category.setImageUrl(request.getImageUrl());
+        
+        // Somente atualiza a URL da imagem se uma nova URL for fornecida no request
+        // Se a imageUrl for null ou vazia, mantenha a imageUrl existente
+        if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
+            category.setImageUrl(request.getImageUrl());
+        }
+        
         category.setDisplayOrder(request.getDisplayOrder());
     }
 } 

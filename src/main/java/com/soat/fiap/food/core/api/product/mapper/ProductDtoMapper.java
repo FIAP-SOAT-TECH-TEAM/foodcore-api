@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.api.product.domain.model.Category;
 import com.soat.fiap.food.core.api.product.domain.model.Product;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.response.ProductResponse;
+import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,14 +19,19 @@ import java.util.List;
 @Component
 public class ProductDtoMapper {
     
-    @Autowired
-    private ImageStorageService imageStorageService;
-    
-    @Autowired
-    private CategoryDtoMapper categoryDtoMapper;
+    private final ImageStorageService imageStorageService;
+    private final CategoryDtoMapper categoryDtoMapper;
+    private final CustomLogger logger;
     
     @Value("${app.cdn.base-url}")
     private String cdnBaseUrl;
+    
+    @Autowired
+    public ProductDtoMapper(ImageStorageService imageStorageService, CategoryDtoMapper categoryDtoMapper) {
+        this.imageStorageService = imageStorageService;
+        this.categoryDtoMapper = categoryDtoMapper;
+        this.logger = CustomLogger.getLogger(getClass());
+    }
     
     /**
      * Converte entidade de domínio para DTO de resposta
@@ -37,6 +43,8 @@ public class ProductDtoMapper {
             return null;
         }
         
+        logger.debug("Convertendo produto para DTO de resposta: {}", product.getName());
+        
         ProductResponse response = new ProductResponse();
         response.setId(product.getId());
         response.setName(product.getName());
@@ -46,6 +54,8 @@ public class ProductDtoMapper {
         response.setCategory(categoryDtoMapper.toResponse(product.getCategory()));
         response.setActive(product.isActive());
         response.setDisplayOrder(product.getDisplayOrder());
+        
+        logger.debug("DTO de resposta gerado com URL de imagem: {}", response.getImageUrl());
         
         return response;
     }
@@ -99,7 +109,12 @@ public class ProductDtoMapper {
         product.setDescription(cleanUrl(request.getDescription()));
         product.setPrice(request.getPrice());
         product.setDisplayOrder(request.getDisplayOrder());
-        product.setImageUrl(request.getImageUrl());
+        
+        // Somente atualiza a URL da imagem se uma nova URL for fornecida no request
+        // Se a imageUrl for null ou vazia, mantenha a imageUrl existente
+        if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
+            product.setImageUrl(stripBaseUrl(request.getImageUrl()));
+        }
         
         setCategoryFromId(request, product);
     }
@@ -143,9 +158,22 @@ public class ProductDtoMapper {
         if (text == null) {
             return null;
         }
-        if (text.startsWith(cdnBaseUrl)) {
-            return text.substring(cdnBaseUrl.length() + 1);
-        }
         return text;
+    }
+    
+    /**
+     * Remove o baseUrl de uma URL completa, mantendo apenas o caminho relativo
+     * @param imageUrl URL completa da imagem
+     * @return Caminho relativo da imagem
+     */
+    protected String stripBaseUrl(String imageUrl) {
+        if (imageUrl == null) {
+            return null;
+        }
+        if (imageUrl.startsWith(cdnBaseUrl)) {
+            // Remove o baseUrl e a barra, retornando apenas o caminho relativo
+            return imageUrl.substring(cdnBaseUrl.length() + 1);
+        }
+        return imageUrl;
     }
 } 

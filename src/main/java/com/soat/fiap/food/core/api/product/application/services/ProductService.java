@@ -7,11 +7,13 @@ import com.soat.fiap.food.core.api.product.domain.model.Product;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.product.mapper.ProductDtoMapper;
+import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,29 +22,33 @@ import java.util.Optional;
  * Implementação do caso de uso de Produto
  */
 @Service
-@Slf4j
 public class ProductService implements ProductUseCase {
 
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final ProductDtoMapper productDtoMapper;
+    private final CustomLogger logger;
+    private final ImageStorageService imageStorageService;
 
     public ProductService(
             ProductRepository productRepository, 
             ApplicationEventPublisher eventPublisher,
-            ProductDtoMapper productDtoMapper) {
+            ProductDtoMapper productDtoMapper,
+            ImageStorageService imageStorageService) {
         this.productRepository = productRepository;
         this.eventPublisher = eventPublisher;
         this.productDtoMapper = productDtoMapper;
+        this.imageStorageService = imageStorageService;
+        this.logger = CustomLogger.getLogger(getClass());
     }
 
     @Override
     @Transactional
     public Product createProduct(Product product) {
-        log.debug("Criando produto: {}", product);
+        logger.debug("Criando produto: {}", product);
         product.activate();
         Product savedProduct = productRepository.save(product);
-        log.debug("Produto criado com sucesso: {}", savedProduct);
+        logger.debug("Produto criado com sucesso: {}", savedProduct);
 
         ProductCreatedEvent event = ProductCreatedEvent.of(
                 savedProduct.getId(),
@@ -51,7 +57,7 @@ public class ProductService implements ProductUseCase {
                 savedProduct.getCategory().getId()
         );
         eventPublisher.publishEvent(event);
-        log.debug("Evento de produto criado publicado: {}", event);
+        logger.debug("Evento de produto criado publicado: {}", event);
         
         return savedProduct;
     }
@@ -59,29 +65,29 @@ public class ProductService implements ProductUseCase {
     @Override
     @Transactional
     public Product updateProduct(Long id, Product product) {
-        log.debug("Atualizando produto com ID {}: {}", id, product);
+        logger.debug("Atualizando produto com ID {}: {}", id, product);
         Optional<Product> existingProduct = productRepository.findById(id);
         
         if (existingProduct.isEmpty()) {
-            log.warn("Produto não encontrado com ID: {}", id);
+            logger.warn("Produto não encontrado com ID: {}", id);
             throw new RuntimeException("Produto não encontrado com ID: " + id);
         }
         
         product.setId(id);
         Product updatedProduct = productRepository.save(product);
-        log.debug("Produto atualizado com sucesso: {}", updatedProduct);
+        logger.debug("Produto atualizado com sucesso: {}", updatedProduct);
         return updatedProduct;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Product> getProductById(Long id) {
-        log.debug("Buscando produto com ID: {}", id);
+        logger.debug("Buscando produto com ID: {}", id);
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            log.debug("Produto encontrado: {}", product.get());
+            logger.debug("Produto encontrado: {}", product.get());
         } else {
-            log.debug("Produto não encontrado com ID: {}", id);
+            logger.debug("Produto não encontrado com ID: {}", id);
         }
         return product;
     }
@@ -89,27 +95,27 @@ public class ProductService implements ProductUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
-        log.debug("Buscando todos os produtos");
+        logger.debug("Buscando todos os produtos");
         List<Product> products = productRepository.findAll();
-        log.debug("Encontrados {} produtos", products.size());
+        logger.debug("Encontrados {} produtos", products.size());
         return products;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Product> getProductsByCategory(Long categoryId) {
-        log.debug("Buscando produtos da categoria ID: {}", categoryId);
+        logger.debug("Buscando produtos da categoria ID: {}", categoryId);
         List<Product> products = productRepository.findByCategory(categoryId);
-        log.debug("Encontrados {} produtos na categoria ID: {}", products.size(), categoryId);
+        logger.debug("Encontrados {} produtos na categoria ID: {}", products.size(), categoryId);
         return products;
     }
 
     @Override
     @Transactional
     public void deleteProduct(Long id) {
-        log.debug("Removendo produto com ID: {}", id);
+        logger.debug("Removendo produto com ID: {}", id);
         productRepository.delete(id);
-        log.debug("Produto removido com sucesso, ID: {}", id);
+        logger.debug("Produto removido com sucesso, ID: {}", id);
     }
     
     /**
@@ -119,10 +125,12 @@ public class ProductService implements ProductUseCase {
      */
     @Transactional
     public Product createProductFromRequest(ProductRequest request) {
-        log.debug("Convertendo request para produto: {}", request);
+        logger.debug("Convertendo request para produto: {}", request);
         Product product = productDtoMapper.toDomain(request);
-        log.debug("Produto convertido: {}", product);
-        return createProduct(product);
+        logger.debug("Produto convertido: {}", product);
+        Product savedProduct = createProduct(product);
+        
+        return getProductById(savedProduct.getId()).orElse(savedProduct);
     }
     
     /**
@@ -133,12 +141,13 @@ public class ProductService implements ProductUseCase {
      */
     @Transactional
     public Optional<Product> updateProductFromRequest(Long id, ProductRequest request) {
-        log.debug("Atualizando produto ID {} com request: {}", id, request);
+        logger.debug("Atualizando produto ID {} com request: {}", id, request);
         return getProductById(id).map(existingProduct -> {
-            log.debug("Produto encontrado para atualização: {}", existingProduct);
+            logger.debug("Produto encontrado para atualização: {}", existingProduct);
             productDtoMapper.updateDomainFromRequest(request, existingProduct);
             productDtoMapper.setCategoryFromId(request, existingProduct);
-            log.debug("Produto atualizado com dados do request: {}", existingProduct);
+            logger.debug("Produto atualizado com dados do request: {}", existingProduct);
+            
             return updateProduct(id, existingProduct);
         });
     }
@@ -149,19 +158,89 @@ public class ProductService implements ProductUseCase {
      * @return DTO de resposta
      */
     public ProductResponse toResponse(Product product) {
-        log.debug("Convertendo produto para response: {}", product);
-        ProductResponse response = productDtoMapper.toResponse(product);
-        log.debug("Response gerada: {}", response);
-        return response;
+        return productDtoMapper.toResponse(product);
     }
     
     /**
-     * Converte uma lista de produtos para lista de DTOs de resposta
-     * @param products Lista de produtos
+     * Converte uma lista de produtos para uma lista de DTOs de resposta
+     * @param products Lista de produtos a ser convertida
      * @return Lista de DTOs de resposta
      */
     public List<ProductResponse> toResponseList(List<Product> products) {
-        log.debug("Convertendo lista de {} produtos para response", products.size());
         return productDtoMapper.toResponseList(products);
+    }
+    
+    /**
+     * Cria um produto com imagem
+     * @param productRequest Dados do produto
+     * @param imageFile Arquivo de imagem (opcional)
+     * @return Produto criado
+     */
+    @Transactional
+    public Product createProductWithImage(ProductRequest productRequest, MultipartFile imageFile) {
+        logger.debug("Criando produto com possível imagem: {}", productRequest.getName());
+        Product product = createProductFromRequest(productRequest);
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imagePath = uploadProductImage(product.getId(), imageFile);
+            product.setImageUrl(imagePath);
+            product = updateProduct(product.getId(), product);
+            
+            return getProductById(product.getId()).orElse(product);
+        }
+        
+        return product;
+    }
+    
+    /**
+     * Atualiza apenas a imagem de um produto existente
+     * @param id ID do produto
+     * @param imageFile Arquivo da nova imagem
+     * @return Produto atualizado com a nova imagem
+     */
+    @Transactional
+    public Product updateProductImage(Long id, MultipartFile imageFile) {
+        logger.debug("Atualizando imagem do produto ID: {}", id);
+        
+        Product existingProduct = getProductById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
+        
+        String imagePath = uploadProductImage(id, imageFile);
+        existingProduct.setImageUrl(imagePath);
+        
+        return updateProduct(id, existingProduct);
+    }
+    
+    /**
+     * Faz upload de uma imagem para um produto, removendo a anterior se existir
+     * @param productId ID do produto
+     * @param imageFile Arquivo da imagem
+     * @return Caminho da imagem no storage
+     */
+    private String uploadProductImage(Long productId, MultipartFile imageFile) {
+        if (imageFile == null || imageFile.isEmpty()) {
+            logger.warn("Tentativa de upload de imagem com arquivo vazio ou nulo");
+            throw new IllegalArgumentException("O arquivo de imagem não pode ser vazio");
+        }
+        
+        logger.debug("Processando upload de imagem para produto ID: {}", productId);
+        
+        try {
+            Optional<Product> productOpt = getProductById(productId);
+            
+            if (productOpt.isPresent() && productOpt.get().getImageUrl() != null && !productOpt.get().getImageUrl().isEmpty()) {
+                String currentImagePath = productOpt.get().getImageUrl();
+                logger.debug("Removendo imagem anterior: {}", currentImagePath);
+                imageStorageService.deleteImage(currentImagePath);
+            }
+            
+            String storagePath = "products/" + productId;
+            String imagePath = imageStorageService.uploadImage(imageFile, storagePath);
+            logger.debug("Nova imagem enviada para o caminho: {}", imagePath);
+            
+            return imagePath;
+        } catch (Exception e) {
+            logger.error("Erro ao processar upload de imagem: {}", e.getMessage(), e);
+            throw new RuntimeException("Falha ao processar imagem: " + e.getMessage(), e);
+        }
     }
 } 

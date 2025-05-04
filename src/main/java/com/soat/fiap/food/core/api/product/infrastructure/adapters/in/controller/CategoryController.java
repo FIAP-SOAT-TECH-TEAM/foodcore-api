@@ -1,10 +1,13 @@
 package com.soat.fiap.food.core.api.product.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.product.application.ports.in.CategoryUseCase;
+import com.soat.fiap.food.core.api.product.application.services.CategoryService;
 import com.soat.fiap.food.core.api.product.domain.model.Category;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.product.infrastructure.adapters.in.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.product.mapper.CategoryDtoMapper;
+import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -17,7 +20,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,12 +34,12 @@ import java.util.List;
 @Tag(name = "Categorias", description = "API para gerenciamento de categorias de produtos")
 public class CategoryController {
 
-    private final CategoryUseCase categoryUseCase;
-    private final CategoryDtoMapper categoryDtoMapper;
+    private final CategoryService categoryService;
+    private final CustomLogger logger;
 
-    public CategoryController(CategoryUseCase categoryUseCase, CategoryDtoMapper categoryDtoMapper) {
-        this.categoryUseCase = categoryUseCase;
-        this.categoryDtoMapper = categoryDtoMapper;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+        this.logger = CustomLogger.getLogger(getClass());
     }
 
     /**
@@ -47,8 +52,9 @@ public class CategoryController {
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class))))
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        List<Category> categories = categoryUseCase.getAllCategories();
-        return ResponseEntity.ok(categoryDtoMapper.toResponseList(categories));
+        logger.debug("Requisição para listar todas as categorias");
+        List<Category> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categoryService.toResponseList(categories));
     }
 
     /**
@@ -68,18 +74,25 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> getCategoryById(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Long id) {
-        return categoryUseCase.getCategoryById(id)
-                .map(category -> ResponseEntity.ok(categoryDtoMapper.toResponse(category)))
+        logger.debug("Requisição para buscar categoria por ID: {}", id);
+        return categoryService.getCategoryById(id)
+                .map(category -> ResponseEntity.ok(categoryService.toResponse(category)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Cria uma categoria
-     * @param request Dados da categoria
+     * Cria uma categoria com ou sem imagem
+     * @param name Nome da categoria
+     * @param description Descrição da categoria
+     * @param displayOrder Ordem de exibição
+     * @param image Arquivo de imagem (opcional)
      * @return Categoria criada
      */
-    @PostMapping
-    @Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria com os dados fornecidos")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+        summary = "Criar nova categoria", 
+        description = "Cria uma nova categoria com os dados fornecidos e opcionalmente com uma imagem"
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria criada com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -87,13 +100,35 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
                     content = @Content)
     })
+    @Transactional
     public ResponseEntity<CategoryResponse> createCategory(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados da categoria a ser criada", required = true,
-                    content = @Content(schema = @Schema(implementation = CategoryRequest.class)))
-            @Valid @RequestBody CategoryRequest request) {
-        Category category = categoryDtoMapper.toDomain(request);
-        Category createdCategory = categoryUseCase.createCategory(category);
-        return new ResponseEntity<>(categoryDtoMapper.toResponse(createdCategory), HttpStatus.CREATED);
+            @Parameter(description = "Nome da categoria", example = "Lanches", required = true)
+            @RequestParam("name") String name,
+            
+            @Parameter(description = "Descrição da categoria", example = "Hambúrgueres e sanduíches")
+            @RequestParam(value = "description", required = false) String description,
+            
+            @Parameter(description = "Ordem de exibição da categoria", example = "1")
+            @RequestParam(value = "displayOrder", required = false) Integer displayOrder,
+            
+            @Parameter(description = "Imagem da categoria (opcional)")
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        
+        logger.info("Requisição para criar categoria: name={}", name);
+        
+        try {
+            CategoryRequest categoryRequest = new CategoryRequest();
+            categoryRequest.setName(name);
+            categoryRequest.setDescription(description);
+            categoryRequest.setDisplayOrder(displayOrder);
+            
+            Category category = categoryService.createCategoryWithImage(categoryRequest, image);
+            
+            return new ResponseEntity<>(categoryService.toResponse(category), HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("Erro ao processar a requisição de criação de categoria: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     /**
@@ -102,7 +137,7 @@ public class CategoryController {
      * @param request Dados atualizados
      * @return Categoria atualizada ou 404
      */
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Atualizar categoria", description = "Atualiza os dados de uma categoria existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso",
@@ -118,13 +153,16 @@ public class CategoryController {
                     content = @Content(schema = @Schema(implementation = CategoryRequest.class)))
             @Valid @RequestBody CategoryRequest request) {
         
-        return categoryUseCase.getCategoryById(id)
-                .map(existingCategory -> {
-                    categoryDtoMapper.updateDomainFromRequest(request, existingCategory);
-                    Category updatedCategory = categoryUseCase.updateCategory(id, existingCategory);
-                    return ResponseEntity.ok(categoryDtoMapper.toResponse(updatedCategory));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        logger.debug("Requisição para atualizar categoria ID: {}", id);
+        
+        try {
+            return categoryService.updateCategoryFromRequest(id, request)
+                    .map(category -> ResponseEntity.ok(categoryService.toResponse(category)))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            logger.error("Erro ao processar atualização de categoria: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     /**
@@ -143,11 +181,51 @@ public class CategoryController {
     public ResponseEntity<Void> deleteCategory(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Long id) {
-        return categoryUseCase.getCategoryById(id)
+        logger.debug("Requisição para remover categoria ID: {}", id);
+        return categoryService.getCategoryById(id)
                 .map(category -> {
-                    categoryUseCase.deleteCategory(id);
+                    categoryService.deleteCategory(id);
                     return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    /**
+     * Atualiza apenas a imagem de uma categoria existente
+     * @param id ID da categoria
+     * @param image Arquivo de imagem
+     * @return Categoria atualizada
+     */
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+        summary = "Atualizar imagem da categoria", 
+        description = "Atualiza apenas a imagem de uma categoria existente"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Imagem atualizada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Categoria não encontrada",
+                    content = @Content)
+    })
+    @Transactional
+    public ResponseEntity<CategoryResponse> updateCategoryImage(
+            @Parameter(description = "ID da categoria", example = "1", required = true)
+            @PathVariable Long id,
+            
+            @Parameter(description = "Arquivo da nova imagem", required = true)
+            @RequestParam("image") MultipartFile image) {
+        
+        logger.info("Requisição para atualizar imagem da categoria ID: {}", id);
+        
+        try {
+            Category category = categoryService.updateCategoryImage(id, image);
+            return ResponseEntity.ok(categoryService.toResponse(category));
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("não encontrada")) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
 } 
