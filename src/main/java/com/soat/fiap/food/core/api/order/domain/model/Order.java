@@ -24,7 +24,10 @@ public class Order {
     private OrderStatus status;
     private Customer customer;
     private BigDecimal totalAmount;
+    
+    @Builder.Default
     private List<OrderItem> items = new ArrayList<>();
+    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
