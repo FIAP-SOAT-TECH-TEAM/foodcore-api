@@ -3,6 +3,8 @@ plugins {
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.liquibase.gradle' version '2.2.0'
+	id 'org.sonarqube' version '4.4.1.3373'
+	id 'jacoco'
 }
 
 group = 'com.soat.fiap'
@@ -99,6 +101,27 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+sonar {
+	properties {
+		property 'sonar.projectKey', 'com.soat.fiap.food-core-api'
+		property 'sonar.projectName', 'Food Core API'
+		property 'sonar.host.url', 'http://localhost:9001'
+		property 'sonar.token', System.getenv('SONAR_TOKEN') ?: ''
+		property 'sonar.java.coveragePlugin', 'jacoco'
+		property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property 'sonar.exclusions', '**/config/**,**/FoodCoreApiApplication.java'
+	}
 }
 
 // Configuração do Liquibase para usar o arquivo de changelog
