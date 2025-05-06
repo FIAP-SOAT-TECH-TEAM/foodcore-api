@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset payment:tables-001
+--changeset payment:01-payment-tables
 CREATE TABLE IF NOT EXISTS payments (
     id SERIAL PRIMARY KEY,
     order_id INT,

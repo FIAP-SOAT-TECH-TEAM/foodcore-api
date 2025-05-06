@@ -1,39 +1,48 @@
 databaseChangeLog:
-  - preConditions:
-    - runningAs:
-        username: postgres
+  - property:
+      name: now
+      value: current_timestamp
+      dbms: postgresql
 
-  # Shared types
-  - include:
-      file: db/changelog/shared/00-init-schema.sql
+  # Clear checksums
+  - changeSet:
+      id: clearChecksums
+      author: system
+      changes:
+        - tagDatabase:
+            tag: clear-checksums
+      labels: clear-checksums
       
+  - include:
+      file: shared/00-init-schema.sql
+      relativeToChangelogFile: true
+  
   # Spring Modulith
   - include:
-      file: db/changelog/shared/01-modulith-tables.sql
+      file: shared/01-modulith-tables.sql
+      relativeToChangelogFile: true
 
-  # Product Module
+  # Customer module
   - include:
-      file: db/changelog/modules/product/01-product-tables.sql
-      relativeToChangelogFile: false
+      file: modules/customer/01-customer-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/product/02-product-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/customer/02-customer-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/customer/03-customer-seed.sql
+      relativeToChangelogFile: true
 
-  # Customer Module  
+  # Product module
   - include:
-      file: db/changelog/modules/customer/01-customer-tables.sql
-      relativeToChangelogFile: false
+      file: modules/product/01-product-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/customer/02-customer-indexes.sql
-      relativeToChangelogFile: false
-
-  # Order Module
+      file: modules/product/02-product-indexes.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/order/01-order-tables.sql
-      relativeToChangelogFile: false
-  - include:
-      file: db/changelog/modules/order/02-order-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/product/03-product-seed.sql
+      relativeToChangelogFile: true
 
   # Order module
   - include:
@@ -48,8 +57,11 @@ databaseChangeLog:
 
   # Payment module
   - include:
-      file: db/changelog/modules/customer/03-customer-seed.sql
+      file: modules/payment/01-payment-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/order/03-order-seed.sql
+      file: modules/payment/02-payment-indexes.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/payment/03-payment-seed.sql 
+      file: modules/payment/03-payment-seed.sql
+      relativeToChangelogFile: true

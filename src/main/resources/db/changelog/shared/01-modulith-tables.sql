@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset shared:modulith-001 context:local,dev,prod
+--changeset shared:01-modulith-tables context:local,dev,prod
 -- Tabela utilizada pelo Spring Modulith para persistência de eventos
 CREATE TABLE IF NOT EXISTS event_publication (
     id UUID NOT NULL PRIMARY KEY,
