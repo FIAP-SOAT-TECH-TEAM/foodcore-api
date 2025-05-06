@@ -32,4 +32,20 @@ public class OrderItem {
         }
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
+    
+    /**
+     * Obtém o ID do produto
+     * @return ID do produto ou null se o produto não estiver definido
+     */
+    public Long getProductId() {
+        return product != null ? product.getId() : null;
+    }
+    
+    /**
+     * Obtém o nome do produto
+     * @return Nome do produto ou null se o produto não estiver definido
+     */
+    public String getProductName() {
+        return product != null ? product.getName() : null;
+    }
 } 

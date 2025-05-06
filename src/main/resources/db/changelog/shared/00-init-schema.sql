@@ -9,4 +9,5 @@ CREATE TYPE payment_type_enum AS ENUM ('CREDIT_CARD', 'DEBIT_CARD', 'PIX', 'CASH
 CREATE TYPE payment_status_enum AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'REFUNDED');
 
 -- Enum para status de pedido
-CREATE TYPE order_status_enum AS ENUM ('RECEIVED', 'WAITING_PAYMENT', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED'); 
+--changeset order-types:create-order-status-enum runOnChange:true
+CREATE TYPE order_status_enum AS ENUM ('RECEIVED', 'WAITING_PAYMENT', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED');

@@ -35,18 +35,18 @@ databaseChangeLog:
       file: db/changelog/modules/order/02-order-indexes.sql
       relativeToChangelogFile: false
 
-  # Payment Module
+  # Order module
   - include:
-      file: db/changelog/modules/payment/01-payment-tables.sql
-      relativeToChangelogFile: false
+      file: modules/order/01-order-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/payment/02-payment-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/order/02-order-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/order/03-order-seed.sql
+      relativeToChangelogFile: true
 
-  # Seed Data
-  - include:
-      file: db/changelog/modules/product/03-product-seed.sql
-      relativeToChangelogFile: false
+  # Payment module
   - include:
       file: db/changelog/modules/customer/03-customer-seed.sql
   - include:
