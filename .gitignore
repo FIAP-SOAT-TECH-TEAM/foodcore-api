@@ -35,5 +35,22 @@ out/
 
 ### VS Code ###
 .vscode/
+
 /docs/
 /logs/food-core-api.log
+
+### SonarQube ###
+.scannerwork/
+.sonarqube/
+.sonar/
+
+# Gradle
+.gradle/
+
+# Logs
+logs/
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
