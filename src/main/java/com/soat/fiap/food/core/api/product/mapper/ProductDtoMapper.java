@@ -109,9 +109,7 @@ public class ProductDtoMapper {
         product.setDescription(cleanUrl(request.getDescription()));
         product.setPrice(request.getPrice());
         product.setDisplayOrder(request.getDisplayOrder());
-        
-        // Somente atualiza a URL da imagem se uma nova URL for fornecida no request
-        // Se a imageUrl for null ou vazia, mantenha a imageUrl existente
+
         if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
             product.setImageUrl(stripBaseUrl(request.getImageUrl()));
         }
@@ -171,7 +169,6 @@ public class ProductDtoMapper {
             return null;
         }
         if (imageUrl.startsWith(cdnBaseUrl)) {
-            // Remove o baseUrl e a barra, retornando apenas o caminho relativo
             return imageUrl.substring(cdnBaseUrl.length() + 1);
         }
         return imageUrl;
