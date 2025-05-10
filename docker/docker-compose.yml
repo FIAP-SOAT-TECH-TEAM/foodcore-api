@@ -19,6 +19,7 @@ services:
       - SPRING_REDIS_PORT=6379
       - APP_CDN_ROOT_PATH=/app/cdn
       - APP_CDN_PUBLIC_URL=http://cdn:80
+      - APP_CDN_STORAGE_DIRECTORY=/app/cdn/public
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
       interval: 30s
@@ -40,7 +41,7 @@ services:
           cpus: '1.0'
           memory: 1G
     volumes:
-      - cdn_data:/app/cdn
+      - ./cdn/public:/app/cdn/public
 
   # Banco de dados PosgreSQL
   db:
@@ -115,7 +116,6 @@ services:
       - "8082:80"
     volumes:
       - ./cdn/nginx.conf:/etc/nginx/nginx.conf:ro
-      - cdn_data:/usr/share/nginx/html
       - ./cdn/public:/usr/share/nginx/html
     healthcheck:
       test: ["CMD", "wget", "-O", "/dev/null", "http://localhost/healthcheck", "-q"]
@@ -133,4 +133,3 @@ networks:
 volumes:
   postgres_data:
   redis_data:
-  cdn_data:

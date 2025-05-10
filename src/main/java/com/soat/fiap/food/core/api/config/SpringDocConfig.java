@@ -55,7 +55,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("produtos")
                 .packagesToScan("com.soat.fiap.food.core.api.product")
-                .pathsToMatch("/products/**", "/api/categories/**")
+                .pathsToMatch("/api/products/**", "/api/categories/**")
                 .build();
     }
 
