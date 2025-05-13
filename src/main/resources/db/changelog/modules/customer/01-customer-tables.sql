@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS customers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT chk_email_requires_name CHECK (email IS NULL OR name IS NOT NULL)
+    CONSTRAINT chk_email_requires_name CHECK ((name IS NULL AND email IS NULL) OR (name IS NOT NULL AND email IS NOT NULL))
 );
 
 COMMENT ON TABLE customers IS 'Tabela que armazena os dados de clientes';
