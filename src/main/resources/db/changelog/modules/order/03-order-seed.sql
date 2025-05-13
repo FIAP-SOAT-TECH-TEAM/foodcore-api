@@ -202,3 +202,59 @@ WHERE NOT EXISTS (
     SELECT 1 FROM order_payments
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
 );
+
+-- Pedido 4 (sem cliente)
+INSERT INTO orders (order_number, status, amount, created_at, updated_at)
+SELECT
+    'ORD-00000004',
+    'COMPLETED',
+    4.90,
+    now() - interval '3 minute',
+    now() - interval '3 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM orders WHERE order_number = 'ORD-00000004'
+);
+
+-- Água Mineral (único item)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
+SELECT
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
+    (SELECT id FROM products WHERE name = 'Água Mineral'),
+    1,
+    4.90,
+    4.90,
+    null,
+    now() - interval '3 minute',
+    now() - interval '3 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM order_items
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004')
+    AND product_id = (SELECT id FROM products WHERE name = 'Água Mineral')
+);
+
+-- Pagamentos do pedido 4
+INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
+SELECT
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
+    (SELECT id FROM payments WHERE tid = 'TID-000004'),
+    'REJECTED',
+    null,
+    now() - interval '3 minute',
+    now() - interval '3 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM order_payments
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004')
+);
+
+INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
+SELECT
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
+    (SELECT id FROM payments WHERE tid = 'TID-000005'),
+    'APPROVED',
+    now() - interval '3 minute',
+    now() - interval '3 minute',
+    now() - interval '3 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM order_payments
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004') AND payment_id = (SELECT id FROM payments WHERE tid = 'TID-000005')
+);

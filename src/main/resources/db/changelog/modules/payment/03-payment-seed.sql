@@ -53,3 +53,33 @@ SELECT
 WHERE NOT EXISTS (
     SELECT 1 FROM payments p WHERE p.tid = 'TID-000003'
 );
+
+-- Pagamento 4 (PIX) - sem cliente
+INSERT INTO payments (type, expires_in, tid, amount, qr_code_url, observations, created_at, updated_at)
+SELECT
+    'PIX',
+    NOW() + interval '1 hour',
+    'TID-000004',
+    4.90,
+    'https://pix.example.com/qr/123457',
+    'QR Code gerado para pagamento',
+    NOW() - interval '5 minute',
+    NOW() - interval '5 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM payments p WHERE p.tid = 'TID-000004'
+);
+
+-- Pagamento 5 (PIX) - sem cliente
+INSERT INTO payments (type, expires_in, tid, amount, qr_code_url, observations, created_at, updated_at)
+SELECT
+    'PIX',
+    NOW() + interval '1 hour',
+    'TID-000005',
+    4.90,
+    'https://pix.example.com/qr/123457',
+    'QR Code gerado para pagamento',
+    NOW() - interval '5 minute',
+    NOW() - interval '5 minute'
+WHERE NOT EXISTS (
+    SELECT 1 FROM payments p WHERE p.tid = 'TID-000005'
+);

@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS order_payments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_order_payment_order FOREIGN KEY (order_id) REFERENCES orders(id),
-    CONSTRAINT fk_order_payment_payment FOREIGN KEY (payment_id) REFERENCES payments(id)
+    CONSTRAINT fk_order_payment_payment FOREIGN KEY (payment_id) REFERENCES payments(id),
+    CONSTRAINT un_order_payment UNIQUE (order_id, payment_id)
 );
 
 COMMENT ON TABLE order_payments IS 'Tabela que armazena os pagamentos associados a pedidos';
@@ -68,3 +69,4 @@ COMMENT ON COLUMN order_payments.status IS 'Status do pagamento';
 COMMENT ON COLUMN order_payments.paid_at IS 'Data e hora em que o pagamento foi confirmado';
 COMMENT ON COLUMN order_payments.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN order_payments.updated_at IS 'Data da última atualização do registro';
+COMMENT ON CONSTRAINT un_order_payment ON order_payments IS 'Evita que a mesma tentativa de pagamento (payment_id) seja associada mais de uma vez ao mesmo pedido (order_id).';
