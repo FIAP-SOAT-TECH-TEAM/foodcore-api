@@ -249,7 +249,45 @@ erDiagram
     CATEGORIES ||--o{ PRODUCTS : categorizes
     ORDERS ||--o{ ORDER_PAYMENTS : has
     PAYMENTS ||--o{ ORDER_PAYMENTS : completes
+    USERS ||--o{ USER_ROLES : has
+    ROLES ||--o{ USER_ROLES : assigned_to
+    USERS ||--o{ REFRESH_TOKENS : owns
+    USERS {
+        int id PK "ID único do usuário"
+        string username "Nome de usuário único para login"
+        string email "E-mail do usuário (também único)"
+        string password_hash "Hash da senha do usuário"
+        string name "Nome do usuário"
+        boolean active "Indica se o usuário está ativo"
+        timestamp last_login "Data do último login"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
 
+    ROLES {
+        int id PK "ID único da Role"
+        string name "Nome único do role (ex: ADMIN, USER)"
+        string description "Descrição das permissões do role"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
+
+    USER_ROLES {
+        int id PK "ID único da Role do usuário"
+        int user_id FK "ID do usuário"
+        int role_id FK "ID do role associado"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
+
+    REFRESH_TOKENS {
+        int id PK "ID único do refresh token"
+        int user_id FK "ID do usuário"
+        string token "Token de refresh único"
+        boolean active "Indica se o Refresh Token está ativo"
+        timestamp expires_at "Data de expiração do token"
+        timestamp created_at "Data de criação do registro"
+    }
     CUSTOMERS {
         bigint id PK
         varchar name
