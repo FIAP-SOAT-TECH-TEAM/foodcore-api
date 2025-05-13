@@ -8,7 +8,7 @@ WHERE NOT EXISTS (
     SELECT 1 FROM customers WHERE email = 'anonimo@fastfood.com'
 );
 
---changeset customer:customer-seed-dev runAlways:true context:local,dev onError:MARK_RAN
+--changeset customer:03-customer-seed-dev runAlways:true context:local,dev onError:MARK_RAN
 -- Clientes para ambiente de desenvolvimento
 
 -- João Silva - nome e email (sem CPF)
