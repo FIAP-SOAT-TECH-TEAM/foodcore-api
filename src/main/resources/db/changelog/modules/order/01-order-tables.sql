@@ -52,9 +52,7 @@ CREATE TABLE IF NOT EXISTS order_payments (
     id SERIAL PRIMARY KEY,
     order_id INTEGER NOT NULL,
     payment_id INTEGER NOT NULL,
-    tid VARCHAR(255),
     status payment_status_enum DEFAULT 'PENDING' NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
     paid_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -66,9 +64,7 @@ COMMENT ON TABLE order_payments IS 'Tabela que armazena os pagamentos associados
 COMMENT ON COLUMN order_payments.id IS 'Identificador único do pagamento do pedido';
 COMMENT ON COLUMN order_payments.order_id IS 'Referência ao pedido associado';
 COMMENT ON COLUMN order_payments.payment_id IS 'Referência ao método de pagamento utilizado';
-COMMENT ON COLUMN order_payments.tid IS 'Identificador da transação no gateway de pagamento';
 COMMENT ON COLUMN order_payments.status IS 'Status do pagamento';
-COMMENT ON COLUMN order_payments.amount IS 'Valor do pagamento em centavos (para precisão)';
 COMMENT ON COLUMN order_payments.paid_at IS 'Data e hora em que o pagamento foi confirmado';
 COMMENT ON COLUMN order_payments.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN order_payments.updated_at IS 'Data da última atualização do registro';

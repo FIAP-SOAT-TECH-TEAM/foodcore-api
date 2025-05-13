@@ -52,18 +52,17 @@ WHERE NOT EXISTS (
 );
 
 -- Pagamento do pedido 1
-INSERT INTO order_payments (order_id, payment_id, tid, status, amount, paid_at, created_at, updated_at)
+INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
-    (SELECT id FROM payments LIMIT 1),
-    'TID-000001',
+    (SELECT id FROM payments WHERE tid = 'TID-000001'),
     'APPROVED',
-    32.80,
     now() - interval '1 hour',
     now() - interval '1 hour',
     now() - interval '1 hour'
 WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000001')
+    SELECT 1 FROM order_payments
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000001')
 );
 
 -- Pedido 2
@@ -71,7 +70,7 @@ INSERT INTO orders (customer_id, order_number, status, amount, created_at, updat
 SELECT
     (SELECT id FROM customers WHERE email = 'joao@email.com'),
     'ORD-00000002',
-    'PREPARING',
+    'CANCELLED',
     79.70,
     now() - interval '30 minute',
     now() - interval '25 minute'
@@ -131,25 +130,24 @@ WHERE NOT EXISTS (
 );
 
 -- Pagamento do pedido 2
-INSERT INTO order_payments (order_id, payment_id, tid, status, amount, paid_at, created_at, updated_at)
+INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
-    (SELECT id FROM payments LIMIT 1 OFFSET 1),
-    'TID-000002',
+    (SELECT id FROM payments WHERE tid = 'TID-000002'),
     'REJECTED',
-    79.70,
     null,
     now() - interval '25 minute',
     now() - interval '25 minute'
 WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
+    SELECT 1 FROM order_payments
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
 );
 
 -- Pedido 3 (sem cliente)
 INSERT INTO orders (order_number, status, amount, created_at, updated_at)
 SELECT
     'ORD-00000003',
-    'RECEIVED',
+    'WAITING_PAYMENT',
     19.90,
     now() - interval '5 minute',
     now() - interval '5 minute'
@@ -192,16 +190,15 @@ WHERE NOT EXISTS (
 );
 
 -- Pagamento do pedido 3
-INSERT INTO order_payments (order_id, payment_id, tid, status, amount, paid_at, created_at, updated_at)
+INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
-    (SELECT id FROM payments LIMIT 1 OFFSET 2),
-    'TID-000003',
+    (SELECT id FROM payments WHERE tid = 'TID-000003'),
     'PENDING',
-    19.90,
     null,
     now() - interval '5 minute',
     now() - interval '5 minute'
 WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
+    SELECT 1 FROM order_payments
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
 );
