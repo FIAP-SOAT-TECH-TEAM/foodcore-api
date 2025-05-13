@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS customers (
     name VARCHAR(255),
     email VARCHAR(255) UNIQUE
     document VARCHAR(14) UNIQUE,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT chk_email_requires_name CHECK (email IS NULL OR name IS NOT NULL)
