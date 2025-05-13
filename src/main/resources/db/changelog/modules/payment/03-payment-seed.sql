@@ -53,7 +53,6 @@ AND NOT EXISTS (
     SELECT 1 FROM payments p WHERE p.amount = o.total AND p.created_at::date = o.created_at::date AND p.customer_id IS NULL
 );
 
-
 -- Pagamento para o pedido 4 (Dinheiro)
 INSERT INTO payments (customer_id, type, expires_in, amount, qr_code_url, observations, created_at, updated_at)
 SELECT
