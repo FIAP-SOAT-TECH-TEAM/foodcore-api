@@ -44,17 +44,6 @@ databaseChangeLog:
       file: modules/product/03-product-seed.sql
       relativeToChangelogFile: true
 
-  # Order module
-  - include:
-      file: modules/order/01-order-tables.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/order/02-order-indexes.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/order/03-order-seed.sql
-      relativeToChangelogFile: true
-
   # Payment module
   - include:
       file: modules/payment/01-payment-tables.sql
@@ -64,4 +53,15 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: modules/payment/03-payment-seed.sql
+      relativeToChangelogFile: true
+
+  # Order module
+  - include:
+      file: modules/order/01-order-tables.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/order/02-order-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/order/03-order-seed.sql
       relativeToChangelogFile: true
