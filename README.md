@@ -89,12 +89,15 @@ A aplicação é estruturada como um monolito modular usando Spring Modulith, co
 ```mermaid
 graph TD
     subgraph "Monolito Modular"
+        USER[Módulo Usuário]
         ORDER[Módulo Pedido]
         CUSTOMER[Módulo Cliente]
         PRODUCT[Módulo Produto]
         PAYMENT[Módulo Pagamento]
         SHARED[Componentes Compartilhados]
         
+        USER --> PRODUCT
+        USER --> ORDER
         ORDER --> CUSTOMER
         ORDER --> PRODUCT
         ORDER --> PAYMENT
