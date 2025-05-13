@@ -6,8 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
+    name VARCHAR(255) NOT NULL,
     active BOOLEAN DEFAULT TRUE NOT NULL,
     last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -19,6 +18,7 @@ COMMENT ON COLUMN users.id IS 'ID único do usuário';
 COMMENT ON COLUMN users.username IS 'Nome de usuário único para login';
 COMMENT ON COLUMN users.email IS 'E-mail do usuário (também único)';
 COMMENT ON COLUMN users.password_hash IS 'Hash da senha do usuário';
+COMMENT ON COLUMN users.name IS 'Nome do usuário';
 COMMENT ON COLUMN users.active IS 'Indica se o usuário está ativo';
 COMMENT ON COLUMN users.last_login IS 'Data do último login';
 COMMENT ON COLUMN users.created_at IS 'Data de criação do registro';

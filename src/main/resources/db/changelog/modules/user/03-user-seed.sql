@@ -11,8 +11,8 @@ WHERE NOT EXISTS (
 );
 
 -- Criação do usuário admin@fastfood.com
-INSERT INTO users (username, email, password_hash, first_name, last_name, active, created_at, updated_at)
-SELECT 'admin', 'admin@fastfood.com', 'hashed_password_admin', 'Admin', 'Sistema', true, now(), now()
+INSERT INTO users (username, email, password_hash, name, active, created_at, updated_at)
+SELECT 'admin', 'admin@fastfood.com', 'hashed_password_admin', 'Admin Sistema', true, now(), now()
 WHERE NOT EXISTS (
     SELECT 1 FROM users WHERE email = 'admin@fastfood.com'
 );
@@ -40,20 +40,20 @@ SELECT 'USER', 'Usuário comum do sistema', now(), now()
 WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'USER');
 
 -- Usuários
-INSERT INTO users (username, email, password_hash, first_name, last_name, active, created_at, updated_at)
-SELECT 'joao', 'joao@email.com', 'hashed_pw_joao', 'João', 'Silva', true, now(), now()
+INSERT INTO users (username, email, password_hash, name, active, created_at, updated_at)
+SELECT 'joao', 'joao@email.com', 'hashed_pw_joao', 'João Silva', true, now(), now()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'joao@email.com');
 
-INSERT INTO users (username, email, password_hash, first_name, last_name, active, created_at, updated_at)
-SELECT 'maria', 'maria@email.com', 'hashed_pw_maria', 'Maria', 'Oliveira', true, now(), now()
+INSERT INTO users (username, email, password_hash, name, active, created_at, updated_at)
+SELECT 'maria', 'maria@email.com', 'hashed_pw_maria', 'Maria Oliveira', true, now(), now()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'maria@email.com');
 
-INSERT INTO users (username, email, password_hash, first_name, last_name, active, created_at, updated_at)
-SELECT 'ana', 'ana@email.com', 'hashed_pw_ana', 'Ana', 'Souza', true, now(), now()
+INSERT INTO users (username, email, password_hash, name, active, created_at, updated_at)
+SELECT 'ana', 'ana@email.com', 'hashed_pw_ana', 'Ana Souza', true, now(), now()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'ana@email.com');
 
-INSERT INTO users (username, email, password_hash, first_name, last_name, active, created_at, updated_at)
-SELECT 'admin_local', 'admin@local.com', 'hashed_pw_admin', 'Admin', 'Local', true, now(), now()
+INSERT INTO users (username, email, password_hash, name, active, created_at, updated_at)
+SELECT 'admin_local', 'admin@local.com', 'hashed_pw_admin', 'Admin Local', true, now(), now()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@local.com');
 
 -- Associações
