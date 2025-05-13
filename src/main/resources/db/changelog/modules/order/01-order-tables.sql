@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS orders (
     status order_status_enum DEFAULT 'WAITING_PAYMENT' NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     subtotal DECIMAL(10, 2) NOT NULL,
     observations TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES products(id)
 );
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS order_payments (
     amount INTEGER NOT NULL,
     paid_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_order_payment_order FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_payment_payment FOREIGN KEY (payment_id) REFERENCES payments(id)
 );

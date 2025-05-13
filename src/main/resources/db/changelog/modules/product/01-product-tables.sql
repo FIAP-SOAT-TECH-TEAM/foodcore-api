@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS categories (
     display_order INT,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 );
 
 COMMENT ON TABLE categories IS 'Tabela que armazena as categorias de produtos';
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS products (
     display_order INT,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS stock (
     product_id BIGINT NOT NULL,
     quantity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_stock_product FOREIGN KEY (product_id) REFERENCES products(id),
     CONSTRAINT chk_quantity_positive CHECK (quantity > 0)
 );

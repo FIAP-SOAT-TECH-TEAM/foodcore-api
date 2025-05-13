@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS payments (
     qr_code_url VARCHAR(255),
     observations TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
