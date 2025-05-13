@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_id INT,
     order_number VARCHAR(20) UNIQUE NOT NULL,
     status order_status_enum DEFAULT 'WAITING_PAYMENT' NOT NULL,
-    total DECIMAL(10, 2) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
@@ -17,7 +17,7 @@ COMMENT ON COLUMN orders.id IS 'Identificador único do pedido';
 COMMENT ON COLUMN orders.customer_id IS 'Referência ao cliente que fez o pedido';
 COMMENT ON COLUMN orders.order_number IS 'Número único identificador do pedido para negócio';
 COMMENT ON COLUMN orders.status IS 'Status atual do pedido (usando tipo enumerado)';
-COMMENT ON COLUMN orders.total IS 'Valor total do pedido em reais';
+COMMENT ON COLUMN orders.amount IS 'Valor total do pedido em reais';
 COMMENT ON COLUMN orders.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN orders.updated_at IS 'Data da última atualização do registro';
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS order_payments (
     payment_id INTEGER NOT NULL,
     tid VARCHAR(255),
     status payment_status_enum DEFAULT 'PENDING' NOT NULL,
-    amount INTEGER NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
     paid_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

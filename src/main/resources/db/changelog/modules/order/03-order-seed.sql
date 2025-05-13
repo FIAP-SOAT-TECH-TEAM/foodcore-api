@@ -4,7 +4,7 @@
 -- Os dados de pedidos são apenas para ambiente de desenvolvimento
 
 -- Pedido 1
-INSERT INTO orders (customer_id, order_number, status, total, created_at, updated_at)
+INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM customers WHERE email = 'maria@email.com' LIMIT 1),
     'ORD-00000001',
@@ -58,7 +58,7 @@ SELECT
     (SELECT id FROM payments LIMIT 1),
     'TID-000001',
     'APPROVED',
-    3280,
+    32.80,
     now() - interval '1 hour',
     now() - interval '1 hour',
     now() - interval '1 hour'
@@ -67,7 +67,7 @@ WHERE NOT EXISTS (
 );
 
 -- Pedido 2
-INSERT INTO orders (customer_id, order_number, status, total, created_at, updated_at)
+INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM customers WHERE email = 'joao@email.com'),
     'ORD-00000002',
@@ -137,7 +137,7 @@ SELECT
     (SELECT id FROM payments LIMIT 1 OFFSET 1),
     'TID-000002',
     'REJECTED',
-    7970,
+    79.70,
     null,
     now() - interval '25 minute',
     now() - interval '25 minute'
@@ -146,7 +146,7 @@ WHERE NOT EXISTS (
 );
 
 -- Pedido 3 (sem cliente)
-INSERT INTO orders (order_number, status, total, created_at, updated_at)
+INSERT INTO orders (order_number, status, amount, created_at, updated_at)
 SELECT
     'ORD-00000003',
     'RECEIVED',
@@ -198,7 +198,7 @@ SELECT
     (SELECT id FROM payments LIMIT 1 OFFSET 2),
     'TID-000003',
     'PENDING',
-    1990,
+    19.90,
     null,
     now() - interval '5 minute',
     now() - interval '5 minute'
