@@ -1,14 +1,26 @@
 --liquibase formatted sql
 
---changeset payment:01-payment-tables
+--changeset payment:01-payment-tables runAlways:true
 CREATE TABLE IF NOT EXISTS payments (
     id SERIAL PRIMARY KEY,
-    order_id INT,
-    status payment_status_enum NOT NULL,
+    customer_id INT,
     type payment_type_enum NOT NULL,
+    expires_in TIMESTAMP NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    transaction_id VARCHAR(100),
     qr_code_url VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP
-); 
+    observations TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+COMMENT ON TABLE payments IS 'Tabela que armazena os pagamentos do sistema';
+COMMENT ON COLUMN payments.id IS 'Identificador único do pagamento';
+COMMENT ON COLUMN payments.customer_id IS 'Referência ao cliente associado ao pagamento';
+COMMENT ON COLUMN payments.type IS 'Tipo de pagamento';
+COMMENT ON COLUMN payments.expires_in IS 'Data e hora de expiração do pagamento';
+COMMENT ON COLUMN payments.amount IS 'Valor total do pagamento em reais';
+COMMENT ON COLUMN payments.qr_code_url IS 'URL do QR Code para pagamentos (quando aplicável)';
+COMMENT ON COLUMN payments.observations IS 'Observações adicionais sobre o pagamento';
+COMMENT ON COLUMN payments.created_at IS 'Data de criação do registro';
+COMMENT ON COLUMN payments.updated_at IS 'Data da última atualização do registro';
