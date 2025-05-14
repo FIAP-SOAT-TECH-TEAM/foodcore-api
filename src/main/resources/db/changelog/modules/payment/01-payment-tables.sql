@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS payments (
     customer_id INT,
     type payment_type_enum NOT NULL,
     expires_in TIMESTAMP NOT NULL,
-    tid VARCHAR(255) UNIQUE,
+    tid VARCHAR(255) UNIQUE NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     qr_code_url VARCHAR(255),
     observations TEXT,
