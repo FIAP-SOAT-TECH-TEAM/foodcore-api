@@ -89,12 +89,15 @@ A aplicação é estruturada como um monolito modular usando Spring Modulith, co
 ```mermaid
 graph TD
     subgraph "Monolito Modular"
+        USER[Módulo Usuário]
         ORDER[Módulo Pedido]
         CUSTOMER[Módulo Cliente]
         PRODUCT[Módulo Produto]
         PAYMENT[Módulo Pagamento]
         SHARED[Componentes Compartilhados]
         
+        USER --> PRODUCT
+        USER --> ORDER
         ORDER --> CUSTOMER
         ORDER --> PRODUCT
         ORDER --> PAYMENT
@@ -242,65 +245,137 @@ classDiagram
 ```mermaid
 erDiagram
     CUSTOMERS ||--o{ ORDERS : places
-    PRODUCTS ||--o{ ORDER_ITEMS : included_in
+    CUSTOMERS ||--o{ PAYMENTS : makes
     ORDERS ||--o{ ORDER_ITEMS : contains
-    ORDERS ||--o| PAYMENTS : has
-    
+    PRODUCTS ||--o{ ORDER_ITEMS : includes
+    PRODUCTS ||--|| STOCK : stored_in
+    CATEGORIES ||--o{ PRODUCTS : categorizes
+    ORDERS ||--o{ ORDER_PAYMENTS : has
+    PAYMENTS ||--o{ ORDER_PAYMENTS : completes
+    USERS ||--o{ USER_ROLES : has
+    ROLES ||--o{ USER_ROLES : assigned_to
+    USERS ||--o{ REFRESH_TOKENS : owns
+    USERS {
+        int id PK "ID único do usuário"
+        string username "Nome de usuário único para login"
+        string email "E-mail do usuário (também único)"
+        string password_hash "Hash da senha do usuário"
+        string name "Nome do usuário"
+        boolean active "Indica se o usuário está ativo"
+        timestamp last_login "Data do último login"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
+
+    ROLES {
+        int id PK "ID único da Role"
+        string name "Nome único do role (ex: ADMIN, USER)"
+        string description "Descrição das permissões do role"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
+
+    USER_ROLES {
+        int id PK "ID único da Role do usuário"
+        int user_id FK "ID do usuário"
+        int role_id FK "ID do role associado"
+        timestamp created_at "Data de criação do registro"
+        timestamp updated_at "Data da última atualização do registro"
+    }
+
+    REFRESH_TOKENS {
+        int id PK "ID único do refresh token"
+        int user_id FK "ID do usuário"
+        string token "Token de refresh único"
+        boolean active "Indica se o Refresh Token está ativo"
+        timestamp expires_at "Data de expiração do token"
+        timestamp created_at "Data de criação do registro"
+    }
     CUSTOMERS {
-        id BIGINT PK
-        name VARCHAR(100)
-        email VARCHAR(100)
-        document VARCHAR(20)
-        phone VARCHAR(20)
-        created_at TIMESTAMP
-        updated_at TIMESTAMP
-        active BOOLEAN
+        bigint id PK
+        varchar name
+        varchar email
+        varchar document
+        timestamp created_at
+        timestamp updated_at
+        boolean active
     }
-    
-    PRODUCTS {
-        id BIGINT PK
-        name VARCHAR(100)
-        description TEXT
-        category VARCHAR(20)
-        price DECIMAL(10_2)
-        image_url VARCHAR(255)
-        created_at TIMESTAMP
-        updated_at TIMESTAMP
-        active BOOLEAN
-    }
-    
+
     ORDERS {
-        id BIGINT PK
-        order_number VARCHAR(20)
-        customer_id BIGINT FK
-        status VARCHAR(20)
-        total DECIMAL(10_2)
-        created_at TIMESTAMP
-        updated_at TIMESTAMP
+        int id PK
+        int customer_id FK
+        varchar order_number
+        varchar status
+        decimal amount
+        timestamp created_at
+        timestamp updated_at
     }
-    
+
     ORDER_ITEMS {
-        id BIGINT PK
-        order_id BIGINT FK
-        product_id BIGINT FK
-        product_name VARCHAR(100)
-        quantity INTEGER
-        unit_price DECIMAL(10_2)
-        total DECIMAL(10_2)
-        observations TEXT
+        int id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal unit_price
+        decimal subtotal
+        text observations
+        timestamp created_at
+        timestamp updated_at
     }
-    
+
+    PRODUCTS {
+        bigint id PK
+        bigint category_id FK
+        varchar name
+        varchar description
+        decimal price
+        varchar image_url
+        int display_order
+        boolean active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CATEGORIES {
+        bigint id PK
+        varchar name
+        varchar description
+        varchar image_url
+        int display_order
+        boolean active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    STOCK {
+        bigint id PK
+        bigint product_id FK
+        int quantity
+        timestamp created_at
+        timestamp updated_at
+    }
+
     PAYMENTS {
-        id BIGINT PK
-        order_id BIGINT FK
-        external_id VARCHAR(100)
-        amount DECIMAL(10_2)
-        status VARCHAR(20)
-        payment_method VARCHAR(50)
-        qr_code_url VARCHAR(255)
-        qr_code_data TEXT
-        created_at TIMESTAMP
-        processed_at TIMESTAMP
+        int id PK
+        int customer_id FK
+        varchar type
+        timestamp expires_in
+        varchar tid
+        decimal amount
+        varchar qr_code_url
+        text observations
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ORDER_PAYMENTS {
+        int id PK
+        int order_id FK
+        int payment_id FK
+        varchar status
+        timestamp paid_at
+        timestamp created_at
+        timestamp updated_at
     }
 ```
 

@@ -3,20 +3,20 @@
 --changeset product:03-product-seed runAlways:true onError:MARK_RAN
 
 -- Categorias
-INSERT INTO categories (name, description, image_url, display_order, active)
-SELECT 'Lanches', 'Hamburgueres e sanduíches', 'categories/burgers.jpg', 1, true
+INSERT INTO categories (name, description, image_url, display_order, active, updated_at)
+SELECT 'Lanches', 'Hamburgueres e sanduíches', 'categories/burgers.jpg', 1, true, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Lanches');
 
-INSERT INTO categories (name, description, image_url, display_order, active)
-SELECT 'Acompanhamentos', 'Batatas fritas, nuggets e outros acompanhamentos', 'categories/sides.jpg', 2, true
+INSERT INTO categories (name, description, image_url, display_order, active, updated_at)
+SELECT 'Acompanhamentos', 'Batatas fritas, nuggets e outros acompanhamentos', 'categories/sides.jpg', 2, true, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Acompanhamentos');
 
-INSERT INTO categories (name, description, image_url, display_order, active)
-SELECT 'Bebidas', 'Refrigerantes, sucos e outras bebidas', 'categories/drinks.jpg', 3, true
+INSERT INTO categories (name, description, image_url, display_order, active, updated_at)
+SELECT 'Bebidas', 'Refrigerantes, sucos e outras bebidas', 'categories/drinks.jpg', 3, true, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Bebidas');
 
-INSERT INTO categories (name, description, image_url, display_order, active)
-SELECT 'Sobremesas', 'Sorvetes, tortas e outras sobremesas', 'categories/desserts.jpg', 4, true
+INSERT INTO categories (name, description, image_url, display_order, active, updated_at)
+SELECT 'Sobremesas', 'Sorvetes, tortas e outras sobremesas', 'categories/desserts.jpg', 4, true, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Sobremesas');
 
 -- Lanches
@@ -116,4 +116,12 @@ WHERE NOT EXISTS (SELECT 1 FROM products WHERE name = 'Brownie');
 INSERT INTO products (name, description, price, image_url, category_id, display_order, active)
 SELECT 'Torta de Limão', 'Fatia de torta de limão', 10.90, 'products/lemon-pie.jpg', 
        (SELECT id FROM categories WHERE name = 'Sobremesas'), 5, true
-WHERE NOT EXISTS (SELECT 1 FROM products WHERE name = 'Torta de Limão'); 
+WHERE NOT EXISTS (SELECT 1 FROM products WHERE name = 'Torta de Limão');
+
+-- Estoque
+INSERT INTO stock (product_id, quantity, updated_at)
+SELECT id, 50, NOW()
+FROM products
+WHERE NOT EXISTS (
+  SELECT 1 FROM stock WHERE product_id = products.id
+);
