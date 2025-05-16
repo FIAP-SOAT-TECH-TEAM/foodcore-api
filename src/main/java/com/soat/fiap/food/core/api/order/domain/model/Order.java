@@ -67,11 +67,11 @@ public class Order {
      */
     public void calculateTotalAmount() {
         if (items == null || items.isEmpty()) {
-            totalAmount = BigDecimal.ZERO;
+            amount = BigDecimal.ZERO;
             return;
         }
         
-        totalAmount = items.stream()
+        amount = items.stream()
                 .map(OrderItem::getSubtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
