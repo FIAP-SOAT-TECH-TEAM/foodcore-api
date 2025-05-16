@@ -17,34 +17,34 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Payment {
     private Long id;
-    private Long orderId;
-    private String externalId;
+    private Long customerId;
+    private PaymentMethod type;
+    private LocalDateTime expiresIn;
+    private String tid;
     private BigDecimal amount;
-    private PaymentMethod method;
-    private PaymentStatus status;
     private String qrCodeUrl;
-    private String qrCodeData;
+    private String observations;
     private LocalDateTime createdAt;
-    private LocalDateTime processedAt;
+    private LocalDateTime updatedAt;
     
-    /**
-     * Atualiza o status do pagamento
-     * @param newStatus Novo status
-     */
-    public void updateStatus(PaymentStatus newStatus) {
-        this.status = newStatus;
-        if (newStatus == PaymentStatus.APPROVED || 
-            newStatus == PaymentStatus.REJECTED || 
-            newStatus == PaymentStatus.CANCELLED) {
-            this.processedAt = LocalDateTime.now();
-        }
-    }
+    // /**
+    //  * Atualiza o status do pagamento
+    //  * @param newStatus Novo status
+    //  */
+    // public void updateStatus(PaymentStatus newStatus) {
+    //     this.status = newStatus;
+    //     if (newStatus == PaymentStatus.APPROVED || 
+    //         newStatus == PaymentStatus.REJECTED || 
+    //         newStatus == PaymentStatus.CANCELLED) {
+    //         this.processedAt = LocalDateTime.now();
+    //     }
+    // }
     
-    /**
-     * Verifica se o pagamento está aprovado
-     * @return true se aprovado, false caso contrário
-     */
-    public boolean isApproved() {
-        return status == PaymentStatus.APPROVED;
-    }
+    // /**
+    //  * Verifica se o pagamento está aprovado
+    //  * @return true se aprovado, false caso contrário
+    //  */
+    // public boolean isApproved() {
+    //     return status == PaymentStatus.APPROVED;
+    // }
 } 
