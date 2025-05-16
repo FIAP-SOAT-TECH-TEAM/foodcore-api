@@ -23,7 +23,7 @@ public class Order {
     private String orderNumber;
     private OrderStatus status;
     private Customer customer;
-    private BigDecimal totalAmount;
+    private BigDecimal amount;
     
     @Builder.Default
     private List<OrderItem> items = new ArrayList<>();
