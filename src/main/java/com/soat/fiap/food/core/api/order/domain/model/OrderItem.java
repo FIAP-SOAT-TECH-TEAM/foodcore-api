@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Entidade de domínio que representa um item de pedido
@@ -21,6 +22,9 @@ public class OrderItem {
     private Integer quantity;
     private BigDecimal unitPrice;
     private String observations;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     
     /**
      * Calcula o subtotal do item (quantidade * preço unitário)
