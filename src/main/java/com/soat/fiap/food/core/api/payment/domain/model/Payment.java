@@ -26,25 +26,4 @@ public class Payment {
     private String observations;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
-    // /**
-    //  * Atualiza o status do pagamento
-    //  * @param newStatus Novo status
-    //  */
-    // public void updateStatus(PaymentStatus newStatus) {
-    //     this.status = newStatus;
-    //     if (newStatus == PaymentStatus.APPROVED || 
-    //         newStatus == PaymentStatus.REJECTED || 
-    //         newStatus == PaymentStatus.CANCELLED) {
-    //         this.processedAt = LocalDateTime.now();
-    //     }
-    // }
-    
-    // /**
-    //  * Verifica se o pagamento está aprovado
-    //  * @return true se aprovado, false caso contrário
-    //  */
-    // public boolean isApproved() {
-    //     return status == PaymentStatus.APPROVED;
-    // }
 } 
