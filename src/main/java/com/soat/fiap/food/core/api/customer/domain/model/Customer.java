@@ -19,7 +19,6 @@ public class Customer {
     private String name;
     private String email;
     private String document;
-    private String phone;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
