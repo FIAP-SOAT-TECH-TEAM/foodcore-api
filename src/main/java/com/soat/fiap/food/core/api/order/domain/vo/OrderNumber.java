@@ -14,7 +14,7 @@ import java.io.Serializable;
 public record OrderNumber(int year, int sequential) implements Serializable {
 
     /**
-     * Cria um novo número de pedido com validação de ano e sequência.
+     * Cria um novo número de pedido.
      *
      * @param year       ano com 4 dígitos
      * @param sequential número sequencial com até 5 dígitos
@@ -34,6 +34,11 @@ public record OrderNumber(int year, int sequential) implements Serializable {
 
     /**
      * Validação centralizada.
+     *
+     * @param year        Ano com 4 dígitos
+     * @param sequential  Número sequencial com até 5 dígitos
+     * @throws IllegalArgumentException se o ano não tiver 4 dígitos
+     * @throws IllegalArgumentException se o número sequencial for menor que 0 ou maior que 99999
      */
     private void validate(int year, int sequential) {
         Validate.isTrue(year >= 1000 && year <= 9999, "Ano deve ter 4 dígitos");

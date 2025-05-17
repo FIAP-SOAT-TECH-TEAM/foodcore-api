@@ -16,18 +16,6 @@ public class AuditInfo {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     /**
-     * Construtor padrão
-     * 
-     * @param updatedAt LocalDateTime a ser criado
-     * @throws NullPointerException  se o updatedAt for nulo
-     * @throws IllegalStateException se o updatedAt for menor ou igual a createdAt
-     */
-    public AuditInfo(LocalDateTime updatedAt) {
-        validate(updatedAt);
-        this.updatedAt = updatedAt;
-    }
-
-    /**
      * Autualiza o campo updatedAt
      * 
      * @param updatedAt LocalDateTime a ser atualizado

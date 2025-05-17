@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.payment.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.model.OrderPayment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

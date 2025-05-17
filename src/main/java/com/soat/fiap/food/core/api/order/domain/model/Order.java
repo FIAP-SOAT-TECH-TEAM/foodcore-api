@@ -3,12 +3,10 @@ package com.soat.fiap.food.core.api.order.domain.model;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,26 +24,88 @@ import java.util.Objects;
  *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Order {
+
     private Long id;
     private Long customerId;
     private OrderNumber orderNumber;
-    private OrderStatus status = OrderStatus.RECEIVED;
+    private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 
     private List<OrderItem> orderItems;
     private List<OrderPayment> orderPayments;
-    
+
+    /**
+     * Construtor que cria uma nova instância de pedido com os dados fornecidos.
+     *
+     * @param customerId   ID do cliente que realizou o pedido
+     * @param orderNumber  Número identificador do pedido
+     * @param orderStatus  Status atual do pedido
+     * @param orderItems   Lista de itens do pedido
+     * @throws NullPointerException     se customerId, orderNumber, orderStatus ou amount forem nulos
+     * @throws IllegalArgumentException se orderItems for vazio ou amount menor ou igual a zero
+     */
+    public Order(
+            Long customerId,
+            OrderNumber orderNumber,
+            OrderStatus orderStatus,
+            List<OrderItem> orderItems
+    ) {
+        validate(
+                customerId,
+                orderNumber,
+                orderStatus,
+                orderItems
+        );
+
+        this.customerId = customerId;
+        this.orderNumber = orderNumber;
+        this.orderStatus = orderStatus;
+        this.orderItems = orderItems;
+
+        calculateTotalAmount();
+    }
+
+    /**
+     * Validação centralizada.
+     *
+     * @param customerId   ID do cliente
+     * @param orderNumber  Número do pedido
+     * @param orderStatus  Status do pedido
+     * @param orderItems   Lista de itens do pedido
+     * @throws NullPointerException     se qualquer parâmetro obrigatório for nulo
+     * @throws IllegalArgumentException se a lista de itens estiver vazia ou se o valor for menor ou igual a zero
+     */
+    private void validate(
+            Long customerId,
+            OrderNumber orderNumber,
+            OrderStatus orderStatus,
+            List<OrderItem> orderItems
+    ) {
+        Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
+        Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
+        Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
+        Objects.requireNonNull(amount, "O valor do pedido não pode ser nulo");
+
+        Validate.notEmpty(orderItems, "A ordem deve conter itens");
+        Validate.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "O valor do pedido deve ser maior que 0");
+    }
+
     /**
      * Obtém o ID do cliente (se disponível)
      * @return ID do cliente ou null se não houver cliente associado
      */
     public Long getCustomerId() {
         return customerId != null ? customerId : null;
+    }
+
+    /**
+     * Obtém o número da ordem
+     * @return o número da ordem
+     */
+    public String getOrderNumber() {
+        return this.orderNumber.getFormatted();
     }
 
     /**
@@ -88,15 +148,12 @@ public class Order {
     /**
      * Calcula o valor total do pedido
      */
-    public void calculateTotalAmount() {
-        if (orderItems == null || orderItems.isEmpty()) {
-            amount = BigDecimal.ZERO;
-            return;
-        }
-        
+    private void calculateTotalAmount() {
+
         amount = orderItems.stream()
                 .map(OrderItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
     }
     
     /**
@@ -109,23 +166,23 @@ public class Order {
 
         Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
         
-        if (this.status == newStatus) {
+        if (this.orderStatus == newStatus) {
             return;
         }
         
         validateStatusTransition(newStatus);
         
-        this.status = newStatus;
+        this.orderStatus = newStatus;
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
-    
+
     /**
      * Valida se a transição de status é permitida
      * @param newStatus Novo status a ser validado
      * @throws IllegalStateException se a transição não for permitida
      */
     private void validateStatusTransition(OrderStatus newStatus) {
-        if (this.status == OrderStatus.CANCELLED) {
+        if (this.orderStatus == OrderStatus.CANCELLED) {
             throw new IllegalStateException(
                 "Não é possível alterar o status de um pedido cancelado"
             );
@@ -160,8 +217,8 @@ public class Order {
         if (!(orderPayment.getStatus() == OrderPaymentStatus.PENDING)) {
             throw new IllegalArgumentException(String.format("Ordem deve estar pendente de pagamento: %s", orderPayment.getStatus()));
         }
-        if (!(this.status == OrderStatus.RECEIVED)) {
-            throw new IllegalArgumentException(String.format("Ordem deve estar aguardando pagamento: %s", this.getStatus()));
+        if (!(this.orderStatus == OrderStatus.RECEIVED)) {
+            throw new IllegalArgumentException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
         }
 
         orderPayment.setStatus(newStatus);
@@ -180,5 +237,47 @@ public class Order {
         return orderPayments
                 .stream()
                 .anyMatch(OrderPayment::isApproved);
+    }
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
+    }
+
+    /**
+     * Atualiza o campo updatedAt do item da ordemcom o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markOrderItemUpdatedNow(Long orderItemId) {
+        Objects.requireNonNull(orderItemId, "O id do item da ordem não pode ser nulo");
+
+        var orderItem = orderItems.stream()
+                .filter(o -> o.getId().equals(orderItemId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Item da ordem não encontrado"));
+
+        orderItem.markUpdatedNow();
+    }
+
+    /**
+     * Atualiza o campo updatedAt do pagamento da ordem o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markOrderPaymentUpdatedNow(Long orderPaymentId) {
+
+        Objects.requireNonNull(orderPaymentId, "O id do pagamento da não pode ser nulo");
+
+        var orderPayment = orderPayments.stream()
+                .filter(o -> o.getId().equals(orderPaymentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Pagamento da ordem não encontrado"));
+
+        orderPayment.markUpdatedNow();
     }
 } 

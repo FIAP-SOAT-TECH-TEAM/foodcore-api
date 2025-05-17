@@ -93,7 +93,7 @@ public class OrderService implements OrderUseCase {
             OrderCreatedEvent.of(
                 savedOrder.getId(),
                 savedOrder.getTotalAmount(),
-                savedOrder.getStatus(),
+                savedOrder.getOrderStatus(),
                 customerId
             )
         );
