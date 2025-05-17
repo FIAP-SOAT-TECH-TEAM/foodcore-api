@@ -79,17 +79,17 @@ public class OrderController {
 
             Order order = orderUseCase.createOrder(request.getCustomerId(), itemRequests);
             
-            if (request.getCustomerId() != null && (order.getCustomer() == null || order.getCustomer().getName() == null)) {
+            if (request.getCustomerId() != null && (order.getCustomerId() == null || order.getCustomerId().getName() == null)) {
                 logger.debug("Cliente completo não preenchido, buscando dados do cliente ID: {}", request.getCustomerId());
                 
-                if (order.getCustomer() == null) {
-                    order.setCustomer(Customer.builder().id(request.getCustomerId()).build());
+                if (order.getCustomerId() == null) {
+                    order.setCustomerId(Customer.builder().id(request.getCustomerId()).build());
                 }
                 
                 customerRepository.findById(request.getCustomerId())
                     .ifPresent(customer -> {
                         logger.debug("Cliente encontrado: {}", customer.getName());
-                        order.setCustomer(customer);
+                        order.setCustomerId(customer);
                     });
             }
             

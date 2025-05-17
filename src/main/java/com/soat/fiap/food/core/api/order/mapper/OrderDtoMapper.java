@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.order.mapper;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.AddOrderItemRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.response.OrderResponse;
 import org.springframework.stereotype.Component;
@@ -47,10 +46,10 @@ public class OrderDtoMapper {
                 .orderNumber(order.getOrderNumber())
                 .status(order.getStatus())
                 .statusDescription(order.getStatus().getDescription())
-                .customerId(order.getCustomer() != null ? order.getCustomer().getId() : null)
-                .customerName(order.getCustomer() != null ? order.getCustomer().getName() : null)
+                .customerId(order.getCustomerId() != null ? order.getCustomerId().getId() : null)
+                .customerName(order.getCustomerId() != null ? order.getCustomerId().getName() : null)
                 .totalAmount(order.getTotalAmount())
-                .items(toOrderItemResponses(order.getItems()))
+                .items(toOrderItemResponses(order.getOrderItems()))
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();

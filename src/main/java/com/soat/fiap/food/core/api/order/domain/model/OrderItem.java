@@ -18,38 +18,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OrderItem {
     private Long id;
-    private Product product;
+    private Order order;
+    private Long productId;
     private Integer quantity;
     private BigDecimal unitPrice;
+    private final BigDecimal subTotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
     private String observations;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
-    /**
-     * Calcula o subtotal do item (quantidade * preço unitário)
-     * @return Subtotal do item
-     */
-    public BigDecimal getSubtotal() {
-        if (quantity == null || unitPrice == null) {
-            return BigDecimal.ZERO;
-        }
-        return unitPrice.multiply(BigDecimal.valueOf(quantity));
-    }
-    
-    /**
-     * Obtém o ID do produto
-     * @return ID do produto ou null se o produto não estiver definido
-     */
-    public Long getProductId() {
-        return product != null ? product.getId() : null;
-    }
-    
-    /**
-     * Obtém o nome do produto
-     * @return Nome do produto ou null se o produto não estiver definido
-     */
-    public String getProductName() {
-        return product != null ? product.getName() : null;
-    }
 } 

@@ -22,7 +22,7 @@ public interface OrderEntityMapper {
      * @param entity Entidade JPA
      * @return Entidade de domínio
      */
-    @Mapping(target = "customer", expression = "java(mapCustomer(entity))")
+    @Mapping(target = "customerId", expression = "java(mapCustomer(entity))")
     @Mapping(target = "status", source = "status", qualifiedByName = "statusToDomainValue")
     Order toDomain(OrderEntity entity);
     
@@ -38,7 +38,7 @@ public interface OrderEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    @Mapping(target = "customerId", source = "customer.id")
+    @Mapping(target = "customerId", source = "customerId.id")
     @Mapping(target = "status", source = "status", qualifiedByName = "statusToDatabaseValue")
     OrderEntity toEntity(Order domain);
     

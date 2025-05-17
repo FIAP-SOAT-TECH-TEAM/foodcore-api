@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentMapper;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository.SpringDataPaymentRepository;
 import org.springframework.stereotype.Component;
@@ -52,7 +52,7 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
     }
     
     @Override
-    public List<Payment> findByStatus(PaymentStatus status) {
+    public List<Payment> findByStatus(OrderPaymentStatus status) {
         return repository.findByStatus(status)
                 .stream()
                 .map(mapper::toDomain)

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -27,5 +27,5 @@ public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity
     /**
      * Lista todas as entidades de pagamento com determinado status
      */
-    List<PaymentEntity> findByStatus(PaymentStatus status);
+    List<PaymentEntity> findByStatus(OrderPaymentStatus status);
 } 

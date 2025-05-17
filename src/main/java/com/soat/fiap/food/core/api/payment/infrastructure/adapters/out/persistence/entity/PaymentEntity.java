@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity;
 
 import com.soat.fiap.food.core.api.payment.domain.model.PaymentMethod;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +41,7 @@ public class PaymentEntity {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private OrderPaymentStatus status;
     
     @Column(name = "qr_code_url")
     private String qrCodeUrl;

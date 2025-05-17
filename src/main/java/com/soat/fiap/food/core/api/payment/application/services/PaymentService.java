@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentReposito
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.model.PaymentMethod;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class PaymentService implements PaymentUseCase {
                 .orderId(orderId)
                 .amount(totalAmount)
                 .method(PaymentMethod.PIX) // Assumindo PIX como padrão por enquanto
-                .status(PaymentStatus.PENDING)
+                .status(OrderPaymentStatus.PENDING)
                 .externalId("PAY-" + UUID.randomUUID().toString())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -84,9 +84,9 @@ public class PaymentService implements PaymentUseCase {
         var payment = paymentRepository.findByExternalId(paymentId)
                 .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado: " + paymentId));
         
-        PaymentStatus newStatus;
+        OrderPaymentStatus newStatus;
         try {
-            newStatus = PaymentStatus.valueOf(status.toUpperCase());
+            newStatus = OrderPaymentStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
             log.error("Status de pagamento inválido: {}", status);
             throw new IllegalArgumentException("Status de pagamento inválido: " + status);
@@ -95,7 +95,7 @@ public class PaymentService implements PaymentUseCase {
         payment.updateStatus(newStatus);
         paymentRepository.save(payment);
 
-        if (newStatus == PaymentStatus.APPROVED) {
+        if (newStatus == OrderPaymentStatus.APPROVED) {
             log.info("Pagamento {} aprovado! Publicando evento.", paymentId);
             eventPublisher.publishEvent(
                 PaymentApprovedEvent.of(

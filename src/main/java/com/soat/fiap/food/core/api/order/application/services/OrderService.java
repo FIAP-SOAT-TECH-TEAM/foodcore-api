@@ -54,14 +54,14 @@ public class OrderService implements OrderUseCase {
         Customer customer = null;
         if (customerId != null) {
             customer = customerRepository.findById(customerId)
-                    .orElseThrow(() -> new ResourceNotFoundException("customer", customerId));
+                    .orElseThrow(() -> new ResourceNotFoundException("customerId", customerId));
         }
         
         Order order = Order.builder()
                 .orderNumber(generateOrderNumber())
                 .status(OrderStatus.PENDING)
-                .customer(customer)
-                .items(new ArrayList<>())
+                .customerId(customer)
+                .orderItems(new ArrayList<>())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -84,7 +84,7 @@ public class OrderService implements OrderUseCase {
         
         if (customerId != null) {
             customerRepository.findById(customerId).ifPresent(fullCustomer -> {
-                savedOrder.setCustomer(fullCustomer);
+                savedOrder.setCustomerId(fullCustomer);
                 logger.debug("Cliente carregado explicitamente: {}", fullCustomer.getName());
             });
         }
@@ -171,8 +171,8 @@ public class OrderService implements OrderUseCase {
             return;
         }
         
-        boolean needsCustomerData = (order.getCustomer() == null && order.getCustomerId() != null) || 
-                                   (order.getCustomer() != null && order.getCustomer().getName() == null);
+        boolean needsCustomerData = (order.getCustomerId() == null && order.getCustomerId() != null) ||
+                                   (order.getCustomerId() != null && order.getCustomerId().getName() == null);
         
         if (needsCustomerData && order.getCustomerId() != null) {
             logger.debug("Carregando dados do cliente ID: {} para pedido ID: {}", 
@@ -180,7 +180,7 @@ public class OrderService implements OrderUseCase {
             
             customerRepository.findById(order.getCustomerId())
                     .ifPresent(customer -> {
-                        order.setCustomer(customer);
+                        order.setCustomerId(customer);
                         logger.debug("Cliente carregado: {}", customer.getName());
                     });
         }

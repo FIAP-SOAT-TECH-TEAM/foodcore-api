@@ -7,7 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum OrderStatus {
-    PENDING("Pendente"),
+    RECEIVED("Recebido"),
     PREPARING("Em Preparação"),
     READY("Pronto"),
     COMPLETED("Finalizado"),
@@ -19,4 +19,4 @@ public enum OrderStatus {
         this.description = description;
     }
 
-} 
+}

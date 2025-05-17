@@ -1,15 +1,17 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
-import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.aspectj.apache.bcel.classfile.Module;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entidade de domínio que representa um pedido
@@ -20,23 +22,36 @@ import java.util.List;
 @AllArgsConstructor
 public class Order {
     private Long id;
+    private Long customerId;
     private String orderNumber;
-    private OrderStatus status;
-    private Customer customer;
+    private OrderStatus status = OrderStatus.RECEIVED;
     private BigDecimal amount;
-    
-    @Builder.Default
-    private List<OrderItem> items = new ArrayList<>();
-    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private List<OrderItem> orderItems;
+    private List<OrderPayment> orderPayments;
     
     /**
      * Obtém o ID do cliente (se disponível)
      * @return ID do cliente ou null se não houver cliente associado
      */
     public Long getCustomerId() {
-        return customer != null ? customer.getId() : null;
+        return customerId != null ? customerId : null;
+    }
+
+    /**
+     * Fornece uma lista imutável de itens da ordem
+     */
+    public List<OrderItem> getOrderItems() {
+        return Collections.unmodifiableList(this.orderItems);
+    }
+
+    /**
+     * Fornece uma lista imutável de pagamentos da ordem
+     */
+    public List<OrderPayment> getOrderPayments() {
+        return Collections.unmodifiableList(this.orderPayments);
     }
     
     /**
@@ -44,10 +59,10 @@ public class Order {
      * @param item Item a ser adicionado
      */
     public void addItem(OrderItem item) {
-        if (items == null) {
-            items = new ArrayList<>();
+        if (orderItems == null) {
+            orderItems = new ArrayList<>();
         }
-        items.add(item);
+        orderItems.add(item);
         calculateTotalAmount();
     }
     
@@ -56,8 +71,8 @@ public class Order {
      * @param item Item a ser removido
      */
     public void removeItem(OrderItem item) {
-        if (items != null) {
-            items.remove(item);
+        if (orderItems != null) {
+            orderItems.remove(item);
             calculateTotalAmount();
         }
     }
@@ -66,26 +81,25 @@ public class Order {
      * Calcula o valor total do pedido
      */
     public void calculateTotalAmount() {
-        if (items == null || items.isEmpty()) {
+        if (orderItems == null || orderItems.isEmpty()) {
             amount = BigDecimal.ZERO;
             return;
         }
         
-        amount = items.stream()
-                .map(OrderItem::getSubtotal)
+        amount = orderItems.stream()
+                .map(OrderItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     
     /**
      * Atualiza o status do pedido
      * @param newStatus Novo status
-     * @throws IllegalArgumentException se o status for inválido
+     * @throws NullPointerException se o status da ordem for nulo
      * @throws IllegalStateException se a transição de status não for permitida
      */
     public void updateStatus(OrderStatus newStatus) {
-        if (newStatus == null) {
-            throw new IllegalArgumentException("O status não pode ser nulo");
-        }
+
+        Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
         
         if (this.status == newStatus) {
             return;
@@ -108,5 +122,54 @@ public class Order {
                 "Não é possível alterar o status de um pedido cancelado"
             );
         }
+    }
+
+    /**
+     * Atualiza o status do pagamento
+     *
+     * @param newStatus Novo status
+     * @param orderPaymentId Id do pagamento da ordem
+     * @throws NullPointerException se o status de pagamento for nulo
+     * @throws NullPointerException se o id de pagamento da ordem for nulo
+     * @throws IllegalArgumentException se o pagamento da ordem não for encontrado
+     * @throws IllegalArgumentException se o pagamento da ordem não estiver pendente
+     * @throws IllegalArgumentException se a ordem não estiver aguardando pagamento
+     */
+    public void updateOrderPaymentStatus(Long orderPaymentId, OrderPaymentStatus newStatus) {
+
+        Objects.requireNonNull(newStatus, "O status de pagamento não pode ser nulo");
+        Objects.requireNonNull(orderPaymentId, "O id do pagamento da ordem não pode ser nulo");
+
+        var orderPayment = orderPayments.stream()
+                .filter(o -> o.getId().equals(orderPaymentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Pagamento da ordem não encontrado"));
+
+
+        if (orderPayment.getStatus() == newStatus) {
+            return;
+        }
+        if (!(orderPayment.getStatus() == OrderPaymentStatus.PENDING)) {
+            throw new IllegalArgumentException(String.format("Ordem deve estar pendente de pagamento: %s", orderPayment.getStatus()));
+        }
+        if (!(this.status == OrderStatus.RECEIVED)) {
+            throw new IllegalArgumentException(String.format("Ordem deve estar aguardando pagamento: %s", this.getStatus()));
+        }
+
+        orderPayment.setStatus(newStatus);
+        orderPayment.setPaidAt((newStatus == OrderPaymentStatus.APPROVED) ? LocalDateTime.now() : orderPayment.getPaidAt());
+    }
+
+    /**
+     * Retorna se o pagamento da ordem foi aprovado
+     */
+    public boolean hasApprovedPayment() {
+        if (orderPayments == null) {
+            return false;
+        }
+
+        return orderPayments
+                .stream()
+                .anyMatch(OrderPayment::isApproved);
     }
 } 
