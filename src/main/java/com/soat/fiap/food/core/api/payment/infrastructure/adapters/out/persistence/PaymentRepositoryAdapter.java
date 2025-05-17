@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentMapper;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository.SpringDataPaymentRepository;
 import org.springframework.stereotype.Component;

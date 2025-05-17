@@ -1,10 +1,12 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Module;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
@@ -30,7 +32,7 @@ import java.util.Objects;
 public class Order {
     private Long id;
     private Long customerId;
-    private String orderNumber;
+    private OrderNumber orderNumber;
     private OrderStatus status = OrderStatus.RECEIVED;
     private BigDecimal amount;
     private AuditInfo auditInfo;

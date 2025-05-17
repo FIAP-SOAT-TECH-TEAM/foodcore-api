@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.order.domain.model;
+package com.soat.fiap.food.core.api.order.domain.vo;
 
 import lombok.Getter;
 

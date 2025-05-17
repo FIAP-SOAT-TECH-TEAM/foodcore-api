@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import lombok.*;
 import java.time.LocalDateTime;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
@@ -7,10 +8,8 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 /**
  * Entidade de domínio que representa um item de pedido
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter(AccessLevel.PACKAGE)
+@Setter(AccessLevel.PACKAGE)
 public class OrderPayment {
     private Long id;
     private Long orderId;
@@ -24,7 +23,7 @@ public class OrderPayment {
      * 
      * @return true se aprovado, false caso contrário
      */
-    public boolean isApproved() {
+    boolean isApproved() {
         return status == OrderPaymentStatus.APPROVED;
     }
 }

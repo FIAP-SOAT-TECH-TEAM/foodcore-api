@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.OrderEntityMapper;

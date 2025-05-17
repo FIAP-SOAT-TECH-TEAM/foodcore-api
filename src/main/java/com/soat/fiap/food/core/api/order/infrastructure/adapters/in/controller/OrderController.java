@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerReposi
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.AddOrderItemRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.UpdateOrderStatusRequest;

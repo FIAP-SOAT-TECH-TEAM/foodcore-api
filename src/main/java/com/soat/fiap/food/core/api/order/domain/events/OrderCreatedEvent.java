@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.domain.events;
 
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

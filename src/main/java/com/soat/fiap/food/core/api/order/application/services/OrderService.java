@@ -7,7 +7,7 @@ import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.product.application.ports.out.ProductRepository;
 import com.soat.fiap.food.core.api.product.domain.model.Product;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;

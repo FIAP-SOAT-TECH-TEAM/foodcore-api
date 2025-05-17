@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentReposito
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.model.PaymentMethod;
-import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

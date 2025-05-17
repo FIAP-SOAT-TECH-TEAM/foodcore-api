@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.order.domain.model.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
