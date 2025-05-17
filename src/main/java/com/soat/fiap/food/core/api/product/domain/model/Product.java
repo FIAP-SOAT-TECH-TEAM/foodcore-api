@@ -1,9 +1,8 @@
 package com.soat.fiap.food.core.api.product.domain.model;
 
 import lombok.*;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 /**
  * Entidade de domínio que representa um produto
@@ -33,9 +32,8 @@ public class Product {
     @Getter
     private boolean active;
     private Integer displayOrder;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
+    private AuditInfo auditInfo;
+
     /**
      * Ativa o produto
      */

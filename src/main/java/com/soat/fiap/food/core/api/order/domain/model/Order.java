@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.aspectj.apache.bcel.classfile.Module;
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,8 +33,7 @@ public class Order {
     private String orderNumber;
     private OrderStatus status = OrderStatus.RECEIVED;
     private BigDecimal amount;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
 
     private List<OrderItem> orderItems;
     private List<OrderPayment> orderPayments;
@@ -113,7 +114,7 @@ public class Order {
         validateStatusTransition(newStatus);
         
         this.status = newStatus;
-        this.updatedAt = LocalDateTime.now();
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
     
     /**

@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 /**
  * Entidade de domínio que representa um item de pedido
@@ -17,8 +17,7 @@ public class OrderPayment {
     private Long paymentId;
     private OrderPaymentStatus status = OrderPaymentStatus.PENDING;
     private LocalDateTime paidAt;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
 
     /**
      * Verifica se o pagamento está aprovado

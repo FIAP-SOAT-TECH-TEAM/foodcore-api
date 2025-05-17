@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.product.domain.model;
 
-import java.time.LocalDateTime;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,5 @@ public class Stock {
     private Long id;
     private Long customerId;
     private Integer quantity;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
 }

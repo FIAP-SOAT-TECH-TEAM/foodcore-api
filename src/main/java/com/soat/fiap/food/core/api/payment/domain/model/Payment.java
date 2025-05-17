@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+
 /**
  * Entidade de domínio que representa um pagamento
  * AGGREGATE ROOT:
@@ -29,6 +31,5 @@ public class Payment {
     private BigDecimal amount;
     private String qrCodeUrl;
     private String observations;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
 } 

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+
 /**
  * Entidade de domínio que representa um cliente
  * AGGREGATE ROOT:
@@ -24,8 +26,7 @@ public class Customer {
     private String name;
     private String email;
     private String document;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
     private boolean active;
     
     /**

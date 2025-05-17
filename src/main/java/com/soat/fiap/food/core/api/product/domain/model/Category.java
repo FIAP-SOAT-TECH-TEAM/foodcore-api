@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.product.domain.model;
 
-import java.time.LocalDateTime;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +21,7 @@ public class Category {
     private String imageUrl;
     private Integer displayOrder;
     private boolean active;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private AuditInfo auditInfo;
     
     /**
      * Ativa a categoria
