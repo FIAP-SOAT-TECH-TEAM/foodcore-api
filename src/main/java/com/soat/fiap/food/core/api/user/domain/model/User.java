@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Entidade de domínio que representa um cliente
+ * Entidade de domínio que representa um usuário
  * AGGREGATE ROOT:
  *  - Toda modificação de entidades internas do agregado devem passar pela entidade raíz;
  *  - Único ponto de entrada para qualquer entidade interna do agregado (Lei de Demeter);
