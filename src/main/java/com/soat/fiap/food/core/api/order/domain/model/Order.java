@@ -15,6 +15,11 @@ import java.util.Objects;
 
 /**
  * Entidade de domínio que representa um pedido
+ * AGGREGATE ROOT:
+ *  - Toda modificação de entidades internas do agregado devem passar pela entidade raíz;
+ *  - Único ponto de entrada para qualquer entidade interna do agregado (Lei de Demeter);
+ *  - Entidades dentro deste agregado podem se referenciar via id ou objeto;
+ *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
  */
 @Data
 @Builder
@@ -162,6 +167,7 @@ public class Order {
 
     /**
      * Retorna se o pagamento da ordem foi aprovado
+     * @return true se tiver pagamento aprovado, false caso contrário
      */
     public boolean hasApprovedPayment() {
         if (orderPayments == null) {
