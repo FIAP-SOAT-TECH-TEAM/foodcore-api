@@ -28,14 +28,14 @@ public class User {
 
     
     /**
-     * Ativa o cliente
+     * Ativa o usuário
      */
     public void activate() {
         this.active = true;
     }
     
     /**
-     * Desativa o cliente
+     * Desativa o usuário
      */
     public void deactivate() {
         this.active = false;
