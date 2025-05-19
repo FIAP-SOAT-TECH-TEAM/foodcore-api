@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
  *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
     private Long id;
     private String name;

@@ -13,9 +13,6 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
  *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Product {
     private Long id;
     private String name;
