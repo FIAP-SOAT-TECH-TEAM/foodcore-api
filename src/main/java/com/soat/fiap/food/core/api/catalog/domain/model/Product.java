@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
@@ -24,7 +25,7 @@ public class Product {
     private final AuditInfo auditInfo = new AuditInfo();
 
     private Category category;
-    private List<Stock> stocks;
+    private final Stock stock = new Stock();
 
 
     void setPrice(BigDecimal price) {
@@ -33,6 +34,10 @@ public class Product {
         }
 
         this.price = price;
+    }
+
+    void updateStockQuantity (int quantity) {
+        stock.setQuantity(quantity);
     }
 
     /**

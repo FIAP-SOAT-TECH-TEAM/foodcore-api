@@ -124,4 +124,13 @@ public class Catalog {
         category.removeProduct(product);
     }
 
+    public void updateProductStockQuantity (Long categoryId, Long productId, int newQuantity) {
+        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+        Objects.requireNonNull(productId, "O ID produto não pode ser nulo");
+
+        var product = getProductFromCategoryById(categoryId, productId);
+
+        product.updateStockQuantity(newQuantity);
+    }
+
 } 
