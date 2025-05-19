@@ -76,4 +76,13 @@ public class Payment {
         Objects.requireNonNull(amount, "O valor total não pode ser nulo");
     }
 
+    /**
+     * Verifica se o pagamento está expirado.
+     *
+     * @return {@code true} se o pagamento estiver expirado, {@code false} caso contrário
+     */
+    public boolean isExpired() {
+        return expiresIn.isBefore(LocalDateTime.now());
+    }
+
 }
