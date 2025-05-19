@@ -20,7 +20,7 @@ public class Product {
     private String imageUrl;
     private boolean active;
     private Integer displayOrder;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 
     private Category category;
     private List<Stock> stocks;

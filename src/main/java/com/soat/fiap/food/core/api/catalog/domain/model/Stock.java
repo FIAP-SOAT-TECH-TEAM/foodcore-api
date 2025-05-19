@@ -13,7 +13,7 @@ public class Stock {
     private Long id;
     private Long customerId;
     private Integer quantity;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 
     private Product product;
 }

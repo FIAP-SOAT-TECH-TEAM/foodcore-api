@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Catalog {
     private Long id;
     private String name;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 
     private List<Category> categories;
 

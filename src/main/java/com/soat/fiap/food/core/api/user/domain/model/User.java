@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String document;
     private boolean active;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 
     
     /**

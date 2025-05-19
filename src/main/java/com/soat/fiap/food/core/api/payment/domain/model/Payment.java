@@ -29,5 +29,5 @@ public class Payment {
     private BigDecimal amount;
     private String qrCodeUrl;
     private String observations;
-    private AuditInfo auditInfo;
+    private final AuditInfo auditInfo = new AuditInfo();
 } 
