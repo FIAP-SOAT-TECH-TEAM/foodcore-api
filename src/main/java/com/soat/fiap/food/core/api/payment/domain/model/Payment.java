@@ -8,14 +8,6 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 /**
  * Entidade de domínio que representa um pagamento
- * AGGREGATE ROOT:
- * - Toda modificação de entidades internas do agregado devem passar pela
- * entidade raíz;
- * - Único ponto de entrada para qualquer entidade interna do agregado (Lei de
- * Demeter);
- * - Entidades dentro deste agregado podem se referenciar via id ou objeto;
- * - Entidades de outros agregados só podem referenciar esta entidade raiz, e
- * isto deve ser via Id;
  */
 @Data
 public class Payment {
@@ -30,17 +22,18 @@ public class Payment {
     private final AuditInfo auditInfo = new AuditInfo();
 
     /**
-     * Construtor que cria uma nova instância de pedido com os dados fornecidos.
+     * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
      *
-     * @param customerId  ID do cliente que realizou o pedido
-     * @param orderNumber Número identificador do pedido
-     * @param orderStatus Status atual do pedido
-     * @param orderItems  Lista de itens do pedido
-     * @throws NullPointerException     se customerId, orderNumber, orderStatus ou
-     *                                  amount forem nulos
-     * @throws IllegalArgumentException se orderItems for vazio ou se o valor
-     *                                  calculado do pedido for menor ou igual a
-     *                                  zero
+     * @param customerId ID do cliente que realizou o pedido
+     * @param type Tipo do método de pagamento
+     * @param expiresIn Data e hora de expiração do pagamento
+     * @param tid Identificador da transação (TID)
+     * @param amount Valor total do pagamento
+     * @param qrCodeUrl URL do QR Code do pagamento
+     * @param observations Observações adicionais sobre o pagamento
+     * 
+     * @throws NullPointerException se type, expiresIn, tid ou amount forem nulos
+     * 
      */
     public Payment(
             Long customerId,
@@ -66,11 +59,10 @@ public class Payment {
      * Valida os campos obrigatórios para um pagamento.
      *
      * @param type      o tipo do método de pagamento; não pode ser {@code null}
-     * @param expiresIn a data e hora de expiração do pagamento; não pode ser
-     *                  {@code null}
-     * @param tid       o identificador da transação (TID); não pode ser
-     *                  {@code null}
+     * @param expiresIn a data e hora de expiração do pagamento; não pode ser {@code null}
+     * @param tid       o identificador da transação (TID); não pode ser {@code null}
      * @param amount    o valor total do pagamento; não pode ser {@code null}
+     * 
      * @throws NullPointerException se algum dos parâmetros for {@code null}
      */
     private void validate(
