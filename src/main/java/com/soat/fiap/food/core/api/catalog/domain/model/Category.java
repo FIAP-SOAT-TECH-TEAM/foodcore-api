@@ -2,6 +2,8 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
+import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
+import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 import lombok.*;
@@ -17,15 +19,22 @@ import java.util.Objects;
 @Setter(AccessLevel.PACKAGE)
 public class Category {
     private Long id;
-    private String name;
-    private String description;
-    private String imageUrl;
+    private Details details;
+    private ImageUrl imageUrl;
     private Integer displayOrder;
     private boolean active;
     private final AuditInfo auditInfo = new AuditInfo();
 
     private Catalog catalog;
     private List<Product> products;
+
+    String getName() {
+        return this.details.name();
+    }
+
+    String getDescription() {
+        return this.details.description();
+    }
 
     Product getProductById (Long productId) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");

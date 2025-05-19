@@ -1,6 +1,8 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
+import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
+import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
 import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,16 +18,23 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 public class Product {
 
     private Long id;
-    private String name;
-    private String description;
+    private Details details;
     private BigDecimal price;
-    private String imageUrl;
+    private ImageUrl imageUrl;
     private boolean active;
     private Integer displayOrder;
     private final AuditInfo auditInfo = new AuditInfo();
 
     private Category category;
     private final Stock stock = new Stock();
+
+    String getName() {
+        return this.details.name();
+    }
+
+    String getDescription() {
+        return this.details.description();
+    }
 
 
     void setPrice(BigDecimal price) {

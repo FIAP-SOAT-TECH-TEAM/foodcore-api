@@ -67,8 +67,7 @@ public class Catalog {
 
         var currentCategory = getCategoryById(newCategory.getId());
 
-        currentCategory.setName(newCategory.getName());
-        currentCategory.setDescription(newCategory.getDescription());
+        currentCategory.setDetails(newCategory.getDetails());
         currentCategory.setImageUrl(newCategory.getImageUrl());
         currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
         currentCategory.setActive(currentCategory.isActive());
@@ -101,8 +100,7 @@ public class Catalog {
 
         var currentProduct = getProductFromCategoryById(currentCategoryId, newCategoryId);
 
-        currentProduct.setName(newProduct.getName());
-        currentProduct.setDescription(newProduct.getDescription());
+        currentProduct.setDetails(newProduct.getDetails());
         currentProduct.setPrice(newProduct.getPrice());
         currentProduct.setImageUrl(newProduct.getImageUrl());
         currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
