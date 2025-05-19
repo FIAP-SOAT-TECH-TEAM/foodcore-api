@@ -127,9 +127,8 @@ public class Order {
      * @param item Item a ser adicionado
      */
     public void addItem(OrderItem item) {
-        if (orderItems == null) {
-            orderItems = new ArrayList<>();
-        }
+        orderItems = (orderItems == null) ? new ArrayList<>() : orderItems;
+
         orderItems.add(item);
         calculateTotalAmount();
     }
