@@ -44,15 +44,15 @@ databaseChangeLog:
       file: modules/customer/03-customer-seed.sql
       relativeToChangelogFile: true
 
-  # Product module
+  # Catalog module
   - include:
-      file: modules/product/01-product-tables.sql
+      file: modules/catalog/01-catalog-tables.sql
       relativeToChangelogFile: true
   - include:
-      file: modules/product/02-product-indexes.sql
+      file: modules/catalog/02-catalog-indexes.sql
       relativeToChangelogFile: true
   - include:
-      file: modules/product/03-product-seed.sql
+      file: modules/catalog/03-catalog-seed.sql
       relativeToChangelogFile: true
 
   # Payment module

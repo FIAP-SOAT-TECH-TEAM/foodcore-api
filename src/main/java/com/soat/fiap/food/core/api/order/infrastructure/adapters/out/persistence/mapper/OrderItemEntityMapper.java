@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
-import com.soat.fiap.food.core.api.product.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import org.mapstruct.*;
 
 import java.util.List;
