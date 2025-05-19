@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,19 @@ public class Catalog {
     private AuditInfo auditInfo;
 
     private List<Category> categories;
+
+    public void addCategory(Category category) {
+
+        categories = (categories == null) ? new ArrayList<>() : categories;
+
+        if (categories
+                .stream()
+                .anyMatch(c -> c.getName().equals(category.getName()))) {
+            return;
+        }
+
+        categories.add(category);
+    }
 
 
 } 

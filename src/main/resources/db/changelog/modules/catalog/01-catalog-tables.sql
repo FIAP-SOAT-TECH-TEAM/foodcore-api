@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS categories (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_category_catalog FOREIGN KEY (catalog_id) REFERENCES catalog(id)
+    CONSTRAINT fk_category_catalog FOREIGN KEY (catalog_id) REFERENCES catalog(id),
+    CONSTRAINT un_category_catalog UNIQUE (name, catalog_id)
 );
 
 COMMENT ON TABLE categories IS 'Tabela que armazena as categorias de produtos';
@@ -39,6 +40,7 @@ COMMENT ON COLUMN categories.display_order IS 'Ordem de exibição da categoria'
 COMMENT ON COLUMN categories.active IS 'Indica se a categoria está ativa ou não';
 COMMENT ON COLUMN categories.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN categories.updated_at IS 'Data da última atualização do registro';
+COMMENT ON CONSTRAINT un_category_catalog ON stock IS 'Garante que não existam categorias com nomes repetidos em um catalogo';
 
 -- Tabela de Produtos
 CREATE TABLE IF NOT EXISTS products (
