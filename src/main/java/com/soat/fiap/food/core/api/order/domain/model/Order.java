@@ -125,8 +125,11 @@ public class Order {
     /**
      * Adiciona um item ao pedido
      * @param item Item a ser adicionado
+     * @throws NullPointerException se o item da ordem for nulo
      */
     public void addItem(OrderItem item) {
+        Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
+
         orderItems = (orderItems == null) ? new ArrayList<>() : orderItems;
 
         orderItems.add(item);
@@ -136,8 +139,11 @@ public class Order {
     /**
      * Remove um item do pedido
      * @param item Item a ser removido
+     * @throws NullPointerException se o item da ordem for nulo
      */
     public void removeItem(OrderItem item) {
+        Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
+
         if (orderItems != null) {
             orderItems.remove(item);
             calculateTotalAmount();
@@ -179,8 +185,11 @@ public class Order {
      * Valida se a transição de status é permitida
      * @param newStatus Novo status a ser validado
      * @throws IllegalStateException se a transição não for permitida
+     * @throws NullPointerException se o status da ordem for nulo
      */
     private void validateStatusTransition(OrderStatus newStatus) {
+        Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
+
         if (this.orderStatus == OrderStatus.CANCELLED) {
             throw new IllegalStateException(
                 "Não é possível alterar o status de um pedido cancelado"

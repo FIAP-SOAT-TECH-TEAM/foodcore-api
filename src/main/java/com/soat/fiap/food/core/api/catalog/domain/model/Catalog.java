@@ -7,6 +7,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entidade de domínio que representa um catalogo de produto
@@ -26,6 +27,8 @@ public class Catalog {
 
     public void addCategory(Category category) {
 
+        Objects.requireNonNull(category, "A categoria não pode ser nula");
+
         categories = (categories == null) ? new ArrayList<>() : categories;
 
         if (categories
@@ -35,6 +38,13 @@ public class Catalog {
         }
 
         categories.add(category);
+    }
+
+    public void addProductToCategory(Long categoryId, Product product) {
+        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+        Objects.requireNonNull(product, "O produto não pode ser nulo");
+
+
     }
 
 
