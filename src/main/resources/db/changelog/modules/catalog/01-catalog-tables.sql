@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS stock (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_stock_product FOREIGN KEY (product_id) REFERENCES products(id),
-    CONSTRAINT chk_quantity_positive CHECK (quantity > 0)
+    CONSTRAINT chk_quantity_positive CHECK (quantity >= 0)
 );
 
 COMMENT ON TABLE stock IS 'Tabela que armazena o estoque dos produtos';
