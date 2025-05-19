@@ -20,6 +20,7 @@ public class Category {
     private boolean active;
     private AuditInfo auditInfo;
 
+    private Catalog catalog;
     private List<Product> products;
     
     /**

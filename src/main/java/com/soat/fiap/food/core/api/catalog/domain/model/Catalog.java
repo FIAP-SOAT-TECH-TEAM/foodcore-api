@@ -22,4 +22,6 @@ public class Catalog {
     private AuditInfo auditInfo;
 
     private List<Category> categories;
+
+
 } 
