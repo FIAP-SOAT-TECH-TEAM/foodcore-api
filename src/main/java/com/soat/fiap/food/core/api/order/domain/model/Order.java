@@ -240,12 +240,4 @@ public class Order {
                 .anyMatch(OrderPayment::isApproved);
     }
 
-    /**
-     * Atualiza o campo updatedAt com o horário atual.
-     *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
-     */
-    public void markUpdatedNow() {
-        this.auditInfo.setUpdatedAt(LocalDateTime.now());
-    }
 } 
