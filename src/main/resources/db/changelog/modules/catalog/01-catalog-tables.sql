@@ -40,13 +40,13 @@ COMMENT ON COLUMN categories.display_order IS 'Ordem de exibição da categoria'
 COMMENT ON COLUMN categories.active IS 'Indica se a categoria está ativa ou não';
 COMMENT ON COLUMN categories.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN categories.updated_at IS 'Data da última atualização do registro';
-COMMENT ON CONSTRAINT un_category_catalog ON stock IS 'Garante que não existam categorias com nomes repetidos em um catalogo';
+COMMENT ON CONSTRAINT un_category_catalog ON categories IS 'Garante que não existam categorias com nomes repetidos em um catalogo';
 
 -- Tabela de Produtos
 CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL,
-    name VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
     description VARCHAR(1000) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(500),
@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS products (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id)
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id),
+    CONSTRAINT un_product_category UNIQUE (name, category_id)
 );
 
 COMMENT ON TABLE products IS 'Tabela que armazena os produtos disponíveis para venda';
@@ -68,6 +69,7 @@ COMMENT ON COLUMN products.display_order IS 'Ordem de exibição do produto';
 COMMENT ON COLUMN products.active IS 'Indica se o produto está ativo ou não';
 COMMENT ON COLUMN products.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN products.updated_at IS 'Data da última atualização do registro';
+COMMENT ON CONSTRAINT un_product_category ON products IS 'Garante que não existam produtos com nomes repetidos em uma categoria';
 
 -- Tabela de estoque
 CREATE TABLE IF NOT EXISTS stock (

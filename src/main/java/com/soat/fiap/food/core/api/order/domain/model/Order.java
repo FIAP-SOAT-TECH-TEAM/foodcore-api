@@ -1,11 +1,11 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
-import lombok.Data;
-
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import lombok.Data;
 import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
@@ -44,7 +44,7 @@ public class Order {
      * @param orderStatus  Status atual do pedido
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se customerId, orderNumber, orderStatus ou amount forem nulos
-     * @throws IllegalArgumentException se orderItems for vazio ou amount menor ou igual a zero
+     * @throws IllegalArgumentException se orderItems for vazio ou se o valor calculado do pedido for menor ou igual a zero
      */
     public Order(
             Long customerId,
@@ -52,18 +52,11 @@ public class Order {
             OrderStatus orderStatus,
             List<OrderItem> orderItems
     ) {
-        validate(
-                customerId,
-                orderNumber,
-                orderStatus,
-                orderItems
-        );
-
+        validate(customerId, orderNumber, orderStatus, orderItems);
         this.customerId = customerId;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.orderItems = orderItems;
-
         calculateTotalAmount();
     }
 
@@ -86,10 +79,8 @@ public class Order {
         Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
         Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
         Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
-        Objects.requireNonNull(amount, "O valor do pedido não pode ser nulo");
 
         Validate.notEmpty(orderItems, "A ordem deve conter itens");
-        Validate.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "O valor do pedido deve ser maior que 0");
     }
 
     /**
@@ -110,6 +101,7 @@ public class Order {
 
     /**
      * Fornece uma lista imutável de itens da ordem
+     * @return lista imutável de itens
      */
     public List<OrderItem> getOrderItems() {
         return Collections.unmodifiableList(this.orderItems);
@@ -117,11 +109,12 @@ public class Order {
 
     /**
      * Fornece uma lista imutável de pagamentos da ordem
+     * @return lista imutável de pagamentos
      */
     public List<OrderPayment> getOrderPayments() {
         return Collections.unmodifiableList(this.orderPayments);
     }
-    
+
     /**
      * Adiciona um item ao pedido
      * @param item Item a ser adicionado
@@ -129,13 +122,11 @@ public class Order {
      */
     public void addItem(OrderItem item) {
         Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
-
         orderItems = (orderItems == null) ? new ArrayList<>() : orderItems;
-
         orderItems.add(item);
         calculateTotalAmount();
     }
-    
+
     /**
      * Remove um item do pedido
      * @param item Item a ser removido
@@ -149,34 +140,33 @@ public class Order {
             calculateTotalAmount();
         }
     }
-    
+
     /**
      * Calcula o valor total do pedido
      */
     private void calculateTotalAmount() {
-
         amount = orderItems.stream()
                 .map(OrderItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        Validate.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "O valor do pedido deve ser maior que 0");
     }
-    
+
     /**
      * Atualiza o status do pedido
      * @param newStatus Novo status
      * @throws NullPointerException se o status da ordem for nulo
-     * @throws IllegalStateException se a transição de status não for permitida
+     * @throws OrderException se a transição de status não for permitida
      */
     public void updateStatus(OrderStatus newStatus) {
-
         Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
-        
+
         if (this.orderStatus == newStatus) {
             return;
         }
-        
+
         validateStatusTransition(newStatus);
-        
+
         this.orderStatus = newStatus;
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
@@ -184,15 +174,15 @@ public class Order {
     /**
      * Valida se a transição de status é permitida
      * @param newStatus Novo status a ser validado
-     * @throws IllegalStateException se a transição não for permitida
      * @throws NullPointerException se o status da ordem for nulo
+     * @throws OrderException se a transição não for permitida
      */
     private void validateStatusTransition(OrderStatus newStatus) {
         Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
 
         if (this.orderStatus == OrderStatus.CANCELLED) {
-            throw new IllegalStateException(
-                "Não é possível alterar o status de um pedido cancelado"
+            throw new OrderException(
+                    "Não é possível alterar o status de um pedido cancelado"
             );
         }
     }
@@ -202,31 +192,26 @@ public class Order {
      *
      * @param newStatus Novo status
      * @param orderPaymentId Id do pagamento da ordem
-     * @throws NullPointerException se o status de pagamento for nulo
-     * @throws NullPointerException se o id de pagamento da ordem for nulo
-     * @throws IllegalArgumentException se o pagamento da ordem não for encontrado
-     * @throws IllegalArgumentException se o pagamento da ordem não estiver pendente
-     * @throws IllegalArgumentException se a ordem não estiver aguardando pagamento
+     * @throws NullPointerException se o status de pagamento ou id forem nulos
+     * @throws OrderException se o pagamento não for encontrado, não estiver pendente ou a ordem não estiver aguardando pagamento
      */
     public void updateOrderPaymentStatus(Long orderPaymentId, OrderPaymentStatus newStatus) {
-
         Objects.requireNonNull(newStatus, "O status de pagamento não pode ser nulo");
         Objects.requireNonNull(orderPaymentId, "O id do pagamento da ordem não pode ser nulo");
 
         var orderPayment = orderPayments.stream()
                 .filter(o -> o.getId().equals(orderPaymentId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento da ordem não encontrado"));
-
+                .orElseThrow(() -> new OrderException("Pagamento da ordem não encontrado"));
 
         if (orderPayment.getStatus() == newStatus) {
             return;
         }
         if (!(orderPayment.getStatus() == OrderPaymentStatus.PENDING)) {
-            throw new IllegalArgumentException(String.format("Ordem deve estar pendente de pagamento: %s", orderPayment.getStatus()));
+            throw new OrderException(String.format("Ordem deve estar pendente de pagamento: %s", orderPayment.getStatus()));
         }
         if (!(this.orderStatus == OrderStatus.RECEIVED)) {
-            throw new IllegalArgumentException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
+            throw new OrderException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
         }
 
         orderPayment.setStatus(newStatus);
@@ -247,5 +232,4 @@ public class Order {
                 .stream()
                 .anyMatch(OrderPayment::isApproved);
     }
-
-} 
+}

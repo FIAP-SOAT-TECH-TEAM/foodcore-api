@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class Catalog {
         return categories.stream()
                 .filter(o -> o.getId().equals(categoryId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada"));
+                .orElseThrow(() -> new CatalogException("Categoria não encontrada"));
     }
 
     public Product getProductFromCategoryById(Long categoryId, Long productId) {
@@ -52,25 +53,26 @@ public class Catalog {
         if (categories
                 .stream()
                 .anyMatch(c -> c.getName().equals(category.getName()))) {
-            return;
+            throw new CatalogException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
         }
 
         categories.add(category);
     }
 
-    public void updateCategory(Category category) {
+    public void updateCategory(Category newCategory) {
 
-        Objects.requireNonNull(category, "A categoria não pode ser nula");
+        Objects.requireNonNull(newCategory, "A categoria não pode ser nula");
 
         categories = (categories == null) ? new ArrayList<>() : categories;
 
-        if (categories
-                .stream()
-                .anyMatch(c -> c.getName().equals(category.getName()))) {
-            return;
-        }
+        var currentCategory = getCategoryById(newCategory.getId());
 
-        categories.add(category);
+        currentCategory.setName(newCategory.getName());
+        currentCategory.setDescription(newCategory.getDescription());
+        currentCategory.setImageUrl(newCategory.getImageUrl());
+        currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
+        currentCategory.setActive(currentCategory.isActive());
+
     }
 
     public void removeCategory(Long categoryId) {
@@ -90,7 +92,6 @@ public class Catalog {
 
         category.addProduct(product);
     }
-
 
     public void updateProductInCategory(Long currentCategoryId, Long newCategoryId, Product newProduct) {
 
@@ -122,6 +123,5 @@ public class Catalog {
 
         category.removeProduct(product);
     }
-
 
 } 

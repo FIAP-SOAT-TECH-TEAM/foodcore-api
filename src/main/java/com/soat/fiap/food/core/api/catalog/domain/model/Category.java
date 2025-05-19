@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 import lombok.*;
@@ -31,7 +33,7 @@ public class Category {
         return products.stream()
                 .filter(p -> p.getId().equals(productId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductException("Produto não encontrado"));
 
     }
 
@@ -41,7 +43,7 @@ public class Category {
         products = (products == null) ? new ArrayList<>() : products;
 
         if (products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
-            return;
+            throw new CategoryException(String.format("Já existe um produto cadastrado com o nome: %s, na categoria", product.getName()));
         }
 
         products.add(product);
@@ -51,7 +53,7 @@ public class Category {
         Objects.requireNonNull(product, "O produto não pode ser nulo");
 
         if (products == null || products.stream().noneMatch(p -> p.getName().equals(product.getName()))) {
-            return;
+            throw new CategoryException("Produto não encontrado");
         }
 
         products.remove(product);
