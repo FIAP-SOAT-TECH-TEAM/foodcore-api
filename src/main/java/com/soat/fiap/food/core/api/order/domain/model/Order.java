@@ -223,6 +223,7 @@ public class Order {
 
         orderPayment.setStatus(newStatus);
         orderPayment.setPaidAt((newStatus == OrderPaymentStatus.APPROVED) ? LocalDateTime.now() : orderPayment.getPaidAt());
+        orderPayment.markUpdatedNow();
     }
 
     /**
@@ -246,38 +247,5 @@ public class Order {
      */
     public void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
-    }
-
-    /**
-     * Atualiza o campo updatedAt do item da ordemcom o horário atual.
-     *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
-     */
-    public void markOrderItemUpdatedNow(Long orderItemId) {
-        Objects.requireNonNull(orderItemId, "O id do item da ordem não pode ser nulo");
-
-        var orderItem = orderItems.stream()
-                .filter(o -> o.getId().equals(orderItemId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Item da ordem não encontrado"));
-
-        orderItem.markUpdatedNow();
-    }
-
-    /**
-     * Atualiza o campo updatedAt do pagamento da ordem o horário atual.
-     *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
-     */
-    public void markOrderPaymentUpdatedNow(Long orderPaymentId) {
-
-        Objects.requireNonNull(orderPaymentId, "O id do pagamento da não pode ser nulo");
-
-        var orderPayment = orderPayments.stream()
-                .filter(o -> o.getId().equals(orderPaymentId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento da ordem não encontrado"));
-
-        orderPayment.markUpdatedNow();
     }
 } 
