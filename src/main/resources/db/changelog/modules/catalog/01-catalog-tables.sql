@@ -46,7 +46,7 @@ COMMENT ON CONSTRAINT un_category_catalog ON stock IS 'Garante que não existam 
 CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) UNIQUE NOT NULL,
     description VARCHAR(1000) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(500),

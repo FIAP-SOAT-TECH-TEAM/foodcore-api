@@ -25,18 +25,13 @@ public class Product {
     private Category category;
     private List<Stock> stocks;
 
-    /**
-     * Ativa o produto
-     */
-    void activate() {
-        this.active = true;
-    }
-    
-    /**
-     * Desativa o produto
-     */
-    void deactivate() {
-        this.active = false;
+
+    void setPrice(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("O preço deve ser maior que 0");
+        }
+
+        this.price = price;
     }
 
     /**
@@ -44,7 +39,7 @@ public class Product {
      * 
      * @return true se o produto estiver ativo e com preço válido.
      */
-    boolean isAvailable() {
+    boolean isActive() {
         return active && price != null && price.compareTo(BigDecimal.ZERO) > 0;
     }
 } 

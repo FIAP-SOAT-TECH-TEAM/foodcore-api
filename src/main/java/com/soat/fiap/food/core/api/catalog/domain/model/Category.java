@@ -4,7 +4,9 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entidade de domínio que representa uma categoria de produto
@@ -22,18 +24,36 @@ public class Category {
 
     private Catalog catalog;
     private List<Product> products;
-    
-    /**
-     * Ativa a categoria
-     */
-    public void activate() {
-        this.active = true;
+
+    Product getProductById (Long productId) {
+        Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
+
+        return products.stream()
+                .filter(p -> p.getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+
     }
-    
-    /**
-     * Desativa a categoria
-     */
-    public void deactivate() {
-        this.active = false;
+
+    void addProduct(Product product) {
+        Objects.requireNonNull(product, "O produto não pode ser nulo");
+
+        products = (products == null) ? new ArrayList<>() : products;
+
+        if (products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
+            return;
+        }
+
+        products.add(product);
+    }
+
+    void removeProduct(Product product) {
+        Objects.requireNonNull(product, "O produto não pode ser nulo");
+
+        if (products == null || products.stream().noneMatch(p -> p.getName().equals(product.getName()))) {
+            return;
+        }
+
+        products.remove(product);
     }
 } 
