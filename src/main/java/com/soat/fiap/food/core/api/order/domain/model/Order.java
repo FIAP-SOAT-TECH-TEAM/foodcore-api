@@ -56,8 +56,10 @@ public class Order {
         this.customerId = customerId;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
-        this.orderItems = orderItems;
-        calculateTotalAmount();
+
+        for (OrderItem orderItem : orderItems) {
+            addItem(orderItem);
+        }
     }
 
     /**
@@ -79,6 +81,7 @@ public class Order {
         Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
         Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
         Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
+        Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
 
         Validate.notEmpty(orderItems, "A ordem deve conter itens");
     }
