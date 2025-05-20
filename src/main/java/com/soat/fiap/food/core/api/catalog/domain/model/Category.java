@@ -15,6 +15,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,6 +72,14 @@ public class Category {
         if (displayOrder != null && displayOrder < 0) {
             throw new CatalogException("A ordem de exibição da categoria deve ser maior que 0");
         }
+    }
+
+    /**
+     * Fornece uma lista imutável de produtos
+     * @return lista imutável de produtos
+     */
+    List<Product> getProducts() {
+        return Collections.unmodifiableList(this.products);
     }
 
     /**

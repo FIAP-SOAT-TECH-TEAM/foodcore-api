@@ -1,16 +1,10 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
-import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
-import lombok.Getter;
-import org.apache.commons.lang3.Validate;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +21,7 @@ public class Catalog {
     private Long id;
     private String name;
     private final AuditInfo auditInfo = new AuditInfo();
+
     private List<Category> categories;
 
     /**
@@ -53,6 +48,14 @@ public class Catalog {
         if (name.trim().length() > 100) {
             throw new CatalogException("Nome do catalogo deve ter no máximo 100 caracteres");
         }
+    }
+
+    /**
+     * Fornece uma lista imutável de categorias
+     * @return lista imutável de categorias
+     */
+    public List<Category> getCategories() {
+        return Collections.unmodifiableList(this.categories);
     }
 
     /**
