@@ -2,6 +2,9 @@
 
 --changeset catalog:02-catalog-indexes
 
+-- Índices para tabela de catálogos
+CREATE INDEX idx_catalog_name ON catalog(name);
+
 -- Índices para tabela de categorias
 CREATE INDEX idx_categories_name ON categories(name);
 CREATE INDEX idx_categories_active ON categories(active);
