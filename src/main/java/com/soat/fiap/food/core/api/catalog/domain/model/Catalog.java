@@ -1,9 +1,13 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
+import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 import lombok.Getter;
+import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +29,19 @@ public class Catalog {
     private final AuditInfo auditInfo = new AuditInfo();
 
     private List<Category> categories;
+
+    public Catalog(
+            String name
+    ) {
+        validate(name);
+        this.name = name;
+    }
+
+    private void validate(
+            String name
+    ) {
+        Objects.requireNonNull(name, "O nome do catalogo não pode ser nulo");
+    }
 
     public Category getCategoryById(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");

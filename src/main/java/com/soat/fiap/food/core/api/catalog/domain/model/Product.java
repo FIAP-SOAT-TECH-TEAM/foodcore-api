@@ -1,14 +1,19 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
+import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Entidade de domínio que representa um produto
@@ -27,6 +32,40 @@ public class Product {
 
     private Category category;
     private final Stock stock = new Stock();
+
+    public Product(
+            Details details,
+            BigDecimal price,
+            ImageUrl imageUrl,
+            boolean active,
+            int displayOrder
+
+    ) {
+        validate(details, price, imageUrl, displayOrder);
+        this.details = details;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.active = active;
+        this.displayOrder = displayOrder;
+    }
+
+    private void validate(
+            Details details,
+            BigDecimal price,
+            ImageUrl imageUrl,
+            int displayOrder
+    ) {
+        Objects.requireNonNull(details, "Os detalhes do produto não podem ser nulos");
+        Objects.requireNonNull(imageUrl, "A URL da imagem não pode ser nula");
+        Objects.requireNonNull(price, "O preço do produto não pode ser nulo");
+
+        if (displayOrder < 0) {
+            throw new CatalogException("A ordem de exibição do produto deve ser maior que 0");
+        }
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ProductException("O preço deve ser maior que 0");
+        }
+    }
 
     String getName() {
         return this.details.name();
