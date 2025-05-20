@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.payment.domain.model;
 
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
