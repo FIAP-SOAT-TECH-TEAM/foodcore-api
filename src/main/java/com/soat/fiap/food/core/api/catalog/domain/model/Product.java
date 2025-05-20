@@ -38,10 +38,10 @@ public class Product {
             BigDecimal price,
             ImageUrl imageUrl,
             boolean active,
-            int displayOrder
+            Integer displayOrder
 
     ) {
-        validate(details, price, imageUrl, displayOrder);
+        validate(details, price, displayOrder);
         this.details = details;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -52,15 +52,13 @@ public class Product {
     private void validate(
             Details details,
             BigDecimal price,
-            ImageUrl imageUrl,
-            int displayOrder
+            Integer displayOrder
     ) {
         Objects.requireNonNull(details, "Os detalhes do produto não podem ser nulos");
-        Objects.requireNonNull(imageUrl, "A URL da imagem não pode ser nula");
         Objects.requireNonNull(price, "O preço do produto não pode ser nulo");
 
-        if (displayOrder < 0) {
-            throw new CatalogException("A ordem de exibição do produto deve ser maior que 0");
+        if (displayOrder != null && displayOrder < 0) {
+            throw new CatalogException("A ordem de exibição da categoria deve ser maior que 0");
         }
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new ProductException("O preço deve ser maior que 0");

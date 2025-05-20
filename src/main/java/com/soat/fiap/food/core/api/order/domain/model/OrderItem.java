@@ -22,18 +22,6 @@ public class OrderItem {
     private Order order;
 
     /**
-     * Construtor que cria um item de pedido com observação vazia
-     *
-     * @param productId        ID do produto
-     * @param orderItemPrice   Preço do item
-     * @throws NullPointerException se qualquer parâmetro for nulo
-     */
-    public OrderItem(Long productId,
-                     OrderItemPrice orderItemPrice) {
-        this(productId, orderItemPrice, "");
-    }
-
-    /**
      * Construtor que cria um item de pedido com os dados informados
      *
      * @param productId        ID do produto
@@ -68,7 +56,7 @@ public class OrderItem {
     ) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
         Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
-        Objects.requireNonNull(observations, "A observação do item da ordem não pode ser nula");
+
     }
 
     /**
