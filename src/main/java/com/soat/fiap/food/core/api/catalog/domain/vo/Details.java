@@ -30,4 +30,3 @@ public record Details(String name, String description) {
         }
     }
 }
-

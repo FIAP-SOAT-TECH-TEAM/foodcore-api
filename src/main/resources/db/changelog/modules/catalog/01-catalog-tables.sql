@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_category_catalog FOREIGN KEY (catalog_id) REFERENCES catalog(id),
-    CONSTRAINT un_category_catalog UNIQUE (name, catalog_id)
+    CONSTRAINT un_category_catalog UNIQUE (name, catalog_id),
+    CONSTRAINT chk_display_order_positive CHECK (display_order IS NULL OR display_order > 0)
 );
 
 COMMENT ON TABLE categories IS 'Tabela que armazena as categorias de produtos';
@@ -41,6 +42,7 @@ COMMENT ON COLUMN categories.active IS 'Indica se a categoria está ativa ou nã
 COMMENT ON COLUMN categories.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN categories.updated_at IS 'Data da última atualização do registro';
 COMMENT ON CONSTRAINT un_category_catalog ON categories IS 'Garante que não existam categorias com nomes repetidos em um catalogo';
+COMMENT ON CONSTRAINT chk_display_order_positive ON categories IS 'Garante que a ordem de exibição seja positiva';
 
 -- Tabela de Produtos
 CREATE TABLE IF NOT EXISTS products (
@@ -55,7 +57,9 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id),
-    CONSTRAINT un_product_category UNIQUE (name, category_id)
+    CONSTRAINT un_product_category UNIQUE (name, category_id),
+    CONSTRAINT chk_price_positive CHECK (price >= 0),
+    CONSTRAINT chk_display_order_positive CHECK (display_order IS NULL OR display_order > 0)
 );
 
 COMMENT ON TABLE products IS 'Tabela que armazena os produtos disponíveis para venda';
@@ -70,6 +74,8 @@ COMMENT ON COLUMN products.active IS 'Indica se o produto está ativo ou não';
 COMMENT ON COLUMN products.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN products.updated_at IS 'Data da última atualização do registro';
 COMMENT ON CONSTRAINT un_product_category ON products IS 'Garante que não existam produtos com nomes repetidos em uma categoria';
+COMMENT ON CONSTRAINT chk_price_positive ON products IS 'Garante que o preço do produto seja sempre positivo';
+COMMENT ON CONSTRAINT chk_display_order_positive ON products IS 'Garante que a ordem de exibição seja positiva';
 
 -- Tabela de estoque
 CREATE TABLE IF NOT EXISTS stock (

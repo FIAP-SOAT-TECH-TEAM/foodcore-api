@@ -26,7 +26,7 @@ public class Product {
     private Details details;
     private BigDecimal price;
     private ImageUrl imageUrl;
-    private boolean active;
+    private boolean active = true;
     private Integer displayOrder;
     private final AuditInfo auditInfo = new AuditInfo();
 
