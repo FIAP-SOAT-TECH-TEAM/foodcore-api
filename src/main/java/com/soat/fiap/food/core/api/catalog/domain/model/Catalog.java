@@ -41,9 +41,13 @@ public class Catalog {
             String name
     ) {
         Objects.requireNonNull(name, "O nome do catalogo não pode ser nulo");
+
+        if (name.trim().length() > 100) {
+            throw new CatalogException("Nome do catalogo deve ter no máximo 100 caracteres");
+        }
     }
 
-    public Category getCategoryById(Long categoryId) {
+    private Category getCategoryById(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
 
         return categories.stream()
@@ -52,13 +56,21 @@ public class Catalog {
                 .orElseThrow(() -> new CatalogException("Categoria não encontrada"));
     }
 
-    public Product getProductFromCategoryById(Long categoryId, Long productId) {
+    private Product getProductFromCategoryById(Long categoryId, Long productId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
 
         var category = getCategoryById(categoryId);
 
         return category.getProductById(productId);
+    }
+
+    public void setName(String name) {
+        if (name.trim().length() > 100) {
+            throw new CatalogException("Nome do catalogo deve ter no máximo 100 caracteres");
+        }
+
+        this.name = name;
     }
 
     public void addCategory(Category category) {
