@@ -49,6 +49,7 @@ public class Catalog {
      */
     private void validate(String name) {
         Objects.requireNonNull(name, "O nome do catalogo não pode ser nulo");
+
         if (name.trim().length() > 100) {
             throw new CatalogException("Nome do catalogo deve ter no máximo 100 caracteres");
         }
@@ -63,6 +64,7 @@ public class Catalog {
      */
     private Category getCategoryById(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+
         return categories.stream()
                 .filter(o -> o.getId().equals(categoryId))
                 .findFirst()
@@ -80,6 +82,7 @@ public class Catalog {
     private Product getProductFromCategoryById(Long categoryId, Long productId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
+
         var category = getCategoryById(categoryId);
         return category.getProductById(productId);
     }
@@ -94,6 +97,7 @@ public class Catalog {
         if (name.trim().length() > 100) {
             throw new CatalogException("Nome do catalogo deve ter no máximo 100 caracteres");
         }
+
         this.name = name;
     }
 
@@ -106,9 +110,11 @@ public class Catalog {
     public void addCategory(Category category) {
         Objects.requireNonNull(category, "A categoria não pode ser nula");
         categories = (categories == null) ? new ArrayList<>() : categories;
+
         if (categories.stream().anyMatch(c -> c.getName().equals(category.getName()))) {
             throw new CatalogException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
         }
+
         categories.add(category);
     }
 
@@ -121,11 +127,14 @@ public class Catalog {
     public void updateCategory(Category newCategory) {
         Objects.requireNonNull(newCategory, "A categoria não pode ser nula");
         categories = (categories == null) ? new ArrayList<>() : categories;
+
         var currentCategory = getCategoryById(newCategory.getId());
+
         currentCategory.setDetails(newCategory.getDetails());
         currentCategory.setImageUrl(newCategory.getImageUrl());
         currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
         currentCategory.setActive(currentCategory.isActive());
+        currentCategory.markUpdatedNow();
     }
 
     /**
@@ -135,6 +144,7 @@ public class Catalog {
      */
     public void removeCategory(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nula");
+
         var category = getCategoryById(categoryId);
         categories.remove(category);
     }
@@ -148,6 +158,7 @@ public class Catalog {
     public void addProductToCategory(Long categoryId, Product product) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(product, "O produto não pode ser nulo");
+
         var category = getCategoryById(categoryId);
         category.addProduct(product);
     }
@@ -163,12 +174,16 @@ public class Catalog {
         Objects.requireNonNull(currentCategoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(newCategoryId, "O novo ID da categoria não pode ser nulo");
         Objects.requireNonNull(newProduct, "O produto não pode ser nulo");
+
         var currentProduct = getProductFromCategoryById(currentCategoryId, newCategoryId);
+
         currentProduct.setDetails(newProduct.getDetails());
         currentProduct.setPrice(newProduct.getPrice());
         currentProduct.setImageUrl(newProduct.getImageUrl());
         currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
         currentProduct.setActive(newProduct.isActive());
+        currentProduct.markUpdatedNow();
+
         if (!currentCategoryId.equals(newCategoryId)) {
             removeProductFromCategory(currentCategoryId, newProduct);
             addProductToCategory(newCategoryId, newProduct);
@@ -184,6 +199,7 @@ public class Catalog {
     public void removeProductFromCategory(Long categoryId, Product product) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(product, "O produto não pode ser nulo");
+
         var category = getCategoryById(categoryId);
         category.removeProduct(product);
     }
@@ -198,6 +214,7 @@ public class Catalog {
     public void updateProductStockQuantity(Long categoryId, Long productId, int newQuantity) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(productId, "O ID produto não pode ser nulo");
+
         var product = getProductFromCategoryById(categoryId, productId);
         product.updateStockQuantity(newQuantity);
     }

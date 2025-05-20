@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -127,6 +128,7 @@ public class Product {
      */
     void updateStockQuantity(int quantity) {
         stock.setQuantity(quantity);
+        stock.markUpdatedNow();
     }
 
     /**
@@ -136,5 +138,14 @@ public class Product {
      */
     boolean isActive() {
         return active && price != null && price.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
 }
