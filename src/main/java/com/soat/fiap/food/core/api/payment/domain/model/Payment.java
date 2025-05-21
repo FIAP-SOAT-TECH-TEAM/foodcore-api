@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.payment.domain.model;
 
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
+import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class Payment {
     private LocalDateTime expiresIn;
     private String tid;
     private BigDecimal amount;
-    private String qrCodeUrl;
+    private QrCode qrCode;
     private String observations;
     private final AuditInfo auditInfo = new AuditInfo();
 
@@ -42,7 +43,7 @@ public class Payment {
             LocalDateTime expiresIn,
             String tid,
             BigDecimal amount,
-            String qrCodeUrl,
+            String qrCode,
             String observations) {
 
         validate(type, expiresIn, tid, amount);
@@ -52,7 +53,7 @@ public class Payment {
         this.expiresIn = expiresIn;
         this.tid = tid;
         this.amount = amount;
-        this.qrCodeUrl = qrCodeUrl;
+        this.qrCode = new QrCode(qrCode);
         this.observations = observations;
     }
 
