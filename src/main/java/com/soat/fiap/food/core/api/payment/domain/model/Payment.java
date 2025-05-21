@@ -80,7 +80,7 @@ public class Payment {
         Objects.requireNonNull(amount, "O valor total não pode ser nulo");
             
         if (tid.length() > 255) {
-            throw new IllegalArgumentException("O TID não pode ter mais de 255 caracteres");
+            throw new PaymentException("O TID não pode ter mais de 255 caracteres");
         }
     }
 
