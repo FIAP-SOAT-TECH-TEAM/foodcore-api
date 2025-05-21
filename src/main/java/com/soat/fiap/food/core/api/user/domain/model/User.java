@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * Entidade de domínio que representa um usuário
  * AGGREGATE ROOT:
@@ -18,9 +20,12 @@ import lombok.NoArgsConstructor;
 public class User {
     private Long id;
     private String name;
+    private String username;
     private String email;
+    private String password;
     private String document;
     private boolean active;
+    private LocalDateTime last_login;
     private final AuditInfo auditInfo = new AuditInfo();
 
     

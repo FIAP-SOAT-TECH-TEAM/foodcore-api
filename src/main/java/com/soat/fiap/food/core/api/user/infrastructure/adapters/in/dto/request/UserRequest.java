@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request;
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * DTO para requisições de criação/atualização de usuários
@@ -17,20 +20,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Schema(name = "CustomerRequest", description = "DTO para criação ou atualização de usuários")
 public class UserRequest {
-    
-    @NotBlank(message = "O nome do usuário é obrigatório")
-    @Schema(description = "Nome completo do usuário", example = "João Silva", required = true)
+
+    @Schema(description = "Nome completo do usuário", example = "João Silva", required = false)
     private String name;
-    
-    @NotBlank(message = "O email do usuário é obrigatório")
+
+    @Schema(description = "Apelido do usuário", example = "Jão", required = false)
+    private String username;
+
     @Email(message = "O email deve ser válido")
-    @Schema(description = "Email do usuário", example = "joao.silva@email.com", required = true)
+    @Schema(description = "Email do usuário", example = "joao.silva@email.com", required = false)
     private String email;
-    
-    @NotBlank(message = "O DOCUMENT do usuário é obrigatório")
-    @Schema(description = "DOCUMENT do usuário (apenas números ou formatado)", example = "123.456.789-00", required = true)
+
+    @Schema(description = "Senha do usuário", example = "João Silva", required = false)
+    private String password;
+
+    @Schema(description = "DOCUMENT do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
     private String document;
-    
-    @Schema(description = "Telefone do usuário", example = "(11) 98765-4321")
-    private String phone;
 }
