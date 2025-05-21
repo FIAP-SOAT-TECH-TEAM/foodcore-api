@@ -2,6 +2,9 @@ package com.soat.fiap.food.core.api.order.domain.exceptions;
 
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 
+/**
+ * Exceção lançada quando uma regra de negócio é violada na entidade pedido
+ */
 public class OrderException extends BusinessException {
 
     public OrderException(String message) {

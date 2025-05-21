@@ -18,20 +18,9 @@ public class OrderItem {
     private Long productId;
     private OrderItemPrice orderItemPrice;
     private String observations = "";
+
     private final AuditInfo auditInfo = new AuditInfo();
     private Order order;
-
-    /**
-     * Construtor que cria um item de pedido com observação vazia
-     *
-     * @param productId        ID do produto
-     * @param orderItemPrice   Preço do item
-     * @throws NullPointerException se qualquer parâmetro for nulo
-     */
-    public OrderItem(Long productId,
-                     OrderItemPrice orderItemPrice) {
-        this(productId, orderItemPrice, "");
-    }
 
     /**
      * Construtor que cria um item de pedido com os dados informados
@@ -46,7 +35,7 @@ public class OrderItem {
             OrderItemPrice orderItemPrice,
             String observations
     ) {
-        validate(productId, orderItemPrice, observations);
+        validate(productId, orderItemPrice);
 
         this.productId = productId;
         this.orderItemPrice = orderItemPrice;
@@ -58,17 +47,15 @@ public class OrderItem {
      *
      * @param productId        ID do produto
      * @param orderItemPrice   Preço do item
-     * @param observations     Observações do item
      * @throws NullPointerException se qualquer parâmetro for nulo
      */
     private void validate(
             Long productId,
-            OrderItemPrice orderItemPrice,
-            String observations
+            OrderItemPrice orderItemPrice
     ) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
         Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
-        Objects.requireNonNull(observations, "A observação do item da ordem não pode ser nula");
+
     }
 
     /**

@@ -2,8 +2,19 @@ package com.soat.fiap.food.core.api.catalog.domain.vo;
 
 import java.util.Objects;
 
+/**
+ * Value Object que representa os detalhes de um produto ou categoria.
+ */
 public record Details(String name, String description) {
 
+    /**
+     * Construtor compacto que realiza validações dos campos.
+     *
+     * @param name        Nome do produto
+     * @param description Descrição do produto
+     * @throws NullPointerException     se {@code name} ou {@code description} forem nulos
+     * @throws IllegalArgumentException se {@code name} ou {@code description} estiverem vazios,
+     */
     public Details {
         Objects.requireNonNull(name, "Nome do produto não pode ser nulo");
         Objects.requireNonNull(description, "Descrição do produto não pode ser nula");

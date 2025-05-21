@@ -56,8 +56,10 @@ public class Order {
         this.customerId = customerId;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
-        this.orderItems = orderItems;
-        calculateTotalAmount();
+
+        for (OrderItem orderItem : orderItems) {
+            addItem(orderItem);
+        }
     }
 
     /**
@@ -79,6 +81,7 @@ public class Order {
         Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
         Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
         Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
+        Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
 
         Validate.notEmpty(orderItems, "A ordem deve conter itens");
     }
@@ -143,13 +146,18 @@ public class Order {
 
     /**
      * Calcula o valor total do pedido
+     * @throws OrderException se o valor do pedido for menor ou igual à 0
      */
     private void calculateTotalAmount() {
         amount = orderItems.stream()
                 .map(OrderItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Validate.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "O valor do pedido deve ser maior que 0");
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new OrderException(
+                    "O valor do pedido deve ser maior que 0"
+            );
+        }
     }
 
     /**
@@ -185,6 +193,28 @@ public class Order {
                     "Não é possível alterar o status de um pedido cancelado"
             );
         }
+    }
+
+    /**
+     * Adiciona um pagamento à ordem
+     *
+     * @param orderPayment pagamento da ordem
+     * @throws NullPointerException se o status de pagamento ou id forem nulos
+     * @throws OrderException se a ordem não estiver aguardando pagamento
+     */
+    public void addOrderPayment(OrderPayment orderPayment) {
+        Objects.requireNonNull(orderPayment, "O pagamento da ordem não pode ser nulo");
+
+        if (orderPayments
+                .stream()
+                .anyMatch(o -> o.getOrderId().equals(orderPayment.getOrderId()) && o.getPaymentId().equals(orderPayment.getPaymentId()))) {
+            throw new OrderException("Tentativa de pagamento já associada ao pedido.");
+        }
+        if (!(this.orderStatus == OrderStatus.RECEIVED)) {
+            throw new OrderException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
+        }
+
+        orderPayments.add(orderPayment);
     }
 
     /**
