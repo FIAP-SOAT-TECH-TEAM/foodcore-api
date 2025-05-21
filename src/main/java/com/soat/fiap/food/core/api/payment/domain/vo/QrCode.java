@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.payment.domain.vo;
 import java.util.Objects;
 
 /**
- * Value Object que representa a URL de uma imagem de um produto ou categoria.
+ * Value Object que representa o conteúdo de um QR Code.
  */
 public record QrCode(String value) {
 
