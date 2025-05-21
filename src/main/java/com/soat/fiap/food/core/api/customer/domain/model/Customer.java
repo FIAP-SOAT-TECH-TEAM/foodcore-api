@@ -7,21 +7,23 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+
 /**
  * Entidade de domínio que representa um cliente
+ * AGGREGATE ROOT:
+ *  - Toda modificação de entidades internas do agregado devem passar pela entidade raíz;
+ *  - Único ponto de entrada para qualquer entidade interna do agregado (Lei de Demeter);
+ *  - Entidades dentro deste agregado podem se referenciar via id ou objeto;
+ *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Customer {
     private Long id;
     private String name;
     private String email;
     private String document;
-    private String phone;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final AuditInfo auditInfo = new AuditInfo();
     private boolean active;
     
     /**

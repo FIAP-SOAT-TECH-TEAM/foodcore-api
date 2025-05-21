@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controlle
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.request.ProcessPaymentRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.response.PaymentResponse;
 import jakarta.validation.Valid;

@@ -1,51 +1,78 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
-import com.soat.fiap.food.core.api.product.domain.model.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Entidade de domínio que representa um item de pedido
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter(AccessLevel.PACKAGE)
+@Setter(AccessLevel.PACKAGE)
 public class OrderItem {
+
     private Long id;
-    private Product product;
-    private Integer quantity;
-    private BigDecimal unitPrice;
-    private String observations;
-    
+    private Long productId;
+    private OrderItemPrice orderItemPrice;
+    private String observations = "";
+
+    private final AuditInfo auditInfo = new AuditInfo();
+    private Order order;
+
     /**
-     * Calcula o subtotal do item (quantidade * preço unitário)
-     * @return Subtotal do item
+     * Construtor que cria um item de pedido com os dados informados
+     *
+     * @param productId        ID do produto
+     * @param orderItemPrice   Preço do item
+     * @param observations     Observações sobre o item
+     * @throws NullPointerException se qualquer parâmetro for nulo
      */
-    public BigDecimal getSubtotal() {
-        if (quantity == null || unitPrice == null) {
-            return BigDecimal.ZERO;
-        }
-        return unitPrice.multiply(BigDecimal.valueOf(quantity));
+    public OrderItem(
+            Long productId,
+            OrderItemPrice orderItemPrice,
+            String observations
+    ) {
+        validate(productId, orderItemPrice);
+
+        this.productId = productId;
+        this.orderItemPrice = orderItemPrice;
+        this.observations = observations;
     }
-    
+
     /**
-     * Obtém o ID do produto
-     * @return ID do produto ou null se o produto não estiver definido
+     * Validação centralizada.
+     *
+     * @param productId        ID do produto
+     * @param orderItemPrice   Preço do item
+     * @throws NullPointerException se qualquer parâmetro for nulo
      */
-    public Long getProductId() {
-        return product != null ? product.getId() : null;
+    private void validate(
+            Long productId,
+            OrderItemPrice orderItemPrice
+    ) {
+        Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
+        Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
+
     }
-    
+
     /**
-     * Obtém o nome do produto
-     * @return Nome do produto ou null se o produto não estiver definido
+     * Retorna o subtotal do item de pedido com base no preço e quantidade
+     *
+     * @return subtotal do item
      */
-    public String getProductName() {
-        return product != null ? product.getName() : null;
+    BigDecimal getSubTotal () {
+        return this.orderItemPrice.getSubTotal();
     }
-} 
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
+    }
+}

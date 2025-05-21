@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request;
 
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

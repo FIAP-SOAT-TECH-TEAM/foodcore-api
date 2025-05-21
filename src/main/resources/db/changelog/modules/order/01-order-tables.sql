@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     customer_id INT,
     order_number VARCHAR(20) UNIQUE NOT NULL,
-    status order_status_enum DEFAULT 'WAITING_PAYMENT' NOT NULL,
+    status order_status_enum DEFAULT 'RECEIVED' NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

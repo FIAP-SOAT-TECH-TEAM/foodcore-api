@@ -36,8 +36,8 @@ public interface CustomerDtoMapper {
      * @return Entidade de domínio
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "AuditInfo.createdAt", ignore = true)
+    @Mapping(target = "AuditInfo.updatedAt", ignore = true)
     @Mapping(target = "active", constant = "true")
     Customer toDomain(CustomerRequest request);
     
@@ -47,8 +47,8 @@ public interface CustomerDtoMapper {
      * @param customer Entidade de domínio a ser atualizada
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "AuditInfo.createdAt", ignore = true)
+    @Mapping(target = "AuditInfo.updatedAt", ignore = true)
     @Mapping(target = "active", ignore = true)
     void updateDomainFromRequest(CustomerRequest request, @MappingTarget Customer customer);
 } 

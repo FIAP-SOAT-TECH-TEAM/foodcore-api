@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.OrderEntityMapper;
@@ -39,9 +39,9 @@ public class OrderRepositoryAdapter implements OrderRepository {
     public Order save(Order order) {
         OrderEntity orderEntity = orderEntityMapper.toEntity(order);
         
-        if (order.getItems() != null) {
+        if (order.getOrderItems() != null) {
             orderEntity.setItems(new java.util.ArrayList<>());
-            for (OrderItem item : order.getItems()) {
+            for (OrderItem item : order.getOrderItems()) {
                 OrderItemEntity itemEntity = orderItemEntityMapper.toEntity(item);
                 orderEntity.addItem(itemEntity);
             }
@@ -50,8 +50,8 @@ public class OrderRepositoryAdapter implements OrderRepository {
         OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
         Order savedOrder = orderEntityMapper.toDomain(savedEntity);
         
-        if (order.getCustomer() != null && order.getCustomer().getName() != null) {
-            savedOrder.setCustomer(order.getCustomer());
+        if (order.getCustomerId() != null && order.getCustomerId().getName() != null) {
+            savedOrder.setCustomerId(order.getCustomerId());
         }
         
         return savedOrder;

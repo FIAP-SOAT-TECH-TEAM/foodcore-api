@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.eventlistener;
 
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

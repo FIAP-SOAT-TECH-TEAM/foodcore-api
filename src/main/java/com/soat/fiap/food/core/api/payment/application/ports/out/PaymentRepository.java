@@ -1,8 +1,7 @@
 package com.soat.fiap.food.core.api.payment.application.ports.out;
 
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentMethod;
-import com.soat.fiap.food.core.api.payment.domain.model.PaymentStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +49,5 @@ public interface PaymentRepository {
      * @param status Status dos pagamentos
      * @return Lista de pagamentos
      */
-    List<Payment> findByStatus(PaymentStatus status);
+    List<Payment> findByStatus(OrderPaymentStatus status);
 } 

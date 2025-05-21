@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.order.application.ports.in;
 
 import com.soat.fiap.food.core.api.order.domain.model.Order;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 
 import java.util.List;
 import java.util.Optional;

@@ -147,7 +147,7 @@ WHERE NOT EXISTS (
 INSERT INTO orders (order_number, status, amount, created_at, updated_at)
 SELECT
     'ORD-00000003',
-    'WAITING_PAYMENT',
+    'RECEIVED',
     19.90,
     now() - interval '5 minute',
     now() - interval '5 minute'

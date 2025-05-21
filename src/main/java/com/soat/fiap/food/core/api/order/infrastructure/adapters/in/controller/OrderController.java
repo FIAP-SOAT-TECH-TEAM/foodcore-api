@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerReposi
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
-import com.soat.fiap.food.core.api.order.domain.model.OrderStatus;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.AddOrderItemRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.UpdateOrderStatusRequest;
@@ -79,17 +79,17 @@ public class OrderController {
 
             Order order = orderUseCase.createOrder(request.getCustomerId(), itemRequests);
             
-            if (request.getCustomerId() != null && (order.getCustomer() == null || order.getCustomer().getName() == null)) {
+            if (request.getCustomerId() != null && (order.getCustomerId() == null || order.getCustomerId().getName() == null)) {
                 logger.debug("Cliente completo não preenchido, buscando dados do cliente ID: {}", request.getCustomerId());
                 
-                if (order.getCustomer() == null) {
-                    order.setCustomer(Customer.builder().id(request.getCustomerId()).build());
+                if (order.getCustomerId() == null) {
+                    order.setCustomerId(Customer.builder().id(request.getCustomerId()).build());
                 }
                 
                 customerRepository.findById(request.getCustomerId())
                     .ifPresent(customer -> {
                         logger.debug("Cliente encontrado: {}", customer.getName());
-                        order.setCustomer(customer);
+                        order.setCustomerId(customer);
                     });
             }
             

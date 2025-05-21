@@ -1,0 +1,39 @@
+package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request;
+
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+/**
+ * DTO para requisições de criação/atualização de usuários
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(name = "CustomerRequest", description = "DTO para criação ou atualização de usuários")
+public class UserRequest {
+
+    @Schema(description = "Nome completo do usuário", example = "João Silva", required = false)
+    private String name;
+
+    @Schema(description = "Apelido do usuário", example = "Jão", required = false)
+    private String username;
+
+    @Email(message = "O email deve ser válido")
+    @Schema(description = "Email do usuário", example = "joao.silva@email.com", required = false)
+    private String email;
+
+    @Schema(description = "Senha do usuário", example = "João Silva", required = false)
+    private String password;
+
+    @Schema(description = "DOCUMENT do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
+    private String document;
+}

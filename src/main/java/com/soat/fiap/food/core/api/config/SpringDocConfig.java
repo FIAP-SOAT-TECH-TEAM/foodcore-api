@@ -63,7 +63,7 @@ public class SpringDocConfig {
     public GroupedOpenApi customerApi() {
         return GroupedOpenApi.builder()
                 .group("clientes")
-                .packagesToScan("com.soat.fiap.food.core.api.customer")
+                .packagesToScan("com.soat.fiap.food.core.api.customerId")
                 .pathsToMatch("/api/customers/**")
                 .build();
     }
