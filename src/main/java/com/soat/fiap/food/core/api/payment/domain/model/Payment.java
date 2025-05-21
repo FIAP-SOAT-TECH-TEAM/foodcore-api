@@ -65,6 +65,7 @@ public class Payment {
      * @param amount    o valor total do pagamento; não pode ser {@code null}
      * 
      * @throws NullPointerException se algum dos parâmetros for {@code null}
+     * @throws IllegalArgumentException se tid for maior que {@code 255}
      */
     private void validate(
             PaymentMethod type,
@@ -75,6 +76,10 @@ public class Payment {
         Objects.requireNonNull(expiresIn, "A data de expiração não pode ser nulo");
         Objects.requireNonNull(tid, "O TID não pode ser nulo");
         Objects.requireNonNull(amount, "O valor total não pode ser nulo");
+            
+        if (tid.length() > 255) {
+            throw new IllegalArgumentException("O TID não pode ter mais de 255 caracteres");
+        }
     }
 
     /**
