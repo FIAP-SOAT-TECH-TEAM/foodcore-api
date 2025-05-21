@@ -10,7 +10,6 @@ public record QrCode(String value) {
     /**
      * Construtor que cria uma nova instância de QrCode com os dados fornecidos.
      *
-     * @param Data do QrCode
      * @throws NullPointerException se o conteúdo do QrCode for nulo
      * @throws IllegalArgumentException se a data do QrCode ultrapassar o tamanho permitido
      */
