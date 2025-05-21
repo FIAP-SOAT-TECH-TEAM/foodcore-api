@@ -1,45 +1,52 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity;
 
+import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
+import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Entidade JPA para produto
  */
 @Entity
-@Table(name = "products")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "products", uniqueConstraints = {
+        @UniqueConstraint(name = "un_product_category", columnNames = {"name", "category_id"})
+})
+@Getter
+@Setter
 public class ProductEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
-    private String name;
-    
-    @Column(length = 1000)
-    private String description;
-    
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_product_category"))
+    private CategoryEntity category;
+
+    @Embedded
+    private Details details;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-    
-    private String imageUrl;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
-    private CategoryEntity category;
-    
-    @Column(nullable = false)
-    private boolean active;
-    
+
+    @Embedded
+    private ImageUrl imageUrl;
+
+    @Column(name = "display_order")
     private Integer displayOrder;
-} 
+
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Embedded
+    private AuditInfo auditInfo = new AuditInfo();
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private StockEntity stock;
+}
