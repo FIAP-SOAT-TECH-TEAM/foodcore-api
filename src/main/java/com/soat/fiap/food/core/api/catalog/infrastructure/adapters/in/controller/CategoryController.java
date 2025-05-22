@@ -2,8 +2,8 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.controlle
 
 import com.soat.fiap.food.core.api.catalog.application.services.CategoryService;
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.request.CategoryRequest;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,13 +1,11 @@
 package com.soat.fiap.food.core.api.catalog.application.services;
 
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CategoryUseCase;
-import com.soat.fiap.food.core.api.catalog.application.ports.out.CategoryRepository;
-import com.soat.fiap.food.core.api.catalog.application.ports.out.ProductRepository;
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.request.CategoryRequest;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.response.CategoryResponse;
-import com.soat.fiap.food.core.api.catalog.mapper.CategoryDtoMapper;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.mapper.CategoryDtoMapper;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementação do caso de uso de Categoria
+ * Serviço que implementa o caso de uso de Catálogo.
  */
 @Service
 public class CategoryService implements CategoryUseCase {

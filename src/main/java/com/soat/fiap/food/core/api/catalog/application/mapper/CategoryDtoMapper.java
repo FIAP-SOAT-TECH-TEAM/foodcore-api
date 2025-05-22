@@ -1,8 +1,8 @@
-package com.soat.fiap.food.core.api.catalog.mapper;
+package com.soat.fiap.food.core.api.catalog.application.mapper;
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.request.CategoryRequest;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
