@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.catalog.domain.exceptions;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 
 /**
- * Exceção lançada quando uma regra de negócio é violada na entidade produto
+ * Exceção lançada quando uma regra de negócio referente a entidade produto é violada
  */
 public class ProductException extends BusinessException {
 

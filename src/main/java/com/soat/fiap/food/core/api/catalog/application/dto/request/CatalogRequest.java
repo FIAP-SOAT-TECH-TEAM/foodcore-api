@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "CatalogCreateRequest", description = "DTO para criação de um catálogo")
-public class CatalogCreateRequest {
+public class CatalogRequest {
     
     @NotBlank(message = "O nome da categoria é obrigatório")
     @Size(max = 100, message = "O nome da categoria deve ter no máximo 100 caracteres")

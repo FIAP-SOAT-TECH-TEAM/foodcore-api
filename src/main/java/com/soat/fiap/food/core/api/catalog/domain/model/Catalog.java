@@ -3,6 +3,8 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -220,5 +222,14 @@ public class Catalog {
 
         var product = getProductFromCategoryById(categoryId, productId);
         product.updateStockQuantity(newQuantity);
+    }
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
 }

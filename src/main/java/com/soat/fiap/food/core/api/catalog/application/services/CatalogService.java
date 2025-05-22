@@ -1,22 +1,18 @@
 package com.soat.fiap.food.core.api.catalog.application.services;
 
-import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogCreateRequest;
-import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogUpdateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
-import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogCreateRequestMapper;
-import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogUpdateRequestMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
-import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
-import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
 * Serviço que implementa o caso de uso de Catálogo.
@@ -25,20 +21,17 @@ import java.util.Optional;
 public class CatalogService implements CatalogUseCase {
 
     private final CatalogRepository catalogRepository;
-    private final CatalogCreateRequestMapper catalogCreateRequestMapper;
-    private final CatalogUpdateRequestMapper catalogUpdateRequestMapper;
+    private final CatalogRequestMapper catalogRequestMapper;
     private final CatalogResponseMapper catalogResponseMapper;
     private final CustomLogger logger;
 
     public CatalogService(
             CatalogRepository catalogRepository,
-            CatalogCreateRequestMapper catalogCreateRequestMapper,
-            CatalogUpdateRequestMapper catalogUpdateRequestMapper,
+            CatalogRequestMapper catalogRequestMapper,
             CatalogResponseMapper catalogResponseMapper
     ) {
         this.catalogRepository = catalogRepository;
-        this.catalogCreateRequestMapper = catalogCreateRequestMapper;
-        this.catalogUpdateRequestMapper = catalogUpdateRequestMapper;
+        this.catalogRequestMapper = catalogRequestMapper;
         this.catalogResponseMapper = catalogResponseMapper;
         this.logger = CustomLogger.getLogger(getClass());
     }
@@ -46,22 +39,19 @@ public class CatalogService implements CatalogUseCase {
     /**
      * Salva um catálogo.
      *
-     * @param catalogCreateRequest Catálogo a ser salvo
+     * @param catalogRequest Catálogo a ser salvo
      * @return Catálogo salvo com identificadores atualizados
      */
     @Override
     @Transactional
-    public CatalogResponse saveCatalog(CatalogCreateRequest catalogCreateRequest) {
+    public CatalogResponse saveCatalog(CatalogRequest catalogRequest) {
 
-        var catalog = catalogCreateRequestMapper.toDomain(catalogCreateRequest);
-
+        var catalog = catalogRequestMapper.toDomain(catalogRequest);
         logger.debug("Criando catalogo: {}", catalog.getName());
 
-        var existingCatalog = catalogRepository.findByName(catalog.getName());
-
-        if (existingCatalog.isPresent()) {
+        if (catalogRepository.existsByName(catalog.getName())) {
             logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalog.getName());
-            throw new ResourceConflictException("Catalogo", "nome", catalog.getName());
+            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", catalog.getName()));
         }
 
         var savedCatalog = catalogRepository.save(catalog);
@@ -72,29 +62,34 @@ public class CatalogService implements CatalogUseCase {
     }
 
     /**
-     * Salva um catálogo.
+     * Atualiza um catálogo.
      *
-     * @param catalogUpdateRequest Catálogo a ser atualizado
+     * @param id Identificador do catálogo
+     * @param catalogRequest Catálogo a ser atualizado
      * @return Catálogo salvo com identificadores atualizados
      */
     @Override
     @Transactional
-    public CatalogResponse updateCatalog(CatalogUpdateRequest catalogUpdateRequest) {
+    public CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest) {
 
-        var catalog = catalogUpdateRequestMapper.toDomain(catalogUpdateRequest);
+        var newCatalog = catalogRequestMapper.toDomain(catalogRequest);
 
-        logger.debug("Atualizando catalogo: {}", catalog.getName());
+        logger.debug("Atualizando catalogo: {}", id);
 
-        var existingCatalog = catalogRepository.findById(catalog.getId());
-
-        if (existingCatalog.isEmpty()) {
-            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", catalog.getId());
-            throw new ResourceNotFoundException("Catalogo", "id", catalog.getId());
+        if (!catalogRepository.existsById(id)) {
+            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", newCatalog.getId());
+            throw new ResourceNotFoundException("Catalogo", "id", newCatalog.getId());
+        }
+        else if (catalogRepository.existsByName(newCatalog.getName())) {
+            logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", newCatalog.getName());
+            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", newCatalog.getName()));
         }
 
-        var updatedCatalog = catalogRepository.save(catalog);
+        newCatalog.setId(id);
+        newCatalog.markUpdatedNow();
+        var updatedCatalog = catalogRepository.save(newCatalog);
 
-        logger.debug("Catalogo atualizado com sucesso: {}", catalog.getId());
+        logger.debug("Catalogo atualizado com sucesso: {}", newCatalog.getId());
 
         return catalogResponseMapper.toResponse(updatedCatalog);
     }
@@ -103,7 +98,7 @@ public class CatalogService implements CatalogUseCase {
      * Busca um catálogo pelo seu ID.
 
      * @param id Identificador do catálogo
-     * @return Optional contendo o catálogo, ou vazio se não encontrado
+     * @return o catálogo
      */
     @Override
     @Transactional(readOnly = true)
@@ -145,9 +140,7 @@ public class CatalogService implements CatalogUseCase {
     public void deleteCatalog(Long id) {
         logger.debug("Excluindo catalogo de id: {}", id);
 
-        var existingCatalog = catalogRepository.findById(id);
-
-        if (existingCatalog.isEmpty()) {
+        if (!catalogRepository.existsById(id)) {
             logger.warn("Tentativa de excluir catalogo inexistente. Id: {}", id);
             throw new ResourceNotFoundException("Catalogo", id);
         }

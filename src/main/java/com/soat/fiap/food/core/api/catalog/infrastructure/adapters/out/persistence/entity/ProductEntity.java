@@ -47,6 +47,9 @@ public class ProductEntity {
     @Embedded
     private AuditInfo auditInfo = new AuditInfo();
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     private StockEntity stock;
 }

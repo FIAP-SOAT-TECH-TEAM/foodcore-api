@@ -78,6 +78,40 @@ public class CatalogRepositoryAdapter implements CatalogRepository {
     }
 
     /**
+     * Verifica se existe um catalogo com um determinado ID.
+     *
+     * @param id ID do catálogo
+     * @return true se existir um catálogo com um determinado ID, false caso contrário
+     */
+    @Override
+    public boolean existsById(Long id) {
+        return springDataCatalogRepository.existsById(id);
+    }
+
+    /**
+     * Verifica se existe um catalogo com um determinado nome.
+     *
+     * @param name Nome do catálogo
+     * @return true se existir um catálogo com um determinado nome, false caso contrário
+     */
+    @Override
+    public boolean existsByName(String name) {
+        return springDataCatalogRepository.existsByName(name);
+    }
+
+    /**
+     * Verifica se existe outro catálogo com o mesmo nome, mas com ID diferente.
+     *
+     * @param name Nome do catálogo
+     * @param id   ID do catálogo que está sendo atualizado
+     * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
+     */
+    @Override
+    public boolean existsByNameAndIdNot(String name, Long id) {
+        return springDataCatalogRepository.existsByNameAndIdNot(name, id);
+    }
+
+    /**
      * Remove um catálogo com base em seu ID.
      *
      * @param id ID do catálogo a ser removido

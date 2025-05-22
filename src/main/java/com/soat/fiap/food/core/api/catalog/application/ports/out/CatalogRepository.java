@@ -42,6 +42,31 @@ public interface CatalogRepository {
     List<Catalog> findAll();
 
     /**
+     * Verifica se existe um catalogo com um determinado ID.
+     *
+     * @param id ID do catálogo
+     * @return true se existir um catalogo com um determinado ID, false caso contrário
+     */
+    boolean existsById(Long id);
+
+    /**
+     * Verifica se existe um catalogo com um determinado nome.
+     *
+     * @param name Nome do catálogo
+     * @return true se existir um catalogo com um determinado nome, false caso contrário
+     */
+    boolean existsByName(String name);
+
+    /**
+     * Verifica se existe outro catálogo com o mesmo nome, mas com ID diferente.
+     *
+     * @param name Nome do catálogo
+     * @param id   ID do catálogo a ser desconsiderado na verificação
+     * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
+     */
+    boolean existsByNameAndIdNot(String name, Long id);
+
+    /**
      * Remove um catálogo.
      *
      * @param id ID do catálogo a ser removido

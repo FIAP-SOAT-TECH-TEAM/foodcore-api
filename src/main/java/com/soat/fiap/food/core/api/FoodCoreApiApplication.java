@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.modulith.Modulith;
 
 @Modulith
 @SpringBootApplication
+@ComponentScan(basePackages = "com.soat.fiap.food.core.api.catalog")
 @OpenAPIDefinition(
 	info = @Info(
 		title = "Food Core API",

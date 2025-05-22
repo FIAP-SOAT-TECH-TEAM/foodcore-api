@@ -27,6 +27,8 @@ public class CatalogEntity {
     @Embedded
     private AuditInfo auditInfo = new AuditInfo();
 
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "catalog",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            orphanRemoval = true)
     private List<CategoryEntity> categories = new ArrayList<>();
 }

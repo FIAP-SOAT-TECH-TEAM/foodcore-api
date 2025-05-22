@@ -45,7 +45,9 @@ public class CategoryEntity {
     @Embedded
     private AuditInfo auditInfo = new AuditInfo();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            orphanRemoval = true)
     private List<ProductEntity> products = new ArrayList<>();
 
 }

@@ -1,12 +1,9 @@
 package com.soat.fiap.food.core.api.catalog.application.ports.in;
 
-import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogCreateRequest;
-import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogUpdateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
-import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Porta de entrada para operações do caso de uso relacionado ao agregado Catálogo.
@@ -16,18 +13,19 @@ public interface CatalogUseCase {
     /**
      * Salva um catálogo.
      *
-     * @param catalogCreateRequest Catálogo a ser salvo
+     * @param catalogRequest Catálogo a ser salvo
      * @return Catálogo salvo com possíveis atualizações de identificadores
      */
-    CatalogResponse saveCatalog(CatalogCreateRequest catalogCreateRequest);
+    CatalogResponse saveCatalog(CatalogRequest catalogRequest);
 
     /**
      * Atualiza um catálogo.
      *
-     * @param catalogUpdateRequest Catálogo a ser atualizado
+     * @param id ID do Catálogo a ser atualizado
+     * @param catalogRequest Catálogo a ser atualizado
      * @return Catálogo atualizado com possíveis atualizações de identificadores
      */
-    CatalogResponse updateCatalog(CatalogUpdateRequest catalogUpdateRequest);
+    CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest);
 
     /**
      * Busca um catálogo pelo seu ID.

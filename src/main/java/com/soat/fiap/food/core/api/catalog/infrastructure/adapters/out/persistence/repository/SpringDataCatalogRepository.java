@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface SpringDataCatalogRepository extends JpaRepository<CatalogEntity, Long> {
 
     Optional<CatalogEntity> findByName(String name);
+    boolean existsByName(String name);
+    boolean existsByNameAndIdNot(String name, Long id);
 
 } 

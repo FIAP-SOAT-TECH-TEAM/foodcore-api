@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.catalog.domain.exceptions;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 
 /**
- * Exceção lançada quando uma regra de negócio é violada na entidade estoque
+ * Exceção lançada quando uma regra de negócio referente a entidade estoque é violada
  */
 public class StockException extends BusinessException {
 
