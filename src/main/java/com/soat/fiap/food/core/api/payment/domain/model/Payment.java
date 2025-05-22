@@ -95,6 +95,15 @@ public class Payment {
     }
 
     /**
+     * Verifica se o pagamento está expirado.
+     *
+     * @return {@code true} se o pagamento estiver expirado, {@code false} caso contrário
+     */
+    public boolean isPix() {
+        return this.type == PaymentMethod.PIX;
+    }
+
+    /**
      * Aplica um desconto percentual ao valor do pagamento.
      *
      * @param percent o percentual de desconto a ser aplicado (1 a 100)
