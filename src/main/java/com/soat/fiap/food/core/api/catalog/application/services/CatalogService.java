@@ -1,5 +1,11 @@
 package com.soat.fiap.food.core.api.catalog.application.services;
 
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogCreateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogUpdateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogCreateRequestMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogUpdateRequestMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
@@ -19,25 +25,36 @@ import java.util.Optional;
 public class CatalogService implements CatalogUseCase {
 
     private final CatalogRepository catalogRepository;
+    private final CatalogCreateRequestMapper catalogCreateRequestMapper;
+    private final CatalogUpdateRequestMapper catalogUpdateRequestMapper;
+    private final CatalogResponseMapper catalogResponseMapper;
     private final CustomLogger logger;
 
     public CatalogService(
-            CatalogRepository catalogRepository
-
+            CatalogRepository catalogRepository,
+            CatalogCreateRequestMapper catalogCreateRequestMapper,
+            CatalogUpdateRequestMapper catalogUpdateRequestMapper,
+            CatalogResponseMapper catalogResponseMapper
     ) {
         this.catalogRepository = catalogRepository;
+        this.catalogCreateRequestMapper = catalogCreateRequestMapper;
+        this.catalogUpdateRequestMapper = catalogUpdateRequestMapper;
+        this.catalogResponseMapper = catalogResponseMapper;
         this.logger = CustomLogger.getLogger(getClass());
     }
 
     /**
      * Salva um catálogo.
      *
-     * @param catalog Catálogo a ser salvo
+     * @param catalogCreateRequest Catálogo a ser salvo
      * @return Catálogo salvo com identificadores atualizados
      */
     @Override
     @Transactional
-    public Catalog saveCatalog(Catalog catalog) {
+    public CatalogResponse saveCatalog(CatalogCreateRequest catalogCreateRequest) {
+
+        var catalog = catalogCreateRequestMapper.toDomain(catalogCreateRequest);
+
         logger.debug("Criando catalogo: {}", catalog.getName());
 
         var existingCatalog = catalogRepository.findByName(catalog.getName());
@@ -51,7 +68,35 @@ public class CatalogService implements CatalogUseCase {
 
         logger.debug("Catalogo criado com sucesso: {}", catalog.getId());
 
-        return savedCatalog;
+        return catalogResponseMapper.toResponse(savedCatalog);
+    }
+
+    /**
+     * Salva um catálogo.
+     *
+     * @param catalogUpdateRequest Catálogo a ser atualizado
+     * @return Catálogo salvo com identificadores atualizados
+     */
+    @Override
+    @Transactional
+    public CatalogResponse updateCatalog(CatalogUpdateRequest catalogUpdateRequest) {
+
+        var catalog = catalogUpdateRequestMapper.toDomain(catalogUpdateRequest);
+
+        logger.debug("Atualizando catalogo: {}", catalog.getName());
+
+        var existingCatalog = catalogRepository.findById(catalog.getId());
+
+        if (existingCatalog.isEmpty()) {
+            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", catalog.getId());
+            throw new ResourceNotFoundException("Catalogo", "id", catalog.getId());
+        }
+
+        var updatedCatalog = catalogRepository.save(catalog);
+
+        logger.debug("Catalogo atualizado com sucesso: {}", catalog.getId());
+
+        return catalogResponseMapper.toResponse(updatedCatalog);
     }
 
     /**
@@ -62,7 +107,7 @@ public class CatalogService implements CatalogUseCase {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Catalog> getCatalogById(Long id) {
+    public CatalogResponse getCatalogById(Long id) {
         logger.debug("Buscando catalogo de id: {}", id);
 
         var existingCatalog = catalogRepository.findById(id);
@@ -72,7 +117,7 @@ public class CatalogService implements CatalogUseCase {
             throw new ResourceNotFoundException("Catalogo", id);
         }
 
-        return catalogRepository.findById(id);
+        return catalogResponseMapper.toResponse(existingCatalog.get());
     }
 
     /**
@@ -82,12 +127,12 @@ public class CatalogService implements CatalogUseCase {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Catalog> getAllCatalogs() {
+    public List<CatalogResponse> getAllCatalogs() {
         logger.debug("Buscando todos os catálogos");
         var existingCatalogs = catalogRepository.findAll();
         logger.debug("Encontradas {} catalogos", existingCatalogs.size());
 
-        return existingCatalogs;
+        return catalogResponseMapper.toResponseList(existingCatalogs);
     }
 
     /**

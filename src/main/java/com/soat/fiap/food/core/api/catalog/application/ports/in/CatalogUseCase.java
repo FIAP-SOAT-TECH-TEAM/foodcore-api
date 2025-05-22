@@ -1,6 +1,8 @@
 package com.soat.fiap.food.core.api.catalog.application.ports.in;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogCreateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogUpdateRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 
 import java.util.List;
@@ -14,25 +16,33 @@ public interface CatalogUseCase {
     /**
      * Salva um catálogo.
      *
-     * @param catalog Catálogo a ser salvo
+     * @param catalogCreateRequest Catálogo a ser salvo
      * @return Catálogo salvo com possíveis atualizações de identificadores
      */
-    Catalog saveCatalog(CatalogCreateRequest catalog);
+    CatalogResponse saveCatalog(CatalogCreateRequest catalogCreateRequest);
+
+    /**
+     * Atualiza um catálogo.
+     *
+     * @param catalogUpdateRequest Catálogo a ser atualizado
+     * @return Catálogo atualizado com possíveis atualizações de identificadores
+     */
+    CatalogResponse updateCatalog(CatalogUpdateRequest catalogUpdateRequest);
 
     /**
      * Busca um catálogo pelo seu ID.
      *
      * @param id Identificador do catálogo
-     * @return Optional contendo o catálogo caso encontrado, ou vazio se não encontrado
+     * @return catálogo caso encontrado
      */
-    Optional<Catalog> getCatalogById(Long id);
+    CatalogResponse getCatalogById(Long id);
 
     /**
      * Lista todos os catálogos disponíveis.
      *
      * @return Lista contendo todos os catálogos
      */
-    List<Catalog> getAllCatalogs();
+    List<CatalogResponse> getAllCatalogs();
 
     /**
      * Remove um catálogo pelo seu ID.
