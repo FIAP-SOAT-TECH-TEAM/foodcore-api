@@ -2,11 +2,12 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.StockException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
-
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Entidade de domínio que representa o estoque de um produto.

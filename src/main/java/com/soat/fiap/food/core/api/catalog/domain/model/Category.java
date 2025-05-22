@@ -5,13 +5,10 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
-
-import lombok.*;
-import org.apache.commons.lang3.Validate;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
