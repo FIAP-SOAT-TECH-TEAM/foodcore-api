@@ -79,6 +79,7 @@ public class PaymentService implements PaymentUseCase {
         return payment.get();
     }
 
+    @Override
     public void approvePayment(Long paymentId) {
         this.eventPublisher.publishEvent(
             new PaymentApprovedEvent(paymentId, LocalDateTime.now())

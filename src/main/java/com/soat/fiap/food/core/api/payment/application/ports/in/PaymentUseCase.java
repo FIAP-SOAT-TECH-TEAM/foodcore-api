@@ -51,4 +51,11 @@ public interface PaymentUseCase {
      * @return Instância de Payment
      */
     Payment getPayment(Long paymentId);
+
+    /**
+     * Aprova um pagamento.
+     * 
+     * @param paymentId ID do pagamento
+     */
+    void approvePayment(Long paymentId);
 }
