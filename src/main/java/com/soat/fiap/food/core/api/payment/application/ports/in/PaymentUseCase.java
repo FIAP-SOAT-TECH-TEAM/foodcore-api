@@ -1,34 +1,68 @@
 package com.soat.fiap.food.core.api.payment.application.ports.in;
 
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
+import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * Interface do caso de uso de pagamento
- */
 public interface PaymentUseCase {
-    
+
     /**
-     * Inicializa um pagamento para um pedido
-     * 
-     * @param orderId ID do pedido
-     * @param totalAmount Valor total a ser pago
-     * @return ‘ID’ do pagamento gerado
-     */
-    String initializePayment(Long orderId, BigDecimal totalAmount);
-    
-    /**
-     * Verifica o status de um pagamento
+     * Aplica desconto promocional ao pagamento.
      * 
      * @param paymentId ID do pagamento
-     * @return Status atual do pagamento
+     * @param percent   Percentual de desconto
      */
-    String checkPaymentStatus(String paymentId);
-    
+    void applyDiscount(Long paymentId, int percent);
+
     /**
-     * Processa uma notificação de pagamento (callback/webhook)
+     * Lista métodos de pagamento disponíveis.
+     * 
+     * @return Lista de métodos de pagamento
+     */
+    List<PaymentMethod> listAvailablePaymentMethods();
+
+    /**
+     * Inicializa um novo pagamento.
+     * 
+     * @param customerId   ID do cliente
+     * @param type         Tipo do método de pagamento
+     * @param expiresIn    Data/hora de expiração
+     * @param tid          Identificador da transação
+     * @param amount       Valor total
+     * @param qrCode       URL/dados do QR Code
+     * @param observations Observações
+     * @return Instância de Payment criada
+     */
+    Payment createPayment(
+            Long customerId,
+            PaymentMethod type,
+            LocalDateTime expiresIn,
+            String tid,
+            BigDecimal amount,
+            String qrCode,
+            String observations);
+
+    /**
+     * Cancela um pagamento.
      * 
      * @param paymentId ID do pagamento
-     * @param status Novo status do pagamento
      */
-    void processPaymentNotification(String paymentId, String status);
-} 
+    void cancelPayment(Long paymentId);
+
+    /**
+     * Consulta informações de um pagamento.
+     * 
+     * @param paymentId ID do pagamento
+     * @return Instância de Payment
+     */
+    Payment getPayment(Long paymentId);
+
+    /**
+     * Efetua o pagamento.
+     * 
+     * @param paymentId ID do pagamento
+     */
+    void performPayment(Long paymentId);
+}

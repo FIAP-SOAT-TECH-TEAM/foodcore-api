@@ -45,7 +45,8 @@ public class Payment {
             String tid,
             BigDecimal amount,
             String qrCode,
-            String observations) {
+            String observations
+    ) {
 
         validate(type, expiresIn, tid, amount);
 
