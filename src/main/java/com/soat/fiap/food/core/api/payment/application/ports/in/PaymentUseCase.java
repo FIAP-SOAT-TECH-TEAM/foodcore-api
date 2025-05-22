@@ -45,24 +45,10 @@ public interface PaymentUseCase {
             String observations);
 
     /**
-     * Cancela um pagamento.
-     * 
-     * @param paymentId ID do pagamento
-     */
-    void cancelPayment(Long paymentId);
-
-    /**
      * Consulta informações de um pagamento.
      * 
      * @param paymentId ID do pagamento
      * @return Instância de Payment
      */
     Payment getPayment(Long paymentId);
-
-    /**
-     * Efetua o pagamento.
-     * 
-     * @param paymentId ID do pagamento
-     */
-    void performPayment(Long paymentId);
 }

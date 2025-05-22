@@ -5,18 +5,15 @@ import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentReposito
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -58,25 +55,33 @@ public class PaymentService implements PaymentUseCase {
     @Override
     public Payment createPayment(Long customerId, PaymentMethod type, LocalDateTime expiresIn, String tid,
             BigDecimal amount, String qrCode, String observations) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createPayment'");
-    }
 
-    @Override
-    public void cancelPayment(Long paymentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cancelPayment'");
+        Payment payment = new Payment(
+                customerId,
+                type,
+                expiresIn,
+                tid,
+                amount,
+                qrCode,
+                observations);
+
+        return paymentRepository.save(payment);
     }
 
     @Override
     public Payment getPayment(Long paymentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPayment'");
+        Optional<Payment> payment = paymentRepository.findById(paymentId);
+
+        if (!payment.isPresent()) {
+            throw new IllegalArgumentException("Pagamento não encontrado");
+        }
+
+        return payment.get();
     }
 
-    @Override
-    public void performPayment(Long paymentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'performPayment'");
+    public void approvePayment(Long paymentId) {
+        this.eventPublisher.publishEvent(
+            new PaymentApprovedEvent(paymentId, LocalDateTime.now())
+        );
     }
 }
