@@ -23,7 +23,7 @@ public class Customer {
     private String name;
     private String email;
     private String document;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
     private boolean active;
     
     /**

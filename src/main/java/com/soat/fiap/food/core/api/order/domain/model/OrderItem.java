@@ -19,7 +19,7 @@ public class OrderItem {
     private OrderItemPrice orderItemPrice;
     private String observations = "";
 
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
     private Order order;
 
     /**

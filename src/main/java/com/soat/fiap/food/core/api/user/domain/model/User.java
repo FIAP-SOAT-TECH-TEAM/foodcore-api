@@ -26,7 +26,7 @@ public class User {
     private String document;
     private boolean active;
     private LocalDateTime last_login;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     
     /**

@@ -22,7 +22,7 @@ public class Payment {
     private BigDecimal amount;
     private QrCode qrCode;
     private String observations;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.

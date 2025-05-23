@@ -31,7 +31,7 @@ public class Order {
     private OrderNumber orderNumber;
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     private List<OrderItem> orderItems;
     private List<OrderPayment> orderPayments;
