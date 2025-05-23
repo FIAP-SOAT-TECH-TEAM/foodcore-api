@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Handler global de exceções para o catalogo
@@ -33,8 +34,8 @@ public class CatalogGlobalExceptionHandler {
         
         String mensagem = ex.getMessage();
         
-        if (mensagem != null && mensagem.contains("fk_category_catalog")) {
-            mensagem = "Não é possível excluir este catalogo porque existem categorias associados a ele";
+        if (mensagem != null && mensagem.contains("fk_order_item_product")) {
+            mensagem = "Não é possível excluir este catalogo porque existem categorias/produtos associados a ele";
         }
         
         ErrorResponse errorResponse = new ErrorResponse(

@@ -24,7 +24,7 @@ public class Catalog {
     private String name;
     private AuditInfo auditInfo = new AuditInfo();
 
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     /**
      * Construtor que inicializa o catálogo com um nome.

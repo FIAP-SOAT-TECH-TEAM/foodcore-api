@@ -30,7 +30,7 @@ public class Category {
     private AuditInfo auditInfo = new AuditInfo();
 
     private Catalog catalog;
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     /**
      * Construtor da categoria de produto.
