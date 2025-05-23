@@ -16,13 +16,13 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = StockResponseMapper.class)
 public interface ProductResponseMapper {
 
-    @Mapping(source = "imageUrl", target = "imageUrl", qualifiedByName = "mapImageUrlToString")
+    @Mapping(source = "imageUrl", target = "imageUrl", qualifiedByName = "mapCategoryImageUrlToString")
     ProductResponse toResponse(Product product);
 
     List<ProductResponse> toResponseList(List<Product> products);
 
-    @Named("mapImageUrlToString")
-    default String mapImageUrlToString(ImageUrl imageUrl) {
+    @Named("mapCategoryImageUrlToString")
+    default String mapCategoryImageUrlToString(ImageUrl imageUrl) {
         return imageUrl != null ? imageUrl.value() : null;
     }
 }
