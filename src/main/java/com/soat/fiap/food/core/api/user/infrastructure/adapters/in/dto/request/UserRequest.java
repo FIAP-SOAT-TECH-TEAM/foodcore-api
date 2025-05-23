@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "CustomerRequest", description = "DTO para criação ou atualização de usuários")
+@Schema(name = "UserRequest", description = "DTO para criação ou atualização de usuários")
 public class UserRequest {
 
     @Schema(description = "Nome completo do usuário", example = "João Silva", required = false)

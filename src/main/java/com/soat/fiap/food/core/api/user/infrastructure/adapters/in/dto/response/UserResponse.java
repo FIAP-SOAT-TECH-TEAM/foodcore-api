@@ -1,17 +1,22 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response;
 
+import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
+/**
+ * DTO para respostas de usuários
+ */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "UserResponse", description = "DTO para resposta com informações de usuários")
+@Schema(name = "UserResponse", description = "DTO para resposta com informações de clientes")
 public class UserResponse {
     
     @Schema(description = "Identificador único do usuário", example = "1")
@@ -32,17 +37,15 @@ public class UserResponse {
     @Schema(description = "Indica se o usuário está ativo", example = "true")
     private boolean active;
 
+    @Builder.Default
     @Schema(description = "Indica a role do usuário", example = "2")
-    private Integer role;
+    private RoleType role;
     
     @Schema(description = "Data e hora de criação do registro", example = "2023-01-01T10:00:00")
     private LocalDateTime createdAt;
     
     @Schema(description = "Data e hora da última atualização", example = "2023-01-10T11:30:00")
     private LocalDateTime updatedAt;
-
-    @Schema(description = "Token JWT", example = "eyJhbGciOiJIUzI1NiIsInR...")
-    private transient String jwtToken;
     
 
 } 
