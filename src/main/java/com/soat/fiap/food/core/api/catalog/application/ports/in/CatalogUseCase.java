@@ -1,7 +1,9 @@
 package com.soat.fiap.food.core.api.catalog.application.ports.in;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 
 import java.util.List;
 
@@ -48,4 +50,12 @@ public interface CatalogUseCase {
      * @param id Identificador do catálogo a ser removido
      */
     void deleteCatalog(Long id);
+
+    /**
+     * Salva uma categoria.
+     *
+     * @param categoryRequest Categoria a ser salva
+     * @return Categoria salva com possíveis atualizações de identificadores
+     */
+    CategoryResponse saveCategory(CategoryRequest categoryRequest);
 }

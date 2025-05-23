@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * Mapper que converte o DTO CatalogCreateRequest para a entidade de domínio Catalog
+ * Mapper que converte o DTO CatalogRequest para a entidade de domínio Catalog
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CatalogRequestMapper {

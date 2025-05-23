@@ -16,7 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Schema(name = "CategoryRequest", description = "DTO para criação ou atualização de categorias de produtos")
 public class CategoryRequest {
-    
+
+    @NotBlank(message = "O ID do catalogo da categoria é obrigatório")
+    @Schema(description = "Id da categoria", example = "2", required = true)
+    private Long catalogId;
+
     @NotBlank(message = "O nome da categoria é obrigatório")
     @Schema(description = "Nome da categoria", example = "Lanches", required = true)
     private String name;

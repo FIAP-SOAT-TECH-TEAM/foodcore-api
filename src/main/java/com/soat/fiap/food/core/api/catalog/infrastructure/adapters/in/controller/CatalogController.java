@@ -1,8 +1,11 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
+import com.soat.fiap.food.core.api.catalog.application.ports.in.CategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.application.services.CatalogService;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -105,5 +108,21 @@ public class CatalogController {
         logger.debug("Requisição para excluir catálogo: {}", id);
         catalogUseCase.deleteCatalog(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/categories")
+    @Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria vinculada a um catálogo existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Categoria criada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
+    })
+    public ResponseEntity<CategoryResponse> createCategory(
+            @Valid @RequestBody CategoryRequest request) {
+        logger.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
+        CategoryResponse response = catalogUseCase.saveCategory(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

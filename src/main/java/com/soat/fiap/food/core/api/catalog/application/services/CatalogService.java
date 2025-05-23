@@ -1,9 +1,13 @@
 package com.soat.fiap.food.core.api.catalog.application.services;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogRequestMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.request.CategoryRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
@@ -21,18 +25,27 @@ import java.util.List;
 public class CatalogService implements CatalogUseCase {
 
     private final CatalogRepository catalogRepository;
+
     private final CatalogRequestMapper catalogRequestMapper;
+    private final CategoryRequestMapper categoryRequestMapper;
+
     private final CatalogResponseMapper catalogResponseMapper;
+    private final CategoryResponseMapper categoryResponseMapper;
+
     private final CustomLogger logger;
 
     public CatalogService(
             CatalogRepository catalogRepository,
             CatalogRequestMapper catalogRequestMapper,
-            CatalogResponseMapper catalogResponseMapper
+            CatalogResponseMapper catalogResponseMapper,
+            CategoryRequestMapper categoryRequestMapper,
+            CategoryResponseMapper categoryResponseMapper
     ) {
         this.catalogRepository = catalogRepository;
         this.catalogRequestMapper = catalogRequestMapper;
         this.catalogResponseMapper = catalogResponseMapper;
+        this.categoryRequestMapper = categoryRequestMapper;
+        this.categoryResponseMapper = categoryResponseMapper;
         this.logger = CustomLogger.getLogger(getClass());
     }
 
@@ -148,5 +161,37 @@ public class CatalogService implements CatalogUseCase {
         catalogRepository.delete(id);
 
         logger.debug("Catalogo excluido com sucesso: {}", id);
+    }
+
+    /**
+     * Salva um catálogo.
+     *
+     * @param categoryRequest Categoria a ser salva
+     * @return Categoria salva com identificadores atualizados
+     */
+    @Override
+    @Transactional
+    public CategoryResponse saveCategory(CategoryRequest categoryRequest) {
+
+        var category = categoryRequestMapper.toDomain(categoryRequest);
+        var catalogCategory = catalogRepository.findById(categoryRequest.getCatalogId());
+
+        logger.debug("Criando categoria: {}", categoryRequest.getName());
+
+        if (catalogCategory.isEmpty()) {
+            logger.warn("Tentativa de cadastrar categoria com catalogo inexistente. ID catalogo: {}", categoryRequest.getCatalogId());
+            throw new ResourceNotFoundException("Catalogo", categoryRequest.getCatalogId());
+        }
+
+        catalogCategory.get().addCategory(category);
+
+        var savedCatalogCategory = catalogRepository.save(catalogCategory.get());
+        var savedCategory = savedCatalogCategory.getCategories().getLast();
+
+        var savedCategoryToResponse = categoryResponseMapper.toResponse(savedCategory);
+
+        logger.debug("Categoria criada com sucesso: {}", savedCategoryToResponse.getId());
+
+        return savedCategoryToResponse;
     }
 }
