@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementação do caso de uso de Cliente
+ * Implementação do caso de uso de Usuário.
  */
 @Service
 public class UserService implements UserUseCase {

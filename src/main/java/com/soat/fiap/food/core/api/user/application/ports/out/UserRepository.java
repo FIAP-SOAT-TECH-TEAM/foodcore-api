@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Porta de saída para persistência de clientes
+ * Porta de saída para persistência de usuários
  */
 public interface UserRepository {
     

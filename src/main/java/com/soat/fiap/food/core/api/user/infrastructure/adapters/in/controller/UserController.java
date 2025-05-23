@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controlador REST para gerenciamento de clientes
+ * Controlador REST para gerenciamento de usuários
  */
 @RestController
 @RequestMapping("/api/users")
@@ -45,7 +45,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
-    public ResponseEntity<List<UserResponse>> getAllCustomers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> users = userUseCase.getAllUsers();
         return ResponseEntity.ok(userDtoMapper.toResponseList(users));
     }
@@ -64,7 +64,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> getCustomerById(
+    public ResponseEntity<UserResponse> getUserById(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
         return userUseCase.getUserById(id)
@@ -86,7 +86,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> getCustomerByDocument(
+    public ResponseEntity<UserResponse> getUserByDocument(
             @Parameter(description = "DOCUMENT do usuário", example = "123.456.789-00", required = true)
             @PathVariable String document) {
         return userUseCase.getUserByDocument(document)
@@ -108,7 +108,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> createCustomer(
+    public ResponseEntity<UserResponse> createUser(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do usuário a ser criado", required = true,
                     content = @Content(schema = @Schema(implementation = UserRequest.class)))
             @Valid @RequestBody UserRequest request) {
@@ -136,7 +136,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> updateCustomer(
+    public ResponseEntity<UserResponse> updateUser(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados atualizados do usuário", required = true,
@@ -165,7 +165,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<Void> deleteCustomer(
+    public ResponseEntity<Void> deleteUser(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
         return userUseCase.getUserById(id)

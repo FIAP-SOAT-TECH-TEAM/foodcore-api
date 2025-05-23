@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Porta de entrada para operações relacionadas a clientes
+ * Porta de entrada para operações relacionadas a usuários
  */
 public interface UserUseCase {
     

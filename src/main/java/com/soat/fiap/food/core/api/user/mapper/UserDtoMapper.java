@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 
 /**
- * Mapper que converte entre DTOs e entidades de domínio para User
+ * Mapper que converte entre DTOs e entidades de domínio para usuários
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserDtoMapper {
