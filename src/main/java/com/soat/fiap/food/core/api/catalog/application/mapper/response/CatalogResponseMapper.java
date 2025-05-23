@@ -2,18 +2,59 @@ package com.soat.fiap.food.core.api.catalog.application.mapper.response;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
 /**
- * Mapper que converte a entidade Catalog para o DTO CatalogResponse
+ * Mapper que converte a entidade {@link Catalog} para o DTO {@link CatalogResponse}.
+ * Utiliza {@link CategoryResponseMapper} para conversão de categorias associadas.
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = CategoryResponseMapper.class)
 public interface CatalogResponseMapper {
 
-    CatalogResponse toResponse(Catalog catalog);
+    /**
+     * Converte a entidade {@link Catalog} para {@link CatalogResponse}, utilizando um contexto para evitar ciclos.
+     *
+     * @param catalog Entidade Catalog.
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
+     * @return DTO CatalogResponse.
+     */
+    CatalogResponse toResponse(Catalog catalog, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
-    List<CatalogResponse> toResponseList(List<Catalog> catalogs);
+    /**
+     * Converte uma lista de entidades {@link Catalog} para uma lista de {@link CatalogResponse}, com contexto.
+     *
+     * @param catalogs Lista de entidades Catalog.
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
+     * @return Lista de DTOs CatalogResponse.
+     */
+    List<CatalogResponse> toResponseList(List<Catalog> catalogs, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+    /**
+     * Converte a entidade {@link Catalog} para {@link CatalogResponse} com um contexto padrão.
+     *
+     * @param catalog Entidade Catalog.
+     * @return DTO CatalogResponse.
+     */
+    @DoIgnore
+    default CatalogResponse toResponse(Catalog catalog) {
+        return toResponse(catalog, new CycleAvoidingMappingContext());
+    }
+
+    /**
+     * Converte uma lista de {@link Catalog} para uma lista de {@link CatalogResponse} com contexto padrão.
+     *
+     * @param catalogs Lista de entidades Catalog.
+     * @return Lista de DTOs CatalogResponse.
+     */
+    @DoIgnore
+    default List<CatalogResponse> toResponseList(List<Catalog> catalogs) {
+        return toResponseList(catalogs, new CycleAvoidingMappingContext());
+    }
 }
+

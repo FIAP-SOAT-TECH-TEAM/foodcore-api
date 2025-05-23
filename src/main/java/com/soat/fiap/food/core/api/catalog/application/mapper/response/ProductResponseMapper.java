@@ -3,22 +3,61 @@ package com.soat.fiap.food.core.api.catalog.application.mapper.response;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.application.mapper.shared.ImageUrlMapper;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
-import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
+import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
 /**
- * Mapper que converte a entidade Product para o DTO ProductResponse
+ * Mapper que converte a entidade {@link Product} para o DTO {@link ProductResponse}.
+ * Utiliza {@link StockResponseMapper} e {@link ImageUrlMapper} para conversão de estoque e URLs de imagem.
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockResponseMapper.class, ImageUrlMapper.class})
 public interface ProductResponseMapper {
 
+    /**
+     * Converte a entidade {@link Product} para {@link ProductResponse}, mapeando a URL da imagem como string.
+     *
+     * @param product Entidade Product.
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
+     * @return DTO ProductResponse.
+     */
     @Mapping(source = "imageUrl", target = "imageUrl", qualifiedByName = "mapImageUrlToString")
-    ProductResponse toResponse(Product product);
+    ProductResponse toResponse(Product product, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
-    List<ProductResponse> toResponseList(List<Product> products);
+    /**
+     * Converte uma lista de {@link Product} para uma lista de {@link ProductResponse}, com contexto.
+     *
+     * @param products Lista de entidades Product.
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
+     * @return Lista de DTOs ProductResponse.
+     */
+    List<ProductResponse> toResponseList(List<Product> products, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+    /**
+     * Converte a entidade {@link Product} para {@link ProductResponse} com um contexto padrão.
+     *
+     * @param product Entidade Product.
+     * @return DTO ProductResponse.
+     */
+    @DoIgnore
+    default ProductResponse toResponse(Product product) {
+        return toResponse(product, new CycleAvoidingMappingContext());
+    }
+
+    /**
+     * Converte uma lista de {@link Product} para uma lista de {@link ProductResponse} com contexto padrão.
+     *
+     * @param products Lista de entidades Product.
+     * @return Lista de DTOs ProductResponse.
+     */
+    @DoIgnore
+    default List<ProductResponse> toResponseList(List<Product> products) {
+        return toResponseList(products, new CycleAvoidingMappingContext());
+    }
 }

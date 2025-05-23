@@ -2,6 +2,9 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CategoryEntity;
+import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -12,25 +15,37 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryEntityMapper {
-    
+
     /**
      * Converte uma entidade JPA para uma entidade de domínio
      * @param entity Entidade JPA
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos
      * @return Entidade de domínio
      */
-    Category toDomain(CategoryEntity entity);
-    
+    Category toDomain(CategoryEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
     /**
      * Converte uma lista de entidades JPA para uma lista de entidades de domínio
      * @param entities Lista de entidades JPA
+     * @param cycleAvoidingMappingContext Contexto para evitar ciclos
      * @return Lista de entidades de domínio
      */
-    List<Category> toDomainList(List<CategoryEntity> entities);
-    
+    List<Category> toDomainList(List<CategoryEntity> entities, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
     /**
      * Converte uma entidade de domínio para uma entidade JPA
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
     CategoryEntity toEntity(Category domain);
-} 
+
+    @DoIgnore
+    default Category toDomain(CategoryEntity entity) {
+        return toDomain(entity, new CycleAvoidingMappingContext());
+    }
+
+    @DoIgnore
+    default List<Category> toDomainList(List<CategoryEntity> entities) {
+        return toDomainList(entities, new CycleAvoidingMappingContext());
+    }
+}
