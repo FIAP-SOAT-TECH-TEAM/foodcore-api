@@ -19,8 +19,8 @@ import java.util.Objects;
 /**
  * Entidade de domínio que representa uma categoria de produto.
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 public class Category {
     private Long id;
     private Details details;

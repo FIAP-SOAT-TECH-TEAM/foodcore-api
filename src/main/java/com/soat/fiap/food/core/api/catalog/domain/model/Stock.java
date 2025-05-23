@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 /**
  * Entidade de domínio que representa o estoque de um produto.
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 @NoArgsConstructor
 public class Stock {
 

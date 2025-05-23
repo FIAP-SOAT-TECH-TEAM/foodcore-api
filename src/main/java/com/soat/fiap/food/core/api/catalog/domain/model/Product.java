@@ -16,8 +16,8 @@ import java.util.Objects;
 /**
  * Entidade de domínio que representa um produto.
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 public class Product {
 
     private Long id;
