@@ -158,6 +158,11 @@ public class RoleController {
 
         //TODO: Implementar a lógica de deleção de roles
         return ResponseEntity.noContent().build();
-
+//        return roleUseCase.getUserById(id)
+//                .map(customer -> {
+//                    roleUseCase.deleteUser(id);
+//                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//                })
+//                .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -1,6 +1,5 @@
 package com.soat.fiap.food.core.api.user.mapper;
 
-import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.user.domain.model.Role;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.RoleRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.RoleResponse;
@@ -14,11 +13,7 @@ import java.util.List;
 /**
  * Mapper que converte entre DTOs e entidades de domínio para roles
  */
-@Mapper(
-        componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = AuditInfoMapper.class
-)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleDtoMapper {
 
     /**
@@ -41,6 +36,9 @@ public interface RoleDtoMapper {
      * @return Entidade de domínio
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "active", constant = "true")
     Role toDomain(RoleRequest request);
 
     /**
@@ -49,5 +47,8 @@ public interface RoleDtoMapper {
      * @param role Entidade de domínio a ser atualizada
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "active", ignore = true)
     void updateDomainFromRequest(RoleRequest request, @MappingTarget Role role);
 }
