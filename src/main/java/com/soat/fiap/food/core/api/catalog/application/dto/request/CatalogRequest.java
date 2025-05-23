@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO para requisições de criação/atualização de categorias
+ * DTO para requisições de criação/atualização de catalogos
  */
 @Data
 @Builder

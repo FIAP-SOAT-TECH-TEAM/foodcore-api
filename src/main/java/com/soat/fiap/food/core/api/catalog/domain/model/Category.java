@@ -75,7 +75,7 @@ public class Category {
      * Fornece uma lista imutável de produtos
      * @return lista imutável de produtos
      */
-    List<Product> getProducts() {
+    public List<Product> getProducts() {
         return Collections.unmodifiableList(this.products);
     }
 

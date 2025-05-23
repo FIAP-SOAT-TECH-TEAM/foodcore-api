@@ -6,6 +6,7 @@ import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Mapper que converte entre a entidade de domínio Category e a entidade JPA CategoryEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ProductEntityMapper.class})
 public interface CategoryEntityMapper {
 
     /**
@@ -37,7 +38,7 @@ public interface CategoryEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    CategoryEntity toEntity(Category domain);
+    CategoryEntity toEntity(Category domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
     default Category toDomain(CategoryEntity entity) {
@@ -47,5 +48,10 @@ public interface CategoryEntityMapper {
     @DoIgnore
     default List<Category> toDomainList(List<CategoryEntity> entities) {
         return toDomainList(entities, new CycleAvoidingMappingContext());
+    }
+
+    @DoIgnore
+    default CategoryEntity toEntity(Category domain) {
+        return toEntity(domain, new CycleAvoidingMappingContext());
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Mapper que converte entre a entidade de domínio Product e a entidade JPA ProductEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockEntityMapper.class})
 public interface ProductEntityMapper {
 
     /**
@@ -37,7 +37,7 @@ public interface ProductEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    ProductEntity toEntity(Product domain);
+    ProductEntity toEntity(Product domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
     default Product toDomain(ProductEntity entity) {
@@ -47,5 +47,10 @@ public interface ProductEntityMapper {
     @DoIgnore
     default List<Product> toDomainList(List<ProductEntity> entities) {
         return toDomainList(entities, new CycleAvoidingMappingContext());
+    }
+
+    @DoIgnore
+    default ProductEntity toEntity(Product domain) {
+        return toEntity(domain, new CycleAvoidingMappingContext());
     }
 }

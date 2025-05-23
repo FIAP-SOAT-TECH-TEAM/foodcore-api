@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Mapper que converte entre a entidade de domínio Catalog e a entidade JPA CatalogEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CategoryEntityMapper.class})
 public interface CatalogEntityMapper {
 
     /**
@@ -37,7 +37,7 @@ public interface CatalogEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    CatalogEntity toEntity(Catalog domain);
+    CatalogEntity toEntity(Catalog domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
     default Catalog toDomain(CatalogEntity entity) {
@@ -47,5 +47,10 @@ public interface CatalogEntityMapper {
     @DoIgnore
     default List<Catalog> toDomainList(List<CatalogEntity> entities) {
         return toDomainList(entities, new CycleAvoidingMappingContext());
+    }
+
+    @DoIgnore
+    default CatalogEntity toEntity(Catalog domain) {
+        return toEntity(domain, new CycleAvoidingMappingContext());
     }
 }

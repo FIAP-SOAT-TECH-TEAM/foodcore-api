@@ -52,7 +52,7 @@ public class Stock {
      * @param quantity nova quantidade a ser atribuída
      * @throws StockException se a quantidade for menor que zero
      */
-    void setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         if (quantity < 0) {
             throw new StockException("A quantidade de estoque deve ser maior que 0");
         }

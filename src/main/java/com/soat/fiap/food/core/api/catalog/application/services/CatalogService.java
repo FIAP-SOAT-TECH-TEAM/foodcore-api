@@ -13,6 +13,7 @@ import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogReposito
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,24 +86,25 @@ public class CatalogService implements CatalogUseCase {
     @Transactional
     public CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest) {
 
-        var newCatalog = catalogRequestMapper.toDomain(catalogRequest);
+        var existingCatalog = catalogRepository.findById(id);
 
         logger.debug("Atualizando catalogo: {}", id);
 
-        if (!catalogRepository.existsById(id)) {
-            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", newCatalog.getId());
-            throw new ResourceNotFoundException("Catalogo", "id", newCatalog.getId());
+        if (existingCatalog.isEmpty()) {
+            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", id);
+            throw new ResourceNotFoundException("Catalogo", id);
         }
-        else if (catalogRepository.existsByName(newCatalog.getName())) {
-            logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", newCatalog.getName());
-            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", newCatalog.getName()));
+        else if (catalogRepository.existsByNameAndIdNot(catalogRequest.getName(), id)) {
+            logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogRequest.getName());
+            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", catalogRequest.getName()));
         }
 
-        newCatalog.setId(id);
-        newCatalog.markUpdatedNow();
-        var updatedCatalog = catalogRepository.save(newCatalog);
+        BeanUtils.copyProperties(catalogRequest, existingCatalog.get());
 
-        logger.debug("Catalogo atualizado com sucesso: {}", newCatalog.getId());
+        existingCatalog.get().markUpdatedNow();
+        var updatedCatalog = catalogRepository.save(existingCatalog.get());
+
+        logger.debug("Catalogo atualizado com sucesso: {}", id);
 
         return catalogResponseMapper.toResponse(updatedCatalog);
     }

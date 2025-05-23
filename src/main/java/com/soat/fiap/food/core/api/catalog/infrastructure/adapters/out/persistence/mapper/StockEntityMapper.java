@@ -37,7 +37,7 @@ public interface StockEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    StockEntity toEntity(Stock domain);
+    StockEntity toEntity(Stock domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
     default Stock toDomain(StockEntity entity) {
@@ -47,5 +47,10 @@ public interface StockEntityMapper {
     @DoIgnore
     default List<Stock> toDomainList(List<StockEntity> entities) {
         return toDomainList(entities, new CycleAvoidingMappingContext());
+    }
+
+    @DoIgnore
+    default StockEntity toEntity(Stock domain) {
+        return toEntity(domain, new CycleAvoidingMappingContext());
     }
 }
