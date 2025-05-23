@@ -4,23 +4,21 @@ import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.controller
 import com.soat.fiap.food.core.api.shared.exception.*;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Handler global de exceções para o catalogo
  */
 @RestControllerAdvice(assignableTypes = {CatalogController.class})
-public class GlobalExceptionHandler {
+@Order(1)
+public class CatalogGlobalExceptionHandler {
 
     private final CustomLogger logger = CustomLogger.getLogger(getClass());
 

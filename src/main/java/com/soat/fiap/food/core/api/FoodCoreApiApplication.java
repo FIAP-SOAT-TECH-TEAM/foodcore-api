@@ -12,7 +12,6 @@ import org.springframework.modulith.Modulith;
 
 @Modulith
 @SpringBootApplication
-@ComponentScan(basePackages = "com.soat.fiap.food.core.api.catalog")
 @OpenAPIDefinition(
 	info = @Info(
 		title = "Food Core API",
