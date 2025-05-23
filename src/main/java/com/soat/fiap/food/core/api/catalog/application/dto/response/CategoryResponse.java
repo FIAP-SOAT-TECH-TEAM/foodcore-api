@@ -37,12 +37,9 @@ public class CategoryResponse {
     @Schema(description = "Indica se a categoria está ativa", example = "true")
     private boolean active;
 
-    @Schema(description = "Data de criação da categoria", example = "2024-01-10T14:30:00")
+    @Schema(description = "Data de criação", example = "2024-01-10T14:30:00")
     private LocalDateTime createdAt;
 
-    @Schema(description = "Data da última atualização da categoria", example = "2024-02-15T09:00:00")
+    @Schema(description = "Data da última atualização", example = "2024-02-15T09:00:00")
     private LocalDateTime updatedAt;
-
-    @Schema(description = "Lista de produtos da categoria")
-    private List<ProductResponse> products;
 } 

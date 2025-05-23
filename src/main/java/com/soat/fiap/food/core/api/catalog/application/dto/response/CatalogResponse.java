@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,6 +22,9 @@ public class CatalogResponse {
     @Schema(description = "Nome do catálogo", example = "Promoções de Verão")
     private String name;
 
-    @Schema(description = "Lista de categorias pertencentes ao catálogo")
-    private List<CategoryResponse> categories;
+    @Schema(description = "Data de criação", example = "2024-01-10T14:30:00")
+    private LocalDateTime createdAt;
+
+    @Schema(description = "Data da última atualização", example = "2024-02-15T09:00:00")
+    private LocalDateTime updatedAt;
 }

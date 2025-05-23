@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.catalog.application.mapper.response;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.application.mapper.shared.ImageUrlMapper;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
+import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
@@ -17,7 +18,7 @@ import java.util.List;
  * Mapper que converte a entidade {@link Product} para o DTO {@link ProductResponse}.
  * Utiliza {@link StockResponseMapper} e {@link ImageUrlMapper} para conversão de estoque e URLs de imagem.
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockResponseMapper.class, ImageUrlMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockResponseMapper.class, ImageUrlMapper.class, AuditInfoMapper.class})
 public interface ProductResponseMapper {
 
     /**
@@ -28,6 +29,8 @@ public interface ProductResponseMapper {
      * @return DTO ProductResponse.
      */
     @Mapping(source = "imageUrl", target = "imageUrl", qualifiedByName = "mapImageUrlToString")
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     ProductResponse toResponse(Product product, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**
@@ -37,6 +40,9 @@ public interface ProductResponseMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
      * @return Lista de DTOs ProductResponse.
      */
+    @Mapping(source = "imageUrl", target = "imageUrl", qualifiedByName = "mapImageUrlToString")
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     List<ProductResponse> toResponseList(List<Product> products, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**

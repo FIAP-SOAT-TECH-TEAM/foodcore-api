@@ -2,10 +2,12 @@ package com.soat.fiap.food.core.api.catalog.application.mapper.response;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
  * Mapper que converte a entidade {@link Catalog} para o DTO {@link CatalogResponse}.
  * Utiliza {@link CategoryResponseMapper} para conversão de categorias associadas.
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = CategoryResponseMapper.class)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CategoryResponseMapper.class, AuditInfoMapper.class})
 public interface CatalogResponseMapper {
 
     /**
@@ -24,6 +26,8 @@ public interface CatalogResponseMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
      * @return DTO CatalogResponse.
      */
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     CatalogResponse toResponse(Catalog catalog, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**
@@ -33,6 +37,8 @@ public interface CatalogResponseMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
      * @return Lista de DTOs CatalogResponse.
      */
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     List<CatalogResponse> toResponseList(List<Catalog> catalogs, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**

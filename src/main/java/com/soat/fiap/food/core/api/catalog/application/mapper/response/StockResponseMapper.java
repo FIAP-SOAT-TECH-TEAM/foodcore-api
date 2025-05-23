@@ -2,17 +2,19 @@ package com.soat.fiap.food.core.api.catalog.application.mapper.response;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.response.StockResponse;
 import com.soat.fiap.food.core.api.catalog.domain.model.Stock;
+import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
  * Mapper que converte a entidade {@link Stock} para o DTO {@link StockResponse}.
  * Utiliza {@link ProductResponseMapper} para conversão de produtos associados ao estoque.
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = ProductResponseMapper.class)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ProductResponseMapper.class, AuditInfoMapper.class})
 public interface StockResponseMapper {
 
     /**
@@ -22,6 +24,8 @@ public interface StockResponseMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos de mapeamento.
      * @return DTO StockResponse.
      */
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     StockResponse toResponse(Stock stock, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**
