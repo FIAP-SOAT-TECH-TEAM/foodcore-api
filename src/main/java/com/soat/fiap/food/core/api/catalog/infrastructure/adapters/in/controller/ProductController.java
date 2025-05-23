@@ -62,7 +62,7 @@
 //     */
 //    @GetMapping("/{id}")
 //    @Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico pelo seu ID")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Produto encontrado",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = ProductResponse.class))),
@@ -86,7 +86,7 @@
 //    @GetMapping("/by-category/{categoryId}")
 //    @Operation(summary = "Listar produtos por categoria",
 //               description = "Retorna uma lista com todos os produtos de uma categoria específica")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))),
@@ -116,7 +116,7 @@
 //        summary = "Criar novo produto",
 //        description = "Cria um novo produto com os dados fornecidos e opcionalmente com uma imagem"
 //    )
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "201", description = "Produto criado com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = ProductResponse.class))),
@@ -129,7 +129,7 @@
 //            @RequestParam("name") String name,
 //
 //            @Parameter(description = "Descrição do produto", example = "Hambúrguer com queijo, alface e tomate")
-//            @RequestParam(value = "description", required = false) String description,
+//            @RequestParam(imageUrl = "description", required = false) String description,
 //
 //            @Parameter(description = "Preço do produto", example = "25.90", required = true)
 //            @RequestParam("price") BigDecimal price,
@@ -138,10 +138,10 @@
 //            @RequestParam("categoryId") Long categoryId,
 //
 //            @Parameter(description = "Ordem de exibição do produto", example = "1")
-//            @RequestParam(value = "displayOrder", required = false) Integer displayOrder,
+//            @RequestParam(imageUrl = "displayOrder", required = false) Integer displayOrder,
 //
 //            @Parameter(description = "Imagem do produto (opcional)")
-//            @RequestParam(value = "image", required = false) MultipartFile image) {
+//            @RequestParam(imageUrl = "image", required = false) MultipartFile image) {
 //
 //        logger.info("Requisição para criar produto: name={}, categoryId={}", name, categoryId);
 //
@@ -168,9 +168,9 @@
 //     * @param request Dados atualizados
 //     * @return Produto atualizado ou 404
 //     */
-//    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @PutMapping(imageUrl = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 //    @Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto existente")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = ProductResponse.class))),
@@ -203,7 +203,7 @@
 //     */
 //    @DeleteMapping("/{id}")
 //    @Operation(summary = "Remover produto", description = "Remove um produto pelo seu ID")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "204", description = "Produto removido com sucesso",
 //                    content = @Content),
 //            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
@@ -227,12 +227,12 @@
 //     * @param image Arquivo de imagem
 //     * @return Produto atualizado
 //     */
-//    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PatchMapping(imageUrl = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //    @Operation(
 //        summary = "Atualizar imagem do produto",
 //        description = "Atualiza apenas a imagem de um produto existente"
 //    )
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Imagem atualizada com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = ProductResponse.class))),

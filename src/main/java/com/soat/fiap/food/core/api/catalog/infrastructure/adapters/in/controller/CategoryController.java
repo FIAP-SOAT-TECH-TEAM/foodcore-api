@@ -61,7 +61,7 @@
 //     */
 //    @GetMapping("/{id}")
 //    @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria específica pelo seu ID")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Categoria encontrada",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = CategoryResponse.class))),
@@ -90,7 +90,7 @@
 //        summary = "Criar nova categoria",
 //        description = "Cria uma nova categoria com os dados fornecidos e opcionalmente com uma imagem"
 //    )
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "201", description = "Categoria criada com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = CategoryResponse.class))),
@@ -103,13 +103,13 @@
 //            @RequestParam("name") String name,
 //
 //            @Parameter(description = "Descrição da categoria", example = "Hambúrgueres e sanduíches")
-//            @RequestParam(value = "description", required = false) String description,
+//            @RequestParam(imageUrl = "description", required = false) String description,
 //
 //            @Parameter(description = "Ordem de exibição da categoria", example = "1")
-//            @RequestParam(value = "displayOrder", required = false) Integer displayOrder,
+//            @RequestParam(imageUrl = "displayOrder", required = false) Integer displayOrder,
 //
 //            @Parameter(description = "Imagem da categoria (opcional)")
-//            @RequestParam(value = "image", required = false) MultipartFile image) {
+//            @RequestParam(imageUrl = "image", required = false) MultipartFile image) {
 //
 //        logger.info("Requisição para criar categoria: name={}", name);
 //
@@ -134,9 +134,9 @@
 //     * @param request Dados atualizados
 //     * @return Categoria atualizada ou 404
 //     */
-//    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @PutMapping(imageUrl = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 //    @Operation(summary = "Atualizar categoria", description = "Atualiza os dados de uma categoria existente")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = CategoryResponse.class))),
@@ -169,7 +169,7 @@
 //     */
 //    @DeleteMapping("/{id}")
 //    @Operation(summary = "Remover categoria", description = "Remove uma categoria pelo seu ID")
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "204", description = "Categoria removida com sucesso",
 //                    content = @Content),
 //            @ApiResponse(responseCode = "404", description = "Categoria não encontrada",
@@ -193,12 +193,12 @@
 //     * @param image Arquivo de imagem
 //     * @return Categoria atualizada
 //     */
-//    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PatchMapping(imageUrl = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //    @Operation(
 //        summary = "Atualizar imagem da categoria",
 //        description = "Atualiza apenas a imagem de uma categoria existente"
 //    )
-//    @ApiResponses(value = {
+//    @ApiResponses(imageUrl = {
 //            @ApiResponse(responseCode = "200", description = "Imagem atualizada com sucesso",
 //                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 //                            schema = @Schema(implementation = CategoryResponse.class))),

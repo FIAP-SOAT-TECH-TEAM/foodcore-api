@@ -10,6 +10,6 @@ public class ImageUrlMapper {
 
     @Named("mapImageUrlToString")
     public static String mapImageUrlToString(ImageUrl imageUrl) {
-        return imageUrl != null ? imageUrl.value() : null;
+        return imageUrl != null ? imageUrl.imageUrl() : null;
     }
 }
