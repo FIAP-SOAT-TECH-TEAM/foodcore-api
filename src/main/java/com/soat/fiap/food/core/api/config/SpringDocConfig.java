@@ -51,11 +51,11 @@ public class SpringDocConfig {
     }
 
     @Bean
-    public GroupedOpenApi productApi() {
+    public GroupedOpenApi catalogApi() {
         return GroupedOpenApi.builder()
-                .group("produtos")
-                .packagesToScan("com.soat.fiap.food.core.api.product")
-                .pathsToMatch("/api/products/**", "/api/categories/**")
+                .group("catálogo")
+                .packagesToScan("com.soat.fiap.food.core.api.catalog")
+                .pathsToMatch("/api/catalogs/**")
                 .build();
     }
 
