@@ -1,15 +1,13 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request;
 
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 /**
  * DTO para requisições de criação/atualização de usuários
@@ -36,4 +34,8 @@ public class UserRequest {
 
     @Schema(description = "DOCUMENT do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
     private String document;
+
+    @Builder.Default
+    @Schema(description = "Tipo de role (ADMIN=1, USER=2)", example = "2")
+    private RoleType role = RoleType.USER; //define a role user como default caso nenhuma seja informada
 }

@@ -1,10 +1,8 @@
 package com.soat.fiap.food.core.api.user.domain.model;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +23,8 @@ public class User {
     private String password;
     private String document;
     private boolean active;
-    private LocalDateTime last_login;
+    private Role role;
+    private LocalDateTime lastLogin;
     private final AuditInfo auditInfo = new AuditInfo();
 
     
