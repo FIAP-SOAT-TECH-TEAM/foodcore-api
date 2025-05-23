@@ -26,10 +26,10 @@ public class Product {
     private ImageUrl imageUrl;
     private boolean active = true;
     private Integer displayOrder;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     private Category category;
-    private final Stock stock = new Stock();
+    private Stock stock = new Stock();
 
     /**
      * Construtor da classe Product.

@@ -27,7 +27,7 @@ public class Category {
     private ImageUrl imageUrl;
     private Integer displayOrder;
     private boolean active = true;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     private Catalog catalog;
     private List<Product> products;

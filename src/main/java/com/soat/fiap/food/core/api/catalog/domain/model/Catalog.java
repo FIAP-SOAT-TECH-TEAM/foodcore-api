@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Catalog {
     private Long id;
     private String name;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     private List<Category> categories;
 

@@ -19,7 +19,7 @@ public class Stock {
 
     private Long id;
     private Integer quantity = 0;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     private Product product;
 
