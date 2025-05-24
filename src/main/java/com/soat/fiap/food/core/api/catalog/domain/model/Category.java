@@ -4,7 +4,6 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.*;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -78,6 +77,19 @@ public class Category {
     }
 
     /**
+     * Retorna o último produto da lista de produtos da categoria.
+     *
+     * @return o último produto da lista
+     * @throws ProductNotFoundException se a lista de produtos estiver vazia
+     */
+    Product getLastProduct() {
+        if (products == null || products.isEmpty()) {
+            throw new ProductNotFoundException("Nenhum produto encontrado na categoria");
+        }
+        return products.getLast();
+    }
+
+    /**
      * Retorna o nome da categoria.
      *
      * @return nome da categoria
@@ -122,8 +134,6 @@ public class Category {
     void addProduct(Product product) {
         Objects.requireNonNull(product, "O produto não pode ser nulo");
 
-        products = (products == null) ? new ArrayList<>() : products;
-
         if (products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
             throw new ProductConflictException("Produto", "Nome", product.getName());
         }
@@ -132,19 +142,60 @@ public class Category {
     }
 
     /**
+     * Atualiza um produto existente na lista de produtos da categoria.
+     *
+     * @param newProduct novo estado do produto a ser atualizado
+     * @throws NullPointerException       se {@code newProduct} for nulo
+     * @throws ProductNotFoundException   se o produto com o ID fornecido não for encontrado
+     * @throws ProductConflictException   se já existir outro produto com o mesmo nome
+     */
+    void updateProduct(Product newProduct) {
+
+        Objects.requireNonNull(newProduct, "O produto não pode ser nulo");
+
+        var currentProduct = getProductById(newProduct.getId());
+
+        if (products.stream().anyMatch(p -> p.getName().equals(newProduct.getName()) && !p.getId().equals(newProduct.getId()))) {
+            throw new ProductConflictException("Produto", "Nome", newProduct.getName());
+        }
+
+        currentProduct.setDetails(newProduct.getDetails());
+        currentProduct.setPrice(newProduct.getPrice());
+        currentProduct.setImageUrl(newProduct.getImageUrl());
+        currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
+        currentProduct.setActive(newProduct.isActive());
+        currentProduct.markUpdatedNow();
+    }
+
+    /**
+     * Move um produto para uma nova categoria.
+     *
+     * @param newCategory a nova categoria que receberá o produto
+     * @param productId o ID do produto a ser movida
+     */
+    void moveCategoryProduct(Category newCategory, Long productId) {
+
+        var product = getProductById(productId);
+
+        newCategory.addProduct(product);
+        product.setCategory(newCategory);
+        product.markUpdatedNow();
+        removeProduct(productId);
+    }
+
+
+    /**
      * Remove um produto da categoria.
      *
-     * @param product produto a ser removido
-     * @throws NullPointerException se {@code product} for nulo
+     * @param productId ID do produto a ser removido
+     * @throws NullPointerException se {@code productId} for nulo
      * @throws CategoryException    se o produto não existir na categoria
      */
-    void removeProduct(Product product) {
-        Objects.requireNonNull(product, "O produto não pode ser nulo");
+    void removeProduct(Long productId) {
+        Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
 
-        if (products == null || products.stream().noneMatch(p -> p.getName().equals(product.getName()))) {
-            throw new CategoryException("Produto não encontrado");
-        }
-        
+        var product = getProductById(productId);
+
         products.remove(product);
     }
 

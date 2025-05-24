@@ -2,8 +2,10 @@ package com.soat.fiap.food.core.api.catalog.application.ports.in;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 
 import java.util.List;
 
@@ -91,4 +93,44 @@ public interface CatalogUseCase {
      * @param categoryId ID da categoria
      */
     void deleteCategory(Long catalogId, Long categoryId);
+
+    /**
+     * Salva um produto.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria à qual o produto será vinculado
+     * @param productRequest Produto a ser salvo
+     * @return Produto salvo com identificadores atualizados
+     */
+    ProductResponse saveProduct(Long catalogId, Long categoryId, ProductRequest productRequest);
+
+    /**
+     * Atualiza um produto.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId ID do produto a ser atualizado
+     * @param productRequest Produto com os dados atualizados
+     * @return Produto atualizado com identificadores atualizados
+     */
+    ProductResponse updateProduct(Long catalogId, Long categoryId, Long productId, ProductRequest productRequest);
+
+    /**
+     * Busca um produto por ID dentro de uma categoria.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId ID do produto
+     * @return Produto encontrado
+     */
+    ProductResponse getProductById(Long catalogId, Long categoryId, Long productId);
+
+    /**
+     * Remove um produto de uma categoria.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId ID do produto a ser removido
+     */
+    void deleteProduct(Long catalogId, Long categoryId, Long productId);
 }

@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -95,6 +96,20 @@ public class Catalog {
     }
 
     /**
+     * Retorna o último produto dentro de uma categoria.
+     *
+     * @param categoryId o ID da categoria
+     * @return o produto correspondente
+     */
+    public Product getLastProductOfCategory(Long categoryId) {
+        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+
+        var category = getCategoryById(categoryId);
+
+        return category.getLastProduct();
+    }
+
+    /**
      * Atualiza o nome do catálogo.
      *
      * @param name o novo nome
@@ -116,7 +131,6 @@ public class Catalog {
      */
     public void addCategory(Category category) {
         Objects.requireNonNull(category, "A categoria não pode ser nula");
-        categories = (categories == null) ? new ArrayList<>() : categories;
 
         if (categories.stream().anyMatch(c -> c.getName().equals(category.getName()))) {
             throw new CategoryConflictException("Categoria", "Nome", category.getName());
@@ -134,7 +148,6 @@ public class Catalog {
      */
     public void updateCategory(Category newCategory) {
         Objects.requireNonNull(newCategory, "A categoria não pode ser nula");
-        categories = (categories == null) ? new ArrayList<>() : categories;
 
         var currentCategory = getCategoryById(newCategory.getId());
 
@@ -203,42 +216,44 @@ public class Catalog {
     /**
      * Atualiza um produto dentro de uma categoria.
      *
-     * @param currentCategoryId o ID da categoria atual
-     * @param newCategoryId o novo ID da categoria (caso vá mudar de categoria)
+     * @param categoryId o ID da categoria do produto
      * @param newProduct os novos dados do produto
      */
-    public void updateProductInCategory(Long currentCategoryId, Long newCategoryId, Product newProduct) {
-        Objects.requireNonNull(currentCategoryId, "O ID da categoria não pode ser nulo");
-        Objects.requireNonNull(newCategoryId, "O novo ID da categoria não pode ser nulo");
+    public void updateProductInCategory(Long categoryId, Product newProduct) {
+        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(newProduct, "O produto não pode ser nulo");
 
-        var currentProduct = getProductFromCategoryById(currentCategoryId, newCategoryId);
+        var category = getCategoryById(categoryId);
 
-        currentProduct.setDetails(newProduct.getDetails());
-        currentProduct.setPrice(newProduct.getPrice());
-        currentProduct.setImageUrl(newProduct.getImageUrl());
-        currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
-        currentProduct.setActive(newProduct.isActive());
-        currentProduct.markUpdatedNow();
+        category.updateProduct(newProduct);
+    }
 
-        if (!currentCategoryId.equals(newCategoryId)) {
-            removeProductFromCategory(currentCategoryId, newProduct);
-            addProductToCategory(newCategoryId, newProduct);
-        }
+    /**
+     * Move um produto para uma nova categoria.
+     *
+     * @param newCategoryId ID da nova categoria que receberá o produto
+     * @param productId o ID do produto a ser movida
+     */
+    public void moveCategoryProduct(Long newCategoryId, Long productId) {
+
+        var category = getCategoryById(newCategoryId);
+
+        category.moveCategoryProduct(category, productId);
     }
 
     /**
      * Remove um produto de uma categoria.
      *
      * @param categoryId o ID da categoria
-     * @param product o produto a ser removido
+     * @param productId o ID do produto a ser removido
      */
-    public void removeProductFromCategory(Long categoryId, Product product) {
+    public void removeProductFromCategory(Long categoryId, Long productId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
-        Objects.requireNonNull(product, "O produto não pode ser nulo");
+        Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
 
         var category = getCategoryById(categoryId);
-        category.removeProduct(product);
+
+        category.removeProduct(productId);
     }
 
     /**

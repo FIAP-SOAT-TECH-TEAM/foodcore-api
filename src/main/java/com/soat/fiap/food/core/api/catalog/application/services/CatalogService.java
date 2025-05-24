@@ -2,12 +2,16 @@ package com.soat.fiap.food.core.api.catalog.application.services;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.CategoryRequestMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.request.ProductRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryResponseMapper;
+import com.soat.fiap.food.core.api.catalog.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
@@ -29,9 +33,11 @@ public class CatalogService implements CatalogUseCase {
 
     private final CatalogRequestMapper catalogRequestMapper;
     private final CategoryRequestMapper categoryRequestMapper;
+    private final ProductRequestMapper productRequestMapper;
 
     private final CatalogResponseMapper catalogResponseMapper;
     private final CategoryResponseMapper categoryResponseMapper;
+    private final ProductResponseMapper productResponseMapper;
 
     private final CustomLogger logger;
 
@@ -40,13 +46,17 @@ public class CatalogService implements CatalogUseCase {
             CatalogRequestMapper catalogRequestMapper,
             CatalogResponseMapper catalogResponseMapper,
             CategoryRequestMapper categoryRequestMapper,
-            CategoryResponseMapper categoryResponseMapper
+            CategoryResponseMapper categoryResponseMapper,
+            ProductRequestMapper productRequestMapper,
+            ProductResponseMapper productResponseMapper
     ) {
         this.catalogRepository = catalogRepository;
         this.catalogRequestMapper = catalogRequestMapper;
         this.catalogResponseMapper = catalogResponseMapper;
         this.categoryRequestMapper = categoryRequestMapper;
         this.categoryResponseMapper = categoryResponseMapper;
+        this.productRequestMapper = productRequestMapper;
+        this.productResponseMapper = productResponseMapper;
         this.logger = CustomLogger.getLogger(getClass());
     }
 
@@ -331,4 +341,130 @@ public class CatalogService implements CatalogUseCase {
 
         logger.debug("Categoria excluída com sucesso: {}", categoryId);
     }
+
+    /**
+     * Salva um produto.
+     *
+     * @param catalogId  ID do catálogo ao qual a categoria pertence
+     * @param categoryId ID da categoria à qual o produto será vinculado
+     * @param productRequest Produto a ser salvo
+     * @return Produto salvo com identificadores atualizados
+     */
+    @Override
+    @Transactional
+    public ProductResponse saveProduct(Long catalogId, Long categoryId, ProductRequest productRequest) {
+        logger.debug("Criando produto: {}", productRequest.getName());
+
+        var catalog = catalogRepository.findById(catalogId);
+        var product = productRequestMapper.toDomain(productRequest);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de cadastrar produto em catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        catalog.get().addProductToCategory(categoryId, product);
+
+        var savedCatalog = catalogRepository.save(catalog.get());
+        var savedProduct = savedCatalog.getLastProductOfCategory(categoryId);
+
+        var productResponse = productResponseMapper.toResponse(savedProduct);
+
+        logger.debug("Produto criado com sucesso: {}", productResponse.getId());
+
+        return productResponse;
+    }
+
+    /**
+     * Atualiza um produto.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId  ID do produto a ser atualizado
+     * @param productRequest Produto com os dados atualizados
+     * @return Produto atualizado com identificadores atualizados
+     */
+    @Override
+    @Transactional
+    public ProductResponse updateProduct(Long catalogId, Long categoryId, Long productId, ProductRequest productRequest) {
+        logger.debug("Atualizando produto: {}", productId);
+
+        var catalog = catalogRepository.findById(catalogId);
+        var product = productRequestMapper.toDomain(productRequest);
+        product.setId(productId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de atualizar produto com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+        else if (!productRequest.getCategoryId().equals(categoryId)) {
+
+            catalog.get().moveCategoryProduct(productRequest.getCategoryId(), productId);
+
+            logger.debug("Produto movido com sucesso para categoria: {}", productRequest.getCategoryId());
+        }
+
+        catalog.get().updateProductInCategory(categoryId, product);
+
+        var updatedCatalog = catalogRepository.save(catalog.get());
+        var updatedProduct = updatedCatalog.getProductFromCategoryById(categoryId, productId);
+
+        var productResponse = productResponseMapper.toResponse(updatedProduct);
+
+        logger.debug("Produto atualizado com sucesso: {}", productId);
+
+        return productResponse;
+    }
+
+    /**
+     * Busca um produto por ID dentro de uma categoria.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId  ID do produto
+     * @return Produto encontrado
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getProductById(Long catalogId, Long categoryId, Long productId) {
+        logger.debug("Buscando produto de id: {} na categoria de id: {} no catalogo de id: {}", productId, categoryId, catalogId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Catalogo não encontrado. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var product = catalog.get().getProductFromCategoryById(categoryId, productId);
+
+        return productResponseMapper.toResponse(product);
+    }
+
+    /**
+     * Exclui um produto de uma categoria.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     * @param productId  ID do produto a ser removido
+     */
+    @Override
+    @Transactional
+    public void deleteProduct(Long catalogId, Long categoryId, Long productId) {
+        logger.debug("Excluindo produto de id: {} da categoria de id: {} do catalogo de id: {}", productId, categoryId, catalogId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de excluir produto com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        catalog.get().removeProductFromCategory(categoryId, productId);
+
+        catalogRepository.save(catalog.get());
+
+        logger.debug("Produto excluído com sucesso: {}", productId);
+    }
+
 }
