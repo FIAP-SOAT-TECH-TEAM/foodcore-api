@@ -75,7 +75,7 @@ public class Catalog {
         return categories.stream()
                 .filter(o -> o.getId().equals(categoryId))
                 .findFirst()
-                .orElseThrow(() -> new CategoryNotFoundException("Categoria não encontrada"));
+                .orElseThrow(() -> new CategoryNotFoundException("Categoria",  categoryId));
     }
 
     /**

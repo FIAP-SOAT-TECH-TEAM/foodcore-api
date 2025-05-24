@@ -109,7 +109,7 @@ public class Category {
         return products.stream()
                 .filter(p -> p.getId().equals(productId))
                 .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Produto", productId));
     }
 
     /**
