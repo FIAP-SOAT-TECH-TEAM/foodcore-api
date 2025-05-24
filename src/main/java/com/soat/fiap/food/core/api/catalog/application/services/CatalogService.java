@@ -256,4 +256,78 @@ public class CatalogService implements CatalogUseCase {
 
         return updatedCategoryToResponse;
     }
+
+    /**
+     * Busca uma categoria por ID dentro de um catálogo.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     * @return Categoria encontrada
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public CategoryResponse getCategoryById(Long catalogId, Long categoryId) {
+        logger.debug("Buscando categoria de id: {} no catalogo de id: {}", categoryId, catalogId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Catalogo não encontrado. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var category = catalog.get().getCategoryById(categoryId);
+
+        return categoryResponseMapper.toResponse(category);
+    }
+
+    /**
+     * Lista todas as categorias de um catálogo.
+     *
+     * @param catalogId ID do catálogo
+     * @return Lista de categorias
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAllCategories(Long catalogId) {
+        logger.debug("Buscando todas as categorias do catalogo de id: {}", catalogId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Catalogo não encontrado. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var categories = catalog.get().getCategories();
+
+        logger.debug("Encontradas {} categorias", categories.size());
+
+        return categoryResponseMapper.toResponseList(categories);
+    }
+
+    /**
+     * Exclui uma categoria de um catálogo.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     */
+    @Override
+    @Transactional
+    public void deleteCategory(Long catalogId, Long categoryId) {
+        logger.debug("Excluindo categoria de id: {} do catalogo de id: {}", categoryId, catalogId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de excluir categoria com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        catalog.get().removeCategory(categoryId);
+
+        catalogRepository.save(catalog.get());
+
+        logger.debug("Categoria excluída com sucesso: {}", categoryId);
+    }
 }

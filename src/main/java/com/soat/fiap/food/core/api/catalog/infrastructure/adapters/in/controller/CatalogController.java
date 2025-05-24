@@ -149,4 +149,54 @@ public class CatalogController {
         CategoryResponse response = catalogUseCase.updateCategory(catalogId, categoryId, request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{catalogId}/categories/{categoryId}")
+    @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria específica de um catálogo pelo ID da categoria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
+    })
+    public ResponseEntity<CategoryResponse> getCategoryById(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId
+    ) {
+        CategoryResponse response = catalogUseCase.getCategoryById(catalogId, categoryId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{catalogId}/categories")
+    @Operation(summary = "Listar categorias do catálogo", description = "Retorna todas as categorias associadas a um catálogo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
+            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
+    })
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId) {
+        List<CategoryResponse> responseList = catalogUseCase.getAllCategories(catalogId);
+        return ResponseEntity.ok(responseList);
+    }
+
+    @DeleteMapping("/{catalogId}/categories/{categoryId}")
+    @Operation(summary = "Excluir categoria", description = "Exclui uma categoria específica de um catálogo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Categoria excluída com sucesso", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
+    })
+    public ResponseEntity<Void> deleteCategory(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId
+    ) {
+        catalogUseCase.deleteCategory(catalogId, categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

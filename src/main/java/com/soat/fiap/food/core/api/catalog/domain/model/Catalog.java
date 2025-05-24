@@ -155,7 +155,9 @@ public class Catalog {
 
         var category = getCategoryById(categoryId);
 
-        if (!category.getProducts().isEmpty() && category.getCatalog().categories.isEmpty()) {
+        category.setCatalog(null);
+
+        if (!category.getProducts().isEmpty() && category.getCatalog() == null) {
             throw new CategoryConflictException("Não é possível excluir esta categoria porque existem produtos associados a ela");
         }
 

@@ -66,4 +66,29 @@ public interface CatalogUseCase {
      * @return Categoria atualizada com possíveis atualizações de identificadores
      */
     CategoryResponse updateCategory(Long catalogId, Long categoryId, CategoryRequest categoryRequest);
+
+    /**
+     * Busca uma categoria dentro de um catálogo pelo seu ID.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @return Categoria encontrada
+     */
+    CategoryResponse getCategoryById(Long catalogId, Long categoryId);
+
+    /**
+     * Lista todas as categorias de um catálogo.
+     *
+     * @param catalogId ID do catálogo
+     * @return Lista de categorias do catálogo
+     */
+    List<CategoryResponse> getAllCategories(Long catalogId);
+
+    /**
+     * Remove uma categoria de um catálogo.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     */
+    void deleteCategory(Long catalogId, Long categoryId);
 }
