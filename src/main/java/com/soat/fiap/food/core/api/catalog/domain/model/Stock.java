@@ -38,11 +38,11 @@ public class Stock {
      * Valida a quantidade informada para o estoque.
      *
      * @param quantity quantidade a ser validada
-     * @throws StockException se a quantidade for menor que zero
+     * @throws StockException se a quantidade for menor ou igual a zero
      */
     private void validate(int quantity) {
         if (quantity < 0) {
-            throw new StockException("A quantidade de estoque deve ser maior que 0");
+            throw new StockException("A quantidade de estoque deve ser positiva");
         }
     }
 
@@ -50,11 +50,11 @@ public class Stock {
      * Define a quantidade de itens no estoque.
      *
      * @param quantity nova quantidade a ser atribuída
-     * @throws StockException se a quantidade for menor que zero
+     * @throws StockException se a quantidade for menor ou igual a zero
      */
     public void setQuantity(int quantity) {
         if (quantity < 0) {
-            throw new StockException("A quantidade de estoque deve ser maior que 0");
+            throw new StockException("A quantidade de estoque deve ser positiva");
         }
         this.quantity = quantity;
     }

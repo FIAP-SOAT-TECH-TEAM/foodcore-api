@@ -69,6 +69,20 @@ public class Category {
     }
 
     /**
+     * Define a ordem de exibição da categoria.
+     *
+     * @param displayOrder nova ordem de exibição
+     * @throws CategoryException se {@code displayOrder} for menor ou igal a zero
+     */
+    void setDisplayOrder(Integer displayOrder) {
+        if (displayOrder != null && displayOrder > 0) {
+            throw new CategoryException("A ordem de exibição da categoria deve ser maior que 0");
+        }
+
+        this.displayOrder = displayOrder;
+    }
+
+    /**
      * Fornece uma lista imutável de produtos
      * @return lista imutável de produtos
      */
