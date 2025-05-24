@@ -28,7 +28,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalogs")
-@Tag(name = "Catálogos", description = "API para gerenciamento de catálogos de produtos")
 public class CatalogController {
 
     private final CatalogUseCase catalogUseCase;
@@ -39,8 +38,13 @@ public class CatalogController {
         this.logger = CustomLogger.getLogger(getClass());
     }
 
+    // ========== CATÁLOGOS ==========
     @GetMapping
-    @Operation(summary = "Listar todos os catálogos", description = "Retorna uma lista com todos os catálogos cadastrados")
+    @Operation(
+            summary = "Listar todos os catálogos",
+            description = "Retorna uma lista com todos os catálogos cadastrados",
+            tags = { "Catálogos" }
+    )
     @ApiResponse(responseCode = "200", description = "Lista de catálogos retornada com sucesso",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = CatalogResponse.class))))
@@ -50,7 +54,11 @@ public class CatalogController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Buscar catálogo por ID", description = "Retorna um catálogo específico pelo seu ID")
+    @Operation(
+            summary = "Buscar catálogo por ID",
+            description = "Retorna um catálogo específico pelo seu ID",
+            tags = { "Catálogos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Catálogo encontrado",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -65,7 +73,11 @@ public class CatalogController {
     }
 
     @PostMapping
-    @Operation(summary = "Criar novo catálogo", description = "Cria um novo catálogo com os dados fornecidos")
+    @Operation(
+            summary = "Criar novo catálogo",
+            description = "Cria um novo catálogo com os dados fornecidos",
+            tags = { "Catálogos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Catálogo criado com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -81,7 +93,11 @@ public class CatalogController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Atualizar catálogo", description = "Atualiza os dados de um catálogo existente pelo seu ID")
+    @Operation(
+            summary = "Atualizar catálogo",
+            description = "Atualiza os dados de um catálogo existente pelo seu ID",
+            tags = { "Catálogos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Catálogo atualizado com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -100,7 +116,11 @@ public class CatalogController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Excluir catálogo", description = "Exclui um catálogo pelo seu ID")
+    @Operation(
+            summary = "Excluir catálogo",
+            description = "Exclui um catálogo pelo seu ID",
+            tags = { "Catálogos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Catálogo excluído com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
@@ -114,8 +134,13 @@ public class CatalogController {
         return ResponseEntity.noContent().build();
     }
 
+    // ========== CATEGORIAS ==========
     @PostMapping("/categories")
-    @Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria vinculada a um catálogo existente")
+    @Operation(
+            summary = "Criar nova categoria",
+            description = "Cria uma nova categoria vinculada a um catálogo existente",
+            tags = { "Categorias" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria criada com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -131,8 +156,53 @@ public class CatalogController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{catalogId}/categories")
+    @Operation(
+            summary = "Listar categorias do catálogo",
+            description = "Retorna todas as categorias associadas a um catálogo",
+            tags = { "Categorias" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
+            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
+    })
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId) {
+        List<CategoryResponse> responseList = catalogUseCase.getAllCategories(catalogId);
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/{catalogId}/categories/{categoryId}")
+    @Operation(
+            summary = "Buscar categoria por ID",
+            description = "Retorna uma categoria específica de um catálogo pelo ID da categoria",
+            tags = { "Categorias" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
+    })
+    public ResponseEntity<CategoryResponse> getCategoryById(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId
+    ) {
+        CategoryResponse response = catalogUseCase.getCategoryById(catalogId, categoryId);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{catalogId}/categories/{categoryId}")
-    @Operation(summary = "Atualizar categoria", description = "Atualiza uma categoria vinculada a um catálogo existente")
+    @Operation(
+            summary = "Atualizar categoria",
+            description = "Atualiza uma categoria vinculada a um catálogo existente",
+            tags = { "Categorias" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -152,41 +222,12 @@ public class CatalogController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{catalogId}/categories/{categoryId}")
-    @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria específica de um catálogo pelo ID da categoria")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CategoryResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
-    })
-    public ResponseEntity<CategoryResponse> getCategoryById(
-            @Parameter(description = "ID do catálogo", example = "1", required = true)
-            @PathVariable Long catalogId,
-            @Parameter(description = "ID da categoria", example = "10", required = true)
-            @PathVariable Long categoryId
-    ) {
-        CategoryResponse response = catalogUseCase.getCategoryById(catalogId, categoryId);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{catalogId}/categories")
-    @Operation(summary = "Listar categorias do catálogo", description = "Retorna todas as categorias associadas a um catálogo")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
-            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
-    })
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(
-            @Parameter(description = "ID do catálogo", example = "1", required = true)
-            @PathVariable Long catalogId) {
-        List<CategoryResponse> responseList = catalogUseCase.getAllCategories(catalogId);
-        return ResponseEntity.ok(responseList);
-    }
-
     @DeleteMapping("/{catalogId}/categories/{categoryId}")
-    @Operation(summary = "Excluir categoria", description = "Exclui uma categoria específica de um catálogo")
+    @Operation(
+            summary = "Excluir categoria",
+            description = "Exclui uma categoria específica de um catálogo",
+            tags = { "Categorias" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Categoria excluída com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content),
@@ -202,8 +243,13 @@ public class CatalogController {
         return ResponseEntity.noContent().build();
     }
 
+    // ========== PRODUTOS ==========
     @PostMapping("/{catalogId}/categories/{categoryId}/products")
-    @Operation(summary = "Criar novo produto", description = "Cria um novo produto vinculado a uma categoria existente")
+    @Operation(
+            summary = "Criar novo produto",
+            description = "Cria um novo produto vinculado a uma categoria existente",
+            tags = { "Produtos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Produto criado com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -223,8 +269,59 @@ public class CatalogController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{catalogId}/categories/{categoryId}/products")
+    @Operation(
+            summary = "Listar produtos por categoria",
+            description = "Retorna todos os produtos de uma determinada categoria dentro de um catálogo",
+            tags = { "Produtos" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))),
+            @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrada", content = @Content)
+    })
+    public ResponseEntity<List<ProductResponse>> getAllProductsByCategory(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "5", required = true)
+            @PathVariable Long categoryId
+    ) {
+        logger.debug("Requisição para listar produtos da categoria {} no catálogo {}", categoryId, catalogId);
+        List<ProductResponse> products = catalogUseCase.getAllProducts(catalogId, categoryId);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
+    @Operation(
+            summary = "Buscar produto por ID",
+            description = "Retorna um produto específico de uma categoria pelo ID do produto",
+            tags = { "Produtos" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto encontrado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
+    })
+    public ResponseEntity<ProductResponse> getProductById(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Parameter(description = "ID do produto", example = "100", required = true)
+            @PathVariable Long productId) {
+        logger.debug("Requisição para buscar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
+        ProductResponse response = catalogUseCase.getProductById(catalogId, categoryId, productId);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-    @Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto existente")
+    @Operation(
+            summary = "Atualizar produto",
+            description = "Atualiza os dados de um produto existente",
+            tags = { "Produtos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -246,48 +343,12 @@ public class CatalogController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-    @Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico de uma categoria pelo ID do produto")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Produto encontrado com sucesso",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ProductResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
-    })
-    public ResponseEntity<ProductResponse> getProductById(
-            @Parameter(description = "ID do catálogo", example = "1", required = true)
-            @PathVariable Long catalogId,
-            @Parameter(description = "ID da categoria", example = "10", required = true)
-            @PathVariable Long categoryId,
-            @Parameter(description = "ID do produto", example = "100", required = true)
-            @PathVariable Long productId) {
-        logger.debug("Requisição para buscar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
-        ProductResponse response = catalogUseCase.getProductById(catalogId, categoryId, productId);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{catalogId}/categories/{categoryId}/products")
-    @Operation(summary = "Listar produtos por categoria", description = "Retorna todos os produtos de uma determinada categoria dentro de um catálogo")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))),
-            @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrada", content = @Content)
-    })
-    public ResponseEntity<List<ProductResponse>> getAllProductsByCategory(
-            @Parameter(description = "ID do catálogo", example = "1", required = true)
-            @PathVariable Long catalogId,
-            @Parameter(description = "ID da categoria", example = "5", required = true)
-            @PathVariable Long categoryId
-    ) {
-        logger.debug("Requisição para listar produtos da categoria {} no catálogo {}", categoryId, catalogId);
-        List<ProductResponse> products = catalogUseCase.getAllProducts(catalogId, categoryId);
-        return ResponseEntity.ok(products);
-    }
-
-
     @DeleteMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-    @Operation(summary = "Excluir produto", description = "Exclui um produto específico de uma categoria")
+    @Operation(
+            summary = "Excluir produto",
+            description = "Exclui um produto específico de uma categoria",
+            tags = { "Produtos" }
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Produto excluído com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
