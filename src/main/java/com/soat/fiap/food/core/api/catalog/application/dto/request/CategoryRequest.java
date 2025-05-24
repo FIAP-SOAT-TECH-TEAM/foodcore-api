@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.application.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Schema(name = "CategoryRequest", description = "DTO para criação ou atualização de categorias de produtos")
 public class CategoryRequest {
 
-    @NotBlank(message = "O ID do catalogo da categoria é obrigatório")
+    @NotNull(message = "O ID do catalogo da categoria é obrigatório")
     @Schema(description = "Id da categoria", example = "2", required = true)
     private Long catalogId;
 

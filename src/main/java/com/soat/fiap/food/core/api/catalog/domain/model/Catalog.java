@@ -120,6 +120,7 @@ public class Catalog {
             throw new CatalogException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
         }
 
+        category.setCatalog(this);
         categories.add(category);
     }
 
