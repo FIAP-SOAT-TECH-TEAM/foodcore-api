@@ -82,6 +82,19 @@ public class Product {
         }
     }
 
+
+    void setStockQuantity(Integer quantity) {
+         this.stock.setQuantity(quantity);
+    }
+
+    Integer getStockQuantity() {
+        return this.stock.getQuantity();
+    }
+
+    void markStockUpdateNow() {
+        this.stock.markUpdatedNow();
+    }
+
     /**
      * Retorna o nome do produto.
      *

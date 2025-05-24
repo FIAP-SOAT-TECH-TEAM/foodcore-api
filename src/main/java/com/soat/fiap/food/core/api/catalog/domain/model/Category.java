@@ -180,7 +180,13 @@ public class Category {
         currentProduct.setPrice(newProduct.getPrice());
         currentProduct.setImageUrl(newProduct.getImageUrl());
         currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
-        currentProduct.setActive(newProduct.isActive());
+
+        if (!currentProduct.getStockQuantity().equals(newProduct.getStockQuantity())) {
+            currentProduct.setStockQuantity(newProduct.getStockQuantity());
+            currentProduct.setActive(newProduct.isActive());
+            currentProduct.markStockUpdateNow();
+        }
+
         currentProduct.markUpdatedNow();
     }
 
