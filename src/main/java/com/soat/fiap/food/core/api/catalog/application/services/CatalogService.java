@@ -12,7 +12,6 @@ import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
-import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -125,7 +124,7 @@ public class CatalogService implements CatalogUseCase {
 
         if (existingCatalog.isEmpty()) {
             logger.warn("Catalogo não encontrado. Id: {}", id);
-            throw new ResourceNotFoundException("Catalogo", id);
+            throw new CatalogNotFoundException("Catalogo", id);
         }
 
         return catalogResponseMapper.toResponse(existingCatalog.get());
@@ -158,7 +157,7 @@ public class CatalogService implements CatalogUseCase {
 
         if (!catalogRepository.existsById(id)) {
             logger.warn("Tentativa de excluir catalogo inexistente. Id: {}", id);
-            throw new ResourceNotFoundException("Catalogo", id);
+            throw new CatalogNotFoundException("Catalogo", id);
         }
         if (catalogRepository.existsCategoryByCatalogId(id)) {
             logger.warn("Tentativa de excluir catalogo com categorias associadas. Id: {}", id);
@@ -187,7 +186,7 @@ public class CatalogService implements CatalogUseCase {
 
         if (catalog.isEmpty()) {
             logger.warn("Tentativa de cadastrar categoria com catalogo inexistente. ID catalogo: {}", categoryRequest.getCatalogId());
-            throw new ResourceNotFoundException("Catalogo", categoryRequest.getCatalogId());
+            throw new CatalogNotFoundException("Catalogo", categoryRequest.getCatalogId());
         }
 
         catalog.get().addCategory(category);
@@ -214,15 +213,38 @@ public class CatalogService implements CatalogUseCase {
 
         var category = categoryRequestMapper.toDomain(categoryRequest);
         var existingCatalog = catalogRepository.findById(catalogId);
+        category.setId(categoryId);
 
         logger.debug("Atualizando categoria: {}", categoryId);
 
         if (existingCatalog.isEmpty()) {
             logger.warn("Tentativa de atualizar categoria com catálogo inexistente. Id: {}", catalogId);
-            throw new ResourceNotFoundException("Catalogo", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+        else if (!categoryRequest.getCatalogId().equals(catalogId)) {
+
+            var newCatalog = catalogRepository.findById(categoryRequest.getCatalogId());
+
+            if (newCatalog.isEmpty()) {
+                logger.warn("Tentativa de mover categoria para catálogo inexistente. Id: {}", categoryRequest.getCatalogId());
+                throw new CatalogNotFoundException("Catalogo", categoryRequest.getCatalogId());
+            }
+
+            existingCatalog.get().moveCatalogCategory(newCatalog.get(), categoryId);
+            catalogRepository.save(existingCatalog.get());
+            logger.debug("Categoria movida com sucesso para catálogo: {}", categoryRequest.getCatalogId());
+
+            newCatalog.get().updateCategory(category);
+            var updatedCatalog = catalogRepository.save(newCatalog.get());
+            var updatedCategory = updatedCatalog.getCategoryById(categoryId);
+
+            var updatedCategoryToResponse = categoryResponseMapper.toResponse(updatedCategory);
+
+            logger.debug("Categoria atualizada com sucesso: {}", catalogId);
+
+            return updatedCategoryToResponse;
         }
 
-        category.setId(categoryId);
         existingCatalog.get().updateCategory(category);
 
         var updatedCatalog = catalogRepository.save(existingCatalog.get());

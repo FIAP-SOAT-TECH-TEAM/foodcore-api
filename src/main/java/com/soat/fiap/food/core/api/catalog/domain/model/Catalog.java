@@ -155,12 +155,29 @@ public class Catalog {
 
         var category = getCategoryById(categoryId);
 
-        if (!category.getProducts().isEmpty()) {
+        if (!category.getProducts().isEmpty() && category.getCatalog().categories.isEmpty()) {
             throw new CategoryConflictException("Não é possível excluir esta categoria porque existem produtos associados a ela");
         }
 
         categories.remove(category);
     }
+
+    /**
+     * Move uma categoria para um novo catálogo.
+     *
+     * @param newCatalog o novo catálogo que receberá a categoria
+     * @param categoryId o ID da categoria a ser movida
+     */
+    public void moveCatalogCategory (Catalog newCatalog, Long categoryId) {
+
+        var category = getCategoryById(categoryId);
+
+        newCatalog.addCategory(category);
+        category.setCatalog(newCatalog);
+        category.markUpdatedNow();
+        removeCategory(categoryId);
+    }
+
 
     /**
      * Adiciona um produto a uma categoria específica do catálogo.
