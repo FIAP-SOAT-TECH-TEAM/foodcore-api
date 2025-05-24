@@ -128,4 +128,25 @@ public class CatalogController {
         CategoryResponse response = catalogUseCase.saveCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PutMapping("/{catalogId}/categories/{categoryId}")
+    @Operation(summary = "Atualizar categoria", description = "Atualiza uma categoria vinculada a um catálogo existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
+    })
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @Parameter(description = "ID do catálogo", example = "2", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "1", required = true)
+            @PathVariable Long categoryId,
+            @Valid @RequestBody CategoryRequest request) {
+        logger.debug("Requisição para atualizar categoria no catálogo: {}", request.getCatalogId());
+        CategoryResponse response = catalogUseCase.updateCategory(catalogId, categoryId, request);
+        return ResponseEntity.ok(response);
+    }
 }

@@ -11,7 +11,7 @@ import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryR
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
-import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
@@ -66,7 +66,7 @@ public class CatalogService implements CatalogUseCase {
 
         if (catalogRepository.existsByName(catalog.getName())) {
             logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalog.getName());
-            throw new CatalogConflictException(String.format("Já existe um catalogo com o nome: %s", catalog.getName()));
+            throw new CatalogConflictException("Catalogo", "Nome", catalog.getName());
         }
 
         var savedCatalog = catalogRepository.save(catalog);
@@ -93,11 +93,11 @@ public class CatalogService implements CatalogUseCase {
 
         if (existingCatalog.isEmpty()) {
             logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", id);
-            throw new ResourceNotFoundException("Catalogo", id);
+            throw new CatalogNotFoundException("Catalogo", id);
         }
         else if (catalogRepository.existsByNameAndIdNot(catalogRequest.getName(), id)) {
             logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogRequest.getName());
-            throw new CatalogConflictException(String.format("Já existe um catalogo com o nome: %s", catalogRequest.getName()));
+            throw new CatalogConflictException("Catalogo", "Nome", catalogRequest.getName());
         }
 
         BeanUtils.copyProperties(catalogRequest, existingCatalog.get());
@@ -171,7 +171,7 @@ public class CatalogService implements CatalogUseCase {
     }
 
     /**
-     * Salva um catálogo.
+     * Salva uma categoria.
      *
      * @param categoryRequest Categoria a ser salva
      * @return Categoria salva com identificadores atualizados
@@ -181,24 +181,57 @@ public class CatalogService implements CatalogUseCase {
     public CategoryResponse saveCategory(CategoryRequest categoryRequest) {
 
         var category = categoryRequestMapper.toDomain(categoryRequest);
-        var catalogCategory = catalogRepository.findById(categoryRequest.getCatalogId());
+        var catalog = catalogRepository.findById(categoryRequest.getCatalogId());
 
         logger.debug("Criando categoria: {}", categoryRequest.getName());
 
-        if (catalogCategory.isEmpty()) {
+        if (catalog.isEmpty()) {
             logger.warn("Tentativa de cadastrar categoria com catalogo inexistente. ID catalogo: {}", categoryRequest.getCatalogId());
             throw new ResourceNotFoundException("Catalogo", categoryRequest.getCatalogId());
         }
 
-        catalogCategory.get().addCategory(category);
+        catalog.get().addCategory(category);
 
-        var savedCatalogCategory = catalogRepository.save(catalogCategory.get());
-        var savedCategory = savedCatalogCategory.getCategories().getLast();
+        var savedCatalog = catalogRepository.save(catalog.get());
+        var savedCategory = savedCatalog.getCategories().getLast();
 
         var savedCategoryToResponse = categoryResponseMapper.toResponse(savedCategory);
 
         logger.debug("Categoria criada com sucesso: {}", savedCategoryToResponse.getId());
 
         return savedCategoryToResponse;
+    }
+
+    /**
+     * Atualiza uma categoria.
+     *
+     * @param categoryRequest Categoria a ser atualizada
+     * @return Categoria atualizada com identificadores atualizados
+     */
+    @Override
+    @Transactional
+    public CategoryResponse updateCategory(Long catalogId, Long categoryId, CategoryRequest categoryRequest) {
+
+        var category = categoryRequestMapper.toDomain(categoryRequest);
+        var existingCatalog = catalogRepository.findById(catalogId);
+
+        logger.debug("Atualizando categoria: {}", categoryId);
+
+        if (existingCatalog.isEmpty()) {
+            logger.warn("Tentativa de atualizar categoria com catálogo inexistente. Id: {}", catalogId);
+            throw new ResourceNotFoundException("Catalogo", catalogId);
+        }
+
+        category.setId(categoryId);
+        existingCatalog.get().updateCategory(category);
+
+        var updatedCatalog = catalogRepository.save(existingCatalog.get());
+        var updatedCategory = updatedCatalog.getCategoryById(categoryId);
+
+        var updatedCategoryToResponse = categoryResponseMapper.toResponse(updatedCategory);
+
+        logger.debug("Categoria atualizada com sucesso: {}", catalogId);
+
+        return updatedCategoryToResponse;
     }
 }

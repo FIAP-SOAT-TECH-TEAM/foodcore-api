@@ -10,4 +10,7 @@ public class CategoryConflictException extends ResourceConflictException {
     public CategoryConflictException(String message) {
         super(message);
     }
+    public CategoryConflictException(String resourceName, String fieldName, Object fieldValue) {
+        super(resourceName, fieldName, fieldValue);
+    }
 }

@@ -58,4 +58,12 @@ public interface CatalogUseCase {
      * @return Categoria salva com possíveis atualizações de identificadores
      */
     CategoryResponse saveCategory(CategoryRequest categoryRequest);
+
+    /**
+     * Atualiza uma categoria.
+     *
+     * @param categoryRequest Categoria a ser atualizada
+     * @return Categoria atualizada com possíveis atualizações de identificadores
+     */
+    CategoryResponse updateCategory(Long catalogId, Long categoryId, CategoryRequest categoryRequest);
 }

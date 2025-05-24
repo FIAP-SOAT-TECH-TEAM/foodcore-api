@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -68,13 +69,13 @@ public class Catalog {
      * @return a categoria correspondente
      * @throws CatalogException se a categoria não for encontrada
      */
-    private Category getCategoryById(Long categoryId) {
+    public Category getCategoryById(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
 
         return categories.stream()
                 .filter(o -> o.getId().equals(categoryId))
                 .findFirst()
-                .orElseThrow(() -> new CatalogException("Categoria não encontrada"));
+                .orElseThrow(() -> new CategoryNotFoundException("Categoria não encontrada"));
     }
 
     /**
@@ -85,7 +86,7 @@ public class Catalog {
      * @return o produto correspondente
      * @throws CatalogException se o produto ou categoria não for encontrado
      */
-    private Product getProductFromCategoryById(Long categoryId, Long productId) {
+    public Product getProductFromCategoryById(Long categoryId, Long productId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
 
@@ -118,7 +119,7 @@ public class Catalog {
         categories = (categories == null) ? new ArrayList<>() : categories;
 
         if (categories.stream().anyMatch(c -> c.getName().equals(category.getName()))) {
-            throw new CategoryConflictException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
+            throw new CategoryConflictException("Categoria", "Nome", category.getName());
         }
 
         category.setCatalog(this);
@@ -140,7 +141,7 @@ public class Catalog {
         currentCategory.setDetails(newCategory.getDetails());
         currentCategory.setImageUrl(newCategory.getImageUrl());
         currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
-        currentCategory.setActive(currentCategory.isActive());
+        currentCategory.setActive(newCategory.isActive());
         currentCategory.markUpdatedNow();
     }
 

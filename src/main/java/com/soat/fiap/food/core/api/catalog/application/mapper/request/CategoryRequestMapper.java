@@ -27,7 +27,6 @@ public interface CategoryRequestMapper {
     @Mapping(target = "auditInfo", ignore = true)
     @Mapping(target = "details", source = "request", qualifiedByName = "mapToDetails")
     @Mapping(target = "imageUrl", source = "request.imageUrl", qualifiedByName = "mapToImageUrl")
-    @Mapping(target = "active", constant = "true")
     Category toDomain(CategoryRequest request);
 
     @Named("mapToDetails")

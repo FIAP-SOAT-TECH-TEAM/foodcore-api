@@ -32,7 +32,12 @@ public class CategoryRequest {
     
     @Schema(description = "URL da imagem da categoria", example = "images/lanches.jpg")
     private String imageUrl;
+
+    @NotNull(message = "O status da categoria é obrigatório")
+    @Schema(description = "Status da categoria", example = "true", required = true)
+    private boolean active;
     
     @Schema(description = "Ordem de exibição da categoria", example = "1")
     private Integer displayOrder;
+
 } 

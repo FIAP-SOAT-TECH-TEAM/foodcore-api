@@ -10,4 +10,7 @@ public class ProductConflictException extends ResourceConflictException {
     public ProductConflictException(String message) {
         super(message);
     }
+    public ProductConflictException(String resourceName, String fieldName, Object fieldValue) {
+        super(resourceName, fieldName, fieldValue);
+    }
 }
