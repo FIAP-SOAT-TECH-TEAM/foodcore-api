@@ -66,7 +66,7 @@ public class Product {
      * @param displayOrder Ordem de exibição
      * @throws NullPointerException se {@code details} ou {@code price} forem nulos
      * @throws ProductException     se {@code price} for menor ou igual a zero
-     * @throws CatalogException     se {@code displayOrder} for menor que zero
+     * @throws ProductException     se {@code displayOrder} for menor ou igal a zero
      */
     private void validate(
             Details details,
@@ -76,11 +76,11 @@ public class Product {
         Objects.requireNonNull(details, "Os detalhes do produto não podem ser nulos");
         Objects.requireNonNull(price, "O preço do produto não pode ser nulo");
 
-        if (displayOrder != null && displayOrder < 0) {
-            throw new CatalogException("A ordem de exibição da categoria deve ser maior que 0");
+        if (displayOrder != null && displayOrder > 0) {
+            throw new ProductException("A ordem de exibição da categoria deve ser maior que 0");
         }
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new ProductException("O preço deve ser maior que 0");
+            throw new ProductException("O preço deve ser positivo");
         }
     }
 
@@ -110,10 +110,24 @@ public class Product {
      */
     void setPrice(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new ProductException("O preço deve ser maior que 0");
+            throw new ProductException("O preço deve ser positivo");
         }
 
         this.price = price;
+    }
+
+    /**
+     * Define a ordem de exibição do produto.
+     *
+     * @param displayOrder nova ordem de exibição
+     * @throws ProductException se {@code displayOrder} for menor ou igal a zero
+     */
+    void setDisplayOrder(Integer displayOrder) {
+        if (displayOrder != null && displayOrder > 0) {
+            throw new ProductException("A ordem de exibição da categoria deve ser maior que 0");
+        }
+
+        this.displayOrder = displayOrder;
     }
 
     /**
