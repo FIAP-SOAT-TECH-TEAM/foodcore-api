@@ -324,7 +324,8 @@ public class CatalogService implements CatalogUseCase {
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
 
-        catalog.get().removeCategory(categoryId);
+
+        catalog.get().removeCategory(categoryId, true);
 
         catalogRepository.save(catalog.get());
 

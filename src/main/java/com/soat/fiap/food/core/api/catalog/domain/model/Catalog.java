@@ -138,6 +138,10 @@ public class Catalog {
 
         var currentCategory = getCategoryById(newCategory.getId());
 
+        if (categories.stream().anyMatch(c -> c.getName().equals(newCategory.getName()) && !c.getId().equals(newCategory.getId()))) {
+            throw new CategoryConflictException("Categoria", "Nome", newCategory.getName());
+        }
+
         currentCategory.setDetails(newCategory.getDetails());
         currentCategory.setImageUrl(newCategory.getImageUrl());
         currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
@@ -149,13 +153,14 @@ public class Catalog {
      * Remove uma categoria do catálogo.
      *
      * @param categoryId o ID da categoria a ser removida
+     * @param invalidateCatalog se true, remove a associação da categoria com o catálogo
      */
-    public void removeCategory(Long categoryId) {
+    public void removeCategory(Long categoryId, boolean invalidateCatalog) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nula");
 
         var category = getCategoryById(categoryId);
 
-        category.setCatalog(null);
+        category.setCatalog((invalidateCatalog) ? null : category.getCatalog());
 
         if (!category.getProducts().isEmpty() && category.getCatalog() == null) {
             throw new CategoryConflictException("Não é possível excluir esta categoria porque existem produtos associados a ela");
@@ -177,7 +182,7 @@ public class Catalog {
         newCatalog.addCategory(category);
         category.setCatalog(newCatalog);
         category.markUpdatedNow();
-        removeCategory(categoryId);
+        removeCategory(categoryId, false);
     }
 
 

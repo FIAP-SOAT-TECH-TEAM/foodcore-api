@@ -187,7 +187,8 @@ public class CatalogController {
     @Operation(summary = "Excluir categoria", description = "Exclui uma categoria específica de um catálogo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Categoria excluída com sucesso", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Categoria possui produtos associados", content = @Content)
     })
     public ResponseEntity<Void> deleteCategory(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
