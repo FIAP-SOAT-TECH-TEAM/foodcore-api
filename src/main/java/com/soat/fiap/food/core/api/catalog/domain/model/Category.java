@@ -127,7 +127,7 @@ public class Category {
      * @param productId ID do produto
      * @return produto correspondente
      * @throws NullPointerException se {@code productId} for nulo
-     * @throws ProductException     se o produto não for encontrado
+     * @throws ProductNotFoundException se o produto não for encontrado
      */
     Product getProductById(Long productId) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
@@ -143,7 +143,7 @@ public class Category {
      *
      * @param product produto a ser adicionado
      * @throws NullPointerException se {@code product} for nulo
-     * @throws CategoryException    se já existir um produto com o mesmo nome
+     * @throws ProductConflictException se já existir um produto com o mesmo nome
      */
     void addProduct(Product product) {
         Objects.requireNonNull(product, "O produto não pode ser nulo");
@@ -203,7 +203,7 @@ public class Category {
      *
      * @param productId ID do produto a ser removido
      * @throws NullPointerException se {@code productId} for nulo
-     * @throws CategoryException    se o produto não existir na categoria
+     * @throws ProductNotFoundException se o produto não existir na categoria
      */
     void removeProduct(Long productId) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");

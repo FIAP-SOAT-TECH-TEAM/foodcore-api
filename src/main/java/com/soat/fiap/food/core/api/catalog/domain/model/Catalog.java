@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
-import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -68,7 +67,7 @@ public class Catalog {
      *
      * @param categoryId o ID da categoria
      * @return a categoria correspondente
-     * @throws CatalogException se a categoria não for encontrada
+     * @throws CategoryNotFoundException se a categoria não for encontrada
      */
     public Category getCategoryById(Long categoryId) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
@@ -127,7 +126,7 @@ public class Catalog {
      * Adiciona uma nova categoria ao catálogo.
      *
      * @param category a categoria a ser adicionada
-     * @throws CatalogException se a categoria for nula ou já existir com o mesmo nome
+     * @throws CategoryConflictException se já existir categoria com o mesmo nome
      */
     public void addCategory(Category category) {
         Objects.requireNonNull(category, "A categoria não pode ser nula");
@@ -144,7 +143,8 @@ public class Catalog {
      * Atualiza uma categoria existente no catálogo.
      *
      * @param newCategory a nova categoria com os dados atualizados
-     * @throws CatalogException se a categoria não for encontrada
+     * @throws CategoryConflictException se já existir categoria com o mesmo nome
+     * @throws CategoryNotFoundException se a categoria não for encontrada
      */
     public void updateCategory(Category newCategory) {
         Objects.requireNonNull(newCategory, "A categoria não pode ser nula");
@@ -167,6 +167,8 @@ public class Catalog {
      *
      * @param categoryId o ID da categoria a ser removida
      * @param invalidateCatalog se true, remove a associação da categoria com o catálogo
+     * @throws CategoryConflictException se a categoria tiver produtos associados
+     * @throws CategoryNotFoundException se a categoria não for encontrada
      */
     public void removeCategory(Long categoryId, boolean invalidateCatalog) {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nula");
