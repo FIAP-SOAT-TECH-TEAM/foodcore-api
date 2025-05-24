@@ -85,7 +85,8 @@ public class CatalogController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = CatalogResponse.class))),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Catálogo com nome já existente", content = @Content),
     })
     public ResponseEntity<CatalogResponse> updateCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
@@ -100,7 +101,8 @@ public class CatalogController {
     @Operation(summary = "Excluir catálogo", description = "Exclui um catálogo pelo seu ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Catálogo excluído com sucesso", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Catálogo possui categorias/produtos associados", content = @Content)
     })
     public ResponseEntity<Void> deleteCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
@@ -117,7 +119,8 @@ public class CatalogController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = CategoryResponse.class))),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request) {

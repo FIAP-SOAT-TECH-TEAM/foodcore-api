@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -117,7 +118,7 @@ public class Catalog {
         categories = (categories == null) ? new ArrayList<>() : categories;
 
         if (categories.stream().anyMatch(c -> c.getName().equals(category.getName()))) {
-            throw new CatalogException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
+            throw new CategoryConflictException(String.format("Já existe uma categoria com o nome: %s, cadastrada neste catalogo", category.getName()));
         }
 
         category.setCatalog(this);

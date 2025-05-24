@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
@@ -127,7 +128,7 @@ public class Category {
         products = (products == null) ? new ArrayList<>() : products;
 
         if (products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
-            throw new CategoryException(String.format("Já existe um produto cadastrado com o nome: %s, na categoria", product.getName()));
+            throw new ProductConflictException(String.format("Já existe um produto cadastrado com o nome: %s, na categoria", product.getName()));
         }
 
         products.add(product);

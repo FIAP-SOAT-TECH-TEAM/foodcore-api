@@ -10,6 +10,7 @@ import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogRe
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
@@ -65,7 +66,7 @@ public class CatalogService implements CatalogUseCase {
 
         if (catalogRepository.existsByName(catalog.getName())) {
             logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalog.getName());
-            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", catalog.getName()));
+            throw new CatalogConflictException(String.format("Já existe um catalogo com o nome: %s", catalog.getName()));
         }
 
         var savedCatalog = catalogRepository.save(catalog);
@@ -96,7 +97,7 @@ public class CatalogService implements CatalogUseCase {
         }
         else if (catalogRepository.existsByNameAndIdNot(catalogRequest.getName(), id)) {
             logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogRequest.getName());
-            throw new CatalogException(String.format("Já existe um catalogo com o nome: %s", catalogRequest.getName()));
+            throw new CatalogConflictException(String.format("Já existe um catalogo com o nome: %s", catalogRequest.getName()));
         }
 
         BeanUtils.copyProperties(catalogRequest, existingCatalog.get());
