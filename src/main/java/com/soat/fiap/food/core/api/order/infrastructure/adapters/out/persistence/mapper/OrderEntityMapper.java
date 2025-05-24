@@ -1,10 +1,10 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper;
 
-import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity.OrderStatusEntity;
+import com.soat.fiap.food.core.api.user.domain.model.User;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface OrderEntityMapper {
      * @param entity Entidade JPA
      * @return Entidade de domínio
      */
-    @Mapping(target = "customerId", expression = "java(mapCustomer(entity))")
+    @Mapping(target = "userId", expression = "java(mapUser(entity))")
     @Mapping(target = "status", source = "status", qualifiedByName = "statusToDomainValue")
     Order toDomain(OrderEntity entity);
     
@@ -38,21 +38,21 @@ public interface OrderEntityMapper {
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    @Mapping(target = "customerId", source = "customerId.id")
+    @Mapping(target = "userId", source = "userId.id")
     @Mapping(target = "status", source = "status", qualifiedByName = "statusToDatabaseValue")
     OrderEntity toEntity(Order domain);
     
     /**
-     * Cria um objeto Customer com ID a partir da entidade OrderEntity
+     * Cria um objeto User com ID a partir da entidade OrderEntity
      * Este é um mapeamento parcial usado apenas para preservar a referência do cliente
      */
-    default Customer mapCustomer(OrderEntity entity) {
-        if (entity == null || entity.getCustomerId() == null) {
+    default User mapUser(OrderEntity entity) {
+        if (entity == null || entity.getUserId() == null) {
             return null;
         }
         
-        return Customer.builder()
-                .id(entity.getCustomerId())
+        return User.builder()
+                .id(entity.getUserId())
                 .build();
     }
     
@@ -66,7 +66,7 @@ public interface OrderEntityMapper {
         }
         
         switch (status) {
-            case PENDING:
+            case RECEIVED:
                 return OrderStatusEntity.RECEIVED;
             case PREPARING:
                 return OrderStatusEntity.PREPARING;
@@ -76,6 +76,8 @@ public interface OrderEntityMapper {
                 return OrderStatusEntity.COMPLETED;
             case CANCELLED:
                 return OrderStatusEntity.CANCELLED;
+            case WAITING_PAYMENT:
+                return OrderStatusEntity.WAITING_PAYMENT;
             default:
                 throw new IllegalArgumentException("Status desconhecido: " + status);
         }
@@ -92,9 +94,7 @@ public interface OrderEntityMapper {
         
         switch (statusEntity) {
             case RECEIVED:
-                return OrderStatus.PENDING;
-            case WAITING_PAYMENT:
-                return OrderStatus.PENDING;
+                return OrderStatus.RECEIVED;
             case PREPARING:
                 return OrderStatus.PREPARING;
             case READY:
@@ -103,6 +103,8 @@ public interface OrderEntityMapper {
                 return OrderStatus.COMPLETED;
             case CANCELLED:
                 return OrderStatus.CANCELLED;
+            case WAITING_PAYMENT:
+                return OrderStatus.WAITING_PAYMENT;
             default:
                 throw new IllegalArgumentException("Status desconhecido: " + statusEntity);
         }

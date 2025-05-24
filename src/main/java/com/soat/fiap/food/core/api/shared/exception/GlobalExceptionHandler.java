@@ -154,8 +154,8 @@ public class GlobalExceptionHandler {
         if (mensagem != null && mensagem.contains("products_category_id_fkey")) {
             mensagem = "Não é possível excluir esta categoria porque existem produtos associados a ela";
         }
-        else if (mensagem != null && mensagem.contains("customers_document_key")) {
-            mensagem = "Já existe um cliente cadastrado com este documento/CPF";
+        else if (mensagem != null && mensagem.contains("users_document_key")) {
+            mensagem = "Já existe um usuário cadastrado com este documento/CPF";
         }
         else {
             mensagem = "Operação não permitida: viola regras de integridade de dados";

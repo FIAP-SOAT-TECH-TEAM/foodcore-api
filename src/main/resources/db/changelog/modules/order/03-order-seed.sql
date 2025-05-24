@@ -4,9 +4,9 @@
 -- Os dados de pedidos são apenas para ambiente de desenvolvimento
 
 -- Pedido 1
-INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
-    (SELECT id FROM customers WHERE email = 'maria@email.com' LIMIT 1),
+    (SELECT id FROM users WHERE email = 'maria@email.com' LIMIT 1),
     'ORD-00000001',
     'COMPLETED',
     32.80,
@@ -66,9 +66,9 @@ WHERE NOT EXISTS (
 );
 
 -- Pedido 2
-INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
-    (SELECT id FROM customers WHERE email = 'joao@email.com'),
+    (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-00000002',
     'CANCELLED',
     79.70,

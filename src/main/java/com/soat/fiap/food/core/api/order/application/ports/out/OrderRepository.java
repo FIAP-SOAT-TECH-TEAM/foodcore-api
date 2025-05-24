@@ -34,10 +34,10 @@ public interface OrderRepository {
     
     /**
      * Busca pedidos de um cliente específico
-     * @param customerId ID do cliente
+     * @param userId ID do usuário
      * @return Lista de pedidos do cliente
      */
-    List<Order> findByCustomerId(Long customerId);
+    List<Order> findByUserId(Long userId);
     
     /**
      * Lista todos os pedidos

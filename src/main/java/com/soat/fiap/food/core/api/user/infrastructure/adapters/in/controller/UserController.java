@@ -169,7 +169,7 @@ public class UserController {
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
         return userUseCase.getUserById(id)
-                .map(customer -> {
+                .map(user -> {
                     userUseCase.deleteUser(id);
                     return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
                 })

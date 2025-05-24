@@ -17,7 +17,7 @@ public class OrderCreatedEvent {
     private final BigDecimal totalAmount;
     private final OrderStatus status;
     private final LocalDateTime createdAt;
-    private final Long customerId;
+    private final Long userId;
 
     /**
      * Cria um evento de pedido criado
@@ -25,10 +25,10 @@ public class OrderCreatedEvent {
      * @param orderId ID do pedido
      * @param totalAmount Valor total do pedido
      * @param status Status do pedido
-     * @param customerId ‘ID’ do cliente (pode ser null para pedidos anônimos)
+     * @param userId ‘ID’ do usuário (pode ser null para pedidos anônimos)
      * @return Nova instância do evento
      */
-    public static OrderCreatedEvent of(Long orderId, BigDecimal totalAmount, OrderStatus status, Long customerId) {
-        return new OrderCreatedEvent(orderId, totalAmount, status, LocalDateTime.now(), customerId);
+    public static OrderCreatedEvent of(Long orderId, BigDecimal totalAmount, OrderStatus status, Long userId) {
+        return new OrderCreatedEvent(orderId, totalAmount, status, LocalDateTime.now(), userId);
     }
 } 

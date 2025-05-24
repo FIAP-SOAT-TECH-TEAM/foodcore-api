@@ -3,18 +3,18 @@
 --changeset order:01-order-tables runAlways:true
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
-    customer_id INT,
+    user_id INT,
     order_number VARCHAR(20) UNIQUE NOT NULL,
     status order_status_enum DEFAULT 'RECEIVED' NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
+    CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 COMMENT ON TABLE orders IS 'Tabela que armazena os pedidos do sistema';
 COMMENT ON COLUMN orders.id IS 'Identificador único do pedido';
-COMMENT ON COLUMN orders.customer_id IS 'Referência ao cliente que fez o pedido';
+COMMENT ON COLUMN orders.user_id IS 'Referência ao usuário que fez o pedido';
 COMMENT ON COLUMN orders.order_number IS 'Número único identificador do pedido para negócio';
 COMMENT ON COLUMN orders.status IS 'Status atual do pedido (usando tipo enumerado)';
 COMMENT ON COLUMN orders.amount IS 'Valor total do pedido em reais';

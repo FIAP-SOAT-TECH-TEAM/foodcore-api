@@ -37,17 +37,17 @@ public class UserService implements UserUseCase {
             throw new BusinessException("Documento inválido");
         }
 
-        Optional<User> existingCustomer = userRepository.findByDocument(user.getDocument());
-        if (existingCustomer.isPresent()) {
+        Optional<User> existingUser = userRepository.findByDocument(user.getDocument());
+        if (existingUser.isPresent()) {
             logger.warn("Tentativa de criar usuário com documento já existente: {}", user.getDocument());
             throw new ResourceConflictException("usuário", "documento", user.getDocument());
         }
         user.activate();
         
-        User savedCustomer = userRepository.save(user);
-        logger.debug("Usuário criado com sucesso. ID: {}", savedCustomer.getId());
+        User savedUser = userRepository.save(user);
+        logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
         
-        return savedCustomer;
+        return savedUser;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class UserService implements UserUseCase {
         }
         
         if (!existingUser.get().getDocument().equals(user.getDocument())) {
-            Optional<User> customerWithSameDocument = userRepository.findByDocument(user.getDocument());
-            if (customerWithSameDocument.isPresent() && !customerWithSameDocument.get().getId().equals(id)) {
+            Optional<User> userWithSameDocument = userRepository.findByDocument(user.getDocument());
+            if (userWithSameDocument.isPresent() && !userWithSameDocument.get().getId().equals(id)) {
                 logger.warn("Tentativa de atualizar usuário para documento já existente: {}", user.getDocument());
                 throw new ResourceConflictException("usuário", "documento", user.getDocument());
             }

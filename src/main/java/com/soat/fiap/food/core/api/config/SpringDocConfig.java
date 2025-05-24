@@ -60,11 +60,11 @@ public class SpringDocConfig {
     }
 
     @Bean
-    public GroupedOpenApi customerApi() {
+    public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
                 .group("clientes")
-                .packagesToScan("com.soat.fiap.food.core.api.customerId")
-                .pathsToMatch("/api/customers/**")
+                .packagesToScan("com.soat.fiap.food.core.api.user")
+                .pathsToMatch("/api/users/**")
                 .build();
     }
 

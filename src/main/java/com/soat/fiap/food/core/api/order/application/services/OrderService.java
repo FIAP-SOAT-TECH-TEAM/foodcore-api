@@ -1,7 +1,5 @@
 package com.soat.fiap.food.core.api.order.application.services;
 
-import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerRepository;
-import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
@@ -12,6 +10,8 @@ import com.soat.fiap.food.core.api.catalog.application.ports.out.ProductReposito
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.model.User;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,36 +31,36 @@ public class OrderService implements OrderUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
     private final CustomLogger logger;
     
     public OrderService(
             ApplicationEventPublisher eventPublisher,
             OrderRepository orderRepository,
             ProductRepository productRepository,
-            CustomerRepository customerRepository) {
+            UserRepository userRepository) {
         this.eventPublisher = eventPublisher;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
-        this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
         this.logger = CustomLogger.getLogger(getClass());
     }
     
     @Override
     @Transactional
-    public Order createOrder(Long customerId, List<OrderItemRequest> items) {
-        logger.info("Criando novo pedido para o cliente ID: {}", customerId);
+    public Order createOrder(Long userId, List<OrderItemRequest> items) {
+        logger.info("Criando novo pedido para o usuário ID: {}", userId);
         
-        Customer customer = null;
-        if (customerId != null) {
-            customer = customerRepository.findById(customerId)
-                    .orElseThrow(() -> new ResourceNotFoundException("customerId", customerId));
+        User user = null;
+        if (userId != null) {
+            user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("userId", userId));
         }
         
         Order order = Order.builder()
                 .orderNumber(generateOrderNumber())
-                .status(OrderStatus.PENDING)
-                .customerId(customer)
+                .status(OrderStatus.RECEIVED)
+                .userId(user)
                 .orderItems(new ArrayList<>())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -82,10 +82,10 @@ public class OrderService implements OrderUseCase {
         
         Order savedOrder = orderRepository.save(order);
         
-        if (customerId != null) {
-            customerRepository.findById(customerId).ifPresent(fullCustomer -> {
-                savedOrder.setCustomerId(fullCustomer);
-                logger.debug("Cliente carregado explicitamente: {}", fullCustomer.getName());
+        if (userId != null) {
+            userRepository.findById(userId).ifPresent(fullUser -> {
+                savedOrder.setUserId(fullUser.getId());
+                logger.debug("Usuário carregado explicitamente: {}", fullUser.getName());
             });
         }
         
@@ -94,7 +94,7 @@ public class OrderService implements OrderUseCase {
                 savedOrder.getId(),
                 savedOrder.getTotalAmount(),
                 savedOrder.getOrderStatus(),
-                customerId
+                userId
             )
         );
         
@@ -107,7 +107,7 @@ public class OrderService implements OrderUseCase {
         logger.debug("Buscando pedido ID: {}", orderId);
         Optional<Order> orderOpt = orderRepository.findById(orderId);
         
-        orderOpt.ifPresent(this::loadCustomerIfNeeded);
+        orderOpt.ifPresent(this::loadUserIfNeeded);
         
         return orderOpt;
     }
@@ -117,7 +117,7 @@ public class OrderService implements OrderUseCase {
         logger.debug("Buscando pedidos com status: {}", status);
         List<Order> orders = orderRepository.findByStatus(status);
         
-        orders.forEach(this::loadCustomerIfNeeded);
+        orders.forEach(this::loadUserIfNeeded);
         
         return orders;
     }
@@ -164,24 +164,24 @@ public class OrderService implements OrderUseCase {
     }
     
     /**
-     * Carrega informações do cliente se necessário
+     * Carrega informações do usuário se necessário
      */
-    private void loadCustomerIfNeeded(Order order) {
+    private void loadUserIfNeeded(Order order) {
         if (order == null) {
             return;
         }
         
-        boolean needsCustomerData = (order.getCustomerId() == null && order.getCustomerId() != null) ||
-                                   (order.getCustomerId() != null && order.getCustomerId().getName() == null);
+        boolean needsUserData = (order.getUserId() == null && order.getUserId() != null) ||
+                                   (order.getUserId() != null && order.getUserId().getName() == null);
         
-        if (needsCustomerData && order.getCustomerId() != null) {
-            logger.debug("Carregando dados do cliente ID: {} para pedido ID: {}", 
-                        order.getCustomerId(), order.getId());
+        if (needsUserData && order.getUserId() != null) {
+            logger.debug("Carregando dados do usuário ID: {} para pedido ID: {}",
+                        order.getUserId(), order.getId());
             
-            customerRepository.findById(order.getCustomerId())
-                    .ifPresent(customer -> {
-                        order.setCustomerId(customer);
-                        logger.debug("Cliente carregado: {}", customer.getName());
+            userRepository.findById(order.getUserId())
+                    .ifPresent(user -> {
+                        order.setUserId(user.getId());
+                        logger.debug("Usuário carregado: {}", user.getName());
                     });
         }
     }

@@ -11,7 +11,7 @@
     displayName = "Order Module",
     allowedDependencies = {
         "com.soat.fiap.food.core.api.product",
-        "com.soat.fiap.food.core.api.customerId",
+        "com.soat.fiap.food.core.api.userId",
         "com.soat.fiap.food.core.api.shared"
     }
 )
