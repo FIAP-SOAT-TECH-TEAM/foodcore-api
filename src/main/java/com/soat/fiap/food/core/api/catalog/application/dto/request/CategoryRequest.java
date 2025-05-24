@@ -25,10 +25,10 @@ public class CategoryRequest {
     @Schema(description = "Nome da categoria", example = "Lanches", required = true)
     private String name;
     
-    @Schema(description = "Descrição da categoria", example = "Variedade de hambúrgueres e sanduíches")
+    @Schema(description = "Descrição da categoria", example = "Variedade de hambúrgueres e sanduíches", required = true)
     private String description;
     
-    @Schema(description = "URL da imagem da categoria", example = "https://storage.example.com/images/lanches.jpg")
+    @Schema(description = "URL da imagem da categoria", example = "images/lanches.jpg")
     private String imageUrl;
     
     @Schema(description = "Ordem de exibição da categoria", example = "1")

@@ -25,7 +25,7 @@ public class ProductRequest {
     @Schema(description = "Nome do produto", example = "X-Burger", required = true)
     private String name;
     
-    @Schema(description = "Descrição do produto", example = "Hambúrguer com queijo, alface e tomate")
+    @Schema(description = "Descrição do produto", example = "Hambúrguer com queijo, alface e tomate", required = true)
     private String description;
     
     @NotNull(message = "O preço do produto é obrigatório")
@@ -33,7 +33,7 @@ public class ProductRequest {
     @Schema(description = "Preço do produto", example = "25.90", required = true)
     private BigDecimal price;
     
-    @Schema(description = "URL da imagem do produto", example = "https://storage.example.com/images/x-burger.jpg")
+    @Schema(description = "URL da imagem do produto", example = "images/x-burger.jpg")
     private String imageUrl;
     
     @NotNull(message = "A categoria do produto é obrigatória")
