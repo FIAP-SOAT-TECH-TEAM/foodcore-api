@@ -24,7 +24,8 @@ public class CategoryRequest {
     @NotBlank(message = "O nome da categoria é obrigatório")
     @Schema(description = "Nome da categoria", example = "Lanches", required = true)
     private String name;
-    
+
+    @NotBlank(message = "A descrição da categoria é obrigatória")
     @Schema(description = "Descrição da categoria", example = "Variedade de hambúrgueres e sanduíches", required = true)
     private String description;
     
