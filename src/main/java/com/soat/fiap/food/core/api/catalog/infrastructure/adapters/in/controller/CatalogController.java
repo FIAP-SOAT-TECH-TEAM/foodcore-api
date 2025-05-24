@@ -2,8 +2,10 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.controlle
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.application.services.CatalogService;
@@ -200,4 +202,85 @@ public class CatalogController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{catalogId}/categories/{categoryId}/products")
+    @Operation(summary = "Criar novo produto", description = "Cria um novo produto vinculado a uma categoria existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Produto criado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
+    })
+    public ResponseEntity<ProductResponse> createProduct(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Valid @RequestBody ProductRequest request) {
+        logger.debug("Requisição para criar novo produto na categoria {} do catálogo {}", categoryId, catalogId);
+        ProductResponse response = catalogUseCase.saveProduct(catalogId, categoryId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
+    @Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
+    })
+    public ResponseEntity<ProductResponse> updateProduct(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Parameter(description = "ID do produto", example = "100", required = true)
+            @PathVariable Long productId,
+            @Valid @RequestBody ProductRequest request) {
+        logger.debug("Requisição para atualizar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
+        ProductResponse response = catalogUseCase.updateProduct(catalogId, categoryId, productId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
+    @Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico de uma categoria pelo ID do produto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto encontrado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
+    })
+    public ResponseEntity<ProductResponse> getProductById(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Parameter(description = "ID do produto", example = "100", required = true)
+            @PathVariable Long productId) {
+        logger.debug("Requisição para buscar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
+        ProductResponse response = catalogUseCase.getProductById(catalogId, categoryId, productId);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
+    @Operation(summary = "Excluir produto", description = "Exclui um produto específico de uma categoria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Produto excluído com sucesso", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
+    })
+    public ResponseEntity<Void> deleteProduct(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Parameter(description = "ID do produto", example = "100", required = true)
+            @PathVariable Long productId) {
+        logger.debug("Requisição para excluir produto {} da categoria {} do catálogo {}", productId, categoryId, catalogId);
+        catalogUseCase.deleteProduct(catalogId, categoryId, productId);
+        return ResponseEntity.noContent().build();
+    }
 }
