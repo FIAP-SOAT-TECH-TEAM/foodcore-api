@@ -102,7 +102,7 @@ public class CatalogController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Catálogo excluído com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Catálogo possui categorias/produtos associados", content = @Content)
+            @ApiResponse(responseCode = "409", description = "Catálogo possui categorias associadas", content = @Content)
     })
     public ResponseEntity<Void> deleteCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)

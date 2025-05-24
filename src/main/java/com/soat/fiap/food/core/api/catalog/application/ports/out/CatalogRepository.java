@@ -67,6 +67,14 @@ public interface CatalogRepository {
     boolean existsByNameAndIdNot(String name, Long id);
 
     /**
+     * Verifica se existe pelo menos uma categoria associada ao catálogo com o ID informado.
+     *
+     * @param catalogId ID do catálogo
+     * @return true se houver ao menos uma categoria associada, false caso contrário
+     */
+    boolean existsCategoryByCatalogId(Long catalogId);
+
+    /**
      * Remove um catálogo.
      *
      * @param id ID do catálogo a ser removido

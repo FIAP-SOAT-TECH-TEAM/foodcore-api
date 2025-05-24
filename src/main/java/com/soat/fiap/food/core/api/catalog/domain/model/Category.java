@@ -147,7 +147,7 @@ public class Category {
         if (products == null || products.stream().noneMatch(p -> p.getName().equals(product.getName()))) {
             throw new CategoryException("Produto não encontrado");
         }
-
+        
         products.remove(product);
     }
 

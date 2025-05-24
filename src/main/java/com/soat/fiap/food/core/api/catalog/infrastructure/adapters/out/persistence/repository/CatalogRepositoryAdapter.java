@@ -111,6 +111,11 @@ public class CatalogRepositoryAdapter implements CatalogRepository {
         return springDataCatalogRepository.existsByNameAndIdNot(name, id);
     }
 
+    @Override
+    public boolean existsCategoryByCatalogId(Long catalogId) {
+        return springDataCatalogRepository.existsCategoryByCatalogId(catalogId);
+    }
+
     /**
      * Remove um catálogo com base em seu ID.
      *

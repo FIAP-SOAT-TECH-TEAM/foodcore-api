@@ -2,6 +2,8 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CatalogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
@@ -14,5 +16,8 @@ public interface SpringDataCatalogRepository extends JpaRepository<CatalogEntity
     Optional<CatalogEntity> findByName(String name);
     boolean existsByName(String name);
     boolean existsByNameAndIdNot(String name, Long id);
+    @Query("SELECT COUNT(c) > 0 FROM CatalogEntity c JOIN c.categories cat WHERE c.id = :catalogId")
+    boolean existsCategoryByCatalogId(@Param("catalogId") Long catalogId);
+
 
 } 

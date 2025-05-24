@@ -160,6 +160,10 @@ public class CatalogService implements CatalogUseCase {
             logger.warn("Tentativa de excluir catalogo inexistente. Id: {}", id);
             throw new ResourceNotFoundException("Catalogo", id);
         }
+        if (catalogRepository.existsCategoryByCatalogId(id)) {
+            logger.warn("Tentativa de excluir catalogo com categorias associadas. Id: {}", id);
+            throw new CatalogConflictException("Não é possível excluir este catalogo porque existem categorias associadas a ele");
+        }
 
         catalogRepository.delete(id);
 

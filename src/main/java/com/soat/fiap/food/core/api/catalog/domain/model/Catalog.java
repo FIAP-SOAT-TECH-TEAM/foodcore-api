@@ -153,6 +153,11 @@ public class Catalog {
         Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nula");
 
         var category = getCategoryById(categoryId);
+
+        if (!category.getProducts().isEmpty()) {
+            throw new CategoryConflictException("Não é possível excluir esta categoria porque existem produtos associados a ela");
+        }
+
         categories.remove(category);
     }
 
