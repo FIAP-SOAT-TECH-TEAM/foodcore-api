@@ -95,6 +95,21 @@ public class Catalog {
     }
 
     /**
+     * Retorna todos os produtos dentro de uma categoria.
+     *
+     * @param categoryId o ID da categoria
+     * @return todos oso produtos correspondentes
+     * @throws CategoryNotFoundException se a categoria não for encontrada
+     */
+    public List<Product> getProductsFromCategoryById(Long categoryId) {
+        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+
+        var category = getCategoryById(categoryId);
+
+        return category.getProducts();
+    }
+
+    /**
      * Retorna o último produto dentro de uma categoria.
      *
      * @param categoryId o ID da categoria

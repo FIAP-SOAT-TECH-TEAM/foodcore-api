@@ -442,6 +442,31 @@ public class CatalogService implements CatalogUseCase {
     }
 
     /**
+     * Lista todos os produtos de uma categoria.
+     *
+     * @param catalogId ID do catálogo
+     * @return Lista de produtos
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponse> getAllProducts(Long catalogId, Long categoryId) {
+        logger.debug("Buscando todos os produtos da categoria de id: {}", categoryId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Catalogo não encontrado. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var products = catalog.get().getProductsFromCategoryById(categoryId);
+
+        logger.debug("Encontrados {} produtos", products.size());
+
+        return productResponseMapper.toResponseList(products);
+    }
+
+    /**
      * Exclui um produto de uma categoria.
      *
      * @param catalogId  ID do catálogo

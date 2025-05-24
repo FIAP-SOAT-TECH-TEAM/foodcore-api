@@ -126,6 +126,15 @@ public interface CatalogUseCase {
     ProductResponse getProductById(Long catalogId, Long categoryId, Long productId);
 
     /**
+     * Lista todas os produtos de ua categoria.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @return Lista de produtos de uma categoria
+     */
+    List<ProductResponse> getAllProducts(Long catalogId, Long categoryId);
+
+    /**
      * Remove um produto de uma categoria.
      *
      * @param catalogId ID do catálogo
