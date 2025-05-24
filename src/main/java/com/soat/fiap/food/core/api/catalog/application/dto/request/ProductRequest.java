@@ -38,6 +38,10 @@ public class ProductRequest {
     @Schema(description = "Preço do produto", example = "25.90", required = true)
     private BigDecimal price;
 
+    @NotNull(message = "Quantidade de itens em estoque")
+    @Schema(description = "Quantidade de itens em estoque do produto", example = "5", required = true)
+    private Integer stockQuantity;
+
     @Schema(description = "URL da imagem do produto", example = "images/x-burger.jpg")
     private String imageUrl;
     

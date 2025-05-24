@@ -212,7 +212,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
     public ResponseEntity<CategoryResponse> updateCategory(
-            @Parameter(description = "ID do catálogo", example = "2", required = true)
+            @Parameter(description = "ID atual do catálogo da categoria", example = "2", required = true)
             @PathVariable Long catalogId,
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Long categoryId,
@@ -331,7 +331,7 @@ public class CatalogController {
     public ResponseEntity<ProductResponse> updateProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
-            @Parameter(description = "ID da categoria", example = "10", required = true)
+            @Parameter(description = "ID atual da categoria do produto", example = "10", required = true)
             @PathVariable Long categoryId,
             @Parameter(description = "ID do produto", example = "100", required = true)
             @PathVariable Long productId,

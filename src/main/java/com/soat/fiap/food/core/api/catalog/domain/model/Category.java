@@ -152,6 +152,7 @@ public class Category {
             throw new ProductConflictException("Produto", "Nome", product.getName());
         }
 
+        product.setActive(product.isActive());
         product.setCategory(this);
         product.setProductStock(product);
         products.add(product);

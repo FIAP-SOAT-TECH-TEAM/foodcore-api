@@ -25,7 +25,7 @@ public class Product {
     private Details details;
     private BigDecimal price;
     private ImageUrl imageUrl;
-    private boolean active = true;
+    private boolean active = isActive();
     private Integer displayOrder;
     private AuditInfo auditInfo = new AuditInfo();
 
@@ -38,7 +38,6 @@ public class Product {
      * @param details      Detalhes do produto (nome e descrição)
      * @param price        Preço do produto
      * @param imageUrl     URL da imagem associada ao produto
-     * @param active       Indica se o produto está ativo
      * @param displayOrder Ordem de exibição do produto
      * @throws NullPointerException se {@code details} ou {@code price} forem nulos
      * @throws ProductException     se {@code price} for menor ou igual a zero
@@ -48,14 +47,12 @@ public class Product {
             Details details,
             BigDecimal price,
             ImageUrl imageUrl,
-            boolean active,
             Integer displayOrder
     ) {
         validate(details, price, displayOrder);
         this.details = details;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.active = active;
         this.displayOrder = displayOrder;
     }
 
@@ -153,10 +150,10 @@ public class Product {
     /**
      * Verifica se o produto está disponível para venda.
      *
-     * @return true se o produto estiver ativo e com preço válido
+     * @return true se o produto estiver com preço válido e estoque positivo
      */
-    boolean isActive() {
-        return active && price != null && price.compareTo(BigDecimal.ZERO) > 0;
+    public boolean isActive() {
+        return price != null && price.compareTo(BigDecimal.ZERO) > 0 && stock != null && stock.getQuantity() > 0;
     }
 
     /**
