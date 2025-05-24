@@ -98,11 +98,10 @@ public interface CatalogUseCase {
      * Salva um produto.
      *
      * @param catalogId ID do catálogo
-     * @param categoryId ID da categoria à qual o produto será vinculado
      * @param productRequest Produto a ser salvo
      * @return Produto salvo com identificadores atualizados
      */
-    ProductResponse saveProduct(Long catalogId, Long categoryId, ProductRequest productRequest);
+    ProductResponse saveProduct(Long catalogId, ProductRequest productRequest);
 
     /**
      * Atualiza um produto.

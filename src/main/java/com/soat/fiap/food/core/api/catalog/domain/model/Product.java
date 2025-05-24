@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
+import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
@@ -128,6 +129,15 @@ public class Product {
         }
 
         this.displayOrder = displayOrder;
+    }
+
+    /**
+     * Define a entidade produto do estoque.
+     *
+     * @param product produto do estoque
+     */
+    void setProductStock(Product product) {
+        this.getStock().setProduct(product);
     }
 
     /**

@@ -152,6 +152,8 @@ public class Category {
             throw new ProductConflictException("Produto", "Nome", product.getName());
         }
 
+        product.setCategory(this);
+        product.setProductStock(product);
         products.add(product);
     }
 

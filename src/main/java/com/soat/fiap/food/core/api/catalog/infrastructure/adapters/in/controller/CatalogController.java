@@ -244,7 +244,7 @@ public class CatalogController {
     }
 
     // ========== PRODUTOS ==========
-    @PostMapping("/{catalogId}/categories/{categoryId}/products")
+    @PostMapping("/{catalogId}/categories/products")
     @Operation(
             summary = "Criar novo produto",
             description = "Cria um novo produto vinculado a uma categoria existente",
@@ -261,11 +261,9 @@ public class CatalogController {
     public ResponseEntity<ProductResponse> createProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
-            @Parameter(description = "ID da categoria", example = "10", required = true)
-            @PathVariable Long categoryId,
             @Valid @RequestBody ProductRequest request) {
-        logger.debug("Requisição para criar novo produto na categoria {} do catálogo {}", categoryId, catalogId);
-        ProductResponse response = catalogUseCase.saveProduct(catalogId, categoryId, request);
+        logger.debug("Requisição para criar novo produto na categoria {} do catálogo {}", request.getCategoryId(), catalogId);
+        ProductResponse response = catalogUseCase.saveProduct(catalogId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

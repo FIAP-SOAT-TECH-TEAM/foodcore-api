@@ -20,7 +20,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Schema(name = "ProductRequest", description = "DTO para criação ou atualização de produtos")
 public class ProductRequest {
-    
+
+    @NotNull(message = "A categoria do produto é obrigatória")
+    @Schema(description = "ID da categoria do produto", example = "1", required = true)
+    private Long categoryId;
+
     @NotBlank(message = "O nome do produto é obrigatório")
     @Schema(description = "Nome do produto", example = "X-Burger", required = true)
     private String name;
@@ -36,10 +40,6 @@ public class ProductRequest {
 
     @Schema(description = "URL da imagem do produto", example = "images/x-burger.jpg")
     private String imageUrl;
-    
-    @NotNull(message = "A categoria do produto é obrigatória")
-    @Schema(description = "ID da categoria do produto", example = "1", required = true)
-    private Long categoryId;
     
     @Schema(description = "Ordem de exibição do produto", example = "1")
     private Integer displayOrder;

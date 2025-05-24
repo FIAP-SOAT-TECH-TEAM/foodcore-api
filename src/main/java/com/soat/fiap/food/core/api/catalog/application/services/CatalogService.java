@@ -346,13 +346,12 @@ public class CatalogService implements CatalogUseCase {
      * Salva um produto.
      *
      * @param catalogId  ID do catálogo ao qual a categoria pertence
-     * @param categoryId ID da categoria à qual o produto será vinculado
      * @param productRequest Produto a ser salvo
      * @return Produto salvo com identificadores atualizados
      */
     @Override
     @Transactional
-    public ProductResponse saveProduct(Long catalogId, Long categoryId, ProductRequest productRequest) {
+    public ProductResponse saveProduct(Long catalogId, ProductRequest productRequest) {
         logger.debug("Criando produto: {}", productRequest.getName());
 
         var catalog = catalogRepository.findById(catalogId);
@@ -363,10 +362,10 @@ public class CatalogService implements CatalogUseCase {
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
 
-        catalog.get().addProductToCategory(categoryId, product);
+        catalog.get().addProductToCategory(productRequest.getCategoryId(), product);
 
         var savedCatalog = catalogRepository.save(catalog.get());
-        var savedProduct = savedCatalog.getLastProductOfCategory(categoryId);
+        var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 
         var productResponse = productResponseMapper.toResponse(savedProduct);
 
