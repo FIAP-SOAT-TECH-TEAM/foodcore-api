@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "CatalogCreateRequest", description = "DTO para criação de um catálogo")
+@Schema(name = "CatalogRequest", description = "DTO para criação de um catálogo")
 public class CatalogRequest {
     
     @NotBlank(message = "O nome do catálogo é obrigatório")
