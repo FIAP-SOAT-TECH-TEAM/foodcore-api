@@ -63,7 +63,7 @@ public class Category {
     private void validate(Details details, Integer displayOrder) {
         Objects.requireNonNull(details, "Os detalhes da categoria não podem ser nulos");
 
-        if (displayOrder != null && displayOrder < 0) {
+        if (displayOrder != null && displayOrder <= 0) {
             throw new CatalogException("A ordem de exibição da categoria deve ser maior que 0");
         }
     }
@@ -75,7 +75,7 @@ public class Category {
      * @throws CategoryException se {@code displayOrder} for menor ou igal a zero
      */
     void setDisplayOrder(Integer displayOrder) {
-        if (displayOrder != null && displayOrder > 0) {
+        if (displayOrder != null && displayOrder <= 0) {
             throw new CategoryException("A ordem de exibição da categoria deve ser maior que 0");
         }
 

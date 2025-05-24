@@ -76,7 +76,7 @@ public class Product {
         Objects.requireNonNull(details, "Os detalhes do produto não podem ser nulos");
         Objects.requireNonNull(price, "O preço do produto não pode ser nulo");
 
-        if (displayOrder != null && displayOrder > 0) {
+        if (displayOrder != null && displayOrder <= 0) {
             throw new ProductException("A ordem de exibição do produto deve ser maior que 0");
         }
         if (price.compareTo(BigDecimal.ZERO) < 0) {
@@ -123,7 +123,7 @@ public class Product {
      * @throws ProductException se {@code displayOrder} for menor ou igal a zero
      */
     void setDisplayOrder(Integer displayOrder) {
-        if (displayOrder != null && displayOrder > 0) {
+        if (displayOrder != null && displayOrder <= 0) {
             throw new ProductException("A ordem de exibição do produto deve ser maior que 0");
         }
 
