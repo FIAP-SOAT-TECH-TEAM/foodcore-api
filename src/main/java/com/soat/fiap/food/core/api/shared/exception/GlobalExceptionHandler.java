@@ -176,12 +176,6 @@ public class GlobalExceptionHandler {
         else if (mensagem != null && mensagem.contains("users_document_key")) {
             mensagem = "Já existe um usuário cadastrado com este documento/CPF";
         }
-        else if (mensagem != null && mensagem.contains("users_email_key")) {
-            mensagem = "Já existe um usuário cadastrado com este E-mail";
-        }
-        else if (mensagem != null && mensagem.contains("users_username_key")) {
-            mensagem = "Já existe um usuário cadastrado com este username";
-        }
         else if (mensagem != null && mensagem.contains("fk_order_item_product")) {
             mensagem = "Não é possível excluir este produto pois existem pedidos associados a ele";
         }
