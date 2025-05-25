@@ -82,15 +82,36 @@ public class Product {
         }
     }
 
-
-    void setStockQuantity(Integer quantity) {
-         this.stock.setQuantity(quantity);
+    /**
+     * Retorna o ID da categoria associada ao produto.
+     *
+     * @return ID da categoria
+     */
+    public Long getCategoryId() {
+        return this.getCategory().getId();
     }
 
+    /**
+     * Define a quantidade em estoque do produto.
+     *
+     * @param quantity nova quantidade de estoque
+     */
+    void setStockQuantity(Integer quantity) {
+        this.stock.setQuantity(quantity);
+    }
+
+    /**
+     * Retorna a quantidade atual em estoque do produto.
+     *
+     * @return quantidade de estoque
+     */
     Integer getStockQuantity() {
         return this.stock.getQuantity();
     }
 
+    /**
+     * Atualiza a data da última modificação do estoque para o momento atual.
+     */
     void markStockUpdateNow() {
         this.stock.markUpdatedNow();
     }
@@ -100,7 +121,7 @@ public class Product {
      *
      * @return nome do produto
      */
-    String getName() {
+    public String getName() {
         return this.details.name();
     }
 

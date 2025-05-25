@@ -14,10 +14,12 @@ import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryR
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.domain.events.ProductCreatedEvent;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,8 @@ public class CatalogService implements CatalogUseCase {
     private final CategoryResponseMapper categoryResponseMapper;
     private final ProductResponseMapper productResponseMapper;
 
+    final ApplicationEventPublisher eventPublisher;
+
     private final CustomLogger logger;
 
     public CatalogService(
@@ -48,7 +52,8 @@ public class CatalogService implements CatalogUseCase {
             CategoryRequestMapper categoryRequestMapper,
             CategoryResponseMapper categoryResponseMapper,
             ProductRequestMapper productRequestMapper,
-            ProductResponseMapper productResponseMapper
+            ProductResponseMapper productResponseMapper,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.catalogRepository = catalogRepository;
         this.catalogRequestMapper = catalogRequestMapper;
@@ -57,6 +62,7 @@ public class CatalogService implements CatalogUseCase {
         this.categoryResponseMapper = categoryResponseMapper;
         this.productRequestMapper = productRequestMapper;
         this.productResponseMapper = productResponseMapper;
+        this.eventPublisher = eventPublisher;
         this.logger = CustomLogger.getLogger(getClass());
     }
 
@@ -368,6 +374,14 @@ public class CatalogService implements CatalogUseCase {
         var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 
         var productResponse = productResponseMapper.toResponse(savedProduct);
+
+        ProductCreatedEvent event = ProductCreatedEvent.of(
+                savedProduct.getId(),
+                savedProduct.getName(),
+                savedProduct.getPrice(),
+                savedProduct.getCategoryId()
+        );
+        eventPublisher.publishEvent(event);
 
         logger.debug("Produto criado com sucesso: {}", productResponse.getId());
 
