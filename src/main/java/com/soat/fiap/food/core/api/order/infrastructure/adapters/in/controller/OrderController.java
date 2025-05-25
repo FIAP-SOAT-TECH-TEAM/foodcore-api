@@ -31,7 +31,7 @@ import java.util.List;
  * Controlador REST para gerenciamento de pedidos
  */
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @Tag(name = "Pedidos", description = "API para gerenciamento de pedidos")
 public class OrderController {
 

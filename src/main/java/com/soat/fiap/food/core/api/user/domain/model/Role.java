@@ -13,7 +13,7 @@ public class Role {
     private Long id;
     private String name;
     private String description;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
 
 }

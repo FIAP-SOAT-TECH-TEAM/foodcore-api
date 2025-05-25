@@ -1,5 +1,8 @@
 package com.soat.fiap.food.core.api.shared.vo;
 
+import lombok.Getter;
+
+@Getter
 public enum RoleType {
     ADMIN(1),
     USER(2);
@@ -8,10 +11,6 @@ public enum RoleType {
 
     RoleType(int id) {
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public static RoleType fromId(int id) {

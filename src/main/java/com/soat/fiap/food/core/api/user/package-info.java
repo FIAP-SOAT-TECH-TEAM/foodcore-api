@@ -2,7 +2,7 @@
  * Módulo de Usuário - Gerencia o cadastro e autenticação de clientes.
  * 
  * Responsabilidades:
- * - Cadastro e gestão de clientes
+ * - Cadastro e gestão de usuários
  * - Autenticação e autorização
  * - Gestão de preferências e histórico
  */

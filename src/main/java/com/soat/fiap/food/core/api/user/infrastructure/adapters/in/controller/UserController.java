@@ -25,7 +25,7 @@ import java.util.List;
  * Controlador REST para gerenciamento de usuários
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Tag(name = "Usuários", description = "API para gerenciamento de usuários")
 public class UserController {
 
@@ -114,6 +114,7 @@ public class UserController {
             @Valid @RequestBody UserRequest request) {
         try {
             User user = userDtoMapper.toDomain(request);
+
             User createdUser = userUseCase.createUser(user);
             return new ResponseEntity<>(userDtoMapper.toResponse(createdUser), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {

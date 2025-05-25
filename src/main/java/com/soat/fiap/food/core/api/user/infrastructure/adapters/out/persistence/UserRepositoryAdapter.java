@@ -45,6 +45,18 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return springDataUserRepository.findByEmail(email)
+                .map(userEntityMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return springDataUserRepository.findByUsername(username)
+                .map(userEntityMapper::toDomain);
+    }
+
+    @Override
     public List<User> findAll() {
         var userEntities = springDataUserRepository.findAll();
         return userEntityMapper.toDomainList(userEntities);

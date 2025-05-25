@@ -23,13 +23,27 @@ public interface UserRepository {
      * @return Optional contendo o usuário ou vazio se não encontrado
      */
     Optional<User> findById(Long id);
-    
+
     /**
      * Busca um usuário por DOCUMENT
      * @param document DOCUMENT do usuário
      * @return Optional contendo o usuário ou vazio se não encontrado
      */
     Optional<User> findByDocument(String document);
+
+    /**
+     * Busca um usuário pelo seu email
+     * @param email EMAIL do usuário
+     * @return Optional contendo o usuário ou vazio se não encontrado
+     */
+    Optional<User> findByEmail(String email);
+
+    /**
+     * Busca um usuário por seu username
+     * @param username USERNAME do usuário
+     * @return Optional contendo o usuário ou vazio se não encontrado
+     */
+    Optional<User> findByUsername(String username);
     
     /**
      * Lista todos os usuário

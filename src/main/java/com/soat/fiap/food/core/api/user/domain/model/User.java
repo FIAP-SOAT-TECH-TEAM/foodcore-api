@@ -25,7 +25,7 @@ public class User {
     private boolean active;
     private Role role;
     private LocalDateTime lastLogin;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     
     /**
