@@ -396,17 +396,17 @@ public class CatalogService implements CatalogUseCase {
             logger.warn("Tentativa de atualizar produto com catálogo inexistente. Id: {}", catalogId);
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
-//        else if (!productRequest.getCategoryId().equals(categoryId)) {
-//
-//            catalog.get().moveCategoryProduct(productRequest.getCategoryId(), productId);
-//
-//            logger.debug("Produto movido com sucesso para categoria: {}", productRequest.getCategoryId());
-//        }
+        else if (!productRequest.getCategoryId().equals(categoryId)) {
 
-        catalog.get().updateProductInCategory(categoryId, product);
+            catalog.get().moveCategoryProduct(categoryId, productRequest.getCategoryId(), productId);
+
+            logger.debug("Produto movido com sucesso para categoria: {}", productRequest.getCategoryId());
+        }
+
+        catalog.get().updateProductInCategory(productRequest.getCategoryId(), product);
 
         var updatedCatalog = catalogRepository.save(catalog.get());
-        var updatedProduct = updatedCatalog.getProductFromCategoryById(categoryId, productId);
+        var updatedProduct = updatedCatalog.getProductFromCategoryById(productRequest.getCategoryId(), productId);
 
         var productResponse = productResponseMapper.toResponse(updatedProduct);
 

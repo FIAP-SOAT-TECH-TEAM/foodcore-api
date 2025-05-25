@@ -251,11 +251,12 @@ public class Catalog {
      * @param newCategoryId ID da nova categoria que receberá o produto
      * @param productId o ID do produto a ser movida
      */
-    public void moveCategoryProduct(Long newCategoryId, Long productId) {
+    public void moveCategoryProduct(Long currentCategoryId, Long newCategoryId, Long productId) {
 
-        var category = getCategoryById(newCategoryId);
+        var product = getProductFromCategoryById(currentCategoryId, productId);
+        var newCategory = getCategoryById(newCategoryId);
 
-        category.moveCategoryProduct(category, productId);
+        newCategory.moveCategoryProduct(product);
     }
 
     /**

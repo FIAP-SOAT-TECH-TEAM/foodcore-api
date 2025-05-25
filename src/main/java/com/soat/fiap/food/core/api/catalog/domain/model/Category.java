@@ -193,17 +193,14 @@ public class Category {
     /**
      * Move um produto para uma nova categoria.
      *
-     * @param newCategory a nova categoria que receberá o produto
-     * @param productId o ID do produto a ser movida
+     * @param product o produto a ser movida
      */
-    void moveCategoryProduct(Category newCategory, Long productId) {
+    void moveCategoryProduct(Product product) {
 
-        var product = getProductById(productId);
-
-        newCategory.addProduct(product);
-        product.setCategory(newCategory);
+        product.setCategory(this);
+        this.addProduct(product);
         product.markUpdatedNow();
-        removeProduct(productId);
+
     }
 
 
