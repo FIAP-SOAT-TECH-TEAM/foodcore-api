@@ -4,9 +4,12 @@ import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.model.Role;
 import com.soat.fiap.food.core.api.user.domain.model.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,52 +22,72 @@ import java.util.Optional;
 @Service
 public class UserService implements UserUseCase {
 
+    private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomLogger logger;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.logger = CustomLogger.getLogger(getClass());
+        this.passwordEncoder = passwordEncoder;
     }
+
 
     @Override
     @Transactional
     public User createUser(User user) {
 
-        if(!user.getDocument().isEmpty()) {
-            if (!user.isValidDocument()) {
-                logger.warn("Tentativa de criar usuário com documento inválido: {}", user.getDocument());
-                throw new BusinessException("Documento inválido");
+        if (user.isGuest()) {
+            user.markAsGuest();
+
+            if (user.getPassword() != null && !user.getPassword().isBlank()) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
 
-            Optional<User> existingDocument = userRepository.findByDocument(user.getDocument());
-            if (existingDocument.isPresent()) {
-                logger.warn("Tentativa de criar usuário com documento já existente: {}", user.getDocument());
-                throw new ResourceConflictException("usuário", "documento", user.getDocument());
+        } else {
+            if (user.getDocument() != null && !user.getDocument().isBlank()) {
+                if (!user.isValidDocument()) {
+                    logger.warn("Tentativa de criar usuário com documento inválido: {}", user.getDocument());
+                    throw new BusinessException("Documento inválido");
+                }
+
+                Optional<User> existingDocument = userRepository.findByDocument(user.getDocument());
+                if (existingDocument.isPresent()) {
+                    throw new ResourceConflictException("usuário", "documento", user.getDocument());
+                }
+            }
+
+            if (user.getEmail() != null && !user.getEmail().isBlank()) {
+                Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
+                if (existingEmail.isPresent()) {
+                    throw new ResourceConflictException("usuário", "email", user.getEmail());
+                }
+            }
+
+            if (user.getUsername() != null && !user.getUsername().isBlank()) {
+                Optional<User> existingUsername = userRepository.findByUsername(user.getUsername());
+                if (existingUsername.isPresent()) {
+                    throw new ResourceConflictException("usuário", "username", user.getUsername());
+                }
+            }
+
+            user.activate();
+
+            // Define role USER caso não seja especificado
+            if (user.getRole() == null || user.getRole().getId() == 0) {
+                Role defaultRole = new Role();
+                defaultRole.setId((long) RoleType.USER.getId());
+                defaultRole.setName(RoleType.USER.name());
+                user.setRole(defaultRole);
+            }
+            if (user.getPassword() != null && !user.getPassword().isBlank()) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
 
         }
 
-        if(!user.getEmail().isEmpty()){
-            Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
-            if (existingEmail.isPresent()) {
-                logger.warn("Tentativa de criar usuário com email já existente: {}", user.getEmail());
-                throw new ResourceConflictException("usuário", "email", user.getEmail());
-            }
-        }
-
-        if(!user.getUsername().isEmpty()){
-            Optional<User> existingUsername = userRepository.findByUsername(user.getUsername());
-            if (existingUsername.isPresent()) {
-                logger.warn("Tentativa de criar usuário com username já existente: {}", user.getUsername());
-                throw new ResourceConflictException("usuário", "username", user.getUsername());
-            }
-        }
-
-        user.activate();
         User savedUser = userRepository.save(user);
         logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
-        
         return savedUser;
     }
 

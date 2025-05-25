@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     document VARCHAR(255),
     active BOOLEAN DEFAULT TRUE NOT NULL,
+    guest BOOLEAN DEFAULT FALSE NOT NULL,
     role_id INTEGER NOT NULL,
     last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -40,6 +41,7 @@ COMMENT ON COLUMN users.email IS 'E-mail do usuário (também único)';
 COMMENT ON COLUMN users.password IS 'Hash da senha do usuário';
 COMMENT ON COLUMN users.document IS 'Documento do usuário';
 COMMENT ON COLUMN users.active IS 'Indica se o usuário está ativo';
+COMMENT ON COLUMN users.guest IS 'Indica se o usuário é um convidado (não registrado, guest)';
 COMMENT ON COLUMN users.role_id IS 'Id da role do usuário';
 COMMENT ON COLUMN users.last_login IS 'Data do último login';
 COMMENT ON COLUMN users.created_at IS 'Data de criação do registro';

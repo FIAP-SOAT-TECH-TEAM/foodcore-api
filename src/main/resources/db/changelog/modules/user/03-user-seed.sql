@@ -13,6 +13,10 @@ INSERT INTO roles (name, description, created_at, updated_at)
 SELECT 'USER', 'Usuário comum do sistema', now(), now()
     WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'USER');
 
+-- Criação do Role GUEST
+INSERT INTO roles (name, description) VALUES ('GUEST', 'Usuário convidado')
+ON CONFLICT (name) DO NOTHING;
+
 -- Criação do usuário admin@fastfood.com
 INSERT INTO users (name, username, email, password, active, role_id, created_at, updated_at)
 SELECT 'Admin Sistema', 'admin', 'admin@fastfood.com', 'hashed_password_admin', true, 1, now(), now()

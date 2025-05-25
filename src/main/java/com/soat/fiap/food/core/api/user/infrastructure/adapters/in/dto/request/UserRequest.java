@@ -19,12 +19,17 @@ import lombok.NoArgsConstructor;
 @Schema(name = "UserRequest", description = "DTO para criação ou atualização de usuários")
 public class UserRequest {
 
+    @Schema(description = "Identifica se o usuário é guest ou não", example = "true", required = false)
+    private boolean guest;
+
     @Schema(description = "Nome completo do usuário", example = "João Silva", required = false)
     private String name;
 
+    @Builder.Default
     @Schema(description = "Apelido do usuário", example = "Jão", required = false)
     private String username = null;
 
+    @Builder.Default
     @Email(message = "O email deve ser válido")
     @Schema(description = "Email do usuário", example = "joao.silva@email.com", required = false)
     private String email = null;
@@ -32,6 +37,7 @@ public class UserRequest {
     @Schema(description = "Senha do usuário", example = "João Silva", required = false)
     private String password;
 
+    @Builder.Default
     @Schema(description = "Documento do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
     private String document = null;
 
