@@ -6,6 +6,8 @@ import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductReques
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -141,4 +143,14 @@ public interface CatalogUseCase {
      * @param productId ID do produto a ser removido
      */
     void deleteProduct(Long catalogId, Long categoryId, Long productId);
+
+    /**
+     * Atualiza apenas a imagem de um produto existente.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria do produto
+     * @param productId ID do produto
+     * @param imageFile Arquivo da nova imagem
+     */
+    void updateProductImage(Long catalogId, Long categoryId, Long productId, MultipartFile imageFile);
 }

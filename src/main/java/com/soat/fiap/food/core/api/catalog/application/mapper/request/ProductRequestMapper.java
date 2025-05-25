@@ -25,18 +25,12 @@ public interface ProductRequestMapper {
     @Mapping(target = "auditInfo", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "details", source = "request", qualifiedByName = "mapToDetails")
-    @Mapping(target = "imageUrl", source = "request.imageUrl", qualifiedByName = "mapToImageUrl")
     @Mapping(target = "stock", source = "request.stockQuantity", qualifiedByName = "mapToStock")
     Product toDomain(ProductRequest request);
 
     @Named("mapToDetails")
     default Details mapToDetails(ProductRequest request) {
         return new Details(request.getName(), request.getDescription());
-    }
-
-    @Named("mapToImageUrl")
-    default ImageUrl mapToImageUrl(String imageUrl) {
-        return (imageUrl != null && !imageUrl.isBlank()) ? new ImageUrl(imageUrl) : null;
     }
 
     @Named("mapToStock")

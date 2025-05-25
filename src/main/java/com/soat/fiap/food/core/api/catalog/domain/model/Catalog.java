@@ -171,7 +171,6 @@ public class Catalog {
         }
 
         currentCategory.setDetails(newCategory.getDetails());
-        currentCategory.setImageUrl(newCategory.getImageUrl());
         currentCategory.setDisplayOrder(newCategory.getDisplayOrder());
         currentCategory.setActive(newCategory.isActive());
         currentCategory.markUpdatedNow();

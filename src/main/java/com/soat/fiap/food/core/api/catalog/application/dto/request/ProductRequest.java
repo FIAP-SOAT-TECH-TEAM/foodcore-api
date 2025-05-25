@@ -41,9 +41,6 @@ public class ProductRequest {
     @NotNull(message = "Quantidade de itens em estoque")
     @Schema(description = "Quantidade de itens em estoque do produto", example = "5", required = true)
     private Integer stockQuantity;
-
-    @Schema(description = "URL da imagem do produto", example = "images/x-burger.jpg")
-    private String imageUrl;
     
     @Schema(description = "Ordem de exibição do produto", example = "1")
     private Integer displayOrder;

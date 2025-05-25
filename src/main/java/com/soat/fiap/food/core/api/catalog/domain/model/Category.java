@@ -178,7 +178,6 @@ public class Category {
 
         currentProduct.setDetails(newProduct.getDetails());
         currentProduct.setPrice(newProduct.getPrice());
-        currentProduct.setImageUrl(newProduct.getImageUrl());
         currentProduct.setDisplayOrder(newProduct.getDisplayOrder());
 
         if (!currentProduct.getStockQuantity().equals(newProduct.getStockQuantity())) {

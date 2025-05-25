@@ -29,9 +29,6 @@ public class CategoryRequest {
     @NotBlank(message = "A descrição da categoria é obrigatória")
     @Schema(description = "Descrição da categoria", example = "Variedade de hambúrgueres e sanduíches", required = true)
     private String description;
-    
-    @Schema(description = "URL da imagem da categoria", example = "images/lanches.jpg")
-    private String imageUrl;
 
     @NotNull(message = "O status da categoria é obrigatório")
     @Schema(description = "Status da categoria", example = "true", required = true)

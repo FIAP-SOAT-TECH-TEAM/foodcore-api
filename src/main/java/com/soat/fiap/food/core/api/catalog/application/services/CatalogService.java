@@ -17,11 +17,15 @@ import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogReposito
 import com.soat.fiap.food.core.api.catalog.domain.events.ProductCreatedEvent;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,9 +45,9 @@ public class CatalogService implements CatalogUseCase {
     private final CategoryResponseMapper categoryResponseMapper;
     private final ProductResponseMapper productResponseMapper;
 
-    final ApplicationEventPublisher eventPublisher;
-
+    private final ApplicationEventPublisher eventPublisher;
     private final CustomLogger logger;
+    private final ImageStorageService imageStorageService;
 
     public CatalogService(
             CatalogRepository catalogRepository,
@@ -53,7 +57,8 @@ public class CatalogService implements CatalogUseCase {
             CategoryResponseMapper categoryResponseMapper,
             ProductRequestMapper productRequestMapper,
             ProductResponseMapper productResponseMapper,
-            ApplicationEventPublisher eventPublisher
+            ApplicationEventPublisher eventPublisher,
+            ImageStorageService imageStorageService
     ) {
         this.catalogRepository = catalogRepository;
         this.catalogRequestMapper = catalogRequestMapper;
@@ -64,6 +69,7 @@ public class CatalogService implements CatalogUseCase {
         this.productResponseMapper = productResponseMapper;
         this.eventPublisher = eventPublisher;
         this.logger = CustomLogger.getLogger(getClass());
+        this.imageStorageService = imageStorageService;
     }
 
     /**
@@ -503,6 +509,78 @@ public class CatalogService implements CatalogUseCase {
         catalogRepository.save(catalog.get());
 
         logger.debug("Produto excluído com sucesso: {}", productId);
+    }
+
+    /**
+     * Atualiza apenas a imagem de um produto existente.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria do produto
+     * @param productId ID do produto
+     * @param imageFile Arquivo da nova imagem
+     * @throws CatalogNotFoundException se o catálogo não for encontrado
+     * @throws IllegalArgumentException se o arquivo de imagem for nulo ou vazio
+     * @throws RuntimeException se ocorrer um erro durante o upload da imagem
+     */
+    @Override
+    @Transactional
+    public void updateProductImage(Long catalogId, Long categoryId, Long productId, MultipartFile imageFile) {
+        logger.debug("Atualizando imagem do produto ID: {}", productId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de excluir produto com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var newProduct = uploadProductImage(catalog.get(), categoryId, productId, imageFile);
+        catalog.get().updateProductInCategory(categoryId, newProduct);
+        catalogRepository.save(catalog.get());
+    }
+
+    /**
+     * Faz upload de uma nova imagem para o produto, removendo a anterior se existir.
+     *
+     * @param catalog Catálogo que contém o produto
+     * @param categoryId ID da categoria do produto
+     * @param productId ID do produto
+     * @param imageFile Arquivo da imagem
+     * @throws IllegalArgumentException se o arquivo de imagem for nulo ou estiver vazio
+     * @throws RuntimeException se ocorrer falha no upload da imagem
+     * @return Produto atualizado com a nova URL da imagem
+     */
+    private Product uploadProductImage(Catalog catalog, Long categoryId, Long productId, MultipartFile imageFile) {
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            logger.warn("Tentativa de upload de imagem com arquivo vazio ou nulo");
+            throw new IllegalArgumentException("O arquivo de imagem não pode ser vazio");
+        }
+
+        var product = catalog.getProductFromCategoryById(categoryId, productId);
+
+        try {
+
+            logger.debug("Processando upload de imagem para produto ID: {}", productId);
+
+            if (product.getImageUrl() != null && !product.imageUrlIsEmpty()) {
+                String currentImagePath = product.getImageUrlValue();
+                logger.debug("Removendo imagem anterior: {}", currentImagePath);
+                imageStorageService.deleteImage(currentImagePath);
+            }
+
+            String storagePath = "products/" + productId;
+            String imagePath = imageStorageService.uploadImage(imageFile, storagePath);
+            logger.debug("Nova imagem enviada para o caminho: {}", imagePath);
+
+            product.setImageUrlValue(imagePath);
+
+            return product;
+
+        } catch (Exception e) {
+            logger.error("Erro ao processar upload de imagem: {}", e.getMessage(), e);
+            throw new RuntimeException("Falha ao processar imagem: " + e.getMessage(), e);
+        }
     }
 
 }

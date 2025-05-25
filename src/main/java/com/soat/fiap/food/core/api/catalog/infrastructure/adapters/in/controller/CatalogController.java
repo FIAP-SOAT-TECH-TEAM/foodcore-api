@@ -9,6 +9,7 @@ import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductRespo
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.application.services.CatalogService;
+import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +23,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -362,4 +365,32 @@ public class CatalogController {
         catalogUseCase.deleteProduct(catalogId, categoryId, productId);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping(value = "/{catalogId}/categories/{categoryId}/products/{productId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            summary = "Atualizar imagem do produto",
+            description = "Atualiza apenas a imagem de um produto existente",
+            tags = { "Produtos" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Imagem do produto atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Imagem inválida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
+    })
+    public ResponseEntity<Void> updateProductImage(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria do produto", example = "10", required = true)
+            @PathVariable Long categoryId,
+            @Parameter(description = "ID do produto", example = "100", required = true)
+            @PathVariable Long productId,
+            @Parameter(description = "Arquivo da nova imagem", required = true)
+            @RequestPart("imageFile") MultipartFile imageFile
+    ) {
+        logger.debug("Requisição para atualizar imagem do produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
+        catalogUseCase.updateProductImage(catalogId, categoryId, productId, imageFile);
+        return ResponseEntity.noContent().build();
+    }
+
 }

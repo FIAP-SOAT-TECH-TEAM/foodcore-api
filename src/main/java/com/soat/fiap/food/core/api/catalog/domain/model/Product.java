@@ -91,6 +91,33 @@ public class Product {
         return this.getCategory().getId();
     }
 
+
+    /**
+     * Retorna a URL da imagem do produto.
+     *
+     * @return URL da imagem
+     */
+    public String getImageUrlValue() {
+        return this.imageUrl.imageUrl();
+    }
+
+    /**
+     * Define a url da imagem do produto.
+     *
+     */
+    public void setImageUrlValue(String imagePath) {
+        this.setImageUrl(new ImageUrl(imagePath));
+    }
+
+    /**
+     * Verifica se a URL da imagem do produto está vazia.
+     *
+     * @return {@code true} se a URL estiver vazia; caso contrário, {@code false}
+     */
+    public Boolean imageUrlIsEmpty() {
+        return this.imageUrl.imageUrl().isEmpty();
+    }
+
     /**
      * Define a quantidade em estoque do produto.
      *

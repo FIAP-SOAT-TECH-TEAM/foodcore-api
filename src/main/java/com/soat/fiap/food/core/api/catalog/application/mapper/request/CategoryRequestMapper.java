@@ -26,16 +26,10 @@ public interface CategoryRequestMapper {
     @Mapping(target = "catalog", ignore = true)
     @Mapping(target = "auditInfo", ignore = true)
     @Mapping(target = "details", source = "request", qualifiedByName = "mapToDetails")
-    @Mapping(target = "imageUrl", source = "request.imageUrl", qualifiedByName = "mapToImageUrl")
     Category toDomain(CategoryRequest request);
 
     @Named("mapToDetails")
     default Details mapToDetails(CategoryRequest request) {
         return new Details(request.getName(), request.getDescription());
-    }
-
-    @Named("mapToImageUrl")
-    default ImageUrl mapToImageUrl(String imageUrl) {
-        return (imageUrl != null && !imageUrl.isBlank()) ? new ImageUrl(imageUrl) : null;
     }
 }
