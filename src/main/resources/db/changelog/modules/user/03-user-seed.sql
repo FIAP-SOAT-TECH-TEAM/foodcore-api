@@ -17,19 +17,13 @@ SELECT 'USER', 'Usuário comum do sistema', now(), now()
 INSERT INTO roles (name, description) VALUES ('GUEST', 'Usuário convidado')
 ON CONFLICT (name) DO NOTHING;
 
--- Criação do usuário admin@fastfood.com, senha: admin123
+-- Criação do usuário admin@fastfood.com
 INSERT INTO users (name, username, email, password, active, role_id, created_at, updated_at)
-SELECT 'Admin Sistema', 'admin', 'admin@fastfood.com', '$2a$12$kl2iMwHXVtymLAza2P2U/uByd5LjRcxrkkF5Y4I.rst.pens6x4Iy', true, 1, now(), now()
+SELECT 'Admin Sistema', 'admin', 'admin@fastfood.com', 'hashed_password_admin', true, 1, now(), now()
 WHERE NOT EXISTS (
     SELECT 1 FROM users WHERE email = 'admin@fastfood.com'
 );
 
--- Criação do usuário GUEST
-INSERT INTO users (name, username, active, role_id, created_at, updated_at)
-SELECT 'Guest', 'user_guest', true, 3, now(), now()
-WHERE NOT EXISTS (
-    SELECT 1 FROM users WHERE username = 'user_guest'
-);
 
 --changeset user:03-user-seed-dev runAlways:true context:local,dev onError:MARK_RAN
 -- Dados para desenvolvimento/local - múltiplos usuários e roles
