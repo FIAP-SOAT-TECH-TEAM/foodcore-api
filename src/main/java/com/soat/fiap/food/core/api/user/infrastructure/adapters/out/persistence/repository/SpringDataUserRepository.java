@@ -33,16 +33,6 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
      * @return Optional contendo o usuário ou vazio se não encontrado
      */
     Optional<UserEntity> findByUsername(String username);
-
-
-    /**
-     * Busca um usuário por sua role
-     * @param roleId Role do usuário
-     * @return Optional contendo o usuário ou vazio se não encontrado
-     */
-
-    Optional<UserEntity> findByRoleId(Long roleId);
-
     
     /**
      * Busca todos os usuários ativos

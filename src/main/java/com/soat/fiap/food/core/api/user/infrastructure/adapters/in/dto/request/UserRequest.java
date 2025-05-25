@@ -23,17 +23,17 @@ public class UserRequest {
     private String name;
 
     @Schema(description = "Apelido do usuário", example = "Jão", required = false)
-    private String username;
+    private String username = null;
 
     @Email(message = "O email deve ser válido")
     @Schema(description = "Email do usuário", example = "joao.silva@email.com", required = false)
-    private String email;
+    private String email = null;
 
     @Schema(description = "Senha do usuário", example = "João Silva", required = false)
     private String password;
 
-    @Schema(description = "DOCUMENT do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
-    private String document;
+    @Schema(description = "Documento do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
+    private String document = null;
 
     @Builder.Default
     @Schema(description = "Tipo de role (ADMIN=1, USER=2)", example = "2")

@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.entity;
 
 
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,12 +49,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private LocalDateTime lastLogin;
-    
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-    
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+
+    @Embedded
+    private AuditInfo auditInfo = new AuditInfo();
     
 
 }

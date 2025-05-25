@@ -30,20 +30,38 @@ public class UserService implements UserUseCase {
     @Override
     @Transactional
     public User createUser(User user) {
-        logger.debug("Criando usuário com documento: {}", user.getDocument());
-        
-        if (!user.isValidDocument()) {
-            logger.warn("Tentativa de criar usuário com documento inválido: {}", user.getDocument());
-            throw new BusinessException("Documento inválido");
+
+        if(!user.getDocument().isEmpty()) {
+            if (!user.isValidDocument()) {
+                logger.warn("Tentativa de criar usuário com documento inválido: {}", user.getDocument());
+                throw new BusinessException("Documento inválido");
+            }
+
+            Optional<User> existingDocument = userRepository.findByDocument(user.getDocument());
+            if (existingDocument.isPresent()) {
+                logger.warn("Tentativa de criar usuário com documento já existente: {}", user.getDocument());
+                throw new ResourceConflictException("usuário", "documento", user.getDocument());
+            }
+
         }
 
-        Optional<User> existingUser = userRepository.findByDocument(user.getDocument());
-        if (existingUser.isPresent()) {
-            logger.warn("Tentativa de criar usuário com documento já existente: {}", user.getDocument());
-            throw new ResourceConflictException("usuário", "documento", user.getDocument());
+        if(!user.getEmail().isEmpty()){
+            Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
+            if (existingEmail.isPresent()) {
+                logger.warn("Tentativa de criar usuário com email já existente: {}", user.getEmail());
+                throw new ResourceConflictException("usuário", "email", user.getEmail());
+            }
         }
+
+        if(!user.getUsername().isEmpty()){
+            Optional<User> existingUsername = userRepository.findByUsername(user.getUsername());
+            if (existingUsername.isPresent()) {
+                logger.warn("Tentativa de criar usuário com username já existente: {}", user.getUsername());
+                throw new ResourceConflictException("usuário", "username", user.getUsername());
+            }
+        }
+
         user.activate();
-        
         User savedUser = userRepository.save(user);
         logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
         
