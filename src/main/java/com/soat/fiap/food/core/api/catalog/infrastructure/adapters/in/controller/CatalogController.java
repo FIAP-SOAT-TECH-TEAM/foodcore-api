@@ -246,6 +246,31 @@ public class CatalogController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping(value = "/{catalogId}/categories/{categoryId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            summary = "Atualizar imagem do category",
+    description = "Atualiza apenas a imagem de um categoryexistente",
+    tags = { "Categorias" }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Imagem da categoria atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrado", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Imagem inválida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
+    })
+    public ResponseEntity<Void> updateCategoryImage(
+            @Parameter(description = "ID do catálogo", example = "1", required = true)
+            @PathVariable Long catalogId,
+            @Parameter(description = "ID da categoria", example = "10", required = true)
+                    @PathVariable Long categoryId,
+            @Parameter(description = "Arquivo da nova imagem", required = true)
+            @RequestPart("imageFile") MultipartFile imageFile
+    ) {
+        logger.debug("Requisição para atualizar imagem da categoria {} do catálogo {}", categoryId, catalogId);
+        catalogUseCase.updateCategoryImage(catalogId, categoryId, imageFile);
+        return ResponseEntity.noContent().build();
+    }
+
     // ========== PRODUTOS ==========
     @PostMapping("/{catalogId}/categories/products")
     @Operation(

@@ -97,6 +97,15 @@ public interface CatalogUseCase {
     void deleteCategory(Long catalogId, Long categoryId);
 
     /**
+     * Atualiza apenas a imagem de uma categoria existente.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria do categoria
+     * @param imageFile Arquivo da nova imagem
+     */
+    void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile);
+
+    /**
      * Salva um produto.
      *
      * @param catalogId ID do catálogo

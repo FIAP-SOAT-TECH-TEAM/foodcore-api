@@ -18,6 +18,7 @@ import com.soat.fiap.food.core.api.catalog.domain.events.ProductCreatedEvent;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
@@ -353,6 +354,80 @@ public class CatalogService implements CatalogUseCase {
 
         logger.debug("Categoria excluída com sucesso: {}", categoryId);
     }
+
+
+
+
+    /**
+     * Atualiza apenas a imagem de uma categoria existente.
+     *
+     * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria do categoria
+     * @param imageFile Arquivo da nova imagem
+     * @throws CatalogNotFoundException se o catálogo não for encontrado
+     * @throws IllegalArgumentException se o arquivo de imagem for nulo ou vazio
+     * @throws RuntimeException se ocorrer um erro durante o upload da imagem
+     */
+    @Override
+    @Transactional
+    public void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile) {
+        logger.debug("Atualizando imagem do categoria ID: {}", categoryId);
+
+        var catalog = catalogRepository.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            logger.warn("Tentativa de excluir categoria com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        var newCategory = uploadCategoryImage(catalog.get(), categoryId, imageFile);
+        catalog.get().updateCategory(newCategory);
+        catalogRepository.save(catalog.get());
+    }
+
+    /**
+     * Faz upload de uma nova imagem para uma categoria, removendo a anterior se existir.
+     *
+     * @param catalog Catálogo que contém o categoria
+     * @param categoryId ID da categoria do categoria
+     * @param imageFile Arquivo da imagem
+     * @throws IllegalArgumentException se o arquivo de imagem for nulo ou estiver vazio
+     * @throws RuntimeException se ocorrer falha no upload da imagem
+     * @return categoria atualizado com a nova URL da imagem
+     */
+    private Category uploadCategoryImage(Catalog catalog, Long categoryId, MultipartFile imageFile) {
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            logger.warn("Tentativa de upload de imagem com arquivo vazio ou nulo");
+            throw new IllegalArgumentException("O arquivo de imagem não pode ser vazio");
+        }
+
+        var category = catalog.getCategoryById(categoryId);
+
+        try {
+
+            logger.debug("Processando upload de imagem para categoria ID: {}", categoryId);
+
+            if (category.getImageUrl() != null && !category.imageUrlIsEmpty()) {
+                String currentImagePath = category.getImageUrlValue();
+                logger.debug("Removendo imagem anterior: {}", currentImagePath);
+                imageStorageService.deleteImage(currentImagePath);
+            }
+
+            String storagePath = "categories/" + categoryId;
+            String imagePath = imageStorageService.uploadImage(imageFile, storagePath);
+            logger.debug("Nova imagem enviada para o caminho: {}", imagePath);
+
+            category.setImageUrlValue(imagePath);
+
+            return category;
+
+        } catch (Exception e) {
+            logger.error("Erro ao processar upload de imagem: {}", e.getMessage(), e);
+            throw new RuntimeException("Falha ao processar imagem: " + e.getMessage(), e);
+        }
+    }
+
 
     /**
      * Salva um produto.

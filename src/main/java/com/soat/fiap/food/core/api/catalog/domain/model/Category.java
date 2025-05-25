@@ -69,6 +69,32 @@ public class Category {
     }
 
     /**
+     * Retorna a URL da imagem do categoria.
+     *
+     * @return URL da imagem
+     */
+    public String getImageUrlValue() {
+        return this.imageUrl.imageUrl();
+    }
+
+    /**
+     * Define a url da imagem do categoria.
+     *
+     */
+    public void setImageUrlValue(String imagePath) {
+        this.setImageUrl(new ImageUrl(imagePath));
+    }
+
+    /**
+     * Verifica se a URL da imagem do categoria está vazia.
+     *
+     * @return {@code true} se a URL estiver vazia; caso contrário, {@code false}
+     */
+    public Boolean imageUrlIsEmpty() {
+        return this.imageUrl.imageUrl().isEmpty();
+    }
+
+    /**
      * Define a ordem de exibição da categoria.
      *
      * @param displayOrder nova ordem de exibição
