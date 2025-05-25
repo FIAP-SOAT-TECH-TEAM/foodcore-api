@@ -19,24 +19,26 @@ COMMENT ON COLUMN roles.updated_at IS 'Data da última atualização do registro
 --changeset user:02-user-tables runAlways:true
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    document VARCHAR(255),
     active BOOLEAN DEFAULT TRUE NOT NULL,
     role_id INTEGER NOT NULL,
     last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles(id),
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 COMMENT ON TABLE users IS 'Tabela de usuários do sistema';
 COMMENT ON COLUMN users.id IS 'ID único do usuário';
+COMMENT ON COLUMN users.name IS 'Nome do usuário';
 COMMENT ON COLUMN users.username IS 'Nome de usuário único para login';
 COMMENT ON COLUMN users.email IS 'E-mail do usuário (também único)';
-COMMENT ON COLUMN users.password_hash IS 'Hash da senha do usuário';
-COMMENT ON COLUMN users.name IS 'Nome do usuário';
+COMMENT ON COLUMN users.password IS 'Hash da senha do usuário';
+COMMENT ON COLUMN users.document IS 'Documento do usuário';
 COMMENT ON COLUMN users.active IS 'Indica se o usuário está ativo';
 COMMENT ON COLUMN users.role_id IS 'Id da role do usuário';
 COMMENT ON COLUMN users.last_login IS 'Data do último login';
