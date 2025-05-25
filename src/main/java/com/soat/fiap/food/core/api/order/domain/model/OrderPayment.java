@@ -18,7 +18,7 @@ public class OrderPayment {
     private Long paymentId;
     private OrderPaymentStatus status = OrderPaymentStatus.PENDING;
     private LocalDateTime paidAt;
-    private final AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo = new AuditInfo();
 
     /**
      * Construtor que inicializa os dados do pagamento de um pedido

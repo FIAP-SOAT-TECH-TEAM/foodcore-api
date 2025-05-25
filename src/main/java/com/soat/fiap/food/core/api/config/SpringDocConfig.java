@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,17 @@ public class SpringDocConfig {
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
+                .tags(List.of(
+                        new Tag()
+                                .name("Catálogos")
+                                .description("Operações para gerenciamento de catálogos de categorias de produtos"),
+                        new Tag()
+                                .name("Categorias")
+                                .description("Operações para gerenciamento de categorias de produtos"),
+                        new Tag()
+                                .name("Produtos")
+                                .description("Operações para gerenciamento de produtos")
+                ))
                 .servers(List.of(
                         new Server()
                                 .url(contextPath)
@@ -51,11 +63,11 @@ public class SpringDocConfig {
     }
 
     @Bean
-    public GroupedOpenApi productApi() {
+    public GroupedOpenApi catalogApi() {
         return GroupedOpenApi.builder()
-                .group("produtos")
-                .packagesToScan("com.soat.fiap.food.core.api.product")
-                .pathsToMatch("/api/products/**", "/api/categories/**")
+                .group("catálogo")
+                .packagesToScan("com.soat.fiap.food.core.api.catalog")
+                .pathsToMatch("/api/catalogs/**")
                 .build();
     }
 
