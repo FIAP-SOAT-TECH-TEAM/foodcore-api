@@ -176,6 +176,9 @@ public class GlobalExceptionHandler {
         else if (mensagem != null && mensagem.contains("customers_document_key")) {
             mensagem = "Já existe um cliente cadastrado com este documento/CPF";
         }
+        else if (mensagem != null && mensagem.contains("fk_order_item_product")) {
+            mensagem = "Não é possível excluir este produto pois existem pedidos associados a ele";
+        }
         else {
             mensagem = "Operação não permitida: viola regras de integridade de dados";
         }
