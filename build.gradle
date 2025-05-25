@@ -16,17 +16,6 @@ java {
 	}
 }
 
-sourceSets {
-	main {
-		java {
-			exclude 'com/soat/fiap/food/core/api/user/**'
-			exclude 'com/soat/fiap/food/core/api/payment/**'
-			exclude 'com/soat/fiap/food/core/api/order/**'
-			exclude 'com/soat/fiap/food/core/api/customer/**'
-		}
-	}
-}
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
