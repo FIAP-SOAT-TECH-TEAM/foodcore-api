@@ -83,6 +83,7 @@ public class Category {
      */
     public void setImageUrlValue(String imagePath) {
         this.setImageUrl(new ImageUrl(imagePath));
+        this.markUpdatedNow();
     }
 
     /**
