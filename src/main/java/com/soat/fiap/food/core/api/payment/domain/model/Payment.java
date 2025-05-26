@@ -32,7 +32,7 @@ public class Payment {
      * @param expiresIn Data e hora de expiração do pagamento
      * @param tid Identificador da transação (TID)
      * @param amount Valor total do pagamento
-     * @param qrCodeUrl URL do QR Code do pagamento
+     * @param qrCode URL do QR Code do pagamento
      * @param observations Observações adicionais sobre o pagamento
      * 
      * @throws NullPointerException se type, expiresIn, tid ou amount forem nulos
