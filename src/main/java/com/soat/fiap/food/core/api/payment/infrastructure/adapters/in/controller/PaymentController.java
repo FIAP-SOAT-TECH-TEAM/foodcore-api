@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.request.ProcessPaymentRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.response.PaymentResponse;

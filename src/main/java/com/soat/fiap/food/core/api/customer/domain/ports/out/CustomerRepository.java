@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.customer.application.ports.out;
+package com.soat.fiap.food.core.api.customer.domain.ports.out;
 
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import java.util.List;

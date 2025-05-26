@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.user.application.ports.out;
+package com.soat.fiap.food.core.api.user.domain.ports.out;
 
 import com.soat.fiap.food.core.api.user.domain.model.User;
 
