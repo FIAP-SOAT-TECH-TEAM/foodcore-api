@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.repository;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public interface SpringDataOrderRepository extends JpaRepository<OrderEntity, Lo
      * @param status Status dos pedidos
      * @return Lista de pedidos com o status informado
      */
-    List<OrderEntity> findByStatus(OrderEntity.OrderStatusEntity status);
+    List<OrderEntity> findByStatus(OrderStatus status);
     
     /**
      * Busca pedidos de um cliente específico

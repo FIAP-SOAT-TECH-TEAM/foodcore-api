@@ -1,16 +1,11 @@
-package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence;
+package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
-import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.OrderEntityMapper;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.OrderItemEntityMapper;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.repository.SpringDataOrderRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,38 +18,19 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     private final SpringDataOrderRepository springDataOrderRepository;
     private final OrderEntityMapper orderEntityMapper;
-    private final OrderItemEntityMapper orderItemEntityMapper;
 
     public OrderRepositoryAdapter(
             SpringDataOrderRepository springDataOrderRepository,
-            OrderEntityMapper orderEntityMapper,
-            OrderItemEntityMapper orderItemEntityMapper) {
+            OrderEntityMapper orderEntityMapper) {
         this.springDataOrderRepository = springDataOrderRepository;
         this.orderEntityMapper = orderEntityMapper;
-        this.orderItemEntityMapper = orderItemEntityMapper;
     }
 
     @Override
-    @Transactional
     public Order save(Order order) {
         OrderEntity orderEntity = orderEntityMapper.toEntity(order);
-        
-        if (order.getOrderItems() != null) {
-            orderEntity.setItems(new java.util.ArrayList<>());
-            for (OrderItem item : order.getOrderItems()) {
-                OrderItemEntity itemEntity = orderItemEntityMapper.toEntity(item);
-                orderEntity.addItem(itemEntity);
-            }
-        }
-        
-        OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
-        Order savedOrder = orderEntityMapper.toDomain(savedEntity);
-        
-        if (order.getCustomerId() != null && order.getCustomerId().getName() != null) {
-            savedOrder.setCustomerId(order.getCustomerId());
-        }
-        
-        return savedOrder;
+        OrderEntity saved = springDataOrderRepository.save(orderEntity);
+        return orderEntityMapper.toDomain(saved);
     }
 
     @Override
@@ -65,8 +41,7 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     @Override
     public List<Order> findByStatus(OrderStatus status) {
-        OrderEntity.OrderStatusEntity statusEntity = orderEntityMapper.statusToDatabaseValue(status);
-        List<OrderEntity> orderEntities = springDataOrderRepository.findByStatus(statusEntity);
+        List<OrderEntity> orderEntities = springDataOrderRepository.findByStatus(status);
         return orderEntityMapper.toDomainList(orderEntities);
     }
 
@@ -83,7 +58,6 @@ public class OrderRepositoryAdapter implements OrderRepository {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         springDataOrderRepository.deleteById(id);
     }
