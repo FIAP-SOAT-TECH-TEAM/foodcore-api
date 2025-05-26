@@ -1,9 +1,9 @@
 package com.soat.fiap.food.core.api.user.application.services;
 
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.service.JwtService;
 import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
@@ -25,11 +25,14 @@ public class UserService implements UserUseCase {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomLogger logger;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.logger = CustomLogger.getLogger(getClass());
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
 
@@ -40,55 +43,55 @@ public class UserService implements UserUseCase {
         if (user.isGuest()) {
             user.markAsGuest();
 
-            if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (user.hasPassword()) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
 
         } else {
-            if (user.getDocument() != null && !user.getDocument().isBlank()) {
-                if (!user.isValidDocument()) {
-                    logger.warn("Tentativa de criar usuário com documento inválido: {}", user.getDocument());
-                    throw new BusinessException("Documento inválido");
-                }
+            user.validateInternalState();
 
-                Optional<User> existingDocument = userRepository.findByDocument(user.getDocument());
-                if (existingDocument.isPresent()) {
+            if (user.hasDocument()) {
+                userRepository.findByDocument(user.getDocument()).ifPresent(existing -> {
                     throw new ResourceConflictException("usuário", "documento", user.getDocument());
-                }
+                });
             }
 
-            if (user.getEmail() != null && !user.getEmail().isBlank()) {
-                Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
-                if (existingEmail.isPresent()) {
+            if (user.hasEmail()) {
+                userRepository.findByEmail(user.getEmail()).ifPresent(existing -> {
                     throw new ResourceConflictException("usuário", "email", user.getEmail());
-                }
+                });
             }
 
-            if (user.getUsername() != null && !user.getUsername().isBlank()) {
-                Optional<User> existingUsername = userRepository.findByUsername(user.getUsername());
-                if (existingUsername.isPresent()) {
+            if (user.hasUsername()) {
+                userRepository.findByUsername(user.getUsername()).ifPresent(existing -> {
                     throw new ResourceConflictException("usuário", "username", user.getUsername());
-                }
+                });
             }
 
             user.activate();
 
-            // Define role USER caso não seja especificado
             if (user.getRole() == null || user.getRole().getId() == 0) {
                 Role defaultRole = new Role();
                 defaultRole.setId((long) RoleType.USER.getId());
                 defaultRole.setName(RoleType.USER.name());
                 user.setRole(defaultRole);
             }
-            if (user.getPassword() != null && !user.getPassword().isBlank()) {
+
+            if (user.hasPassword()) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
-
         }
 
-        User savedUser = userRepository.save(user);
-        logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
-        return savedUser;
+        try {
+            User savedUser = userRepository.save(user);
+            String token = jwtService.generateToken(savedUser);
+            savedUser.setJwtToken(token);
+            logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
+            return savedUser;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

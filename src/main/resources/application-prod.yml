@@ -57,3 +57,8 @@ logging:
     org.hibernate: WARN
     org.hibernate.SQL: WARN
     org.hibernate.type.descriptor.sql.BasicBinder: WARN
+
+#JWT Configuration
+jwt:
+  secret_key: "${JWT_SECRET:UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==}"
+  expiration: 3600

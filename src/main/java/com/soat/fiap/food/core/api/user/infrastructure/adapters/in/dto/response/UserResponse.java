@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "UserResponse", description = "DTO para resposta com informações de clientes")
+@Schema(name = "UserResponse", description = "DTO para resposta com informações de usuários")
 public class UserResponse {
     
     @Schema(description = "Identificador único do usuário", example = "1")
@@ -40,6 +40,9 @@ public class UserResponse {
     
     @Schema(description = "Data e hora da última atualização", example = "2023-01-10T11:30:00")
     private LocalDateTime updatedAt;
+
+    @Schema(description = "Token JWT", example = "eyJhbGciOiJIUzI1NiIsInR...")
+    private transient String jwtToken;
     
 
 } 

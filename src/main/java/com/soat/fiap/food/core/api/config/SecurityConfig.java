@@ -1,14 +1,17 @@
 package com.soat.fiap.food.core.api.config;
 
+import jakarta.servlet.Filter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 /**
  * Configuração de segurança para a aplicação
  */
@@ -17,7 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Qualifier("jwtAuthenticationFilter") Filter jwtFilter) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
@@ -32,9 +35,12 @@ public class SecurityConfig {
                     AntPathRequestMatcher.antMatcher("/webjars/**"),
                     AntPathRequestMatcher.antMatcher("/actuator/**")
                 ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/users/{id}").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").authenticated()
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
                 .anyRequest().permitAll()
-            );
+            ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
                 
         return http.build();
     }
