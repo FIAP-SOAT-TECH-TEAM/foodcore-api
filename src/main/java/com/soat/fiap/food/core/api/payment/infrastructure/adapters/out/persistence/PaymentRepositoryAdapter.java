@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence;
 
-import com.soat.fiap.food.core.api.payment.application.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentMapper;

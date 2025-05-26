@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.order.application.ports.out;
+package com.soat.fiap.food.core.api.order.domain.ports.out;
 
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;

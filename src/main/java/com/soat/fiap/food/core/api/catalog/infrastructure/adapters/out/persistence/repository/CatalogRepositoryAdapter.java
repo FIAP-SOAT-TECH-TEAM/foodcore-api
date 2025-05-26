@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.mapper.CatalogEntityMapper;
