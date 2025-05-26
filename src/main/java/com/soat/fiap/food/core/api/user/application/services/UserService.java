@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
-import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

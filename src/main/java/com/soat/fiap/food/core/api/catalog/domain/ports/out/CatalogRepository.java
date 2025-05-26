@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.application.ports.out;
+package com.soat.fiap.food.core.api.catalog.domain.ports.out;
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 

@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.customer.application.services;
 
 import com.soat.fiap.food.core.api.customer.application.ports.in.CustomerUseCase;
-import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerRepository;
+import com.soat.fiap.food.core.api.customer.domain.ports.out.CustomerRepository;
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;

@@ -1,9 +1,9 @@
 package com.soat.fiap.food.core.api.order.application.services;
 
-import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerRepository;
+import com.soat.fiap.food.core.api.customer.domain.ports.out.CustomerRepository;
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
-import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
+import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;

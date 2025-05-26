@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.customer.infrastructure.adapters.out.persistence;
 
-import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerRepository;
+import com.soat.fiap.food.core.api.customer.domain.ports.out.CustomerRepository;
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.customer.infrastructure.adapters.out.persistence.mapper.CustomerEntityMapper;
 import com.soat.fiap.food.core.api.customer.infrastructure.adapters.out.persistence.repository.SpringDataCustomerRepository;

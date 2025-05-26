@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence;
 
-import com.soat.fiap.food.core.api.order.application.ports.out.OrderRepository;
+import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;

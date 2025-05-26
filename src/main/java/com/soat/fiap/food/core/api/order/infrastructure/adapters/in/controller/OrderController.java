@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.controller;
 
-import com.soat.fiap.food.core.api.customer.application.ports.out.CustomerRepository;
+import com.soat.fiap.food.core.api.customer.domain.ports.out.CustomerRepository;
 import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;

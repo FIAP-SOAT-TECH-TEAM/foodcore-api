@@ -13,7 +13,7 @@ import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogRe
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
-import com.soat.fiap.food.core.api.catalog.application.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.catalog.domain.events.ProductCreatedEvent;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
