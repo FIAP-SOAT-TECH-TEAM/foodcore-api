@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.response;
+package com.soat.fiap.food.core.api.payment.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

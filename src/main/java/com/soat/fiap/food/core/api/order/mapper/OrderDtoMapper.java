@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.order.mapper;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.CreateOrderRequest;
-import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.application.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

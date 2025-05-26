@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.request;
+package com.soat.fiap.food.core.api.payment.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

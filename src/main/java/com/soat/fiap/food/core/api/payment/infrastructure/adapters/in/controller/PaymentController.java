@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controlle
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.request.ProcessPaymentRequest;
-import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.response.PaymentResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.request.ProcessPaymentRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

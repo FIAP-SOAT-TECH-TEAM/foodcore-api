@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request;
+package com.soat.fiap.food.core.api.order.application.dto.request;
 
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
