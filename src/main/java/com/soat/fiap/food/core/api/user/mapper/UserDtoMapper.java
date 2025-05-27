@@ -45,37 +45,6 @@ public interface UserDtoMapper {
     @Mapping(target = "id", ignore = true)
     User toDomain(UserRequest request);
 
-    @AfterMapping
-    default void customizeUserFromRequest(UserRequest request, @MappingTarget User user) {
-        boolean emptyUser = (request.getEmail() == null || request.getEmail().isBlank()) &&
-                (request.getDocument() == null || request.getDocument().isBlank()) &&
-                (request.getUsername() == null || request.getUsername().isBlank());
-
-        if (emptyUser || request.isGuest()) {
-            user.markAsGuest();
-
-            String guestName = "guest-" + java.util.UUID.randomUUID();
-
-            // Preencher username obrigatório para não violar NOT NULL no BD
-            if (user.getUsername() == null || user.getUsername().isBlank()) {
-                user.setUsername(guestName);
-            }
-
-            // Se precisar, preencha outros campos obrigatórios também
-            if (user.getEmail() == null || user.getEmail().isBlank()) {
-                user.setEmail(guestName + "@foodcore.local");
-            }
-
-            if (user.getPassword() == null || user.getPassword().isBlank()) {
-                user.setPassword(guestName);
-            }
-        } else if (request.getRole() != null) {
-            Role role = new Role();
-            role.setId((long) request.getRole().getId());
-            role.setName(request.getRole().name());
-            user.setRole(role);
-        }
-    }
     
     /**
      * Atualiza uma entidade de domínio com os dados de um DTO de requisição

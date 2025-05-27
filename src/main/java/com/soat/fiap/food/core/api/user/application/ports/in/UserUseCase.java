@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.user.application.ports.in;
 
 import com.soat.fiap.food.core.api.user.domain.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public interface UserUseCase {
      * @return Usuário cadastrado com ID gerado
      */
     User createUser(User user);
+
     
     /**
      * Atualiza um usuário existente
@@ -50,4 +52,12 @@ public interface UserUseCase {
      * @param id ID do usuário a ser removido
      */
     void deleteUser(Long id);
-} 
+
+    /**
+     * Realiza o login de um usuário
+     * @param email Email do usuário
+     * @param rawPassword Senha em texto puro
+     * @return Usuário autenticado ou lança exceção se falhar
+     */
+    User login(String email, String rawPassword);
+}

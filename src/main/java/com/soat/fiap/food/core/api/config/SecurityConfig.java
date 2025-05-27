@@ -24,6 +24,9 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
+                 // Rotas públicas
+                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                 // Permitir acesso ao Swagger e OpenAPI
                 .requestMatchers(
                     AntPathRequestMatcher.antMatcher("/"),
@@ -36,11 +39,12 @@ public class SecurityConfig {
                     AntPathRequestMatcher.antMatcher("/actuator/**")
                 ).permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/users/{id}").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/users/{id}").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/users/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN")
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
-                .anyRequest().permitAll()
-            ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
+                .anyRequest().authenticated()
+                //.anyRequest().permitAll()
+            ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                 
         return http.build();
     }

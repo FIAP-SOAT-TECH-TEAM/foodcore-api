@@ -19,10 +19,10 @@ COMMENT ON COLUMN roles.updated_at IS 'Data da última atualização do registro
 --changeset user:02-user-tables runAlways:true
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    username VARCHAR(50),
+    email VARCHAR(255),
+    password VARCHAR(255),
     document VARCHAR(255),
     active BOOLEAN DEFAULT TRUE NOT NULL,
     guest BOOLEAN DEFAULT FALSE NOT NULL,

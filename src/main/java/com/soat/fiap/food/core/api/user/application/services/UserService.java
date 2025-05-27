@@ -39,59 +39,48 @@ public class UserService implements UserUseCase {
     @Override
     @Transactional
     public User createUser(User user) {
-
         if (user.isGuest()) {
-            user.markAsGuest();
+            User guestUser = userRepository.findByRoleId((long) RoleType.GUEST.getId())
+                    .orElseThrow(() -> new RuntimeException("Usuário GUEST não encontrado no banco."));
+            String token = jwtService.generateToken(guestUser);
+            guestUser.setJwtToken(token);
+            return guestUser;
+        }
 
-            if (user.hasPassword()) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
+        user.validateInternalState();
 
-        } else {
-            user.validateInternalState();
-
-            if (user.hasDocument()) {
-                userRepository.findByDocument(user.getDocument()).ifPresent(existing -> {
-                    throw new ResourceConflictException("usuário", "documento", user.getDocument());
-                });
-            }
-
-            if (user.hasEmail()) {
-                userRepository.findByEmail(user.getEmail()).ifPresent(existing -> {
-                    throw new ResourceConflictException("usuário", "email", user.getEmail());
-                });
-            }
-
-            if (user.hasUsername()) {
-                userRepository.findByUsername(user.getUsername()).ifPresent(existing -> {
-                    throw new ResourceConflictException("usuário", "username", user.getUsername());
-                });
-            }
-
-            user.activate();
-
-            if (user.getRole() == null || user.getRole().getId() == 0) {
-                Role defaultRole = new Role();
-                defaultRole.setId((long) RoleType.USER.getId());
-                defaultRole.setName(RoleType.USER.name());
-                user.setRole(defaultRole);
-            }
-
-            if (user.hasPassword()) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.hasDocument()) {
+            Optional<User> existingByDocument = userRepository.findByDocument(user.getDocument());
+            if (existingByDocument.isPresent()) {
+                User existingUser = existingByDocument.get();
+                String token = jwtService.generateToken(existingUser);
+                existingUser.setJwtToken(token);
+                return existingUser;
             }
         }
 
-        try {
-            User savedUser = userRepository.save(user);
-            String token = jwtService.generateToken(savedUser);
-            savedUser.setJwtToken(token);
-            logger.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
-            return savedUser;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (user.hasEmail()) {
+            Optional<User> existingByEmail = userRepository.findByEmail(user.getEmail());
+            if (existingByEmail.isPresent()) {
+                User existingUser = existingByEmail.get();
+                String token = jwtService.generateToken(existingUser);
+                existingUser.setJwtToken(token);
+                return existingUser;
+            }
         }
 
+        assignDefaultRole(user);
+
+        if (user.hasPassword()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        user.activate();
+        User saved = userRepository.save(user);
+        String token = jwtService.generateToken(saved);
+        saved.setJwtToken(token);
+        logger.debug("Usuário criado com sucesso. ID: {}", saved.getId());
+        return saved;
     }
 
     @Override
@@ -165,5 +154,42 @@ public class UserService implements UserUseCase {
         
         userRepository.delete(id);
         logger.debug("Usuário excluído com sucesso. ID: {}", id);
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public User login(String email, String rawPassword) {
+        logger.debug("Tentando autenticar usuário com email: {}", email);
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isEmpty()) {
+            logger.warn("Usuário não encontrado para o email: {}", email);
+            throw new ResourceNotFoundException("Usuário", "email", email);
+        }
+
+        User user = optionalUser.get();
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            logger.warn("Senha incorreta para o email: {}", email);
+            throw new RuntimeException("Email ou senha inválidos");
+        }
+
+        String token = jwtService.generateToken(user);
+        user.setJwtToken(token);
+
+        logger.debug("Usuário autenticado com sucesso. ID: {}", user.getId());
+        return user;
+    }
+
+    private void assignDefaultRole(User user) {
+        if (user.getRole()==null || user.getRole().getId()==0) {
+            Role r = new Role();
+            r.setId((long)RoleType.USER.getId());
+            r.setName(RoleType.USER.name());
+            user.setRole(r);
+        }
     }
 }

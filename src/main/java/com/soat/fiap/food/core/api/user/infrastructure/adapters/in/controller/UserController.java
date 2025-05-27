@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.LoginRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;
 import com.soat.fiap.food.core.api.user.mapper.UserDtoMapper;
@@ -117,6 +118,28 @@ public class UserController {
 
             User createdUser = userUseCase.createUser(user);
             return new ResponseEntity<>(userDtoMapper.toResponse(createdUser), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Realiza o login de um usuário com email e senha")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos",
+                    content = @Content)
+    })
+    public ResponseEntity<UserResponse> login(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do login", required = true,
+                    content = @Content(schema = @Schema(implementation = LoginRequest.class)))
+            @Valid @RequestBody LoginRequest request) {
+        try {
+
+            User loggedUser = userUseCase.login(request.getEmail(), request.getPassword());
+            return new ResponseEntity<>(userDtoMapper.toResponse(loggedUser), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }

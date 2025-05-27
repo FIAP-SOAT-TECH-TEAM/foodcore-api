@@ -49,6 +49,8 @@ public class JwtService {
             throw new BusinessException("Usuários convidados não podem gerar novos tokens.");
         }
 
+        System.out.println("Gerando token JWT para o usuário: " + user.getRole().getName());
+
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("role", user.getRole().getName())
