@@ -1,7 +1,5 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.controller;
 
-import com.soat.fiap.food.core.api.customer.domain.ports.out.CustomerRepository;
-import com.soat.fiap.food.core.api.customer.domain.model.Customer;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
@@ -11,6 +9,8 @@ import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.request.
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.in.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.mapper.OrderDtoMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,22 +31,22 @@ import java.util.List;
  * Controlador REST para gerenciamento de pedidos
  */
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @Tag(name = "Pedidos", description = "API para gerenciamento de pedidos")
 public class OrderController {
 
     private final OrderUseCase orderUseCase;
     private final OrderDtoMapper orderDtoMapper;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
     private final CustomLogger logger;
 
     public OrderController(
             OrderUseCase orderUseCase,
             OrderDtoMapper orderDtoMapper,
-            CustomerRepository customerRepository) {
+            UserRepository userRepository) {
         this.orderUseCase = orderUseCase;
         this.orderDtoMapper = orderDtoMapper;
-        this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
         this.logger = CustomLogger.getLogger(getClass());
     }
 
@@ -71,25 +71,25 @@ public class OrderController {
     public ResponseEntity<OrderResponse> createOrder(
             @Valid @RequestBody CreateOrderRequest request) {
         
-        logger.info("Requisição para criar pedido recebida. Cliente ID: {}, {} itens", 
-                request.getCustomerId(), request.getItems().size());
+        logger.info("Requisição para criar pedido recebida. Usuário ID: {}, {} itens",
+                request.getUserId(), request.getItems().size());
         
         try {
             List<OrderUseCase.OrderItemRequest> itemRequests = orderDtoMapper.toOrderItemRequests(request);
 
-            Order order = orderUseCase.createOrder(request.getCustomerId(), itemRequests);
+            Order order = orderUseCase.createOrder(request.getUserId(), itemRequests);
             
-            if (request.getCustomerId() != null && (order.getCustomerId() == null || order.getCustomerId().getName() == null)) {
-                logger.debug("Cliente completo não preenchido, buscando dados do cliente ID: {}", request.getCustomerId());
+            if (request.getUserId() != null && (order.getUserId() == null || order.getUserId().getName() == null)) {
+                logger.debug("User completo não preenchido, buscando dados do cliente ID: {}", request.getUserId());
                 
-                if (order.getCustomerId() == null) {
-                    order.setCustomerId(Customer.builder().id(request.getCustomerId()).build());
+                if (order.getUserId() == null) {
+                    order.setUserId(User.builder().id(request.getUserId()).build());
                 }
                 
-                customerRepository.findById(request.getCustomerId())
-                    .ifPresent(customer -> {
-                        logger.debug("Cliente encontrado: {}", customer.getName());
-                        order.setCustomerId(customer);
+                userRepository.findById(request.getUserId())
+                    .ifPresent(user -> {
+                        logger.debug("Usuário encontrado: {}", user.getName());
+                        order.setUserId(user.getId());
                     });
             }
             
@@ -127,7 +127,7 @@ public class OrderController {
         if (status != null) {
             orders = orderUseCase.findOrdersByStatus(status);
         } else {
-            orders = orderUseCase.findOrdersByStatus(OrderStatus.PENDING);
+            orders = orderUseCase.findOrdersByStatus(OrderStatus.RECEIVED);
         }
         
         List<OrderResponse> response = orderDtoMapper.toResponseList(orders);
