@@ -42,7 +42,7 @@ public class OrderDiscountService {
      */
     public void applyDiscount(Order order) {
 
-        var user = userRepository.findById(order.getCustomerId());
+        var user = userRepository.findById(order.getUserId());
 
         if (user.isEmpty()) {
             throw new UserNotFoundException("Cliente do pedido não encontrado");

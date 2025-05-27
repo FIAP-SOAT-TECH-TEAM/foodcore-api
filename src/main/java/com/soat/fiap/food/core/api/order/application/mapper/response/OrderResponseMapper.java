@@ -25,7 +25,7 @@ public interface OrderResponseMapper {
     @Mapping(source = "orderNumber", target = "orderNumber")
     @Mapping(source = "orderStatus", target = "status")
     @Mapping(source = "orderStatus", target = "statusDescription", qualifiedByName = "mapStatusToDescription")
-    @Mapping(source = "customerId", target = "customerId")
+    @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "totalAmount")
     @Mapping(source = "orderItems", target = "items")
     @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")

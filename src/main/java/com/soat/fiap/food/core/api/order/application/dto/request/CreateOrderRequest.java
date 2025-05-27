@@ -17,10 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @Schema(description = "Requisição para criação de um novo pedido")
 public class CreateOrderRequest {
-    
+
     @Schema(description = "ID do cliente (opcional)", example = "1")
-    private Long customerId;
-    
+    private Long userId;
+
     @NotEmpty(message = "A lista de itens não pode estar vazia")
     @Valid
     @Schema(description = "Lista de itens do pedido", required = true)

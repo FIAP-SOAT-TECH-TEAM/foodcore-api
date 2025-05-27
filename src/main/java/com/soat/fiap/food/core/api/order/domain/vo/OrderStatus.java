@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 public enum OrderStatus {
     RECEIVED("Recebido"),
-    WAITING_PAYMENT ("Aguardando Pagamento"),
     PREPARING("Em Preparação"),
     READY("Pronto"),
     COMPLETED("Finalizado"),

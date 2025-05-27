@@ -23,8 +23,8 @@ public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id")
-    private Long customerId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
