@@ -5,11 +5,19 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 CREATE INDEX IF NOT EXISTS idx_users_active ON users(active);
 
---changeset auth:02-user-indexes runAlways:true
-CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_roles_role_id ON user_roles(role_id);
+-- Garante CPF único quando document NÃO for NULL
+CREATE UNIQUE INDEX IF NOT EXISTS ux_users_document ON users(document)
+    WHERE document IS NOT NULL;
 
---changeset auth:03-user-indexes runAlways:true
+-- Garante email único quando email NÃO for NULL
+CREATE UNIQUE INDEX IF NOT EXISTS ux_users_email ON users(email)
+    WHERE email IS NOT NULL;
+
+-- Garante username único quando username NÃO for NULL
+CREATE UNIQUE INDEX IF NOT EXISTS ux_users_username ON users(username)
+    WHERE username IS NOT NULL;
+
+--changeset auth:02-user-indexes runAlways:true
 CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);
 CREATE INDEX IF NOT EXISTS idx_refresh_tokens_active ON refresh_tokens(active);
 CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token);

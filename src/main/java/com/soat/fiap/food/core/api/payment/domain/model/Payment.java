@@ -15,7 +15,7 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 @Data
 public class Payment {
     private Long id;
-    private Long customerId;
+    private Long userId;
     private PaymentMethod type;
     private LocalDateTime expiresIn;
     private String tid;
@@ -27,7 +27,7 @@ public class Payment {
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
      *
-     * @param customerId ID do cliente que realizou o pedido
+     * @param userId ID do usuário que realizou o pedido
      * @param type Tipo do método de pagamento
      * @param expiresIn Data e hora de expiração do pagamento
      * @param tid Identificador da transação (TID)
@@ -39,22 +39,22 @@ public class Payment {
      * 
      */
     public Payment(
-            Long customerId,
+            Long userId,
             PaymentMethod type,
             LocalDateTime expiresIn,
             String tid,
             BigDecimal amount,
-            String qrCode,
+            String qrCodeUrl,
             String observations) {
 
         validate(type, expiresIn, tid, amount);
 
-        this.customerId = customerId;
+        this.userId = userId;
         this.type = type;
         this.expiresIn = expiresIn;
         this.tid = tid;
         this.amount = amount;
-        this.qrCode = new QrCode(qrCode);
+        this.qrCode = new QrCode(qrCodeUrl);
         this.observations = observations;
     }
 

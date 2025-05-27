@@ -11,8 +11,8 @@ docker/ @soat-fiap/tech-leads
 # Módulo de produtos
 /src/main/java/com/soat/fiap/food/core/api/product/ @soat-fiap/product-team
 
-# Módulo de clientes
-/src/main/java/com/soat/fiap/food/core/api/customer/ @soat-fiap/customer-team
+# Módulo de usuários
+/src/main/java/com/soat/fiap/food/core/api/user/ @soat-fiap/user-team
 
 # Módulo de pedidos
 /src/main/java/com/soat/fiap/food/core/api/order/ @soat-fiap/order-team

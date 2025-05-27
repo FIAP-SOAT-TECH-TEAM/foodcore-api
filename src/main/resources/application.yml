@@ -68,4 +68,9 @@ server:
 app:
   cdn:
     base-url: http://localhost:8082
-    storage-directory: ${user.home}/cdn-storage 
+    storage-directory: ${user.home}/cdn-storage
+
+#JWT Configuration
+jwt:
+  secret_key: "${JWT_SECRET:UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==}"
+  expiration: 3600

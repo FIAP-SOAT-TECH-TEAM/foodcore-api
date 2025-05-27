@@ -1,13 +1,13 @@
 /**
- * Módulo de Cliente - Gerencia o cadastro e autenticação de clientes.
+ * Módulo de Usuário - Gerencia o cadastro e autenticação de clientes.
  * 
  * Responsabilidades:
- * - Cadastro e gestão de clientes
+ * - Cadastro e gestão de usuários
  * - Autenticação e autorização
  * - Gestão de preferências e histórico
  */
 @ApplicationModule(
-    displayName = "Customer Module",
+    displayName = "User Module",
     allowedDependencies = {
         "com.soat.fiap.food.core.api.shared"
     }
