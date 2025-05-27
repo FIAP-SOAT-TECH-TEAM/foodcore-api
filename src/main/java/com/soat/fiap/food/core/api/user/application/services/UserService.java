@@ -6,7 +6,7 @@ import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import com.soat.fiap.food.core.api.shared.service.JwtService;
 import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
-import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import com.soat.fiap.food.core.api.user.domain.model.Role;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,7 +43,7 @@ public class UserService implements UserUseCase {
             User guestUser = userRepository.findByRoleId((long) RoleType.GUEST.getId())
                     .orElseThrow(() -> new RuntimeException("Usuário GUEST não encontrado no banco."));
             String token = jwtService.generateToken(guestUser);
-            guestUser.setJwtToken(token);
+            guestUser.setToken(token);
             return guestUser;
         }
 
@@ -54,7 +54,7 @@ public class UserService implements UserUseCase {
             if (existingByDocument.isPresent()) {
                 User existingUser = existingByDocument.get();
                 String token = jwtService.generateToken(existingUser);
-                existingUser.setJwtToken(token);
+                existingUser.setToken(token);
                 return existingUser;
             }
         }
@@ -64,7 +64,7 @@ public class UserService implements UserUseCase {
             if (existingByEmail.isPresent()) {
                 User existingUser = existingByEmail.get();
                 String token = jwtService.generateToken(existingUser);
-                existingUser.setJwtToken(token);
+                existingUser.setToken(token);
                 return existingUser;
             }
         }
@@ -78,7 +78,7 @@ public class UserService implements UserUseCase {
         user.activate();
         User saved = userRepository.save(user);
         String token = jwtService.generateToken(saved);
-        saved.setJwtToken(token);
+        saved.setToken(token);
         logger.debug("Usuário criado com sucesso. ID: {}", saved.getId());
         return saved;
     }
@@ -161,8 +161,6 @@ public class UserService implements UserUseCase {
     @Override
     @Transactional(readOnly = true)
     public User login(String email, String rawPassword) {
-        logger.debug("Tentando autenticar usuário com email: {}", email);
-
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
@@ -178,7 +176,7 @@ public class UserService implements UserUseCase {
         }
 
         String token = jwtService.generateToken(user);
-        user.setJwtToken(token);
+        user.setToken(token);
 
         logger.debug("Usuário autenticado com sucesso. ID: {}", user.getId());
         return user;

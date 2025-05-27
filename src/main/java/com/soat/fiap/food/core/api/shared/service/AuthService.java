@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.service;
 
-import com.soat.fiap.food.core.api.user.application.ports.out.UserRepository;
+import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 

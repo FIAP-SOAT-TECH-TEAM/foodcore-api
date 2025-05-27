@@ -26,7 +26,7 @@ import java.util.List;
  * Controlador REST para gerenciamento de usuários
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @Tag(name = "Usuários", description = "API para gerenciamento de usuários")
 public class UserController {
 
@@ -38,8 +38,8 @@ public class UserController {
         this.userDtoMapper = userDtoMapper;
     }
     /**
-     * Lista todos os clientes
-     * @return Lista de clientes
+     * Lista todos os usuários
+     * @return Lista de usuários
      */
     @GetMapping
     @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
