@@ -1,21 +1,14 @@
-//package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository;
-//
-//import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
-//import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-//import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-//import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity.PaymentEntity;
-//import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentEntityMapper;
-//import org.springframework.stereotype.Component;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-///**
-// * Adaptador que implementa a interface do repositório de pagamentos
-// * Faz a ponte entre o domínio e a infraestrutura de persistência
-// */
-//@Component
-//public class PaymentRepositoryAdapter implements PaymentRepository {
+package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.repository;
+
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import org.springframework.stereotype.Component;
+
+/**
+ * Adaptador que implementa a interface do repositório de pagamentos
+ * Faz a ponte entre o domínio e a infraestrutura de persistência
+ */
+@Component
+public class PaymentRepositoryAdapter implements PaymentRepository {
 //
 //    private final SpringDataPaymentRepository repository;
 //    private final PaymentEntityMapper mapper;
@@ -55,4 +48,4 @@
 //        List<PaymentEntity> entities = repository.findByStatus(status);
 //        return mapper.toDomainList(entities);
 //    }
-//}
+}

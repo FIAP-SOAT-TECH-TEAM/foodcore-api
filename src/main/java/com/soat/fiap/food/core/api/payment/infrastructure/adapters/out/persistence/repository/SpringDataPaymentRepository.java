@@ -13,19 +13,19 @@ import java.util.Optional;
  */
 @Repository
 public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity, Long> {
-    
-    /**
-     * Busca uma entidade de pagamento pelo ID externo
-     */
-    Optional<PaymentEntity> findByExternalId(String externalId);
-    
-    /**
-     * Busca uma entidade de pagamento pelo ID do pedido
-     */
-    Optional<PaymentEntity> findByOrderId(Long orderId);
-    
-    /**
-     * Lista todas as entidades de pagamento com determinado status
-     */
-    List<PaymentEntity> findByStatus(OrderPaymentStatus status);
+//
+//    /**
+//     * Busca uma entidade de pagamento pelo ID externo
+//     */
+//    Optional<PaymentEntity> findByExternalId(String externalId);
+//
+//    /**
+//     * Busca uma entidade de pagamento pelo ID do pedido
+//     */
+//    Optional<PaymentEntity> findByOrderId(Long orderId);
+//
+//    /**
+//     * Lista todas as entidades de pagamento com determinado status
+//     */
+//    List<PaymentEntity> findByStatus(OrderPaymentStatus status);
 } 

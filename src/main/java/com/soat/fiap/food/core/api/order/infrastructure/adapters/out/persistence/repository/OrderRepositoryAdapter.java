@@ -40,8 +40,8 @@ public class OrderRepositoryAdapter implements OrderRepository {
     }
 
     @Override
-    public List<Order> findByStatus(OrderStatus status) {
-        List<OrderEntity> orderEntities = springDataOrderRepository.findByStatus(status);
+    public List<Order> findByOrderStatus(OrderStatus status) {
+        List<OrderEntity> orderEntities = springDataOrderRepository.findByOrderStatus(status);
         return orderEntityMapper.toDomainList(orderEntities);
     }
 

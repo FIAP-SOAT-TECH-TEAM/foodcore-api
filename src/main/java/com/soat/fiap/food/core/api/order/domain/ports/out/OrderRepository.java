@@ -30,7 +30,7 @@ public interface OrderRepository {
      * @param status Status dos pedidos
      * @return Lista de pedidos com o status informado
      */
-    List<Order> findByStatus(OrderStatus status);
+    List<Order> findByOrderStatus(OrderStatus status);
 
     /**
      * Busca pedidos de um cliente específico

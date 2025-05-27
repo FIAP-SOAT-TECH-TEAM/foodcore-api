@@ -1,27 +1,27 @@
-//package com.soat.fiap.food.core.api.payment.application.services;
-//
-//import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-//import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-//import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
-//import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-//import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
-//import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.context.ApplicationEventPublisher;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDateTime;
-//import java.util.UUID;
-//
-///**
-// * Implementação do caso de uso de pagamento
-// */
-//@Service
-//@Slf4j
-//public class PaymentService implements PaymentUseCase {
-//
+package com.soat.fiap.food.core.api.payment.application.services;
+
+import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+/**
+ * Implementação do caso de uso de pagamento
+ */
+@Service
+@Slf4j
+public class PaymentService implements PaymentUseCase {
+
 //    private final PaymentRepository paymentRepository;
 //    private final ApplicationEventPublisher eventPublisher;
 //
@@ -107,4 +107,4 @@
 //            );
 //        }
 //    }
-//}
+}

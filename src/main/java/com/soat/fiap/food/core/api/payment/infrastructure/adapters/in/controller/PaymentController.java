@@ -1,24 +1,24 @@
-//package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
-//
-//import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-//import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-//import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-//import com.soat.fiap.food.core.api.payment.application.dto.request.ProcessPaymentRequest;
-//import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentResponse;
-//import jakarta.validation.Valid;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-///**
-// * Controlador REST para pagamentos
-// */
-//@RestController
-//@RequestMapping("/api/orders/{orderId}/payments")
-//@Slf4j
-//public class PaymentController {
-//
+package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
+
+import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.application.dto.request.ProcessPaymentRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentResponse;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * Controlador REST para pagamentos
+ */
+@RestController
+@RequestMapping("/api/orders/{orderId}/payments")
+@Slf4j
+public class PaymentController {
+
 //    private final PaymentUseCase paymentUseCase;
 //    private final PaymentRepository paymentRepository;
 //
@@ -108,4 +108,4 @@
 //                .processedAt(payment.getProcessedAt())
 //                .build();
 //    }
-//}
+}

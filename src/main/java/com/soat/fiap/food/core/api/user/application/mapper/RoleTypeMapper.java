@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.shared.mapper;
+package com.soat.fiap.food.core.api.user.application.mapper;
 
 import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import org.mapstruct.Mapper;

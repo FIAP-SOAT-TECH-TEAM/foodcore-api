@@ -1,8 +1,7 @@
 package com.soat.fiap.food.core.api.user.mapper;
 
 import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
-import com.soat.fiap.food.core.api.shared.mapper.RoleTypeMapper;
-import com.soat.fiap.food.core.api.user.domain.model.Role;
+import com.soat.fiap.food.core.api.user.application.mapper.RoleTypeMapper;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;

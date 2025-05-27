@@ -18,7 +18,7 @@ public interface SpringDataCatalogRepository extends JpaRepository<CatalogEntity
     boolean existsByNameAndIdNot(String name, Long id);
     @Query("SELECT COUNT(c) > 0 FROM CatalogEntity c JOIN c.categories cat WHERE c.id = :catalogId")
     boolean existsCategoryByCatalogId(@Param("catalogId") Long catalogId);
-    @Query("SELECT * FROM CatalogEntity c JOIN c.categories cat JOIN cat.products p WHERE p.id = :productId")
+    @Query("SELECT c FROM CatalogEntity c JOIN c.categories cat JOIN cat.products p WHERE p.id = :productId")
     Optional<CatalogEntity> findByProductId(@Param("productId") Long productId);
 
 } 

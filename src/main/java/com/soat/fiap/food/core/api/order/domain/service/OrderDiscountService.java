@@ -5,6 +5,7 @@ import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.user.domain.exceptions.UserNotFoundException;
 import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import lombok.Data;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  * Serviço responsável pela aplicação de descontos em pedidos com base no tempo de cadastro do usuário.
  */
 @Data
+@Service
 public class OrderDiscountService {
 
     /**

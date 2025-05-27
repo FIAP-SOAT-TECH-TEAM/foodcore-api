@@ -5,12 +5,16 @@ import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+import lombok.Data;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Serviço responsável pela validação de produtos associados aos itens de uma ordem.
  */
+@Data
+@Service
 public class OrderProductService {
 
     private final CatalogRepository catalogRepository;
