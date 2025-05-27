@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/users/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN")
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
-                .anyRequest().authenticated()
-                //.anyRequest().permitAll()
+                //.anyRequest().authenticated()
+                .anyRequest().permitAll()
             ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                 
         return http.build();

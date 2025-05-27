@@ -35,8 +35,8 @@ public class Order {
     private BigDecimal amount;
     private AuditInfo auditInfo = new AuditInfo();
 
-    private List<OrderItem> orderItems;
-    private List<OrderPayment> orderPayments;
+    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderPayment> orderPayments = new ArrayList<>();
 
     /**
      * Construtor que cria uma nova instância de pedido com os dados fornecidos.
@@ -44,7 +44,7 @@ public class Order {
      * @param userId   ID do cliente que realizou o pedido
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se userId, orderNumber, orderStatus ou amount forem nulos
-     * @throws IllegalArgumentException se orderItems for vazio ou se o valor calculado do pedido for menor ou igual a zero
+     * @throws OrderException se orderItems for vazio ou se o valor calculado do pedido for menor ou igual a zero
      */
     public Order(
             Long userId,
@@ -64,7 +64,7 @@ public class Order {
      * @param userId   ID do cliente
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se qualquer parâmetro obrigatório for nulo
-     * @throws IllegalArgumentException se a lista de itens estiver vazia ou se o valor for menor ou igual a zero
+     * @throws OrderException se a lista de itens estiver vazia
      */
     private void validate(
             Long userId,
@@ -73,7 +73,9 @@ public class Order {
         Objects.requireNonNull(userId, "O ID do cliente não pode ser nulo");
         Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
 
-        Validate.notEmpty(orderItems, "A ordem deve conter itens");
+        if (orderItems.isEmpty()) {
+            throw new OrderException("A ordem deve conter itens");
+        }
     }
 
     /**
@@ -115,7 +117,8 @@ public class Order {
      */
     public void addItem(OrderItem item) {
         Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
-        orderItems = (orderItems == null) ? new ArrayList<>() : orderItems;
+
+        item.setOrder(this);
         orderItems.add(item);
         calculateTotalAmount();
     }

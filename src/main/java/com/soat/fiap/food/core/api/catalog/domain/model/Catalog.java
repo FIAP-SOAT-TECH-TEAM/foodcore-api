@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -313,7 +314,7 @@ public class Catalog {
     /**
      * Atualiza o campo updatedAt com o horário atual.
      *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
      */
     public void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());

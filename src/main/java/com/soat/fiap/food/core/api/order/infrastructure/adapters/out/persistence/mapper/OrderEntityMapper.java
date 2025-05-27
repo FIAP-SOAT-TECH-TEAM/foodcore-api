@@ -7,6 +7,7 @@ import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
         OrderNumberMapper .class
 })
 public interface OrderEntityMapper {
-
+    @Mapping(source = "orderItems", target = "orderItems")
     Order toDomain(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
     List<Order> toDomainList(List<OrderEntity> entities, @Context CycleAvoidingMappingContext context);

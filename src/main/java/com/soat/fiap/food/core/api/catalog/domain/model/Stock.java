@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.StockException;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +62,7 @@ public class Stock {
     /**
      * Atualiza o campo updatedAt com o horário atual.
      *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
      */
     void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());

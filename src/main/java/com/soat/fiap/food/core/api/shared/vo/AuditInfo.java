@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.shared.vo;
 
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class AuditInfo {
      * 
      * @param updatedAt LocalDateTime a ser atualizado
      * @throws NullPointerException  se o updatedAt for nulo
-     * @throws IllegalStateException se o updatedAt for menor ou igual a createdAt
+     * @throws BusinessException se o updatedAt for menor ou igual a createdAt
      */
     public void setUpdatedAt(LocalDateTime updatedAt) {
         validate(updatedAt);
@@ -32,13 +33,13 @@ public class AuditInfo {
      * 
      * @param updatedAt data e hora da última atualização
      * @throws NullPointerException  se o updatedAt for nulo
-     * @throws IllegalStateException se o updatedAt for menor ou igual a createdAt
+     * @throws BusinessException se o updatedAt for menor ou igual a createdAt
      */
     private void validate(LocalDateTime updatedAt) {
         Objects.requireNonNull(updatedAt, "UpdatedAt não pode ser nulo");
 
         if (updatedAt.isBefore(createdAt) || updatedAt.isEqual(createdAt)) {
-            throw new IllegalArgumentException("UpdatedAt não pode ser menor ou igual a CreatedAt");
+            throw new BusinessException("UpdatedAt não pode ser menor ou igual a CreatedAt");
         }
     }
 }

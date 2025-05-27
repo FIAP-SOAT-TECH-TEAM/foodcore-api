@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
 import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public class OrderPayment {
     /**
      * Atualiza o campo updatedAt com o horário atual.
      *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
      */
     void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
