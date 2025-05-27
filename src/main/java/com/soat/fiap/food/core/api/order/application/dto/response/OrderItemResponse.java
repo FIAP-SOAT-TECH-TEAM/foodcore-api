@@ -34,6 +34,9 @@ public class OrderItemResponse {
     @Schema(description = "Subtotal do item", example = "51.80")
     private BigDecimal subtotal;
 
+    @Schema(description = "Observações do item", example = "Sem tomate")
+    private String observations;
+
     @Schema(description = "Data de criação", example = "2023-06-15T14:30:15")
     private LocalDateTime createdAt;
 

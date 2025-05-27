@@ -30,7 +30,7 @@ public class Order {
 
     private Long id;
     private Long userId;
-    private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), ThreadLocalRandom.current().nextInt(1, 6));
+    private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), System.identityHashCode(this));
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
     private AuditInfo auditInfo = new AuditInfo();

@@ -2,13 +2,11 @@ package com.soat.fiap.food.core.api.order.application.mapper.response;
 
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderItemResponse;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,6 +16,9 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {AuditInfoMapper.class})
 public interface OrderItemResponseMapper {
 
+    @Mapping(target = "quantity", source = "orderItemPrice", qualifiedByName = "mapQuantity")
+    @Mapping(target = "unitPrice", source = "orderItemPrice", qualifiedByName = "mapUnitPrice")
+    @Mapping(target = "subtotal", source = "orderItemPrice", qualifiedByName = "mapSubtotal")
     @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
     @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     OrderItemResponse toResponse(OrderItem orderItem, @Context CycleAvoidingMappingContext context);
@@ -34,5 +35,20 @@ public interface OrderItemResponseMapper {
     @DoIgnore
     default List<OrderItemResponse> toResponseList(List<OrderItem> orderItems) {
         return toResponseList(orderItems, new CycleAvoidingMappingContext());
+    }
+
+    @Named("mapQuantity")
+    static Integer mapQuantity(OrderItemPrice price) {
+        return price != null ? price.quantity() : null;
+    }
+
+    @Named("mapUnitPrice")
+    static java.math.BigDecimal mapUnitPrice(OrderItemPrice price) {
+        return price != null ? price.unitPrice() : null;
+    }
+
+    @Named("mapSubtotal")
+    static java.math.BigDecimal mapSubtotal(OrderItemPrice price) {
+        return price != null ? price.getSubTotal() : null;
     }
 }

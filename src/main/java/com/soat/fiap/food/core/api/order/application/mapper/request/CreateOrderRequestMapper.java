@@ -18,5 +18,11 @@ public interface CreateOrderRequestMapper {
      * @return instância da entidade {@link Order}.
      */
     @Mapping(target = "orderItems", source = "items")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "auditInfo", ignore = true)
+    @Mapping(target = "orderStatus", ignore = true)
+    @Mapping(target = "orderNumber", ignore = true)
+    @Mapping(target = "amount", ignore = true)
+    @Mapping(target = "orderPayments", ignore = true)
     Order toDomain(CreateOrderRequest request);
 }

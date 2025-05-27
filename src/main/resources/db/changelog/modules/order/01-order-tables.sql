@@ -4,7 +4,7 @@
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     user_id INT,
-    order_number VARCHAR(20) UNIQUE NOT NULL,
+    order_number VARCHAR(255) UNIQUE NOT NULL,
     status order_status_enum DEFAULT 'RECEIVED' NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

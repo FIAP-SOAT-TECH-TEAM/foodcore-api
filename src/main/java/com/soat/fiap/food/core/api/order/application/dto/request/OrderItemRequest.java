@@ -35,5 +35,5 @@ public class OrderItemRequest {
     private BigDecimal unitPrice;
 
     @Schema(description = "Observações adicionais sobre o item", example = "Sem cebola")
-    private String observations;
+    private String observations = "";
 }

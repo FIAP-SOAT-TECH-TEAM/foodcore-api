@@ -20,6 +20,9 @@ public interface OrderItemRequestMapper {
      * @return instância da entidade {@link OrderItem}.
      */
     @Mapping(target = "orderItemPrice", source = "dto", qualifiedByName = "toOrderItemPrice")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "order", ignore = true)
+    @Mapping(target = "auditInfo", ignore = true)
     OrderItem toDomain(OrderItemRequest dto);
 
     /**

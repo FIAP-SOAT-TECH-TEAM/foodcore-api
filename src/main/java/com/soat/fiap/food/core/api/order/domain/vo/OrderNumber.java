@@ -20,7 +20,7 @@ public record OrderNumber(int year, int sequential) implements Serializable {
      * @param sequential número sequencial com até 5 dígitos
      */
     public OrderNumber {
-        validate(year, sequential);
+        validate(year);
     }
 
     /**
@@ -36,12 +36,10 @@ public record OrderNumber(int year, int sequential) implements Serializable {
      * Validação centralizada.
      *
      * @param year        Ano com 4 dígitos
-     * @param sequential  Número sequencial com até 5 dígitos
      * @throws IllegalArgumentException se o ano não tiver 4 dígitos
      * @throws IllegalArgumentException se o número sequencial for menor que 0 ou maior que 99999
      */
-    private void validate(int year, int sequential) {
+    private void validate(int year) {
         Validate.isTrue(year >= 1000 && year <= 9999, "Ano deve ter 4 dígitos");
-        Validate.isTrue(sequential >= 0 && sequential <= 99999, "Sequencial deve ter até 5 dígitos");
     }
 }
