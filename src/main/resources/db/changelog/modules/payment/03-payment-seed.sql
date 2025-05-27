@@ -4,7 +4,7 @@
 -- Pagamentos para ambiente de desenvolvimento
 
 -- Pagamento 1 (Cartão de Crédito) - João Silva
-INSERT INTO payments (customer_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (user_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
     u.id,
     'CREDIT_CARD',
@@ -16,13 +16,13 @@ SELECT
     NOW() - interval '2 hour',
     NOW() - interval '1 hour'
 FROM users u
-WHERE u.email = 'admin@fastfood.com'
+WHERE u.email = 'joao@email.com'
   AND NOT EXISTS (
       SELECT 1 FROM payments p WHERE p.tid = 'TID-000001'
   );
 
 -- Pagamento 2 (Débito) - Maria Oliveira
-INSERT INTO payments (customer_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (user_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
     u.id,
     'DEBIT_CARD',
@@ -34,7 +34,7 @@ SELECT
     NOW() - interval '30 minute',
     NOW() - interval '25 minute'
 FROM users u
-WHERE u.email = 'admin@fastfood.com'
+WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
       SELECT 1 FROM payments p WHERE p.tid = 'TID-000002'
   );

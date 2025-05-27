@@ -4,9 +4,9 @@
 -- Os dados de pedidos são apenas para ambiente de desenvolvimento
 
 -- Pedido 1
-INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
-    (SELECT id FROM users WHERE email = 'admin@fastfood.com' LIMIT 1),
+    (SELECT id FROM users WHERE email = 'maria@email.com' LIMIT 1),
     'ORD-00000001',
     'COMPLETED',
     32.80,
@@ -18,11 +18,12 @@ WHERE NOT EXISTS (
 
 -- Itens do pedido 1
 -- X-Burger
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
     (SELECT id FROM products WHERE name = 'X-Burger'),
     1,
+    22.90,
     22.90,
     'Sem cebola',
     now() - interval '2 hour',
@@ -34,11 +35,12 @@ WHERE NOT EXISTS (
 );
 
 -- Refrigerante Lata
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
     (SELECT id FROM products WHERE name = 'Refrigerante Lata'),
     1,
+    6.90,
     6.90,
     null,
     now() - interval '2 hour',
@@ -64,9 +66,9 @@ WHERE NOT EXISTS (
 );
 
 -- Pedido 2
-INSERT INTO orders (customer_id, order_number, status, amount, created_at, updated_at)
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
-    (SELECT id FROM users WHERE email = 'admin@fastfood.com'),
+    (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-00000002',
     'CANCELLED',
     79.70,
@@ -77,12 +79,13 @@ WHERE NOT EXISTS (
 );
 
 -- X-Salada
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
     (SELECT id FROM products WHERE name = 'X-Salada'),
     2,
     20.90,
+    41.80,
     null,
     now() - interval '30 minute',
     now() - interval '30 minute'
@@ -93,11 +96,12 @@ WHERE NOT EXISTS (
 );
 
 -- X-Bacon
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
     (SELECT id FROM products WHERE name = 'X-Bacon'),
     1,
+    24.90,
     24.90,
     null,
     now() - interval '30 minute',
@@ -109,12 +113,13 @@ WHERE NOT EXISTS (
 );
 
 -- Refrigerante Lata
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
     (SELECT id FROM products WHERE name = 'Refrigerante Lata'),
     2,
     6.90,
+    13.80,
     null,
     now() - interval '30 minute',
     now() - interval '30 minute'
@@ -151,11 +156,12 @@ WHERE NOT EXISTS (
 );
 
 -- Água Mineral
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
     (SELECT id FROM products WHERE name = 'Água Mineral'),
     1,
+    4.90,
     4.90,
     null,
     now() - interval '5 minute',
@@ -167,11 +173,12 @@ WHERE NOT EXISTS (
 );
 
 -- Batata Frita G
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
     (SELECT id FROM products WHERE name = 'Batata Frita G'),
     1,
+    15.00,
     15.00,
     null,
     now() - interval '5 minute',
@@ -209,11 +216,12 @@ WHERE NOT EXISTS (
 );
 
 -- Água Mineral (único item)
-INSERT INTO order_items (order_id, product_id, quantity, unit_price, observations, created_at, updated_at)
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, observations, created_at, updated_at)
 SELECT
     (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
     (SELECT id FROM products WHERE name = 'Água Mineral'),
     1,
+    4.90,
     4.90,
     null,
     now() - interval '3 minute',
