@@ -56,6 +56,12 @@ public class UserRepositoryAdapter implements UserRepository {
                 .map(userEntityMapper::toDomain);
     }
 
+    public Optional<User> findByRoleId(Long roleId) {
+        return springDataUserRepository.findByRoleId(roleId)
+                .map(userEntityMapper::toDomain); // converte de entidade para domínio
+    }
+
+
     @Override
     public List<User> findAll() {
         var userEntities = springDataUserRepository.findAll();

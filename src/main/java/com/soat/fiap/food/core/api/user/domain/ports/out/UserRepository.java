@@ -44,6 +44,14 @@ public interface UserRepository {
      * @return Optional contendo o usuário ou vazio se não encontrado
      */
     Optional<User> findByUsername(String username);
+
+    /**
+     * Busca um usuário por sua role
+     * @param roleId Role do usuário
+     * @return Optional contendo o usuário ou vazio se não encontrado
+     */
+
+    Optional<User> findByRoleId(Long roleId);
     
     /**
      * Lista todos os usuário
