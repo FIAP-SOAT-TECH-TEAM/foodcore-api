@@ -125,4 +125,9 @@ public class CatalogRepositoryAdapter implements CatalogRepository {
     public void delete(Long id) {
         springDataCatalogRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Catalog> findByProductId(Long productId) {
+        return springDataCatalogRepository.findByProductId(productId).map(catalogEntityMapper::toDomain);
+    }
 }

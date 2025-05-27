@@ -56,4 +56,13 @@ public class User {
 
         return numericDocument.length() == 11;
     }
+
+    /**
+     * Retorna a data de criação do usuário
+     * @return a data de criação de usuário
+     */
+    public LocalDateTime getCreatedAt() {
+        return this.auditInfo.getCreatedAt();
+    }
+
 } 

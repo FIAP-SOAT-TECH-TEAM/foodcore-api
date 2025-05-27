@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS orders (
     amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
+    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES users(id)
 );
 
 COMMENT ON TABLE orders IS 'Tabela que armazena os pedidos do sistema';
@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS order_items (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
-    subtotal DECIMAL(10, 2) NOT NULL,
     observations TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -42,7 +41,6 @@ COMMENT ON COLUMN order_items.order_id IS 'Referência ao pedido associado';
 COMMENT ON COLUMN order_items.product_id IS 'Referência ao produto vendido';
 COMMENT ON COLUMN order_items.quantity IS 'Quantidade do produto no pedido';
 COMMENT ON COLUMN order_items.unit_price IS 'Preço unitário do produto no momento da venda';
-COMMENT ON COLUMN order_items.subtotal IS 'Subtotal do item (unit_price * quantity)';
 COMMENT ON COLUMN order_items.observations IS 'Observações específicas sobre o item';
 COMMENT ON COLUMN order_items.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN order_items.updated_at IS 'Data da última atualização do registro';

@@ -75,9 +75,16 @@ public interface CatalogRepository {
     boolean existsCategoryByCatalogId(Long catalogId);
 
     /**
-     * Remove um catálogo.
+     * Verifica se um produto existe pelo id.
      *
      * @param id ID do catálogo a ser removido
      */
     void delete(Long id);
+
+    /**
+     * Retorna um catalogo pelo ID do produto
+     *
+     * @param productId ID do produto
+     */
+    Optional<Catalog> findByProductId (Long productId);
 }

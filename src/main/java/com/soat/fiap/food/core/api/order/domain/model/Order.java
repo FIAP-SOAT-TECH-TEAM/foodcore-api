@@ -9,11 +9,13 @@ import lombok.Data;
 import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Entidade de domínio que representa um pedido
@@ -28,7 +30,7 @@ public class Order {
 
     private Long id;
     private Long customerId;
-    private OrderNumber orderNumber;
+    private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), ThreadLocalRandom.current().nextInt(1, 6));
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
     private AuditInfo auditInfo = new AuditInfo();
@@ -40,22 +42,16 @@ public class Order {
      * Construtor que cria uma nova instância de pedido com os dados fornecidos.
      *
      * @param customerId   ID do cliente que realizou o pedido
-     * @param orderNumber  Número identificador do pedido
-     * @param orderStatus  Status atual do pedido
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se customerId, orderNumber, orderStatus ou amount forem nulos
      * @throws IllegalArgumentException se orderItems for vazio ou se o valor calculado do pedido for menor ou igual a zero
      */
     public Order(
             Long customerId,
-            OrderNumber orderNumber,
-            OrderStatus orderStatus,
             List<OrderItem> orderItems
     ) {
-        validate(customerId, orderNumber, orderStatus, orderItems);
+        validate(customerId, orderItems);
         this.customerId = customerId;
-        this.orderNumber = orderNumber;
-        this.orderStatus = orderStatus;
 
         for (OrderItem orderItem : orderItems) {
             addItem(orderItem);
@@ -66,21 +62,15 @@ public class Order {
      * Validação centralizada.
      *
      * @param customerId   ID do cliente
-     * @param orderNumber  Número do pedido
-     * @param orderStatus  Status do pedido
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se qualquer parâmetro obrigatório for nulo
      * @throws IllegalArgumentException se a lista de itens estiver vazia ou se o valor for menor ou igual a zero
      */
     private void validate(
             Long customerId,
-            OrderNumber orderNumber,
-            OrderStatus orderStatus,
             List<OrderItem> orderItems
     ) {
         Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
-        Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
-        Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
         Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
 
         Validate.notEmpty(orderItems, "A ordem deve conter itens");
@@ -261,5 +251,22 @@ public class Order {
         return orderPayments
                 .stream()
                 .anyMatch(OrderPayment::isApproved);
+    }
+
+
+    /**
+     * Aplica um desconto percentual ao valor do pagamento.
+     *
+     * @param percent o percentual de desconto a ser aplicado (1 a 95)
+     * @throws OrderException se percent não estiver entre 1 e 95
+     */
+    public void applyDiscount(int percent) {
+        if (percent < 1 || percent > 95) {
+            throw new OrderException("O percentual de desconto deve estar entre 1 e 95");
+        }
+
+        BigDecimal percentage = BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(95));
+        BigDecimal discount = this.amount.multiply(percentage);
+        this.amount = this.amount.subtract(discount);
     }
 }

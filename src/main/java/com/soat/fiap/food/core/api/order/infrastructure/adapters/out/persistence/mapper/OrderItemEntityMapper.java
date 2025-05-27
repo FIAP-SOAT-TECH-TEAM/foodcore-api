@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
+import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.shared.OrderNumberMapper;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Mapper que converte entre a entidade de domínio OrderItem e a entidade JPA OrderItemEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {OrderNumberMapper.class})
 public interface OrderItemEntityMapper {
 
     OrderItem toDomain(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);

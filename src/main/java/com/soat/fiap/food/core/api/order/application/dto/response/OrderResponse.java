@@ -36,9 +36,6 @@ public class OrderResponse {
     @Schema(description = "ID do cliente (opcional)", example = "1")
     private Long customerId;
     
-    @Schema(description = "Nome do cliente (opcional)", example = "João Silva")
-    private String customerName;
-    
     @Schema(description = "Valor total do pedido", example = "75.90")
     private BigDecimal totalAmount;
     
@@ -50,33 +47,4 @@ public class OrderResponse {
     
     @Schema(description = "Data de atualização", example = "2023-06-15T14:45:22")
     private LocalDateTime updatedAt;
-    
-    /**
-     * DTO para resposta de item de pedido
-     */
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema(description = "Item de um pedido")
-    public static class OrderItemResponse {
-        
-        @Schema(description = "ID do item", example = "1")
-        private Long id;
-        
-        @Schema(description = "ID do produto", example = "3")
-        private Long productId;
-        
-        @Schema(description = "Nome do produto", example = "X-Burger")
-        private String productName;
-        
-        @Schema(description = "Quantidade", example = "2")
-        private Integer quantity;
-        
-        @Schema(description = "Preço unitário", example = "25.90")
-        private BigDecimal unitPrice;
-        
-        @Schema(description = "Subtotal do item", example = "51.80")
-        private BigDecimal subtotal;
-    }
 } 

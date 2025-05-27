@@ -33,17 +33,6 @@ databaseChangeLog:
       file: modules/user/03-user-seed.sql
       relativeToChangelogFile: true
 
-  # Customer module
-  - include:
-      file: modules/customer/01-customer-tables.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/customer/02-customer-indexes.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/customer/03-customer-seed.sql
-      relativeToChangelogFile: true
-
   # Catalog module
   - include:
       file: modules/catalog/01-catalog-tables.sql

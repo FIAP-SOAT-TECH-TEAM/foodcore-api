@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,14 +25,8 @@ public class OrderItemEntity {
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal unitPrice;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal subtotal;
+    @Embedded
+    private OrderItemPrice orderItemPrice;
 
     @Column(columnDefinition = "TEXT")
     private String observations = "";

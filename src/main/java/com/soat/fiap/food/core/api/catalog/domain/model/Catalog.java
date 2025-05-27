@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -93,6 +94,27 @@ public class Catalog {
         var category = getCategoryById(categoryId);
         return category.getProductById(productId);
     }
+
+    /**
+     * Retorna um produto específico presente em qualquer categoria deste catálogo.
+     *
+     * @param productId o ID do produto a ser buscado
+     * @return o produto correspondente
+     * @throws ProductNotFoundException se o produto não for encontrado em nenhuma categoria
+     */
+    public Product getProductById(Long productId) {
+        var product = categories.stream()
+                .flatMap(c -> c.getProducts().stream())
+                .filter(p -> p.getId().equals(productId))
+                .findFirst();
+
+        if (product.isEmpty()) {
+            throw new ProductNotFoundException("Produto", productId);
+        }
+
+        return product.get();
+    }
+
 
     /**
      * Retorna todos os produtos dentro de uma categoria.

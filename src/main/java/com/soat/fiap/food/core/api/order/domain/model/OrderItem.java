@@ -10,8 +10,8 @@ import java.util.Objects;
 /**
  * Entidade de domínio que representa um item de pedido
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 public class OrderItem {
 
     private Long id;
@@ -74,5 +74,13 @@ public class OrderItem {
      */
     void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
+    }
+
+    /**
+     * Retorna o preço do item da ordem
+     *
+     */
+    public BigDecimal getPrice() {
+        return orderItemPrice.unitPrice();
     }
 }

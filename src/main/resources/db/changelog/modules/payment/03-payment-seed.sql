@@ -6,7 +6,7 @@
 -- Pagamento 1 (Cartão de Crédito) - João Silva
 INSERT INTO payments (customer_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
-    c.id,
+    u.id,
     'CREDIT_CARD',
     NOW() + interval '30 days',
     'TID-000001',
@@ -15,8 +15,8 @@ SELECT
     'Pagamento aprovado via cartão',
     NOW() - interval '2 hour',
     NOW() - interval '1 hour'
-FROM customers c
-WHERE c.email = 'joao@email.com'
+FROM users u
+WHERE u.email = 'admin@fastfood.com'
   AND NOT EXISTS (
       SELECT 1 FROM payments p WHERE p.tid = 'TID-000001'
   );
@@ -24,7 +24,7 @@ WHERE c.email = 'joao@email.com'
 -- Pagamento 2 (Débito) - Maria Oliveira
 INSERT INTO payments (customer_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
-    c.id,
+    u.id,
     'DEBIT_CARD',
     NOW() + interval '1 hour',
     'TID-000002',
@@ -33,8 +33,8 @@ SELECT
     'Pagamento via débito automático',
     NOW() - interval '30 minute',
     NOW() - interval '25 minute'
-FROM customers c
-WHERE c.email = 'maria@email.com'
+FROM users u
+WHERE u.email = 'admin@fastfood.com'
   AND NOT EXISTS (
       SELECT 1 FROM payments p WHERE p.tid = 'TID-000002'
   );

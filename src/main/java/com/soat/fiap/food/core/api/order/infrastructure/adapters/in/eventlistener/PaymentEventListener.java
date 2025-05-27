@@ -33,8 +33,8 @@ public class PaymentEventListener {
         log.info("Módulo Order: Recebido evento de pagamento aprovado para o pedido: {}, valor: {}",
                 event.getOrderId(), event.getAmount());
         
-        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.PREPARING);
-        
-        log.info("Pedido {} atualizado para status PREPARING após pagamento aprovado", event.getOrderId());
+//        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.PREPARING);
+//
+//        log.info("Pedido {} atualizado para status PREPARING após pagamento aprovado", event.getOrderId());
     }
 } 

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS payments (
     observations TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
+    CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES users(id)
 );
 
 COMMENT ON TABLE payments IS 'Tabela que armazena os pagamentos do sistema';

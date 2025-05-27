@@ -10,8 +10,8 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 /**
  * Entidade de domínio que representa um pagamento de um pedido
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 public class OrderPayment {
     private Long id;
     private Long orderId;

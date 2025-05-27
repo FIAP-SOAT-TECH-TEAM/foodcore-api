@@ -1,6 +1,8 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.converter.OrderNumberConverter;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,8 +25,9 @@ public class OrderEntity {
     @Column(name = "customer_id")
     private Long customerId;
 
+    @Convert(converter = OrderNumberConverter.class)
     @Column(name = "order_number", length = 20, nullable = false, unique = true)
-    private String orderNumber;
+    private OrderNumber orderNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

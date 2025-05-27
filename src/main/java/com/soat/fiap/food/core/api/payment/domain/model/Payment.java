@@ -93,20 +93,4 @@ public class Payment {
         return expiresIn.isBefore(LocalDateTime.now());
     }
 
-    /**
-     * Aplica um desconto percentual ao valor do pagamento.
-     *
-     * @param percent o percentual de desconto a ser aplicado (1 a 100)
-     * @throws PaymentException se percent não estiver entre 1 e 100
-     */
-    public void applyDiscount(int percent) {
-        if (percent < 1 || percent > 100) {
-            throw new PaymentException("O percentual de desconto deve estar entre 1 e 100");
-        }
-        
-        BigDecimal percentage = BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(100));
-        BigDecimal discount = this.amount.multiply(percentage);
-        this.amount = this.amount.subtract(discount);
-    }
-
 }

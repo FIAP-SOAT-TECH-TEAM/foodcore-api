@@ -1,0 +1,55 @@
+package com.soat.fiap.food.core.api.order.domain.service;
+
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
+import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
+import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
+
+import java.util.List;
+
+/**
+ * Serviço responsável pela validação de produtos associados aos itens de uma ordem.
+ */
+public class OrderProductService {
+
+    private final CatalogRepository catalogRepository;
+
+    /**
+     * Cria uma instância do serviço com o repositório de catálogo.
+     *
+     * @param catalogRepository o repositório de catálogos utilizado para busca de produtos
+     */
+    public OrderProductService(CatalogRepository catalogRepository) {
+        this.catalogRepository = catalogRepository;
+    }
+
+    /**
+     * Valida os produtos associados aos itens da ordem.
+     * <p>
+     * Para cada item da ordem, verifica se o produto existe no catálogo e se o preço informado
+     * no item corresponde ao preço atual do produto no catálogo.
+     *
+     * @param orderItems a lista de itens da ordem a serem validados
+     * @throws OrderException se algum produto não for encontrado no catálogo
+     * @throws OrderItemException se o preço do item da ordem não corresponder ao preço do produto
+     */
+    public void validateOrderItemProduct(List<OrderItem> orderItems) {
+
+        for (OrderItem orderItem : orderItems) {
+
+            var catalog = catalogRepository.findByProductId(orderItem.getProductId());
+
+            if (catalog.isEmpty()) {
+                throw new ProductNotFoundException("O produto do item da ordem não existe");
+            }
+
+            var productOrderItem = catalog.get().getProductById(orderItem.getProductId());
+
+            if (productOrderItem.getPrice().compareTo(orderItem.getPrice()) != 0) {
+                throw new OrderItemException("O preço unitário do item da ordem diverge do preço do produto");
+            }
+
+        }
+    }
+}
