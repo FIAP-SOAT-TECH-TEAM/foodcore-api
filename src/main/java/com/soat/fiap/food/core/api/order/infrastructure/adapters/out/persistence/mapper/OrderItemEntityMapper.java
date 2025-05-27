@@ -7,6 +7,7 @@ import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {OrderNumberMapper.class})
 public interface OrderItemEntityMapper {
 
+    @Mapping(target = "order", ignore = true)
     OrderItem toDomain(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
 
     List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);

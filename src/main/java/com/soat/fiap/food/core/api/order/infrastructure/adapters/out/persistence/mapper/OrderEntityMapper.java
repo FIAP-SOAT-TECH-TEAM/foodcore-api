@@ -20,7 +20,7 @@ import java.util.List;
         OrderNumberMapper .class
 })
 public interface OrderEntityMapper {
-    @Mapping(source = "orderItems", target = "orderItems")
+
     Order toDomain(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
     List<Order> toDomainList(List<OrderEntity> entities, @Context CycleAvoidingMappingContext context);
