@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.shared.vo;
+package com.soat.fiap.food.core.api.user.domain.vo;
 
 import lombok.Getter;
 

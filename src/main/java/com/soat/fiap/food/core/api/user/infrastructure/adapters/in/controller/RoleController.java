@@ -1,9 +1,9 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.user.application.ports.in.RoleUseCase;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.RoleRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.RoleResponse;
-import com.soat.fiap.food.core.api.user.mapper.RoleDtoMapper;
+import com.soat.fiap.food.core.api.user.application.dto.request.RoleRequest;
+import com.soat.fiap.food.core.api.user.application.dto.response.RoleResponse;
+import com.soat.fiap.food.core.api.user.application.mapper.RoleDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

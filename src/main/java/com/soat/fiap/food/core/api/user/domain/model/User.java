@@ -3,9 +3,7 @@ package com.soat.fiap.food.core.api.user.domain.model;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
-import com.soat.fiap.food.core.api.shared.vo.RoleType;
 import lombok.Data;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
-package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request;
+package com.soat.fiap.food.core.api.user.application.dto.request;
 
-import com.soat.fiap.food.core.api.shared.vo.RoleType;
+import com.soat.fiap.food.core.api.user.domain.vo.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;

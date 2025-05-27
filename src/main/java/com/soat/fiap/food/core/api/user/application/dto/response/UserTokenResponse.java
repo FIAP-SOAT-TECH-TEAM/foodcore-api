@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response;
+package com.soat.fiap.food.core.api.user.application.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

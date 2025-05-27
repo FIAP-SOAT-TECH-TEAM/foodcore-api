@@ -1,12 +1,10 @@
 package com.soat.fiap.food.core.api.catalog.domain.model;
 
-import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 

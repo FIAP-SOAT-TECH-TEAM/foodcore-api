@@ -2,10 +2,10 @@ package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.domain.model.User;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.LoginRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;
-import com.soat.fiap.food.core.api.user.mapper.UserDtoMapper;
+import com.soat.fiap.food.core.api.user.application.dto.request.LoginRequest;
+import com.soat.fiap.food.core.api.user.application.dto.request.UserRequest;
+import com.soat.fiap.food.core.api.user.application.dto.response.UserResponse;
+import com.soat.fiap.food.core.api.user.application.mapper.UserDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

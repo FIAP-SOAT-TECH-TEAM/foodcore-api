@@ -1,9 +1,9 @@
-package com.soat.fiap.food.core.api.user.mapper;
+package com.soat.fiap.food.core.api.user.application.mapper;
 
 import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.user.domain.model.Role;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.RoleRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.RoleResponse;
+import com.soat.fiap.food.core.api.user.application.dto.request.RoleRequest;
+import com.soat.fiap.food.core.api.user.application.dto.response.RoleResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request;
+package com.soat.fiap.food.core.api.user.application.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
