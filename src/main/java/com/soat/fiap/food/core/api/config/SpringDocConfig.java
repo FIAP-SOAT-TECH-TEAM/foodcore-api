@@ -74,7 +74,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
-                .group("clientes")
+                .group("usuários")
                 .packagesToScan("com.soat.fiap.food.core.api.user")
                 .pathsToMatch("/api/users/**")
                 .build();
