@@ -33,8 +33,8 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatusEntity status;
     
-    @Column(name = "customer_id")
-    private Long customerId;
+    @Column(name = "user_id")
+    private Long userId;
     
     @Column(name = "total", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;

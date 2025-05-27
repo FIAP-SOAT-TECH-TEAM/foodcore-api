@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.LoginRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;
 import com.soat.fiap.food.core.api.user.mapper.UserDtoMapper;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controlador REST para gerenciamento de clientes
+ * Controlador REST para gerenciamento de usuários
  */
 @RestController
 @RequestMapping("/api/users")
@@ -37,15 +38,15 @@ public class UserController {
         this.userDtoMapper = userDtoMapper;
     }
     /**
-     * Lista todos os clientes
-     * @return Lista de clientes
+     * Lista todos os usuários
+     * @return Lista de usuários
      */
     @GetMapping
     @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
     @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
-    public ResponseEntity<List<UserResponse>> getAllCustomers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> users = userUseCase.getAllUsers();
         return ResponseEntity.ok(userDtoMapper.toResponseList(users));
     }
@@ -64,7 +65,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> getCustomerById(
+    public ResponseEntity<UserResponse> getUserById(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
         return userUseCase.getUserById(id)
@@ -86,7 +87,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> getCustomerByDocument(
+    public ResponseEntity<UserResponse> getUserByDocument(
             @Parameter(description = "DOCUMENT do usuário", example = "123.456.789-00", required = true)
             @PathVariable String document) {
         return userUseCase.getUserByDocument(document)
@@ -108,14 +109,37 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> createCustomer(
+    public ResponseEntity<UserResponse> createUser(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do usuário a ser criado", required = true,
                     content = @Content(schema = @Schema(implementation = UserRequest.class)))
             @Valid @RequestBody UserRequest request) {
         try {
             User user = userDtoMapper.toDomain(request);
+
             User createdUser = userUseCase.createUser(user);
             return new ResponseEntity<>(userDtoMapper.toResponse(createdUser), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Realiza o login de um usuário com email e senha")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos",
+                    content = @Content)
+    })
+    public ResponseEntity<UserResponse> login(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do login", required = true,
+                    content = @Content(schema = @Schema(implementation = LoginRequest.class)))
+            @Valid @RequestBody LoginRequest request) {
+        try {
+
+            User loggedUser = userUseCase.login(request.getEmail(), request.getPassword());
+            return new ResponseEntity<>(userDtoMapper.toResponse(loggedUser), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -136,7 +160,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<UserResponse> updateCustomer(
+    public ResponseEntity<UserResponse> updateUser(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados atualizados do usuário", required = true,
@@ -165,11 +189,11 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content)
     })
-    public ResponseEntity<Void> deleteCustomer(
+    public ResponseEntity<Void> deleteUser(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
         return userUseCase.getUserById(id)
-                .map(customer -> {
+                .map(user -> {
                     userUseCase.deleteUser(id);
                     return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
                 })

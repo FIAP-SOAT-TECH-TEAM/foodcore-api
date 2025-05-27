@@ -3,7 +3,7 @@
 --changeset order:01-order-indexes runAlways:true
 
 -- Índices para tabela de pedidos
-CREATE INDEX IF NOT EXISTS idx_orders_customer_id ON orders (customer_id);
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders (user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders (status);
 CREATE INDEX IF NOT EXISTS idx_orders_order_number ON orders (order_number);
 

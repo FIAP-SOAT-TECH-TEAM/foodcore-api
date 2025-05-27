@@ -14,11 +14,11 @@ public interface OrderUseCase {
     /**
      * Cria um novo pedido
      * 
-     * @param customerId ID do cliente (opcional)
+     * @param userId ID do usuário (opcional)
      * @param items Lista de IDs de produtos e quantidades
      * @return Pedido criado
      */
-    Order createOrder(Long customerId, List<OrderItemRequest> items);
+    Order createOrder(Long userId, List<OrderItemRequest> items);
     
     /**
      * Busca um pedido pelo ID

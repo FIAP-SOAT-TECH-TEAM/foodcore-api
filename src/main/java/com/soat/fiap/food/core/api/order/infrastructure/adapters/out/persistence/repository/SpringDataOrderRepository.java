@@ -20,9 +20,9 @@ public interface SpringDataOrderRepository extends JpaRepository<OrderEntity, Lo
     List<OrderEntity> findByStatus(OrderEntity.OrderStatusEntity status);
     
     /**
-     * Busca pedidos de um cliente específico
-     * @param customerId ID do cliente
+     * Busca pedidos de um usuário específico
+     * @param userId ID do usuário
      * @return Lista de pedidos do cliente
      */
-    List<OrderEntity> findByCustomerId(Long customerId);
+    List<OrderEntity> findByUserId(Long userId);
 } 

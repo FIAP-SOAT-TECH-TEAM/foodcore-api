@@ -38,25 +38,6 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    /**
-     * Trata erros de validação
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrors(
-            IllegalArgumentException ex, HttpServletRequest request) {
-
-        logger.error("Erro de validação: {}", ex.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
     
     /**
      * Trata erros de validação
@@ -173,11 +154,14 @@ public class GlobalExceptionHandler {
         if (mensagem != null && mensagem.contains("products_category_id_fkey")) {
             mensagem = "Não é possível excluir esta categoria porque existem produtos associados a ela";
         }
-        else if (mensagem != null && mensagem.contains("customers_document_key")) {
-            mensagem = "Já existe um cliente cadastrado com este documento/CPF";
+        else if (mensagem != null && mensagem.contains("users_document_key")) {
+            mensagem = "Já existe um usuário cadastrado com este documento/CPF";
         }
-        else if (mensagem != null && mensagem.contains("fk_order_item_product")) {
-            mensagem = "Não é possível excluir este produto pois existem pedidos associados a ele";
+        else if (mensagem != null && mensagem.contains("users_email_key")) {
+            mensagem = "Já existe um usuário cadastrado com este E-mail";
+        }
+        else if (mensagem != null && mensagem.contains("users_username_key")) {
+            mensagem = "Já existe um usuário cadastrado com este username";
         }
         else {
             mensagem = "Operação não permitida: viola regras de integridade de dados";

@@ -33,11 +33,11 @@ public class OrderResponse {
     @Schema(description = "Descrição do status do pedido", example = "Pendente")
     private String statusDescription;
     
-    @Schema(description = "ID do cliente (opcional)", example = "1")
-    private Long customerId;
+    @Schema(description = "ID do usuário (opcional)", example = "1")
+    private Long userId;
     
-    @Schema(description = "Nome do cliente (opcional)", example = "João Silva")
-    private String customerName;
+    @Schema(description = "Nome do usuário (opcional)", example = "João Silva")
+    private String userName;
     
     @Schema(description = "Valor total do pedido", example = "75.90")
     private BigDecimal totalAmount;

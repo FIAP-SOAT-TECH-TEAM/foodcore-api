@@ -27,7 +27,7 @@ import java.util.Objects;
 public class Order {
 
     private Long id;
-    private Long customerId;
+    private Long userId;
     private OrderNumber orderNumber;
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
@@ -39,21 +39,21 @@ public class Order {
     /**
      * Construtor que cria uma nova instância de pedido com os dados fornecidos.
      *
-     * @param customerId   ID do cliente que realizou o pedido
+     * @param userId   ID do usuário que realizou o pedido
      * @param orderNumber  Número identificador do pedido
      * @param orderStatus  Status atual do pedido
      * @param orderItems   Lista de itens do pedido
-     * @throws NullPointerException     se customerId, orderNumber, orderStatus ou amount forem nulos
+     * @throws NullPointerException     se userId, orderNumber, orderStatus ou amount forem nulos
      * @throws IllegalArgumentException se orderItems for vazio ou se o valor calculado do pedido for menor ou igual a zero
      */
     public Order(
-            Long customerId,
+            Long userId,
             OrderNumber orderNumber,
             OrderStatus orderStatus,
             List<OrderItem> orderItems
     ) {
-        validate(customerId, orderNumber, orderStatus, orderItems);
-        this.customerId = customerId;
+        validate(userId, orderNumber, orderStatus, orderItems);
+        this.userId = userId;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
 
@@ -65,7 +65,7 @@ public class Order {
     /**
      * Validação centralizada.
      *
-     * @param customerId   ID do cliente
+     * @param userId   ID do usuário que realizou o pedido
      * @param orderNumber  Número do pedido
      * @param orderStatus  Status do pedido
      * @param orderItems   Lista de itens do pedido
@@ -73,12 +73,12 @@ public class Order {
      * @throws IllegalArgumentException se a lista de itens estiver vazia ou se o valor for menor ou igual a zero
      */
     private void validate(
-            Long customerId,
+            Long userId,
             OrderNumber orderNumber,
             OrderStatus orderStatus,
             List<OrderItem> orderItems
     ) {
-        Objects.requireNonNull(customerId, "O ID do cliente não pode ser nulo");
+        Objects.requireNonNull(userId, "O ID do usuário não pode ser nulo");
         Objects.requireNonNull(orderNumber, "O número do pedido não pode ser nulo");
         Objects.requireNonNull(orderStatus, "O status da ordem não pode ser nulo");
         Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
@@ -87,11 +87,11 @@ public class Order {
     }
 
     /**
-     * Obtém o ID do cliente (se disponível)
-     * @return ID do cliente ou null se não houver cliente associado
+     * Obtém o ID do usuário (se disponível)
+     * @return ID do usuário ou null se não houver usuário associado
      */
-    public Long getCustomerId() {
-        return customerId != null ? customerId : null;
+    public Long getUserId() {
+        return userId != null ? userId : null;
     }
 
     /**

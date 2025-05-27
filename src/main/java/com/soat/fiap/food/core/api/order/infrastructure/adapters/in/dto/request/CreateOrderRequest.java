@@ -20,8 +20,8 @@ import java.util.List;
 @Schema(description = "Requisição para criação de um novo pedido")
 public class CreateOrderRequest {
     
-    @Schema(description = "ID do cliente (opcional)", example = "1")
-    private Long customerId;
+    @Schema(description = "ID do user (opcional)", example = "1")
+    private Long userId;
     
     @NotEmpty(message = "A lista de itens não pode estar vazia")
     @Valid

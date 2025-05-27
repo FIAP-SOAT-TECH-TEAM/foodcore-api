@@ -1,19 +1,23 @@
 package com.soat.fiap.food.core.api.user.mapper;
 
+import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
+import com.soat.fiap.food.core.api.shared.mapper.RoleTypeMapper;
+import com.soat.fiap.food.core.api.user.domain.model.Role;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
 /**
- * Mapper que converte entre DTOs e entidades de domínio para User
+ * Mapper que converte entre DTOs e entidades de domínio para usuários
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {RoleTypeMapper.class, AuditInfoMapper.class}
+)
 public interface UserDtoMapper {
     
     /**
@@ -21,6 +25,9 @@ public interface UserDtoMapper {
      * @param user Entidade de domínio
      * @return DTO de resposta
      */
+    @Mapping(source = "role.id", target = "role")
+    @Mapping(source = "auditInfo", target = "createdAt", qualifiedByName = "mapCreatedAt")
+    @Mapping(source = "auditInfo", target = "updatedAt", qualifiedByName = "mapUpdatedAt")
     UserResponse toResponse(User user);
     
     /**
@@ -36,10 +43,8 @@ public interface UserDtoMapper {
      * @return Entidade de domínio
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "active", constant = "true")
     User toDomain(UserRequest request);
+
     
     /**
      * Atualiza uma entidade de domínio com os dados de um DTO de requisição
@@ -47,8 +52,5 @@ public interface UserDtoMapper {
      * @param user Entidade de domínio a ser atualizada
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "active", ignore = true)
     void updateDomainFromRequest(UserRequest request, @MappingTarget User user);
 } 

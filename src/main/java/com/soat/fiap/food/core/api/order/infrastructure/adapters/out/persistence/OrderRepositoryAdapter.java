@@ -50,8 +50,8 @@ public class OrderRepositoryAdapter implements OrderRepository {
         OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
         Order savedOrder = orderEntityMapper.toDomain(savedEntity);
         
-        if (order.getCustomerId() != null && order.getCustomerId().getName() != null) {
-            savedOrder.setCustomerId(order.getCustomerId());
+        if (order.getUserId() != null && order.getUserId().getName() != null) {
+            savedOrder.setUserId(order.getUserId());
         }
         
         return savedOrder;
@@ -71,8 +71,8 @@ public class OrderRepositoryAdapter implements OrderRepository {
     }
 
     @Override
-    public List<Order> findByCustomerId(Long customerId) {
-        List<OrderEntity> orderEntities = springDataOrderRepository.findByCustomerId(customerId);
+    public List<Order> findByUserId(Long userId) {
+        List<OrderEntity> orderEntities = springDataOrderRepository.findByUserId(userId);
         return orderEntityMapper.toDomainList(orderEntities);
     }
 
