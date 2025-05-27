@@ -29,7 +29,7 @@ public class User {
     private boolean guest;
     private Role role;
     private LocalDateTime lastLogin;
-    private transient String jwtToken;
+    private transient String token;
     private AuditInfo auditInfo = new AuditInfo();
 
     /**
