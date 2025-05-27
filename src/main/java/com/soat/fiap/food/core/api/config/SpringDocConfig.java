@@ -44,17 +44,6 @@ public class SpringDocConfig {
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-                .tags(List.of(
-                        new Tag()
-                                .name("Catálogos")
-                                .description("Operações para gerenciamento de catálogos de categorias de produtos"),
-                        new Tag()
-                                .name("Categorias")
-                                .description("Operações para gerenciamento de categorias de produtos"),
-                        new Tag()
-                                .name("Produtos")
-                                .description("Operações para gerenciamento de produtos")
-                ))
                 .servers(List.of(
                         new Server()
                                 .url(contextPath)

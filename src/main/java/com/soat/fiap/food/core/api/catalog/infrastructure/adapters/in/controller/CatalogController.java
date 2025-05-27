@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +48,7 @@ public class CatalogController {
     @ApiResponse(responseCode = "200", description = "Lista de catálogos retornada com sucesso",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = CatalogResponse.class))))
+    @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<List<CatalogResponse>> getAllCatalogs() {
         logger.debug("Requisição para listar todos os catálogos");
         return ResponseEntity.ok(catalogUseCase.getAllCatalogs());
@@ -64,6 +66,7 @@ public class CatalogController {
                             schema = @Schema(implementation = CatalogResponse.class))),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
     })
+    @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<CatalogResponse> getCatalogById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
@@ -84,6 +87,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "409", description = "Catálogo com nome já existente", content = @Content),
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
+    @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<CatalogResponse> createCatalog(
             @Valid @RequestBody CatalogRequest request) {
         logger.debug("Requisição para criar novo catálogo");
@@ -105,6 +109,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "409", description = "Catálogo com nome já existente", content = @Content),
     })
+    @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<CatalogResponse> updateCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id,
@@ -125,6 +130,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),
             @ApiResponse(responseCode = "409", description = "Catálogo possui categorias associadas", content = @Content)
     })
+    @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<Void> deleteCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
@@ -148,6 +154,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request) {
         logger.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
@@ -167,6 +174,7 @@ public class CatalogController {
                             array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<List<CategoryResponse>> getAllCategories(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId) {
@@ -186,6 +194,7 @@ public class CatalogController {
                             schema = @Schema(implementation = CategoryResponse.class))),
             @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<CategoryResponse> getCategoryById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -210,6 +219,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<CategoryResponse> updateCategory(
             @Parameter(description = "ID atual do catálogo da categoria", example = "2", required = true)
             @PathVariable Long catalogId,
@@ -232,6 +242,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content),
             @ApiResponse(responseCode = "409", description = "Categoria possui produtos associados", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<Void> deleteCategory(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -254,6 +265,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Imagem inválida", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
     })
+    @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<Void> updateCategoryImage(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -282,6 +294,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<ProductResponse> createProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -303,6 +316,7 @@ public class CatalogController {
                             array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))),
             @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrada", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<List<ProductResponse>> getAllProductsByCategory(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -326,6 +340,7 @@ public class CatalogController {
                             schema = @Schema(implementation = ProductResponse.class))),
             @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<ProductResponse> getProductById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -352,6 +367,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<ProductResponse> updateProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -375,6 +391,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "204", description = "Produto excluído com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<Void> deleteProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -399,6 +416,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Imagem inválida", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
     })
+    @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
     public ResponseEntity<Void> updateProductImage(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
