@@ -46,27 +46,3 @@ COMMENT ON COLUMN order_items.unit_price IS 'Preço unitário do produto no mome
 COMMENT ON COLUMN order_items.observations IS 'Observações específicas sobre o item';
 COMMENT ON COLUMN order_items.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN order_items.updated_at IS 'Data da última atualização do registro';
-
---changeset order:03-order-tables runAlways:true
-CREATE TABLE IF NOT EXISTS order_payments (
-    id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
-    payment_id INTEGER NOT NULL,
-    status payment_status_enum DEFAULT 'PENDING' NOT NULL,
-    paid_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_order_payment_order FOREIGN KEY (order_id) REFERENCES orders(id),
-    CONSTRAINT fk_order_payment_payment FOREIGN KEY (payment_id) REFERENCES payments(id),
-    CONSTRAINT un_order_payment UNIQUE (order_id, payment_id)
-);
-
-COMMENT ON TABLE order_payments IS 'Tabela que armazena os pagamentos associados a pedidos';
-COMMENT ON COLUMN order_payments.id IS 'Identificador único do pagamento do pedido';
-COMMENT ON COLUMN order_payments.order_id IS 'Referência ao pedido associado';
-COMMENT ON COLUMN order_payments.payment_id IS 'Referência ao método de pagamento utilizado';
-COMMENT ON COLUMN order_payments.status IS 'Status do pagamento';
-COMMENT ON COLUMN order_payments.paid_at IS 'Data e hora em que o pagamento foi confirmado';
-COMMENT ON COLUMN order_payments.created_at IS 'Data de criação do registro';
-COMMENT ON COLUMN order_payments.updated_at IS 'Data da última atualização do registro';
-COMMENT ON CONSTRAINT un_order_payment ON order_payments IS 'Evita que a mesma tentativa de pagamento (payment_id) seja associada mais de uma vez ao mesmo pedido (order_id).';

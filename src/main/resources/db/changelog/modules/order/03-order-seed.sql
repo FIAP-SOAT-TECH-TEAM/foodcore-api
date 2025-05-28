@@ -51,20 +51,6 @@ WHERE NOT EXISTS (
     AND product_id = (SELECT id FROM products WHERE name = 'Refrigerante Lata')
 );
 
--- Pagamento do pedido 1
-INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
-SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
-    (SELECT id FROM payments WHERE tid = 'TID-000001'),
-    'APPROVED',
-    now() - interval '1 hour',
-    now() - interval '1 hour',
-    now() - interval '1 hour'
-WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000001')
-);
-
 -- Pedido 2
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
@@ -129,20 +115,6 @@ WHERE NOT EXISTS (
     AND product_id = (SELECT id FROM products WHERE name = 'Refrigerante Lata')
 );
 
--- Pagamento do pedido 2
-INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
-SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
-    (SELECT id FROM payments WHERE tid = 'TID-000002'),
-    'REJECTED',
-    null,
-    now() - interval '25 minute',
-    now() - interval '25 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
-);
-
 -- Pedido 3 (sem cliente)
 INSERT INTO orders (order_number, status, amount, created_at, updated_at)
 SELECT
@@ -189,20 +161,6 @@ WHERE NOT EXISTS (
     AND product_id = (SELECT id FROM products WHERE name = 'Batata Frita G')
 );
 
--- Pagamento do pedido 3
-INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
-SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
-    (SELECT id FROM payments WHERE tid = 'TID-000003'),
-    'PENDING',
-    null,
-    now() - interval '5 minute',
-    now() - interval '5 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
-);
-
 -- Pedido 4 (sem cliente)
 INSERT INTO orders (order_number, status, amount, created_at, updated_at)
 SELECT
@@ -230,31 +188,4 @@ WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004')
     AND product_id = (SELECT id FROM products WHERE name = 'Água Mineral')
-);
-
--- Pagamentos do pedido 4
-INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
-SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
-    (SELECT id FROM payments WHERE tid = 'TID-000004'),
-    'REJECTED',
-    null,
-    now() - interval '3 minute',
-    now() - interval '3 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004')
-);
-
-INSERT INTO order_payments (order_id, payment_id, status, paid_at, created_at, updated_at)
-SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
-    (SELECT id FROM payments WHERE tid = 'TID-000005'),
-    'APPROVED',
-    now() - interval '3 minute',
-    now() - interval '3 minute',
-    now() - interval '3 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM order_payments
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004') AND payment_id = (SELECT id FROM payments WHERE tid = 'TID-000005')
 );
