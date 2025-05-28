@@ -8,6 +8,9 @@ import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
 
+/**
+ * Implementação da porta de saída referente a API do mercado pago
+ */
 @Component
 public class MercadoPagoAdapter implements MercadoPagoPort {
 

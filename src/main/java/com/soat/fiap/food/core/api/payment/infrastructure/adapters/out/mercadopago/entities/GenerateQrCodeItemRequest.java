@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * Entidade que representa os itens do pedido no body de geração de um QrCode
+ */
 @Data
 public class GenerateQrCodeItemRequest {
     private String sku_number;

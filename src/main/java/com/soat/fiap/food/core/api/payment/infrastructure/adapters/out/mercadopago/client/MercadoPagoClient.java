@@ -7,6 +7,9 @@ import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
+/**
+ * Cliente de conexão com a API do mercado pago
+ */
 public interface MercadoPagoClient {
 
     @Headers({

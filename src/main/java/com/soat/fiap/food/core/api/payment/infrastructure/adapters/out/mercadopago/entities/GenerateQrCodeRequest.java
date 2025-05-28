@@ -5,6 +5,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Entidade que representa o body de geração de um QrCode
+ */
 @Data
 public class GenerateQrCodeRequest {
     private String external_reference;
