@@ -30,11 +30,9 @@ public class OrderEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleOrderCreatedEvent(OrderCreatedEvent event) {
         log.info("Módulo Payment: Iniciando pagamento para o pedido: {} com valor total: {}",
-                event.getOrderId(), event.getTotalAmount());
+                event.getId(), event.getTotalAmount());
         
-//        String externalPaymentId = paymentUseCase.initializePayment(event.getOrderId(), event.getTotalAmount());
-//
-//        log.info("Pagamento para pedido {} inicializado com ID externo: {}",
-//                event.getOrderId(), externalPaymentId);
+        paymentUseCase.initializePayment(event);
+
     }
 } 

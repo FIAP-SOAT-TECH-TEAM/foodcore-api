@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.payment.application.ports.in;
 
+import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,14 +9,12 @@ import java.math.BigDecimal;
  */
 public interface PaymentUseCase {
     
-//    /**
-//     * Inicializa um pagamento para um pedido
-//     *
-//     * @param orderId ID do pedido
-//     * @param totalAmount Valor total a ser pago
-//     * @return ‘ID’ do pagamento gerado
-//     */
-//    String initializePayment(Long orderId, BigDecimal totalAmount);
+    /**
+     * Inicializa um pagamento para um pedido
+     *
+     * @param orderCreatedEvent evento de criação de pedido
+     */
+    void initializePayment(OrderCreatedEvent orderCreatedEvent);
 //
 //    /**
 //     * Verifica o status de um pagamento

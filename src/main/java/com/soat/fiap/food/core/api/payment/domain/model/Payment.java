@@ -16,46 +16,40 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 public class Payment {
     private Long id;
     private Long userId;
-    private PaymentMethod type;
+    private PaymentMethod type = PaymentMethod.PIX;
     private LocalDateTime expiresIn;
     private String tid;
     private BigDecimal amount;
     private QrCode qrCode;
-    private String observations;
+    private String observations = "Pagamento via Mercado Pago";
     private AuditInfo auditInfo = new AuditInfo();
 
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
      *
      * @param userId ID do usuário que realizou o pedido
-     * @param type Tipo do método de pagamento
      * @param expiresIn Data e hora de expiração do pagamento
      * @param tid Identificador da transação (TID)
      * @param amount Valor total do pagamento
      * @param qrCode URL do QR Code do pagamento
-     * @param observations Observações adicionais sobre o pagamento
      * 
      * @throws NullPointerException se type, expiresIn, tid ou amount forem nulos
      * 
      */
     public Payment(
             Long userId,
-            PaymentMethod type,
             LocalDateTime expiresIn,
             String tid,
             BigDecimal amount,
-            String qrCodeUrl,
-            String observations) {
+            String qrCode) {
 
         validate(type, expiresIn, tid, amount);
 
         this.userId = userId;
-        this.type = type;
         this.expiresIn = expiresIn;
         this.tid = tid;
         this.amount = amount;
-        this.qrCode = new QrCode(qrCodeUrl);
-        this.observations = observations;
+        this.qrCode = new QrCode(qrCode);
     }
 
     /**

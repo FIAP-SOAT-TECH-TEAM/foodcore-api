@@ -23,6 +23,9 @@ public class OrderItemEntity {
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
+    @Column(nullable = false)
+    private String name;
+
     @Embedded
     private OrderItemPrice orderItemPrice;
 

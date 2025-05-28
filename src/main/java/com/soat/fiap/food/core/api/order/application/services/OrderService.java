@@ -7,16 +7,17 @@ import com.soat.fiap.food.core.api.order.application.mapper.request.CreateOrderR
 import com.soat.fiap.food.core.api.order.application.mapper.response.OrderResponseMapper;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.api.order.domain.model.Order;
+import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.service.OrderDiscountService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderProductService;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementação do caso de uso de pedidos
@@ -63,20 +64,30 @@ public class OrderService implements OrderUseCase {
 
         orderDiscountService.applyDiscount(order);
 
-        Order savedOrder = orderRepository.save(order);
+        var savedOrder = orderRepository.save(order);
 
-        eventPublisher.publishEvent(
-                OrderCreatedEvent.of(
-                        savedOrder.getId(),
-                        savedOrder.getAmount(),
-                        savedOrder.getOrderStatus(),
-                        savedOrder.getUserId()
-                )
-        );
+        var saveOrderToResponse = orderResponseMapper.toResponse(savedOrder);
+
+        var orderCreatedEvent = new OrderCreatedEvent();
+
+        BeanUtils.copyProperties(saveOrderToResponse, orderCreatedEvent);
+        List<OrderItemCreatedEvent> itemEvents = saveOrderToResponse.getItems().stream()
+                .map(itemResponse -> {
+                    OrderItemCreatedEvent itemEvent = new OrderItemCreatedEvent();
+                    BeanUtils.copyProperties(itemResponse, itemEvent);
+                    return itemEvent;
+                })
+                .toList();
+
+        orderCreatedEvent.setItems(itemEvents);
+
+        BeanUtils.copyProperties(saveOrderToResponse.getItems(), orderCreatedEvent.getItems());
+
+        eventPublisher.publishEvent(orderCreatedEvent);
 
         logger.info("Pedido {} criado com sucesso. Total: {}", savedOrder.getId(), savedOrder.getAmount());
 
-        return orderResponseMapper.toResponse(savedOrder);
+        return saveOrderToResponse;
     }
 
 //    @Override

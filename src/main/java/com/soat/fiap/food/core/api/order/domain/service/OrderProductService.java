@@ -53,6 +53,9 @@ public class OrderProductService {
             if (productOrderItem.getPrice().compareTo(orderItem.getPrice()) != 0) {
                 throw new OrderItemException("O preço unitário do item da ordem diverge do preço do produto");
             }
+            else if (!productOrderItem.getName().equals(orderItem.getName())) {
+                throw new OrderItemException("O nome do produto do item diverge do nome do produto cadastrado");
+            }
 
         }
     }

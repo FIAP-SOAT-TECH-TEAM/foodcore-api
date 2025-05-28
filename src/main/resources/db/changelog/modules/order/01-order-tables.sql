@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     id SERIAL PRIMARY KEY,
     order_id INT NOT NULL,
     product_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
     observations TEXT,
@@ -39,6 +40,7 @@ COMMENT ON TABLE order_items IS 'Tabela que armazena os itens de cada pedido';
 COMMENT ON COLUMN order_items.id IS 'Identificador único do item do pedido';
 COMMENT ON COLUMN order_items.order_id IS 'Referência ao pedido associado';
 COMMENT ON COLUMN order_items.product_id IS 'Referência ao produto vendido';
+COMMENT ON COLUMN order_items.name IS 'Nome do produto comercializado no momento da venda';
 COMMENT ON COLUMN order_items.quantity IS 'Quantidade do produto no pedido';
 COMMENT ON COLUMN order_items.unit_price IS 'Preço unitário do produto no momento da venda';
 COMMENT ON COLUMN order_items.observations IS 'Observações específicas sobre o item';

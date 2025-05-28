@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
@@ -17,6 +18,7 @@ public class OrderItem {
 
     private Long id;
     private Long productId;
+    private String name;
     private OrderItemPrice orderItemPrice;
     private String observations = "";
 
@@ -27,18 +29,21 @@ public class OrderItem {
      * Construtor que cria um item de pedido com os dados informados
      *
      * @param productId        ID do produto
+     * @param name   Nome do item do pedido
      * @param orderItemPrice   Preço do item
      * @param observations     Observações sobre o item
      * @throws NullPointerException se qualquer parâmetro for nulo
      */
     public OrderItem(
             Long productId,
+            String name,
             OrderItemPrice orderItemPrice,
             String observations
     ) {
-        validate(productId, orderItemPrice);
+        validate(productId, name, orderItemPrice);
 
         this.productId = productId;
+        this.name = name;
         this.orderItemPrice = orderItemPrice;
         this.observations = observations;
     }
@@ -48,15 +53,20 @@ public class OrderItem {
      *
      * @param productId        ID do produto
      * @param orderItemPrice   Preço do item
+     * @param name   Nome do item do pedido
      * @throws NullPointerException se qualquer parâmetro for nulo
      */
     private void validate(
             Long productId,
+            String name,
             OrderItemPrice orderItemPrice
     ) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
         Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
 
+        if (name.isEmpty()) {
+            throw new OrderItemException("O nome do item do pedido não pode ser nulo");
+        }
     }
 
     /**

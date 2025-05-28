@@ -25,6 +25,9 @@ public class OrderItemResponse {
     @Schema(description = "ID do produto", example = "3")
     private Long productId;
 
+    @Schema(description = "Nome do produto do item do pedido", example = "Água Mineral")
+    private String name;
+
     @Schema(description = "Quantidade", example = "2")
     private Integer quantity;
 
