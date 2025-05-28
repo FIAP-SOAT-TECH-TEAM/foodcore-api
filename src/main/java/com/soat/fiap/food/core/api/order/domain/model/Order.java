@@ -36,7 +36,6 @@ public class Order {
     private AuditInfo auditInfo = new AuditInfo();
 
     private List<OrderItem> orderItems = new ArrayList<>();
-    private List<OrderPayment> orderPayments = new ArrayList<>();
 
     /**
      * Construtor que cria uma nova instância de pedido com os dados fornecidos.
@@ -100,14 +99,6 @@ public class Order {
      */
     public List<OrderItem> getOrderItems() {
         return Collections.unmodifiableList(this.orderItems);
-    }
-
-    /**
-     * Fornece uma lista imutável de pagamentos da ordem
-     * @return lista imutável de pagamentos
-     */
-    public List<OrderPayment> getOrderPayments() {
-        return Collections.unmodifiableList(this.orderPayments);
     }
 
     /**
@@ -187,75 +178,6 @@ public class Order {
             );
         }
     }
-
-    /**
-     * Adiciona um pagamento à ordem
-     *
-     * @param orderPayment pagamento da ordem
-     * @throws NullPointerException se o status de pagamento ou id forem nulos
-     * @throws OrderException se a ordem não estiver aguardando pagamento
-     */
-    public void addOrderPayment(OrderPayment orderPayment) {
-        Objects.requireNonNull(orderPayment, "O pagamento da ordem não pode ser nulo");
-
-        if (orderPayments
-                .stream()
-                .anyMatch(o -> o.getOrderId().equals(orderPayment.getOrderId()) && o.getPaymentId().equals(orderPayment.getPaymentId()))) {
-            throw new OrderException("Tentativa de pagamento já associada ao pedido.");
-        }
-        if (!(this.orderStatus == OrderStatus.RECEIVED)) {
-            throw new OrderException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
-        }
-
-        orderPayments.add(orderPayment);
-    }
-
-    /**
-     * Atualiza o status do pagamento
-     *
-     * @param newStatus Novo status
-     * @param orderPaymentId Id do pagamento da ordem
-     * @throws NullPointerException se o status de pagamento ou id forem nulos
-     * @throws OrderException se o pagamento não for encontrado, não estiver pendente ou a ordem não estiver aguardando pagamento
-     */
-    public void updateOrderPaymentStatus(Long orderPaymentId, OrderPaymentStatus newStatus) {
-        Objects.requireNonNull(newStatus, "O status de pagamento não pode ser nulo");
-        Objects.requireNonNull(orderPaymentId, "O id do pagamento da ordem não pode ser nulo");
-
-        var orderPayment = orderPayments.stream()
-                .filter(o -> o.getId().equals(orderPaymentId))
-                .findFirst()
-                .orElseThrow(() -> new OrderException("Pagamento da ordem não encontrado"));
-
-        if (orderPayment.getStatus() == newStatus) {
-            return;
-        }
-        if (!(orderPayment.getStatus() == OrderPaymentStatus.PENDING)) {
-            throw new OrderException(String.format("Ordem deve estar pendente de pagamento: %s", orderPayment.getStatus()));
-        }
-        if (!(this.orderStatus == OrderStatus.RECEIVED)) {
-            throw new OrderException(String.format("Ordem deve estar aguardando pagamento: %s", this.getOrderStatus()));
-        }
-
-        orderPayment.setStatus(newStatus);
-        orderPayment.setPaidAt((newStatus == OrderPaymentStatus.APPROVED) ? LocalDateTime.now() : orderPayment.getPaidAt());
-        orderPayment.markUpdatedNow();
-    }
-
-    /**
-     * Retorna se o pagamento da ordem foi aprovado
-     * @return true se tiver pagamento aprovado, false caso contrário
-     */
-    public boolean hasApprovedPayment() {
-        if (orderPayments == null) {
-            return false;
-        }
-
-        return orderPayments
-                .stream()
-                .anyMatch(OrderPayment::isApproved);
-    }
-
 
     /**
      * Aplica um desconto percentual ao valor do pagamento.

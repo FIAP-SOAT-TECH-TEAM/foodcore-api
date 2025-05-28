@@ -16,6 +16,7 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 public class Payment {
     private Long id;
     private Long userId;
+    private Long orderId;
     private PaymentMethod type = PaymentMethod.PIX;
     private LocalDateTime expiresIn;
     private String tid;
@@ -38,14 +39,16 @@ public class Payment {
      */
     public Payment(
             Long userId,
+            Long orderId,
             LocalDateTime expiresIn,
             String tid,
             BigDecimal amount,
             String qrCode) {
 
-        validate(type, expiresIn, tid, amount);
+        validate(orderId, type, expiresIn, tid, amount);
 
         this.userId = userId;
+        this.orderId = orderId;
         this.expiresIn = expiresIn;
         this.tid = tid;
         this.amount = amount;
@@ -64,10 +67,12 @@ public class Payment {
      * @throws IllegalArgumentException se tid for maior que {@code 255}
      */
     private void validate(
+            Long orderId,
             PaymentMethod type,
             LocalDateTime expiresIn,
             String tid,
             BigDecimal amount) {
+        Objects.requireNonNull(orderId, "O ID do pedido não pode ser nulo");
         Objects.requireNonNull(type, "O tipo do pagamento não pode ser nulo");
         Objects.requireNonNull(expiresIn, "A data de expiração não pode ser nulo");
         Objects.requireNonNull(tid, "O TID não pode ser nulo");
