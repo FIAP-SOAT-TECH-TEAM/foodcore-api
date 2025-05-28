@@ -218,6 +218,15 @@ public class Product {
     }
 
     /**
+     * Verifica se a categoria do produto está ativa.
+     *
+     * @return true se a categoria estiver ativa
+     */
+    public boolean categoryisActive() {
+        return category.isActive();
+    }
+
+    /**
      * Atualiza o campo updatedAt com o horário atual.
      *
      * @throws BusinessException se o horário atual for menor ou igual ao createdAt

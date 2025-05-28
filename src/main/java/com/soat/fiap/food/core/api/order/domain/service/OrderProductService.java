@@ -56,6 +56,12 @@ public class OrderProductService {
             else if (!productOrderItem.getName().equals(orderItem.getName())) {
                 throw new OrderItemException("O nome do produto do item diverge do nome do produto cadastrado");
             }
+            else if (!productOrderItem.isActive()) {
+                throw new OrderItemException("O pedido não pode possuir produtos inativos");
+            }
+            else if (!productOrderItem.categoryisActive()) {
+                throw new OrderItemException("A categoria do produto do pedido não pode estar inativa");
+            }
 
         }
     }
