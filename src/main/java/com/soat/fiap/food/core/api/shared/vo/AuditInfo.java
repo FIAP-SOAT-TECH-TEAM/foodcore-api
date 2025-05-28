@@ -38,8 +38,11 @@ public class AuditInfo {
     private void validate(LocalDateTime updatedAt) {
         Objects.requireNonNull(updatedAt, "UpdatedAt não pode ser nulo");
 
-        if (updatedAt.isBefore(createdAt) || updatedAt.isEqual(createdAt)) {
+        if (updatedAt.isBefore(createdAt)) {
             throw new BusinessException("UpdatedAt não pode ser menor ou igual a CreatedAt");
+        }
+        else if (updatedAt.isEqual(createdAt)) {
+            updatedAt.plusNanos(1);
         }
     }
 }

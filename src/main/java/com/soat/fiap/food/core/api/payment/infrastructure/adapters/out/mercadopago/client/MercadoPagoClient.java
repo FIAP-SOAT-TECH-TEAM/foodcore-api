@@ -19,4 +19,5 @@ public interface MercadoPagoClient {
             @Path("pos_id") String posId,
             @Body GenerateQrCodeRequest request
     );
+
 }

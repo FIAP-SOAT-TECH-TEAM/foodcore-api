@@ -12,7 +12,7 @@ SELECT
     NOW() + interval '30 days',
     'TID-000001',
     32.80,
-    NULL,
+    '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento aprovado via cartão',
     NOW() - interval '2 hour',
     NOW() - interval '1 hour'
@@ -31,7 +31,7 @@ SELECT
     NOW() + interval '1 hour',
     'TID-000002',
     79.70,
-    NULL,
+    '000201010asdasd43650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento via débito automático',
     NOW() - interval '30 minute',
     NOW() - interval '25 minute'

@@ -2,11 +2,9 @@ package com.soat.fiap.food.core.api.order.domain.model;
 
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
-import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Entidade de domínio que representa um pedido
@@ -150,7 +147,7 @@ public class Order {
      * @throws NullPointerException se o status da ordem for nulo
      * @throws OrderException se a transição de status não for permitida
      */
-    public void updateStatus(OrderStatus newStatus) {
+    public void setOrderStatus(OrderStatus newStatus) {
         Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
 
         if (this.orderStatus == newStatus) {

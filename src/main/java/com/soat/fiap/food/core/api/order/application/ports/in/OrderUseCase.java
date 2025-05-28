@@ -35,14 +35,13 @@ public interface OrderUseCase {
 //     */
 //    List<OrderResponse> findOrdersByStatus(OrderStatus status);
 //
-//    /**
-//     * Atualiza o status de um pedido
-//     *
-//     * @param orderId ID do pedido
-//     * @param newStatus Novo status
-//     * @return Pedido atualizado
-//     */
-//    OrderResponse updateOrderStatus(Long orderId, OrderStatus newStatus);
+        /**
+         * Atualiza o status de um pedido
+         *
+         * @param orderId ID do pedido
+         * @param newStatus Novo status
+         */
+        void updateOrderStatus(Long orderId, OrderStatus newStatus);
 //
 //    /**
 //     * Adiciona um item a um pedido existente

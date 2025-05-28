@@ -19,10 +19,15 @@ public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity
 //     */
 //    Optional<PaymentEntity> findByExternalId(String externalId);
 //
-//    /**
-//     * Busca uma entidade de pagamento pelo ID do pedido
-//     */
-//    Optional<PaymentEntity> findByOrderId(Long orderId);
+    /**
+     * Busca uma entidade de pagamento pelo ID do pedido
+     */
+    Optional<PaymentEntity> findByOrderId(Long orderId);
+
+    /**
+     * Verifica se já existe um pagamento para o pedido
+     */
+    boolean existsByOrderId(Long orderId);
 //
 //    /**
 //     * Lista todas as entidades de pagamento com determinado status

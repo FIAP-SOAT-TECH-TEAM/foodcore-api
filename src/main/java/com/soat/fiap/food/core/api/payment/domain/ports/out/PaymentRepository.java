@@ -10,14 +10,14 @@ import java.util.Optional;
  * Interface que define as operações de persistência para a entidade Payment
  */
 public interface PaymentRepository {
-//
-//    /**
-//     * Salva um pagamento no repositório
-//     *
-//     * @param payment Pagamento a ser salvo
-//     * @return Pagamento salvo com ID gerado
-//     */
-//    Payment save(Payment payment);
+
+    /**
+     * Salva um pagamento no repositório
+     *
+     * @param payment Pagamento a ser salvo
+     * @return Pagamento salvo com ID gerado
+     */
+    Payment save(Payment payment);
 //
 //    /**
 //     * Busca um pagamento pelo ID
@@ -35,13 +35,18 @@ public interface PaymentRepository {
 //     */
 //    Optional<Payment> findByExternalId(String externalId);
 //
-//    /**
-//     * Busca um pagamento pelo ID do pedido
-//     *
-//     * @param orderId ID do pedido
-//     * @return Pagamento encontrado ou vazio
-//     */
-//    Optional<Payment> findByOrderId(Long orderId);
+    /**
+     * Busca um pagamento pelo ID do pedido
+     *
+     * @param orderId ID do pedido
+     * @return Pagamento encontrado ou vazio
+     */
+    Optional<Payment> findByOrderId(Long orderId);
+
+    /**
+     * Verifica se já existe um pagamento para o pedido
+     */
+    boolean existsByOrderId(Long orderId);
 //
 //    /**
 //     * Lista todos os pagamentos com determinado status

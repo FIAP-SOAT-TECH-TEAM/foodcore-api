@@ -8,9 +8,11 @@ import com.soat.fiap.food.core.api.order.application.mapper.response.OrderRespon
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.service.OrderDiscountService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderProductService;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -110,21 +112,23 @@ public class OrderService implements OrderUseCase {
 //        return orders;
 //    }
 //
-//    @Override
-//    @Transactional
-//    public Order updateOrderStatus(Long orderId, OrderStatus newStatus) {
-//        logger.info("Atualizando status do pedido {} para {}", orderId, newStatus);
-//
-//        Order order = findOrderById(orderId)
-//                .orElseThrow(() -> new ResourceNotFoundException("order", orderId));
-//
-//        order.updateStatus(newStatus);
-//
-//        Order updatedOrder = orderRepository.save(order);
-//
-//        logger.info("Status do pedido {} atualizado para {}", orderId, newStatus);
-//        return updatedOrder;
-//    }
+    @Override
+    @Transactional
+    public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
+        logger.info("Atualizando status do pedido {} para {}", orderId, newStatus);
+
+        var order = orderRepository.findById(orderId);
+
+        if (order.isEmpty()) {
+            throw new OrderNotFoundException("Ordem", orderId);
+        }
+
+        order.get().setOrderStatus(newStatus);
+
+        var updatedOrder = orderRepository.save(order.get());
+
+        logger.info("Status do pedido {} atualizado para {}", orderId, newStatus);
+    }
 //
 //    @Override
 //    @Transactional

@@ -115,9 +115,10 @@ WHERE NOT EXISTS (
     AND product_id = (SELECT id FROM products WHERE name = 'Refrigerante Lata')
 );
 
--- Pedido 3 (sem cliente)
-INSERT INTO orders (order_number, status, amount, created_at, updated_at)
+-- Pedido 3
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
+    (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-00000003',
     'RECEIVED',
     19.90,
@@ -161,9 +162,10 @@ WHERE NOT EXISTS (
     AND product_id = (SELECT id FROM products WHERE name = 'Batata Frita G')
 );
 
--- Pedido 4 (sem cliente)
-INSERT INTO orders (order_number, status, amount, created_at, updated_at)
+-- Pedido 4
+INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
+    (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-00000004',
     'COMPLETED',
     4.90,

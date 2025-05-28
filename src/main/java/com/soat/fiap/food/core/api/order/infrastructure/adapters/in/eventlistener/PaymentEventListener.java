@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.eventlisten
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -36,5 +37,18 @@ public class PaymentEventListener {
 //        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.PREPARING);
 //
 //        log.info("Pedido {} atualizado para status PREPARING após pagamento aprovado", event.getOrderId());
+    }
+
+    /**
+     * Processa o evento de erro na inicialização do pagamento
+     *
+     * @param event Evento de erro na inicialização do pagamento
+     */
+    @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
+        log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
+
+        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.CANCELLED);
     }
 } 

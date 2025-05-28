@@ -2,13 +2,13 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
+import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.converter.QrCodeConverter;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 /**
@@ -43,7 +43,8 @@ public class PaymentEntity {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Embedded
+    @Convert(converter = QrCodeConverter.class)
+    @Column(name = "qr_code", length = 255, nullable = false, unique = true)
     private QrCode qrCode;
 
     @Column(columnDefinition = "TEXT")

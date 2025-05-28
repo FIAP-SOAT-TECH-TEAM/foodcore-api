@@ -4,16 +4,13 @@ import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -41,46 +38,42 @@ public class PaymentService implements PaymentUseCase {
     @Override
     @Transactional
     public void initializePayment(OrderCreatedEvent event) {
-       log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 
-        var generateQrCodeBody = generateQrCodeRequestMapper.toRequest(event);
-        var payment = new Payment(
-                event.getUserId(),
-                event.getId(),
-                generateQrCodeBody.getTotal_amount()
-        );
+        try {
+            log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 
-        var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
+            if (paymentRepository.existsByOrderId(event.getId())) {
+                log.info("Pagamento já existe para o pedido {}", event.getId());
+                return;
+            }
 
-        payment.setQrCode(generateQrCodeResponse.getQr_data());
-        payment.setTid(generateQrCodeResponse.getIn_store_order_id());
+            var generateQrCodeBody = generateQrCodeRequestMapper.toRequest(event);
+            var payment = new Payment(
+                    event.getUserId(),
+                    event.getId(),
+                    generateQrCodeBody.getTotal_amount()
+            );
 
-//        var existingPayment = paymentRepository.findByOrderId(orderId);
-//        if (existingPayment.isPresent()) {
-//            log.info("Pagamento já existe para o pedido {}: {}", orderId, existingPayment.get().getId());
-//            return existingPayment.get().getExternalId();
-//        }
-//
-//        var payment = Payment.builder()
-//                .orderId(orderId)
-//                .amount(totalAmount)
-//                .method(PaymentMethod.PIX) // Assumindo PIX como padrão por enquanto
-//                .status(OrderPaymentStatus.PENDING)
-//                .externalId("PAY-" + UUID.randomUUID().toString())
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//
-//        // TODO: integração com gateway de pagamento (ex: Mercado Pago)
-//        // Implementar lógica para gerar QR Code
-//        payment.setQrCodeUrl("https://api.exemplo.com/qrcode/" + payment.getExternalId());
-//        payment.setQrCodeData("00020126580014BR.GOV.BCB.PIX0136a629534e-7693-46c9-8551-b9b94b54fec10" +
-//                totalAmount.toString().replace(".", ""));
-//
-//        var savedPayment = paymentRepository.save(payment);
-//        log.info("Pagamento inicializado com ID: {}, externalId: {}",
-//                savedPayment.getId(), savedPayment.getExternalId());
-//
-//        return savedPayment.getExternalId();
+            var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
+
+            payment.setQrCode(generateQrCodeResponse.getQr_data());
+            payment.setTid(generateQrCodeResponse.getIn_store_order_id());
+
+            var savedPayment = paymentRepository.save(payment);
+
+            log.info("Pagamento inicializado com ID: {}, qrCode: {}, pedido: {}",
+                    savedPayment.getId(), savedPayment.getQrCode(), savedPayment.getOrderId());
+
+        }
+        catch (Exception ex) {
+
+            log.warn("Erro na inicialização do pagamento. Pedido: {}, Causa: {}", event.getId(), ex.getMessage());
+
+            var paymentInitializationErrorEvent = new PaymentInitializationErrorEvent(event.getId(), ex.getMessage());
+            eventPublisher.publishEvent(paymentInitializationErrorEvent);
+
+            throw  ex;
+        }
     }
 //
 //    @Override
