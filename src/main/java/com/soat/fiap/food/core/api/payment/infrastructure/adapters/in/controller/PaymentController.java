@@ -5,6 +5,7 @@ import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class PaymentController {
             @ApiResponse(responseCode = "400", description = "Notificação malformada")
     })
     @PostMapping("/webhook")
-    public ResponseEntity<Void> mercadoPagoWebhook(@RequestBody MercadoPagoNotificationRequest notification) {
+    public ResponseEntity<Void> mercadoPagoWebhook(@Valid @RequestBody MercadoPagoNotificationRequest notification) {
         log.info("Recebida notificação do Mercado Pago: ação={}, id interno={}, id externo={}",
                 notification.getAction(),
                 notification.getId(),
