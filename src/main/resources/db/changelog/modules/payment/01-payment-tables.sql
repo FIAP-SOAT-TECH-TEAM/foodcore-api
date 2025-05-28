@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS payments (
     id SERIAL PRIMARY KEY,
     user_id INT,
+    order_id INT,
     type payment_type_enum NOT NULL,
     expires_in TIMESTAMP NOT NULL,
     tid VARCHAR(255) UNIQUE NOT NULL,
@@ -12,12 +13,14 @@ CREATE TABLE IF NOT EXISTS payments (
     observations TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
 COMMENT ON TABLE payments IS 'Tabela que armazena os pagamentos do sistema';
 COMMENT ON COLUMN payments.id IS 'Identificador único do pagamento';
 COMMENT ON COLUMN payments.user_id IS 'Referência ao usuário associado ao pagamento';
+COMMENT ON COLUMN payments.order_id IS 'Referência ao pedido associado ao pagamento';
 COMMENT ON COLUMN payments.type IS 'Tipo de pagamento';
 COMMENT ON COLUMN payments.expires_in IS 'Data e hora de expiração do pagamento';
 COMMENT ON COLUMN payments.tid IS 'Identificador da transação no gateway de pagamento';

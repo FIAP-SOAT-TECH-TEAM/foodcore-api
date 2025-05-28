@@ -4,9 +4,10 @@
 -- Pagamentos para ambiente de desenvolvimento
 
 -- Pagamento 1 (Cartão de Crédito) - João Silva
-INSERT INTO payments (user_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
     u.id,
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
     'CREDIT_CARD',
     NOW() + interval '30 days',
     'TID-000001',
@@ -22,9 +23,10 @@ WHERE u.email = 'joao@email.com'
   );
 
 -- Pagamento 2 (Débito) - Maria Oliveira
-INSERT INTO payments (user_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
     u.id,
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
     'DEBIT_CARD',
     NOW() + interval '1 hour',
     'TID-000002',
@@ -40,8 +42,9 @@ WHERE u.email = 'maria@email.com'
   );
 
 -- Pagamento 3 (PIX) - sem cliente
-INSERT INTO payments (type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
     'PIX',
     NOW() + interval '1 hour',
     'TID-000003',
@@ -55,8 +58,9 @@ WHERE NOT EXISTS (
 );
 
 -- Pagamento 4 (PIX) - sem cliente
-INSERT INTO payments (type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
+    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
     'PIX',
     NOW() + interval '1 hour',
     'TID-000004',
@@ -67,19 +71,4 @@ SELECT
     NOW() - interval '5 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM payments p WHERE p.tid = 'TID-000004'
-);
-
--- Pagamento 5 (PIX) - sem cliente
-INSERT INTO payments (type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
-SELECT
-    'PIX',
-    NOW() + interval '1 hour',
-    'TID-000005',
-    4.90,
-    '00020101021243650016COM.MERCADOLIBRE02013063682409abcd-1234-efgh-5678-90abcdef12345204000053039865802BR5909Lucas Lima6009PORTO ALEGRE62070503***6304E2F1',
-    'QR Code gerado para pagamento',
-    NOW() - interval '5 minute',
-    NOW() - interval '5 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM payments p WHERE p.tid = 'TID-000005'
 );
