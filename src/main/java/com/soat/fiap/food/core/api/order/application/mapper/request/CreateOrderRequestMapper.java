@@ -23,6 +23,5 @@ public interface CreateOrderRequestMapper {
     @Mapping(target = "orderStatus", ignore = true)
     @Mapping(target = "orderNumber", ignore = true)
     @Mapping(target = "amount", ignore = true)
-    @Mapping(target = "orderPayments", ignore = true)
     Order toDomain(CreateOrderRequest request);
 }

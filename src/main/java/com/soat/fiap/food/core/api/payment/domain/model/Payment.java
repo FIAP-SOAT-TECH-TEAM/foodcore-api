@@ -6,6 +6,8 @@ import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
@@ -18,7 +20,10 @@ public class Payment {
     private Long userId;
     private Long orderId;
     private PaymentMethod type = PaymentMethod.PIX;
-    private LocalDateTime expiresIn;
+    private OffsetDateTime expiresIn = LocalDateTime
+            .now()
+            .plusMinutes(30)
+            .atOffset(ZoneOffset.of("-03:00"));
     private String tid;
     private BigDecimal amount;
     private QrCode qrCode;
@@ -29,10 +34,8 @@ public class Payment {
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
      *
      * @param userId ID do usuário que realizou o pedido
-     * @param expiresIn Data e hora de expiração do pagamento
-     * @param tid Identificador da transação (TID)
+     * @param orderId ID do pedido relacionado ao pagamento
      * @param amount Valor total do pagamento
-     * @param qrCode URL do QR Code do pagamento
      * 
      * @throws NullPointerException se type, expiresIn, tid ou amount forem nulos
      * 
@@ -40,47 +43,48 @@ public class Payment {
     public Payment(
             Long userId,
             Long orderId,
-            LocalDateTime expiresIn,
-            String tid,
-            BigDecimal amount,
-            String qrCode) {
+            BigDecimal amount) {
 
-        validate(orderId, type, expiresIn, tid, amount);
+        validate(userId, orderId, amount);
 
         this.userId = userId;
         this.orderId = orderId;
-        this.expiresIn = expiresIn;
-        this.tid = tid;
         this.amount = amount;
+    }
+
+    /**
+     * Define o qrCode do pagamento.
+     *
+     */
+    public void setQrCode(String qrCode) {
         this.qrCode = new QrCode(qrCode);
+    }
+
+    /**
+     * Define o transaction id do pagamento.
+     *
+     * @throws PaymentException se o TID for maior que 255 caracteres {@code null}
+     */
+    public void setTid(String tid) {
+        if (tid.length() > 255) {
+            throw new PaymentException("O TID não pode ter mais de 255 caracteres");
+        }
+
+        this.tid = tid;
     }
 
     /**
      * Valida os campos obrigatórios para um pagamento.
      *
-     * @param type      o tipo do método de pagamento; não pode ser {@code null}
-     * @param expiresIn a data e hora de expiração do pagamento; não pode ser {@code null}
-     * @param tid       o identificador da transação (TID); não pode ser {@code null}
-     * @param amount    o valor total do pagamento; não pode ser {@code null}
-     * 
      * @throws NullPointerException se algum dos parâmetros for {@code null}
-     * @throws IllegalArgumentException se tid for maior que {@code 255}
      */
     private void validate(
+            Long userId,
             Long orderId,
-            PaymentMethod type,
-            LocalDateTime expiresIn,
-            String tid,
             BigDecimal amount) {
+        Objects.requireNonNull(userId, "O ID do cliente do pedido não pode ser nulo");
         Objects.requireNonNull(orderId, "O ID do pedido não pode ser nulo");
-        Objects.requireNonNull(type, "O tipo do pagamento não pode ser nulo");
-        Objects.requireNonNull(expiresIn, "A data de expiração não pode ser nulo");
-        Objects.requireNonNull(tid, "O TID não pode ser nulo");
         Objects.requireNonNull(amount, "O valor total não pode ser nulo");
-            
-        if (tid.length() > 255) {
-            throw new PaymentException("O TID não pode ter mais de 255 caracteres");
-        }
     }
 
     /**
@@ -89,7 +93,11 @@ public class Payment {
      * @return {@code true} se o pagamento estiver expirado, {@code false} caso contrário
      */
     public boolean isExpired() {
-        return expiresIn.isBefore(LocalDateTime.now());
+        return expiresIn.isBefore(
+                LocalDateTime
+                        .now()
+                        .atOffset(ZoneOffset.of("-03:00")
+        ));
     }
 
 }

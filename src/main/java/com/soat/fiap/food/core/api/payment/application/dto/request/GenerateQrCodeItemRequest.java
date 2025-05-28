@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.entities;
+package com.soat.fiap.food.core.api.payment.application.dto.request;
 
 import lombok.Data;
 

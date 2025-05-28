@@ -3,8 +3,8 @@
 --changeset payment:01-payment-tables runAlways:true
 CREATE TABLE IF NOT EXISTS payments (
     id SERIAL PRIMARY KEY,
-    user_id INT,
-    order_id INT,
+    user_id INT NOT NULL,
+    order_id INT NOT NULL,
     type payment_type_enum NOT NULL,
     expires_in TIMESTAMP NOT NULL,
     tid VARCHAR(255) UNIQUE NOT NULL,

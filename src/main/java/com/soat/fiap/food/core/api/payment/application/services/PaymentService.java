@@ -1,41 +1,59 @@
 package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.domain.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Implementação do caso de uso de pagamento
  */
 @Service
+@Slf4j
 public class PaymentService implements PaymentUseCase {
 
     private final PaymentRepository paymentRepository;
     private final MercadoPagoPort mercadoPagoPort;
+    private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
     private final ApplicationEventPublisher eventPublisher;
-    private final CustomLogger logger;
 
     public PaymentService(
             PaymentRepository paymentRepository,
             MercadoPagoPort mercadoPagoPort,
-            ApplicationEventPublisher eventPublisher,
-            CustomLogger customLogger) {
+            GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
+            ApplicationEventPublisher eventPublisher) {
         this.paymentRepository = paymentRepository;
         this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;
-        this.logger = customLogger;
+        this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
     }
 
     @Override
     @Transactional
     public void initializePayment(OrderCreatedEvent event) {
-        logger.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
+       log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 
+        var generateQrCodeBody = generateQrCodeRequestMapper.toRequest(event);
+        var payment = new Payment(
+                event.getUserId(),
+                event.getId(),
+                generateQrCodeBody.getTotal_amount()
+        );
+
+        var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
+
+        payment.setQrCode(generateQrCodeResponse.getQr_data());
+        payment.setTid(generateQrCodeResponse.getIn_store_order_id());
 
 //        var existingPayment = paymentRepository.findByOrderId(orderId);
 //        if (existingPayment.isPresent()) {

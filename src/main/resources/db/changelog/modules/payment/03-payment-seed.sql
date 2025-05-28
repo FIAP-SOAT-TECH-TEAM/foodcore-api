@@ -41,9 +41,10 @@ WHERE u.email = 'maria@email.com'
       SELECT 1 FROM payments p WHERE p.tid = 'TID-000002'
   );
 
--- Pagamento 3 (PIX) - sem cliente
-INSERT INTO payments (order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+-- Pagamento 3 (PIX) - Maria Oliveira
+INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
+    u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
     'PIX',
     NOW() + interval '1 hour',
@@ -53,13 +54,16 @@ SELECT
     'QR Code gerado para pagamento',
     NOW() - interval '5 minute',
     NOW() - interval '5 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM payments p WHERE p.tid = 'TID-000003'
-);
+FROM users u
+WHERE u.email = 'maria@email.com'
+  AND NOT EXISTS (
+      SELECT 1 FROM payments p WHERE p.tid = 'TID-000003'
+  );
 
--- Pagamento 4 (PIX) - sem cliente
-INSERT INTO payments (order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+-- Pagamento 4 (PIX) - Maria Oliveira
+INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
 SELECT
+    u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
     'PIX',
     NOW() + interval '1 hour',
@@ -69,6 +73,8 @@ SELECT
     'QR Code gerado para pagamento',
     NOW() - interval '5 minute',
     NOW() - interval '5 minute'
-WHERE NOT EXISTS (
-    SELECT 1 FROM payments p WHERE p.tid = 'TID-000004'
-);
+FROM users u
+WHERE u.email = 'maria@email.com'
+  AND NOT EXISTS (
+      SELECT 1 FROM payments p WHERE p.tid = 'TID-000004'
+  );

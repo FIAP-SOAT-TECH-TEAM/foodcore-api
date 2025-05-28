@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Entidade JPA para pagamento
@@ -26,12 +27,15 @@ public class PaymentEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "order_id")
+    private Long orderId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentMethod type;
 
     @Column(name = "expires_in", nullable = false)
-    private LocalDateTime expiresIn;
+    private OffsetDateTime expiresIn;
 
     @Column(nullable = false, unique = true)
     private String tid;

@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.entities;
+package com.soat.fiap.food.core.api.payment.application.dto.request;
 
 import lombok.Data;
 
@@ -15,5 +15,6 @@ public class GenerateQrCodeRequest {
     private String description;
     private String notification_url;
     private BigDecimal total_amount;
+    private String expiration_date;
     private List<GenerateQrCodeItemRequest> items;
 }
