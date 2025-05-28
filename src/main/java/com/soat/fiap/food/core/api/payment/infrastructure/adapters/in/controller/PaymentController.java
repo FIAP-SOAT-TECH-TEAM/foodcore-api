@@ -1,31 +1,53 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
 
+import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.application.dto.request.ProcessPaymentRequest;
-import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentResponse;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador REST para pagamentos
  */
 @RestController
-@RequestMapping("/api/orders/{orderId}/payments")
+@RequestMapping("/payments")
 @Slf4j
 public class PaymentController {
 
-//    private final PaymentUseCase paymentUseCase;
-//    private final PaymentRepository paymentRepository;
-//
-//    public PaymentController(PaymentUseCase paymentUseCase, PaymentRepository paymentRepository) {
-//        this.paymentUseCase = paymentUseCase;
-//        this.paymentRepository = paymentRepository;
-//    }
+    private final PaymentUseCase paymentUseCase;
+
+    public PaymentController(PaymentUseCase paymentUseCase) {
+        this.paymentUseCase = paymentUseCase;
+    }
+
+    /**
+     * Recebe notificações de pagamento do Mercado Pago
+     *
+     * @param notification corpo da notificação
+     * @return HTTP 200 se a notificação for processada com sucesso
+     */
+    @Operation(summary = "Webhook do Mercado Pago", description = "Recebe notificações de eventos de pagamento do Mercado Pago")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notificação processada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Notificação malformada")
+    })
+    @PostMapping("/webhook")
+    public ResponseEntity<Void> mercadoPagoWebhook(@RequestBody MercadoPagoNotificationRequest notification) {
+        log.info("Recebida notificação do Mercado Pago: ação={}, id interno={}, id externo={}",
+                notification.getAction(),
+                notification.getId(),
+                notification.getData() != null ? notification.getData().getId() : "sem id externo");
+
+        paymentUseCase.notification(notification);
+
+        return ResponseEntity.ok().build();
+    }
 //
 //    /**
 //     * Processa o pagamento de um pedido

@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
@@ -75,6 +76,15 @@ public class PaymentService implements PaymentUseCase {
             throw  ex;
         }
     }
+
+    @Override
+    @Transactional
+    public void notification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest) {
+
+        var a = 2;
+
+    }
+
 //
 //    @Override
 //    @Transactional(readOnly = true)

@@ -17,7 +17,7 @@ import retrofit2.Response;
 public class MercadoPagoAdapter implements MercadoPagoPort {
 
     private final MercadoPagoClient client;
-    private MercadoPagoProperties properties;
+    private final MercadoPagoProperties properties;
 
     public MercadoPagoAdapter(
             MercadoPagoClient client,
@@ -30,6 +30,7 @@ public class MercadoPagoAdapter implements MercadoPagoPort {
     @Override
     public GenerateQrCodeResponse generateQrCode(GenerateQrCodeRequest request) {
         try {
+            request.setNotification_url(properties.getNotificationUrl());
             Response<GenerateQrCodeResponse> response = client.generateQrCode(
                     properties.getUserId(),
                     properties.getPosId(),

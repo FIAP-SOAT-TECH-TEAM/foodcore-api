@@ -16,7 +16,7 @@ public interface GenerateQrCodeRequestMapper {
     @Mapping(target = "external_reference", source = "orderNumber")
     @Mapping(target = "title", expression = "java(\"Pedido #\" + event.getOrderNumber())")
     @Mapping(target = "description", source = "statusDescription")
-    @Mapping(target = "notification_url", constant = "http://teste.com")
+    @Mapping(target = "notification_url", ignore = true)
     @Mapping(target = "total_amount", source = "totalAmount")
     @Mapping(target = "items", source = "items")
     @Mapping(target = "expiration_date", ignore = true)

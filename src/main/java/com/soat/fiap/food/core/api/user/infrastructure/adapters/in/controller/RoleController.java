@@ -23,7 +23,7 @@ import java.util.List;
  * Controlador REST para gerenciamento de roles
  */
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/roles")
 @Tag(name = "roles", description = "API para gerenciamento das roles")
 public class RoleController {
 

@@ -54,9 +54,9 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi catalogApi() {
         return GroupedOpenApi.builder()
-                .group("catálogo")
+                .group("catálogos")
                 .packagesToScan("com.soat.fiap.food.core.api.catalog")
-                .pathsToMatch("/api/catalogs/**")
+                .pathsToMatch("/catalogs/**")
                 .build();
     }
 
@@ -65,7 +65,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("usuários")
                 .packagesToScan("com.soat.fiap.food.core.api.user")
-                .pathsToMatch("/api/users/**")
+                .pathsToMatch("/users/**")
                 .build();
     }
 
@@ -74,7 +74,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("pedidos")
                 .packagesToScan("com.soat.fiap.food.core.api.order")
-                .pathsToMatch("/api/orders/**")
+                .pathsToMatch("/orders/**")
                 .build();
     }
 
@@ -83,7 +83,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("pagamentos")
                 .packagesToScan("com.soat.fiap.food.core.api.payment")
-                .pathsToMatch("/api/payments/**")
+                .pathsToMatch("/payments/**")
                 .build();
     }
 } 

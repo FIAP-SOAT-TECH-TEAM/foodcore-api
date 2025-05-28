@@ -69,3 +69,4 @@ mercado-pago:
   token: APP_USR-6067894635102235-051018-411ad7e519a24f5652d328ba205a2b9a-2430659417
   user-id: 2430659417
   pos-id: POCMP001POS001
+  notification-url: https://teste.com # definir posteriormente

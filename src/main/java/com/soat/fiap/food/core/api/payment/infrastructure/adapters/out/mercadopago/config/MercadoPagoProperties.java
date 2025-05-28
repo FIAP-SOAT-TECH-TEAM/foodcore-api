@@ -12,4 +12,5 @@ public class MercadoPagoProperties {
     private String token;
     private String userId;
     private String posId;
+    private String notificationUrl;
 }
