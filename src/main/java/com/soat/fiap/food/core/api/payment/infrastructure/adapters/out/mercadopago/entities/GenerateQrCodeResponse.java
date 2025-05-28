@@ -1,0 +1,9 @@
+package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.entities;
+
+import lombok.Data;
+
+@Data
+public class GenerateQrCodeResponse {
+    private String in_store_order_id;
+    private String qr_data;
+}

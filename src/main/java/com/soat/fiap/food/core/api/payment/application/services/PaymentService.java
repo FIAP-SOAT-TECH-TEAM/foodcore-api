@@ -2,8 +2,9 @@ package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.MercadoPagoPort;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,28 +13,28 @@ import org.springframework.transaction.annotation.Transactional;
  * Implementação do caso de uso de pagamento
  */
 @Service
-@Slf4j
 public class PaymentService implements PaymentUseCase {
 
     private final PaymentRepository paymentRepository;
+    private final MercadoPagoPort mercadoPagoPort;
     private final ApplicationEventPublisher eventPublisher;
+    private final CustomLogger logger;
 
     public PaymentService(
             PaymentRepository paymentRepository,
-            ApplicationEventPublisher eventPublisher) {
+            MercadoPagoPort mercadoPagoPort,
+            ApplicationEventPublisher eventPublisher,
+            CustomLogger customLogger) {
         this.paymentRepository = paymentRepository;
+        this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;
+        this.logger = customLogger;
     }
 
     @Override
     @Transactional
     public void initializePayment(OrderCreatedEvent event) {
-        log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
-
-
-
-
-
+        logger.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 
 
 //        var existingPayment = paymentRepository.findByOrderId(orderId);

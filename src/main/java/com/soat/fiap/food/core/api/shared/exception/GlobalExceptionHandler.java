@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.shared.exception;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -119,6 +120,29 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Trata erros de resposta de APIs
+     */
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<ErrorResponse> handleAPIException(APIException ex, HttpServletRequest request) {
+        int statusCode = ex.getStatusCode();
+        HttpStatus status = HttpStatus.resolve(statusCode);
+
+        if (status == null) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            statusCode = status.value();
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                statusCode,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
     }
     
     /**
