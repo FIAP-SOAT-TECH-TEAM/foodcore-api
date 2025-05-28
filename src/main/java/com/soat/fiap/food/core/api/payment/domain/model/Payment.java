@@ -2,14 +2,16 @@ package com.soat.fiap.food.core.api.payment.domain.model;
 
 import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentException;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
+import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 
 /**
  * Entidade de domínio que representa um pagamento
@@ -27,6 +29,8 @@ public class Payment {
     private String tid;
     private BigDecimal amount;
     private QrCode qrCode;
+    private PaymentStatus status = PaymentStatus.PENDING;
+    private LocalDateTime paidAt;
     private String observations = "Pagamento via Mercado Pago";
     private AuditInfo auditInfo = new AuditInfo();
 
@@ -58,6 +62,18 @@ public class Payment {
      */
     public void setQrCode(String qrCode) {
         this.qrCode = new QrCode(qrCode);
+    }
+
+    /**
+     * Define o status do pagamento.
+     *
+     */
+    public void setStatus(PaymentStatus status) {
+        if (status == PaymentStatus.APPROVED) {
+            this.setPaidAt(LocalDateTime.now());
+        }
+
+        this.status = status;
     }
 
     /**

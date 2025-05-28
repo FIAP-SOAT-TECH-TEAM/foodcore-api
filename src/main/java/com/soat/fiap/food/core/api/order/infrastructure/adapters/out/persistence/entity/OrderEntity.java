@@ -7,10 +7,14 @@ import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 
 @Entity
 @Table(name = "orders")
@@ -30,7 +34,8 @@ public class OrderEntity {
     private OrderNumber orderNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "order_status_enum ")
+    @JdbcTypeCode(NAMED_ENUM)
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -43,9 +48,4 @@ public class OrderEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             orphanRemoval = true)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "order",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
-            orphanRemoval = true)
-    private List<OrderPaymentEntity> orderPayments = new ArrayList<>();
 }

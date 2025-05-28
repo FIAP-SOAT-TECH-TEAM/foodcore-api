@@ -1,15 +1,20 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity;
 
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.converter.QrCodeConverter;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+
+import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 
 /**
  * Entidade JPA para pagamento
@@ -31,11 +36,20 @@ public class PaymentEntity {
     private Long orderId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "payment_type_enum")
+    @JdbcTypeCode(NAMED_ENUM)
     private PaymentMethod type;
 
     @Column(name = "expires_in", nullable = false)
     private OffsetDateTime expiresIn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "payment_status_enum")
+    @JdbcTypeCode(NAMED_ENUM)
+    private PaymentStatus status;
+
+    @Column(nullable = true)
+    private LocalDateTime paidAt;
 
     @Column(nullable = false, unique = true)
     private String tid;

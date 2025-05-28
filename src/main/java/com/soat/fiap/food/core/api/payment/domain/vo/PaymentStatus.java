@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.order.domain.vo;
+package com.soat.fiap.food.core.api.payment.domain.vo;
 
 import lombok.Getter;
 
@@ -6,7 +6,7 @@ import lombok.Getter;
  * Enum que representa os possíveis status de um pagamento
  */
 @Getter
-public enum OrderPaymentStatus {
+public enum PaymentStatus {
     PENDING("Pendente"),
     APPROVED("Aprovado"),
     REJECTED("Rejeitado"),
@@ -14,7 +14,7 @@ public enum OrderPaymentStatus {
     
     private final String description;
     
-    OrderPaymentStatus(String description) {
+    PaymentStatus(String description) {
         this.description = description;
     }
 

@@ -4,12 +4,16 @@
 -- Pagamentos para ambiente de desenvolvimento
 
 -- Pagamento 1 (Cartão de Crédito) - João Silva
-INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (
+    user_id, order_id, type, expires_in, status, paid_at, tid, amount, qr_code, observations, created_at, updated_at
+)
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
     'CREDIT_CARD',
     NOW() + interval '30 days',
+    'APPROVED',
+    NOW() - interval '1 hour',
     'TID-000001',
     32.80,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
@@ -23,12 +27,16 @@ WHERE u.email = 'joao@email.com'
   );
 
 -- Pagamento 2 (Débito) - Maria Oliveira
-INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (
+    user_id, order_id, type, expires_in, status, paid_at, tid, amount, qr_code, observations, created_at, updated_at
+)
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
     'DEBIT_CARD',
     NOW() + interval '1 hour',
+    'APPROVED',
+    NOW() - interval '25 minute',
     'TID-000002',
     79.70,
     '000201010asdasd43650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
@@ -42,12 +50,16 @@ WHERE u.email = 'maria@email.com'
   );
 
 -- Pagamento 3 (PIX) - Maria Oliveira
-INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (
+    user_id, order_id, type, expires_in, status, paid_at, tid, amount, qr_code, observations, created_at, updated_at
+)
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
     'PIX',
     NOW() + interval '1 hour',
+    'PENDING',
+    NULL,
     'TID-000003',
     19.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***6304A13B',
@@ -61,12 +73,16 @@ WHERE u.email = 'maria@email.com'
   );
 
 -- Pagamento 4 (PIX) - Maria Oliveira
-INSERT INTO payments (user_id, order_id, type, expires_in, tid, amount, qr_code, observations, created_at, updated_at)
+INSERT INTO payments (
+    user_id, order_id, type, expires_in, status, paid_at, tid, amount, qr_code, observations, created_at, updated_at
+)
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
     'PIX',
     NOW() + interval '1 hour',
+    'PENDING',
+    NULL,
     'TID-000004',
     4.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409cafe-9876-abcd-1234-1234567890cd5204000053039865802BR5912Maria Silva6009RIO BRANCO62070503***6304C7D2',
