@@ -1,17 +1,17 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador REST para pagamentos
@@ -48,6 +48,19 @@ public class PaymentController {
         paymentUseCase.notification(notification);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Buscar status do pagamento por ID do pedido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status do pagamento retornado com sucesso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentStatusResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)
+    })
+    @GetMapping("/{orderId}/status")
+    public ResponseEntity<PaymentStatusResponse> getPaymentStatus(@PathVariable Long orderId) {
+        log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
+        var response = paymentUseCase.getPaymentStatus(orderId);
+        return ResponseEntity.ok(response);
     }
 //
 //    /**

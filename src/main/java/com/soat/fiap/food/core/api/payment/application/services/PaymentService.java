@@ -2,7 +2,9 @@ package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
+import com.soat.fiap.food.core.api.payment.application.mapper.response.PaymentStatusResponseMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
@@ -28,16 +30,19 @@ public class PaymentService implements PaymentUseCase {
     private final PaymentRepository paymentRepository;
     private final MercadoPagoPort mercadoPagoPort;
     private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
+    private final PaymentStatusResponseMapper paymentStatusResponseMapper;
     private final ApplicationEventPublisher eventPublisher;
 
     public PaymentService(
             PaymentRepository paymentRepository,
             MercadoPagoPort mercadoPagoPort,
             GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
-            ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher,
+            PaymentStatusResponseMapper paymentStatusResponseMapper) {
         this.paymentRepository = paymentRepository;
         this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;
+        this.paymentStatusResponseMapper = paymentStatusResponseMapper;
         this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
     }
 
@@ -115,6 +120,19 @@ public class PaymentService implements PaymentUseCase {
             log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.get().getId(), payment.get().getOrderId());
         }
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PaymentStatusResponse getPaymentStatus(Long orderId) {
+        var payment = paymentRepository.findByOrderId(orderId);
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
+            throw new PaymentNotFoundException("Pagamento", orderId);
+        }
+
+        return paymentStatusResponseMapper.toResponse(payment.get());
     }
 
 //
