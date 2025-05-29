@@ -2,9 +2,10 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadop
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.GenerateQrCodeRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.GenerateQrCodeResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoPaymentsResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Headers;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -18,6 +19,11 @@ public interface MercadoPagoClient {
             @Path("user_id") String userId,
             @Path("pos_id") String posId,
             @Body GenerateQrCodeRequest request
+    );
+
+    @GET("/v1/payments/{payment_id}")
+    Call<MercadoPagoPaymentsResponse> getMercadoPagoPayments(
+            @Path("payment_id") String paymentId
     );
 
 }

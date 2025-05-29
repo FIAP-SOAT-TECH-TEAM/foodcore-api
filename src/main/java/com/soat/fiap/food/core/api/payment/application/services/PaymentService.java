@@ -5,13 +5,18 @@ import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNo
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
+import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -81,7 +86,34 @@ public class PaymentService implements PaymentUseCase {
     @Transactional
     public void notification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest) {
 
-        var a = 2;
+        var mercadoPagoPaymentResponse = mercadoPagoPort.getMercadoPagoPayments(mercadoPagoNotificationRequest.getDataId());
+        var longExternalRefernce = Long.parseLong(mercadoPagoPaymentResponse.getExternal_reference());
+        var payment = paymentRepository.findByOrderId(longExternalRefernce);
+
+        var mercadoPagoPaymentStatus = mercadoPagoPaymentResponse.getStatus().toUpperCase();
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir da external_referente! {}", longExternalRefernce);
+            throw new PaymentNotFoundException("Pagamento", longExternalRefernce);
+        }
+        else if (mercadoPagoPaymentStatus.equals(PaymentStatus.APPROVED.name())) {
+
+            payment.get().setStatus(PaymentStatus.APPROVED);
+            paymentRepository.save(payment.get());
+
+            log.info("Pagamento aprovado: {}, Publicando evento!", payment.get().getId());
+
+            eventPublisher.publishEvent(
+                PaymentApprovedEvent.of(
+                    payment.get().getId(),
+                    payment.get().getOrderId(),
+                    payment.get().getAmount(),
+                    payment.get().getTypeName()
+                )
+            );
+
+            log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.get().getId(), payment.get().getOrderId());
+        }
 
     }
 

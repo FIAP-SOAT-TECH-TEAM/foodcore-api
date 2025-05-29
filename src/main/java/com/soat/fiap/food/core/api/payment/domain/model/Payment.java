@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentException;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -74,6 +75,7 @@ public class Payment {
         }
 
         this.status = status;
+        markUpdatedNow();
     }
 
     /**
@@ -114,6 +116,24 @@ public class Payment {
                         .now()
                         .atOffset(ZoneOffset.of("-03:00")
         ));
+    }
+
+    /**
+     * Retorna o nome do método de pagamento.
+     *
+     * @return o nome do método de pagamento
+     */
+    public String getTypeName() {
+        return this.type.name();
+    }
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
 
 }

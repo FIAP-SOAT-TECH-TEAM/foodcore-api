@@ -13,7 +13,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = GenerateQrCodeItemRequestMapper.class)
 public interface GenerateQrCodeRequestMapper {
 
-    @Mapping(target = "external_reference", source = "orderNumber")
+    @Mapping(target = "external_reference", source = "id")
     @Mapping(target = "title", expression = "java(\"Pedido #\" + event.getOrderNumber())")
     @Mapping(target = "description", source = "statusDescription")
     @Mapping(target = "notification_url", ignore = true)

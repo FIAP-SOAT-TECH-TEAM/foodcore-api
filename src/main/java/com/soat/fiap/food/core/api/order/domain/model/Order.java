@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.order.domain.model;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
 
@@ -157,7 +158,7 @@ public class Order {
         validateStatusTransition(newStatus);
 
         this.orderStatus = newStatus;
-        this.auditInfo.setUpdatedAt(LocalDateTime.now());
+        markUpdatedNow();
     }
 
     /**
@@ -190,5 +191,14 @@ public class Order {
         BigDecimal percentage = BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(95));
         BigDecimal discount = this.amount.multiply(percentage);
         this.amount = this.amount.subtract(discount);
+    }
+
+    /**
+     * Atualiza o campo updatedAt com o horário atual.
+     *
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
+     */
+    public void markUpdatedNow() {
+        this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
 }

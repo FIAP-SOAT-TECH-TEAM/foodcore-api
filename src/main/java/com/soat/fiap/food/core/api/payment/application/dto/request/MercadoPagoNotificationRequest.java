@@ -61,5 +61,9 @@ public class MercadoPagoNotificationRequest {
         @Schema(description = "Identificador da entidade associada (ex: pagamento)", example = "1234567890")
         private String id;
     }
+
+    public String getDataId() {
+        return this.data.getId();
+    }
 }
 
