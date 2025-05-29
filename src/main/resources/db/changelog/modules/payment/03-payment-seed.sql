@@ -92,5 +92,5 @@ SELECT
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
-      SELECT 1 FROM payments p WHERE p.tid = 'TID-000004'
+      SELECT 1 FROM payments p WHERE p.tid = '10448279-hc37-4e2e-a2f5-c379f2340e53'
   );
