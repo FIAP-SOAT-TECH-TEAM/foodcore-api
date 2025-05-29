@@ -27,7 +27,7 @@ public class Payment {
     private OffsetDateTime expiresIn = LocalDateTime
             .now()
             .plusMinutes(30)
-            .atOffset(ZoneOffset.of("-03:00"));
+            .atOffset(ZoneOffset.of("-04:00"));
     private String tid;
     private BigDecimal amount;
     private QrCode qrCode;
@@ -119,7 +119,7 @@ public class Payment {
         return expiresIn.isBefore(
                 LocalDateTime
                         .now()
-                        .atOffset(ZoneOffset.of("-03:00")
+                        .atOffset(ZoneOffset.of("-04:00")
         ));
     }
 

@@ -29,20 +29,10 @@ public interface PaymentUseCase {
      * @param orderId id do pedido
      */
     PaymentStatusResponse getPaymentStatus(Long orderId);
-//
-//    /**
-//     * Verifica o status de um pagamento
-//     *
-//     * @param paymentId ID do pagamento
-//     * @return Status atual do pagamento
-//     */
-//    String checkPaymentStatus(String paymentId);
-//
-//    /**
-//     * Processa uma notificação de pagamento (callback/webhook)
-//     *
-//     * @param paymentId ID do pagamento
-//     * @param status Novo status do pagamento
-//     */
-//    void processPaymentNotification(String paymentId, String status);
+
+    /**
+     * Processa pagamentos pendentes expirados
+     *
+     */
+    void proccessPendingExpiredPayments();
 } 

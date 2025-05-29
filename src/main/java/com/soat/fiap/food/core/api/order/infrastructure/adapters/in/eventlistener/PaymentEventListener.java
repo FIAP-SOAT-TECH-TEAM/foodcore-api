@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.eventlisten
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -48,6 +49,19 @@ public class PaymentEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
         log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
+
+        orderUseCase.updateOrderStatusToCancelled(event.getOrderId());
+    }
+
+    /**
+     * Processa eventos de pagamento expirado
+     *
+     * @param event Evento de pagamento expirado
+     */
+    @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void handlePaymentExpiredEvent(PaymentExpiredEvent event) {
+        log.info("Módulo Order: Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(), event.getPaymentId());
 
         orderUseCase.updateOrderStatusToCancelled(event.getOrderId());
     }

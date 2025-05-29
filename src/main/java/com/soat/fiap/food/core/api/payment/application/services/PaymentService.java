@@ -8,6 +8,7 @@ import com.soat.fiap.food.core.api.payment.application.mapper.response.PaymentSt
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
 import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
@@ -17,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -138,5 +142,32 @@ public class PaymentService implements PaymentUseCase {
         }
 
         return paymentStatusResponseMapper.toResponse(payment.get());
+    }
+
+    @Override
+    @Transactional
+    public void proccessPendingExpiredPayments() {
+
+        var expiredPayments = paymentRepository.findByStatusAndExpiresInBefore(PaymentStatus.PENDING, LocalDateTime
+                .now()
+                .atOffset(ZoneOffset.of("-04:00")));
+
+        if (expiredPayments.isEmpty()) {
+            log.info("Nenhum pagamento pendente expirado encontrado!");
+            return;
+        }
+
+        for (Payment expiredPayment: expiredPayments) {
+            log.info("Iniciando processamento expirado: {}, pedido: {}, expirado em: {}", expiredPayment.getId(), expiredPayment.getOrderId(), expiredPayment.getExpiresIn().toString());
+            expiredPayment.setStatus(PaymentStatus.CANCELLED);
+            paymentRepository.save(expiredPayment);
+
+            log.info("Pagamento expirado cancelado: {}", expiredPayment.getId());
+
+            var expiredEvent = new PaymentExpiredEvent(expiredPayment.getId(), expiredPayment.getOrderId(), expiredPayment.getExpiresIn());
+            eventPublisher.publishEvent(expiredEvent);
+
+            log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
+        }
     }
 }
