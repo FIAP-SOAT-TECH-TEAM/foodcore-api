@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.user.domain.model;
 
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.user.domain.exceptions.UserException;
 
 import lombok.Data;
 
@@ -10,10 +11,13 @@ import java.time.LocalDateTime;
 /**
  * Entidade de domínio que representa um usuário
  * AGGREGATE ROOT:
- *  - Toda modificação de entidades internas do agregado devem passar pela entidade raíz;
- *  - Único ponto de entrada para qualquer entidade interna do agregado (Lei de Demeter);
- *  - Entidades dentro deste agregado podem se referenciar via id ou objeto;
- *  - Entidades de outros agregados só podem referenciar esta entidade raiz, e isto deve ser via Id;
+ * - Toda modificação de entidades internas do agregado devem passar pela
+ * entidade raiz;
+ * - Único ponto de entrada para qualquer entidade interna do agregado (Lei de
+ * Demeter);
+ * - Entidades dentro deste agregado podem se referenciar via id ou objeto;
+ * - Entidades de outros agregados só podem referenciar esta entidade raiz, e
+ * isto deve ser via Id;
  */
 @Data
 public class User {
@@ -55,7 +59,7 @@ public class User {
     public void deactivate() {
         this.active = false;
     }
-    
+
     /**
      * Verifica se o DOCUMENT é válido (implementação simples)
      * @return true se válido, false caso contrário
@@ -109,24 +113,24 @@ public class User {
      */
     public void validateInternalState() {
         if (hasDocument() && !isValidDocument()) {
-            throw new BusinessException("Documento inválido");
+            throw new UserException("Documento inválido");
         }
         if (hasDocument() && this.document.length() < 11) {
-            throw new BusinessException("O documento deve ter pelo menos 11 caracteres");
+            throw new UserException("O documento deve ter pelo menos 11 caracteres");
         }
         if (hasEmail()) {
             if (!this.email.contains("@")) {
-                throw new BusinessException("Email inválido");
+                throw new UserException("Email inválido");
             }
             if (this.name == null || this.name.isBlank()) {
-                throw new BusinessException("Nome é obrigatório");
+                throw new UserException("Nome é obrigatório");
             }
         }
         if (hasUsername() && this.username.length() < 3) {
-            throw new BusinessException("O username deve ter pelo menos 3 caracteres");
+            throw new UserException("O username deve ter pelo menos 3 caracteres");
         }
         if (hasPassword() && this.password.length() < 8) {
-            throw new BusinessException("A senha deve ter pelo menos 8 caracteres");
+            throw new UserException("A senha deve ter pelo menos 8 caracteres");
         }
     }
 
