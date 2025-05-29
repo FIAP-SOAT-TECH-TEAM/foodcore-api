@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS payments (
     CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT chk_paid_at_if_approved CHECK (status != 'APPROVED' OR paid_at IS NOT NULL),
-    CONSTRAINT chk_type CHECK (status = 'PENDING' OR type IS NOT NULL),
-    CONSTRAINT chk_tid CHECK (status = 'PENDING' OR tid IS NOT NULL)
+    CONSTRAINT chk_type CHECK (status = 'PENDING' OR status = 'CANCELLED' OR type IS NOT NULL),
+    CONSTRAINT chk_tid CHECK (status = 'PENDING' OR status = 'CANCELLED' OR tid IS NOT NULL)
 );
 
 COMMENT ON TABLE payments IS 'Tabela que armazena os pagamentos do sistema';
@@ -37,5 +37,5 @@ COMMENT ON COLUMN payments.observations IS 'Observações adicionais sobre o pag
 COMMENT ON COLUMN payments.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN payments.updated_at IS 'Data da última atualização do registro';
 COMMENT ON CONSTRAINT chk_paid_at_if_approved ON payments IS 'Se o status do pagamento for APPROVED, o campo paid_at deve ser obrigatoriamente preenchido.';
-COMMENT ON CONSTRAINT chk_type ON payments IS 'Se o status do pagamento não for PENDING, o campo type deve ser obrigatoriamente preenchido.';
-COMMENT ON CONSTRAINT chk_tid ON payments IS 'Se o status do pagamento não for PENDING, o campo tid deve ser obrigatoriamente preenchido.';
+COMMENT ON CONSTRAINT chk_type ON payments IS 'Se o status do pagamento não for PENDING/CANCELLED, o campo type deve ser obrigatoriamente preenchido.';
+COMMENT ON CONSTRAINT chk_tid ON payments IS 'Se o status do pagamento não for PENDING/CANCELLED, o campo tid deve ser obrigatoriamente preenchido.';
