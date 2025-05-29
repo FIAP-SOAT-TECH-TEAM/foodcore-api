@@ -35,7 +35,7 @@ public class PaymentEventListener {
         log.info("Módulo Order: Recebido evento de pagamento aprovado para o pedido: {}, valor: {}",
                 event.getOrderId(), event.getAmount());
         
-          orderUseCase.updateOrderStatusToPreparing(event.getOrderId());
+          orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.PREPARING);
 
           log.info("Pedido {} atualizado para status PREPARING após pagamento aprovado", event.getOrderId());
     }
@@ -50,7 +50,7 @@ public class PaymentEventListener {
     public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
         log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
 
-        orderUseCase.updateOrderStatusToCancelled(event.getOrderId());
+        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.CANCELLED);
     }
 
     /**
@@ -63,6 +63,6 @@ public class PaymentEventListener {
     public void handlePaymentExpiredEvent(PaymentExpiredEvent event) {
         log.info("Módulo Order: Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(), event.getPaymentId());
 
-        orderUseCase.updateOrderStatusToCancelled(event.getOrderId());
+        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.CANCELLED);
     }
 } 

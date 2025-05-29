@@ -22,24 +22,18 @@ public interface OrderUseCase {
     OrderResponse createOrder(CreateOrderRequest createOrderRequest);
 
     /**
-     * Atualiza o status de um pedido para em preparo
+     * Atualiza o status de um pedido
      *
      * @param orderId ID do pedido
+     * @param orderStatus novo status do pedido
      */
-    void updateOrderStatusToPreparing(Long orderId);
-
-    /**
-     * Atualiza o status de um pedido para cancelado
-     *
-     * @param orderId ID do pedido
-     */
-    void updateOrderStatusToCancelled(Long orderId);
+    void updateOrderStatus(Long orderId, OrderStatus orderStatus);
 
     /**
      * Atualiza o status de um pedido
      *
      * @param orderId ID do pedido
-     * @param orderStatusRequest Novo status
+     * @param orderStatusRequest novo status do pedido
      */
     OrderStatusResponse updateOrderStatus(Long orderId, OrderStatusRequest orderStatusRequest);
 

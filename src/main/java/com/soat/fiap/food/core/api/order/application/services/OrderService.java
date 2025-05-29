@@ -104,38 +104,23 @@ public class OrderService implements OrderUseCase {
 
     @Override
     @Transactional
-    public void updateOrderStatusToPreparing(Long orderId) {
-        logger.info("Atualizando status do pedido {} para {}", orderId, OrderStatus.PREPARING);
+    public void updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+        logger.info("Atualizando status do pedido {} para {}", orderId, orderStatus);
 
         var order = orderRepository.findById(orderId);
 
         if (order.isEmpty()) {
             throw new OrderNotFoundException("Pedido", orderId);
         }
-
-        order.get().setOrderStatus(OrderStatus.PREPARING);
-
-        orderRepository.save(order.get());
-
-        logger.info("Status do pedido {} atualizado para {}", orderId, OrderStatus.PREPARING);
-    }
-
-    @Override
-    @Transactional
-    public void updateOrderStatusToCancelled(Long orderId) {
-        logger.info("Atualizando status do pedido {} para {}", orderId, OrderStatus.CANCELLED);
-
-        var order = orderRepository.findById(orderId);
-
-        if (order.isEmpty()) {
-            throw new OrderNotFoundException("Pedido", orderId);
+        else if (order.get().getOrderStatus() == orderStatus) {
+            return;
         }
 
-        order.get().setOrderStatus(OrderStatus.CANCELLED);
+        order.get().setOrderStatus(orderStatus);
 
         orderRepository.save(order.get());
 
-        logger.info("Status do pedido {} atualizado para {}", orderId, OrderStatus.CANCELLED);
+        logger.info("Status do pedido {} atualizado para {}", orderId, orderStatus);
     }
 
     @Override

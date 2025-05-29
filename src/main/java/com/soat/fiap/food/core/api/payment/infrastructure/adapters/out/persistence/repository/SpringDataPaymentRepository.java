@@ -14,12 +14,6 @@ import java.util.Optional;
  */
 @Repository
 public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity, Long> {
-//
-//    /**
-//     * Busca uma entidade de pagamento pelo ID externo
-//     */
-//    Optional<PaymentEntity> findByExternalId(String externalId);
-//
     /**
      * Busca o último pagamento inserido para um determinado pedido
      */
@@ -34,9 +28,4 @@ public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity
      * Busca pagamentos expirados com um determinado status
      */
     List<PaymentEntity> findByStatusAndExpiresInBefore(PaymentStatus status, OffsetDateTime now);
-//
-//    /**
-//     * Lista todas as entidades de pagamento com determinado status
-//     */
-//    List<PaymentEntity> findByStatus(OrderPaymentStatus status);
 } 
