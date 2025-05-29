@@ -11,7 +11,7 @@ import java.io.Serializable;
  * <p>
  * Exemplo: "ORD-2023-00042"
  */
-public record OrderNumber(int year, int sequential) implements Serializable {
+public record OrderNumber(int year, long sequential) implements Serializable {
 
     /**
      * Cria um novo número de pedido.

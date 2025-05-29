@@ -11,6 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +23,10 @@ import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 @Setter
 public class OrderEntity {
 
+    // GenerationType IDENTITY não acionará o @PrePersist de criação do orderNumber
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq_gen")
+    @SequenceGenerator(name = "order_id_seq_gen", sequenceName = "orders_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "user_id")
@@ -48,4 +51,9 @@ public class OrderEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             orphanRemoval = true)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
+
+    @PrePersist
+    public void generateOrderNumber() {
+        this.orderNumber = new OrderNumber(LocalDate.now().getYear(), this.id.intValue());
+    }
 }

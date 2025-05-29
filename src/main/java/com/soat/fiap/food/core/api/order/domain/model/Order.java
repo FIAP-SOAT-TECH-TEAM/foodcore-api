@@ -28,7 +28,7 @@ public class Order {
 
     private Long id;
     private Long userId;
-    private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), System.identityHashCode(this));
+    private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), (id == null ) ? 0 : id);
     private OrderStatus orderStatus = OrderStatus.RECEIVED;
     private BigDecimal amount;
     private AuditInfo auditInfo = new AuditInfo();
