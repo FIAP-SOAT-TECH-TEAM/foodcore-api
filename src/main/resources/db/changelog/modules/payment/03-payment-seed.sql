@@ -14,7 +14,7 @@ SELECT
     NOW() + interval '30 days',
     'APPROVED',
     NOW() - interval '1 hour',
-    '104ab379-hc37-4e2e-a2f5-c379f2340e56',
+    '112673020299',
     32.80,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento aprovado via cartão',
@@ -23,7 +23,7 @@ SELECT
 FROM users u
 WHERE u.email = 'joao@email.com'
   AND NOT EXISTS (
-      SELECT 1 FROM payments p WHERE p.tid = '104ab379-hc37-4e2e-a2f5-c379f2340e56'
+      SELECT 1 FROM payments p WHERE p.tid = '112673020299'
   );
 
 -- Pagamento 2 (Débito) - Maria Oliveira
@@ -37,7 +37,7 @@ SELECT
     NOW() + interval '1 hour',
     'APPROVED',
     NOW() - interval '25 minute',
-    '1044b379-hc37-4e2e-a2f5-c379f2340e59',
+    '872379520298',
     79.70,
     '000201010asdasd43650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento via débito automático',
@@ -46,7 +46,7 @@ SELECT
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
-      SELECT 1 FROM payments p WHERE p.tid = '1044b379-hc37-4e2e-a2f5-c379f2340e59'
+      SELECT 1 FROM payments p WHERE p.tid = '872379520298'
   );
 
 -- Pagamento 3 (PIX) - Maria Oliveira
@@ -56,11 +56,11 @@ INSERT INTO payments (
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003'),
-    'PIX',
+    NULL,
     NOW() + interval '1 hour',
     'PENDING',
     NULL,
-    '1044b279-hc37-4e2e-a2f5-c379f2340e53',
+    '622433528299',
     19.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***6304A13B',
     'QR Code gerado para pagamento',
@@ -69,7 +69,7 @@ SELECT
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
-      SELECT 1 FROM payments p WHERE p.tid = '1044b279-hc37-4e2e-a2f5-c379f2340e53'
+      SELECT 1 FROM payments p WHERE p.tid = '622433528299'
   );
 
 -- Pagamento 4 (PIX) - Maria Oliveira
@@ -79,11 +79,11 @@ INSERT INTO payments (
 SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000004'),
-    'PIX',
+    NULL,
     NOW() + interval '1 hour',
     'PENDING',
     NULL,
-    '10448279-hc37-4e2e-a2f5-c379f2340e53',
+    '2126735727299',
     4.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409cafe-9876-abcd-1234-1234567890cd5204000053039865802BR5912Maria Silva6009RIO BRANCO62070503***6304C7D2',
     'QR Code gerado para pagamento',
@@ -92,5 +92,5 @@ SELECT
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
-      SELECT 1 FROM payments p WHERE p.tid = '10448279-hc37-4e2e-a2f5-c379f2340e53'
+      SELECT 1 FROM payments p WHERE p.tid = '2126735727299'
   );

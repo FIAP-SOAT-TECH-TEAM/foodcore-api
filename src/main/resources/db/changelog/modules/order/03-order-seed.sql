@@ -56,7 +56,7 @@ INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_a
 SELECT
     (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-2025-00000002',
-    'CANCELLED',
+    'READY',
     79.70,
     now() - interval '30 minute',
     now() - interval '25 minute'
@@ -167,7 +167,7 @@ INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_a
 SELECT
     (SELECT id FROM users WHERE email = 'joao@email.com'),
     'ORD-2025-00000004',
-    'COMPLETED',
+    'RECEIVED',
     4.90,
     now() - interval '3 minute',
     now() - interval '3 minute'
