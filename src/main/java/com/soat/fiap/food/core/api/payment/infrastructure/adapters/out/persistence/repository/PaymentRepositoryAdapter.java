@@ -2,9 +2,12 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentEntityMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,19 +31,7 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
         var savedEntity = repository.save(entity);
         return mapper.toDomain(savedEntity);
     }
-//
-//    @Override
-//    public Optional<Payment> findById(Long id) {
-//        return repository.findById(id)
-//                .map(mapper::toDomain);
-//    }
-//
-//    @Override
-//    public Optional<Payment> findByExternalId(String externalId) {
-//        return repository.findByExternalId(externalId)
-//                .map(mapper::toDomain);
-//    }
-//
+
     @Override
     public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
         return repository.findTopByOrderIdOrderByIdDesc(orderId)
@@ -51,10 +42,11 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
     public boolean existsByOrderId(Long orderId) {
         return repository.existsByOrderId(orderId);
     }
-//
-//    @Override
-//    public List<Payment> findByStatus(OrderPaymentStatus status) {
-//        List<PaymentEntity> entities = repository.findByStatus(status);
-//        return mapper.toDomainList(entities);
-//    }
+
+    @Override
+    public List<Payment> findByStatusAndExpiresInBefore(PaymentStatus status, OffsetDateTime now) {
+      var paymentEntities = repository.findByStatusAndExpiresInBefore(status, now);
+
+      return mapper.toDomainList(paymentEntities);
+    }
 }
