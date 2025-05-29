@@ -61,4 +61,10 @@ public class OrderRepositoryAdapter implements OrderRepository {
     public void delete(Long id) {
         springDataOrderRepository.deleteById(id);
     }
+
+    @Override
+    public List<Order> findActiveOrdersSorted() {
+        List<OrderEntity> orderEntities = springDataOrderRepository.findActiveOrdersSorted();
+        return orderEntityMapper.toDomainList(orderEntities);
+    }
 } 

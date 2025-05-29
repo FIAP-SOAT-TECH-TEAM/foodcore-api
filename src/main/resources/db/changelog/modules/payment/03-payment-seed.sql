@@ -9,7 +9,7 @@ INSERT INTO payments (
 )
 SELECT
     u.id,
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001'),
     'CREDIT_CARD',
     NOW() + interval '30 days',
     'APPROVED',
@@ -32,7 +32,7 @@ INSERT INTO payments (
 )
 SELECT
     u.id,
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
     'DEBIT_CARD',
     NOW() + interval '1 hour',
     'APPROVED',
@@ -55,7 +55,7 @@ INSERT INTO payments (
 )
 SELECT
     u.id,
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003'),
     'PIX',
     NOW() + interval '1 hour',
     'PENDING',
@@ -78,7 +78,7 @@ INSERT INTO payments (
 )
 SELECT
     u.id,
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000004'),
     'PIX',
     NOW() + interval '1 hour',
     'PENDING',

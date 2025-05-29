@@ -7,20 +7,20 @@
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM users WHERE email = 'maria@email.com' LIMIT 1),
-    'ORD-00000001',
+    'ORD-2025-00000001',
     'COMPLETED',
     32.80,
     now() - interval '2 hour',
     now() - interval '1 hour'
 WHERE NOT EXISTS (
-    SELECT 1 FROM orders WHERE order_number = 'ORD-00000001'
+    SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000001'
 );
 
 -- Itens do pedido 1
 -- X-Burger
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001'),
     (SELECT id FROM products WHERE name = 'X-Burger'),
     'X-Burger',
     1,
@@ -30,14 +30,14 @@ SELECT
     now() - interval '2 hour'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000001')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001')
     AND product_id = (SELECT id FROM products WHERE name = 'X-Burger')
 );
 
 -- Refrigerante Lata
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000001'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001'),
     (SELECT id FROM products WHERE name = 'Refrigerante Lata'),
     'Refrigerante Lata',
     1,
@@ -47,7 +47,7 @@ SELECT
     now() - interval '2 hour'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000001')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001')
     AND product_id = (SELECT id FROM products WHERE name = 'Refrigerante Lata')
 );
 
@@ -55,19 +55,19 @@ WHERE NOT EXISTS (
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM users WHERE email = 'joao@email.com'),
-    'ORD-00000002',
+    'ORD-2025-00000002',
     'CANCELLED',
     79.70,
     now() - interval '30 minute',
     now() - interval '25 minute'
 WHERE NOT EXISTS (
-    SELECT 1 FROM orders WHERE order_number = 'ORD-00000002'
+    SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000002'
 );
 
 -- X-Salada
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
     (SELECT id FROM products WHERE name = 'X-Salada'),
     'X-Salada',
     2,
@@ -77,14 +77,14 @@ SELECT
     now() - interval '30 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
     AND product_id = (SELECT id FROM products WHERE name = 'X-Salada')
 );
 
 -- X-Bacon
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
     (SELECT id FROM products WHERE name = 'X-Bacon'),
     'X-Bacon',
     1,
@@ -94,14 +94,14 @@ SELECT
     now() - interval '30 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
     AND product_id = (SELECT id FROM products WHERE name = 'X-Bacon')
 );
 
 -- Refrigerante Lata
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000002'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
     (SELECT id FROM products WHERE name = 'Refrigerante Lata'),
     'Refrigerante Lata',
     2,
@@ -111,7 +111,7 @@ SELECT
     now() - interval '30 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000002')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
     AND product_id = (SELECT id FROM products WHERE name = 'Refrigerante Lata')
 );
 
@@ -119,19 +119,19 @@ WHERE NOT EXISTS (
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM users WHERE email = 'joao@email.com'),
-    'ORD-00000003',
+    'ORD-2025-00000003',
     'RECEIVED',
     19.90,
     now() - interval '5 minute',
     now() - interval '5 minute'
 WHERE NOT EXISTS (
-    SELECT 1 FROM orders WHERE order_number = 'ORD-00000003'
+    SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000003'
 );
 
 -- Água Mineral
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003'),
     (SELECT id FROM products WHERE name = 'Água Mineral'),
     'Água Mineral',
     1,
@@ -141,14 +141,14 @@ SELECT
     now() - interval '5 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003')
     AND product_id = (SELECT id FROM products WHERE name = 'Água Mineral')
 );
 
 -- Batata Frita G
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000003'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003'),
     (SELECT id FROM products WHERE name = 'Batata Frita G'),
     'Batata Frita G',
     1,
@@ -158,7 +158,7 @@ SELECT
     now() - interval '5 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000003')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003')
     AND product_id = (SELECT id FROM products WHERE name = 'Batata Frita G')
 );
 
@@ -166,19 +166,19 @@ WHERE NOT EXISTS (
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
 SELECT
     (SELECT id FROM users WHERE email = 'joao@email.com'),
-    'ORD-00000004',
+    'ORD-2025-00000004',
     'COMPLETED',
     4.90,
     now() - interval '3 minute',
     now() - interval '3 minute'
 WHERE NOT EXISTS (
-    SELECT 1 FROM orders WHERE order_number = 'ORD-00000004'
+    SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000004'
 );
 
 -- Água Mineral (único item)
 INSERT INTO order_items (order_id, product_id, name, quantity, unit_price, observations, created_at, updated_at)
 SELECT
-    (SELECT id FROM orders WHERE order_number = 'ORD-00000004'),
+    (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000004'),
     (SELECT id FROM products WHERE name = 'Água Mineral'),
     'Água Mineral',
     1,
@@ -188,6 +188,6 @@ SELECT
     now() - interval '3 minute'
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
-    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-00000004')
+    WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000004')
     AND product_id = (SELECT id FROM products WHERE name = 'Água Mineral')
 );

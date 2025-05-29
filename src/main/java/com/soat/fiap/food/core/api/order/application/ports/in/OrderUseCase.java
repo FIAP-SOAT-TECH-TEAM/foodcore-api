@@ -19,37 +19,19 @@ public interface OrderUseCase {
      */
     OrderResponse createOrder(CreateOrderRequest createOrderRequest);
 
-//    /**
-//     * Busca um pedido pelo ID
-//     *
-//     * @param orderId ID do pedido
-//     * @return Pedido encontrado ou vazio
-//     */
-//    OrderResponse findOrderById(Long orderId);
-//
-//    /**
-//     * Lista todos os pedidos com determinado status
-//     *
-//     * @param status Status dos pedidos
-//     * @return Lista de pedidos
-//     */
-//    List<OrderResponse> findOrdersByStatus(OrderStatus status);
-//
-        /**
-         * Atualiza o status de um pedido
-         *
-         * @param orderId ID do pedido
-         * @param newStatus Novo status
-         */
-        void updateOrderStatus(Long orderId, OrderStatus newStatus);
-//
-//    /**
-//     * Adiciona um item a um pedido existente
-//     *
-//     * @param orderId ID do pedido
-//     * @param productId ID do produto
-//     * @param quantity Quantidade
-//     * @return Pedido atualizado
-//     */
-//    OrderResponse addItemToOrder(Long orderId, Long productId, Integer quantity);
+    /**
+     * Atualiza o status de um pedido
+     *
+     * @param orderId ID do pedido
+     * @param newStatus Novo status
+     */
+    void updateOrderStatus(Long orderId, OrderStatus newStatus);
+
+    /**
+     * Busca pedidos que não estejam finalizados, ordenados por prioridade de status e data de criação.
+     * A ordem de prioridade de status é: PRONTO > EM_PREPARACAO > RECEBIDO.
+     * Pedidos com status FINALIZADO não são retornados.
+     *
+     */
+    List<OrderResponse> getActiveOrdersSorted();
 } 

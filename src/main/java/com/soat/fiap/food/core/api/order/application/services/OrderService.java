@@ -92,26 +92,7 @@ public class OrderService implements OrderUseCase {
         return saveOrderToResponse;
     }
 
-//    @Override
-//    public Optional<Order> findOrderById(Long orderId) {
-//        logger.debug("Buscando pedido ID: {}", orderId);
-//        Optional<Order> orderOpt = orderRepository.findById(orderId);
-//
-//        orderOpt.ifPresent(this::loadCustomerIfNeeded);
-//
-//        return orderOpt;
-//    }
-//
-//    @Override
-//    public List<Order> findOrdersByStatus(OrderStatus status) {
-//        logger.debug("Buscando pedidos com status: {}", status);
-//        List<Order> orders = orderRepository.findByStatus(status);
-//
-//        orders.forEach(this::loadCustomerIfNeeded);
-//
-//        return orders;
-//    }
-//
+
     @Override
     @Transactional
     public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
@@ -129,29 +110,16 @@ public class OrderService implements OrderUseCase {
 
         logger.info("Status do pedido {} atualizado para {}", orderId, newStatus);
     }
-//
-//    @Override
-//    @Transactional
-//    public Order addItemToOrder(Long orderId, Long productId, Integer quantity) {
-//        logger.info("Adicionando item ao pedido {}: produto {}, quantidade {}", orderId, productId, quantity);
-//
-//        Order order = findOrderById(orderId)
-//                .orElseThrow(() -> new ResourceNotFoundException("order", orderId));
-//
-//        Product product = productRepository.findById(productId)
-//                .orElseThrow(() -> new ResourceNotFoundException("product", productId));
-//
-//        OrderItem item = OrderItem.builder()
-//                .product(product)
-//                .quantity(quantity)
-//                .unitPrice(product.getPrice())
-//                .build();
-//
-//        order.addItem(item);
-//
-//        Order updatedOrder = orderRepository.save(order);
-//
-//        logger.info("Item adicionado ao pedido {}. Novo total: {}", orderId, updatedOrder.getTotalAmount());
-//        return updatedOrder;
-//    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getActiveOrdersSorted() {
+        logger.info("Buscando pedidos ativos ordenados por prioridade e data de criação.");
+
+        var activeOrders = orderRepository.findActiveOrdersSorted();
+
+        return activeOrders.stream()
+                .map(orderResponseMapper::toResponse)
+                .toList();
+    }
 } 

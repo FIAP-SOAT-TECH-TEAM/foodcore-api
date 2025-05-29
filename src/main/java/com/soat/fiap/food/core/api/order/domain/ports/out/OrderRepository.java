@@ -50,4 +50,14 @@ public interface OrderRepository {
      * @param id ID do pedido a ser removido
      */
     void delete(Long id);
+
+    /**
+     * Busca pedidos que não estejam finalizados, ordenados por prioridade de status e data de criação.
+     * A ordem de prioridade de status é: PRONTO > EM_PREPARACAO > RECEBIDO.
+     * Pedidos com status FINALIZADO não são retornados.
+     *
+     * @return Lista de pedidos ativos ordenados por prioridade de status e data de criação (mais antigos primeiro)
+     */
+    List<Order> findActiveOrdersSorted();
+
 } 
