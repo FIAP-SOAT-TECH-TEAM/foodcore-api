@@ -18,8 +18,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 /**
  * Implementação do caso de uso de pagamento
  */
@@ -69,7 +67,6 @@ public class PaymentService implements PaymentUseCase {
             var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
 
             payment.setQrCode(generateQrCodeResponse.getQr_data());
-            payment.setTid(generateQrCodeResponse.getIn_store_order_id());
 
             var savedPayment = paymentRepository.save(payment);
 
@@ -94,15 +91,24 @@ public class PaymentService implements PaymentUseCase {
 
         var mercadoPagoPaymentResponse = mercadoPagoPort.getMercadoPagoPayments(mercadoPagoNotificationRequest.getDataId());
         var longExternalRefernce = Long.parseLong(mercadoPagoPaymentResponse.getExternal_reference());
-        var payment = paymentRepository.findByOrderId(longExternalRefernce);
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(longExternalRefernce);
 
         if (payment.isEmpty()) {
-            log.warn("Pagamento não foi encontrado a partir da external_referente! {}", longExternalRefernce);
+            log.warn("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
             throw new PaymentNotFoundException("Pagamento", longExternalRefernce);
+        }
+        else if(payment.get().getStatus() == PaymentStatus.APPROVED) {
+            log.info("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
+            return;
+        }
+        // Indica que se trata de uma segunda tentativa de pagamento
+        else if(payment.get().getStatus() != PaymentStatus.PENDING) {
+            payment.get().setId(null);
         }
 
         payment.get().setStatus(mercadoPagoPaymentResponse.getStatus());
         payment.get().setType(mercadoPagoPaymentResponse.getPaymentType());
+        payment.get().setTid(mercadoPagoNotificationRequest.getDataId());
         paymentRepository.save(payment.get());
 
         if (mercadoPagoPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
@@ -124,7 +130,7 @@ public class PaymentService implements PaymentUseCase {
     @Override
     @Transactional(readOnly = true)
     public PaymentStatusResponse getPaymentStatus(Long orderId) {
-        var payment = paymentRepository.findByOrderId(orderId);
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(orderId);
 
         if (payment.isEmpty()) {
             log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
@@ -133,48 +139,4 @@ public class PaymentService implements PaymentUseCase {
 
         return paymentStatusResponseMapper.toResponse(payment.get());
     }
-
-//
-//    @Override
-//    @Transactional(readOnly = true)
-//    public String checkPaymentStatus(String paymentId) {
-//        log.info("Verificando status do pagamento: {}", paymentId);
-//
-//        var payment = paymentRepository.findByExternalId(paymentId)
-//                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado: " + paymentId));
-//
-//        return payment.getStatus().name();
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void processPaymentNotification(String paymentId, String status) {
-//        log.info("Processando notificação de pagamento: {} com status: {}", paymentId, status);
-//
-//        var payment = paymentRepository.findByExternalId(paymentId)
-//                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado: " + paymentId));
-//
-//        OrderPaymentStatus newStatus;
-//        try {
-//            newStatus = OrderPaymentStatus.valueOf(status.toUpperCase());
-//        } catch (IllegalArgumentException e) {
-//            log.error("Status de pagamento inválido: {}", status);
-//            throw new IllegalArgumentException("Status de pagamento inválido: " + status);
-//        }
-//
-//        payment.updateStatus(newStatus);
-//        paymentRepository.save(payment);
-//
-//        if (newStatus == OrderPaymentStatus.APPROVED) {
-//            log.info("Pagamento {} aprovado! Publicando evento.", paymentId);
-//            eventPublisher.publishEvent(
-//                PaymentApprovedEvent.of(
-//                    payment.getId(),
-//                    payment.getOrderId(),
-//                    payment.getAmount(),
-//                    payment.getMethod().name()
-//                )
-//            );
-//        }
-//    }
 }

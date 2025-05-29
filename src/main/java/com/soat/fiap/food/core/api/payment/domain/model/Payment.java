@@ -89,7 +89,7 @@ public class Payment {
      * @throws PaymentException se o TID for maior que 255 caracteres {@code null}
      */
     public void setTid(String tid) {
-        if (tid.length() > 255) {
+        if ( tid != null && tid.length() > 255) {
             throw new PaymentException("O TID não pode ter mais de 255 caracteres");
         }
 

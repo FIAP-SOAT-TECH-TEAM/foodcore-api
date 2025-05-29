@@ -42,8 +42,8 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
 //    }
 //
     @Override
-    public Optional<Payment> findByOrderId(Long orderId) {
-        return repository.findByOrderId(orderId)
+    public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
+        return repository.findTopByOrderIdOrderByIdDesc(orderId)
                 .map(mapper::toDomain);
     }
 

@@ -23,7 +23,7 @@ public class OrderPaymentService {
 
     public void validateOrderPayment(Order order) {
 
-        var payment = paymentRepository.findByOrderId(order.getId());
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(order.getId());
 
         if (payment.isEmpty()) {
             throw new PaymentNotFoundException("O pagamento do pedido não existe");
