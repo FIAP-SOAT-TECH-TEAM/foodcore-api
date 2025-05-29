@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.payment.application.ports.in;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 
 /**
  * Interface do caso de uso de pagamento
@@ -21,18 +22,25 @@ public interface PaymentUseCase {
      *
      * @param mercadoPagoNotificationRequest notificação de pagamento mercado pago
      */
-    void notification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest);
+    void processPaymentNotification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest);
 
     /**
      * Retorna o status de pagamento de um pedido
      *
      * @param orderId id do pedido
      */
-    PaymentStatusResponse getPaymentStatus(Long orderId);
+    PaymentStatusResponse getOrderPaymentStatus(Long orderId);
 
     /**
      * Processa pagamentos pendentes expirados
      *
      */
-    void proccessPendingExpiredPayments();
+    void processPendingExpiredPayments();
+
+    /**
+     * Retorna o qr code de pagamento de um dado pedido
+     *
+     * @param orderId id do pedido
+     */
+     QrCodeResponse getOrderPaymentQrCode(Long orderId);
 } 

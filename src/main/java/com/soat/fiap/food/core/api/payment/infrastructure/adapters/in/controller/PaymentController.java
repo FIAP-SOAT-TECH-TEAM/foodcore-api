@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controlle
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,7 +46,7 @@ public class PaymentController {
                 notification.getId(),
                 notification.getData() != null ? notification.getData().getId() : "sem id externo");
 
-        paymentUseCase.notification(notification);
+        paymentUseCase.processPaymentNotification(notification);
 
         return ResponseEntity.ok().build();
     }
@@ -57,9 +58,22 @@ public class PaymentController {
             @ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)
     })
     @GetMapping("/{orderId}/status")
-    public ResponseEntity<PaymentStatusResponse> getPaymentStatus(@PathVariable Long orderId) {
+    public ResponseEntity<PaymentStatusResponse> getOrderPaymentStatus(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
-        var response = paymentUseCase.getPaymentStatus(orderId);
+        var response = paymentUseCase.getOrderPaymentStatus(orderId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Buscar QrCode de pagamento por ID do pedido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Qr Code de pagamento retornado com sucesso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = QrCodeResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)
+    })
+    @GetMapping("/{orderId}/qrCode")
+    public ResponseEntity<QrCodeResponse> getOrderPaymentQrCode(@PathVariable Long orderId) {
+        log.info("Recebida requisição para obter qr de pagamento para orderId {}", orderId);
+        var response = paymentUseCase.getOrderPaymentQrCode(orderId);
         return ResponseEntity.ok(response);
     }
 }

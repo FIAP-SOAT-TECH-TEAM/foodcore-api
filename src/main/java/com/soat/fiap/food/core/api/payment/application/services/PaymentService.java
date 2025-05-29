@@ -3,8 +3,10 @@ package com.soat.fiap.food.core.api.payment.application.services;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.mapper.response.PaymentStatusResponseMapper;
+import com.soat.fiap.food.core.api.payment.application.mapper.response.QrCodeResponseMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
@@ -33,6 +35,7 @@ public class PaymentService implements PaymentUseCase {
     private final MercadoPagoPort mercadoPagoPort;
     private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
     private final PaymentStatusResponseMapper paymentStatusResponseMapper;
+    private final QrCodeResponseMapper qrCodeResponseMapper;
     private final ApplicationEventPublisher eventPublisher;
 
     public PaymentService(
@@ -40,12 +43,14 @@ public class PaymentService implements PaymentUseCase {
             MercadoPagoPort mercadoPagoPort,
             GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
             ApplicationEventPublisher eventPublisher,
-            PaymentStatusResponseMapper paymentStatusResponseMapper) {
+            PaymentStatusResponseMapper paymentStatusResponseMapper,
+            QrCodeResponseMapper qrCodeResponseMapper) {
         this.paymentRepository = paymentRepository;
         this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;
         this.paymentStatusResponseMapper = paymentStatusResponseMapper;
         this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
+        this.qrCodeResponseMapper = qrCodeResponseMapper;
     }
 
     @Override
@@ -91,7 +96,7 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public void notification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest) {
+    public void processPaymentNotification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest) {
 
         var mercadoPagoPaymentResponse = mercadoPagoPort.getMercadoPagoPayments(mercadoPagoNotificationRequest.getDataId());
         var longExternalRefernce = Long.parseLong(mercadoPagoPaymentResponse.getExternal_reference());
@@ -133,7 +138,7 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentStatusResponse getPaymentStatus(Long orderId) {
+    public PaymentStatusResponse getOrderPaymentStatus(Long orderId) {
         var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(orderId);
 
         if (payment.isEmpty()) {
@@ -146,7 +151,7 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public void proccessPendingExpiredPayments() {
+    public void processPendingExpiredPayments() {
 
         var expiredPayments = paymentRepository.findByStatusAndExpiresInBefore(PaymentStatus.PENDING, LocalDateTime
                 .now()
@@ -169,5 +174,18 @@ public class PaymentService implements PaymentUseCase {
 
             log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QrCodeResponse getOrderPaymentQrCode(Long orderId) {
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(orderId);
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
+            throw new PaymentNotFoundException("Pagamento", orderId);
+        }
+
+        return qrCodeResponseMapper.toResponse(payment.get());
     }
 }

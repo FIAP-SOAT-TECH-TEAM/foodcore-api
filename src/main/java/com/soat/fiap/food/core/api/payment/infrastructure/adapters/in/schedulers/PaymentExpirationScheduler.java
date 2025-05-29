@@ -24,6 +24,6 @@ public class PaymentExpirationScheduler {
     @Scheduled(fixedRate = 1_860_000)//
     public void verificarPedidosExpirados() {
         log.info("Iniciando processamento de pagamentos pendentes expirados.");
-        paymentUseCase.proccessPendingExpiredPayments();
+        paymentUseCase.processPendingExpiredPayments();
     }
 }
