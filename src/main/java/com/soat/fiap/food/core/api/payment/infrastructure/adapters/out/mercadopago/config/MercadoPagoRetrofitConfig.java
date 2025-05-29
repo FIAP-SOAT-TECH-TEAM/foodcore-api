@@ -2,8 +2,8 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadop
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.soat.fiap.food.core.api.payment.application.dto.deserializers.PaymentMethodTypeAdapter;
-import com.soat.fiap.food.core.api.payment.application.dto.deserializers.PaymentStatusTypeAdapter;
+import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.deserializers.PaymentMethodTypeAdapter;
+import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.deserializers.PaymentStatusTypeAdapter;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.client.MercadoPagoClient;

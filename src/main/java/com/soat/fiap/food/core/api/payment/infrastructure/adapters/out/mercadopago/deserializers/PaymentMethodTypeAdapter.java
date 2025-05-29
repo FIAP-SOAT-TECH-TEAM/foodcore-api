@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.payment.application.dto.deserializers;
+package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.deserializers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
