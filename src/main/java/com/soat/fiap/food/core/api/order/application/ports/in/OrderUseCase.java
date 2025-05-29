@@ -1,7 +1,9 @@
 package com.soat.fiap.food.core.api.order.application.ports.in;
 
 import com.soat.fiap.food.core.api.order.application.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.order.application.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 
 import java.util.List;
@@ -20,12 +22,26 @@ public interface OrderUseCase {
     OrderResponse createOrder(CreateOrderRequest createOrderRequest);
 
     /**
+     * Atualiza o status de um pedido para em preparo
+     *
+     * @param orderId ID do pedido
+     */
+    void updateOrderStatusToPreparing(Long orderId);
+
+    /**
+     * Atualiza o status de um pedido para cancelado
+     *
+     * @param orderId ID do pedido
+     */
+    void updateOrderStatusToCancelled(Long orderId);
+
+    /**
      * Atualiza o status de um pedido
      *
      * @param orderId ID do pedido
-     * @param newStatus Novo status
+     * @param orderStatusRequest Novo status
      */
-    void updateOrderStatus(Long orderId, OrderStatus newStatus);
+    OrderStatusResponse updateOrderStatus(Long orderId, OrderStatusRequest orderStatusRequest);
 
     /**
      * Busca pedidos que não estejam finalizados, ordenados por prioridade de status e data de criação.

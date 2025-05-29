@@ -68,10 +68,10 @@ public class Order {
             List<OrderItem> orderItems
     ) {
         Objects.requireNonNull(userId, "O ID do cliente não pode ser nulo");
-        Objects.requireNonNull(orderItems, "A lista de itens da ordem não pode ser nula");
+        Objects.requireNonNull(orderItems, "A lista de itens do pedido não pode ser nula");
 
         if (orderItems.isEmpty()) {
-            throw new OrderException("A ordem deve conter itens");
+            throw new OrderException("O pedido deve conter itens");
         }
     }
 
@@ -84,15 +84,15 @@ public class Order {
     }
 
     /**
-     * Obtém o número da ordem
-     * @return o número da ordem
+     * Obtém o número do pedido
+     * @return o número do pedido
      */
     public String getOrderNumber() {
         return this.orderNumber.getFormatted();
     }
 
     /**
-     * Fornece uma lista imutável de itens da ordem
+     * Fornece uma lista imutável de itens do pedido
      * @return lista imutável de itens
      */
     public List<OrderItem> getOrderItems() {
@@ -102,10 +102,10 @@ public class Order {
     /**
      * Adiciona um item ao pedido
      * @param item Item a ser adicionado
-     * @throws NullPointerException se o item da ordem for nulo
+     * @throws NullPointerException se o item do pedido for nulo
      */
     public void addItem(OrderItem item) {
-        Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
+        Objects.requireNonNull(item, "O item do pedido não pode ser nulo");
 
         item.setOrder(this);
         orderItems.add(item);
@@ -115,10 +115,10 @@ public class Order {
     /**
      * Remove um item do pedido
      * @param item Item a ser removido
-     * @throws NullPointerException se o item da ordem for nulo
+     * @throws NullPointerException se o item do pedido for nulo
      */
     public void removeItem(OrderItem item) {
-        Objects.requireNonNull(item, "O item da ordem não pode ser nulo");
+        Objects.requireNonNull(item, "O item do pedido não pode ser nulo");
 
         if (orderItems != null) {
             orderItems.remove(item);
@@ -145,17 +145,17 @@ public class Order {
     /**
      * Atualiza o status do pedido
      * @param newStatus Novo status
-     * @throws NullPointerException se o status da ordem for nulo
+     * @throws NullPointerException se o status do pedido for nulo
      * @throws OrderException se a transição de status não for permitida
      */
     public void setOrderStatus(OrderStatus newStatus) {
-        Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
+        Objects.requireNonNull(newStatus, "O status do pedido não pode ser nulo");
+
+        validateStatusTransition(newStatus);
 
         if (this.orderStatus == newStatus) {
             return;
         }
-
-        validateStatusTransition(newStatus);
 
         this.orderStatus = newStatus;
         markUpdatedNow();
@@ -164,11 +164,11 @@ public class Order {
     /**
      * Valida se a transição de status é permitida
      * @param newStatus Novo status a ser validado
-     * @throws NullPointerException se o status da ordem for nulo
+     * @throws NullPointerException se o status do pedido for nulo
      * @throws OrderException se a transição não for permitida
      */
     private void validateStatusTransition(OrderStatus newStatus) {
-        Objects.requireNonNull(newStatus, "O status da ordem não pode ser nulo");
+        Objects.requireNonNull(newStatus, "O status do pedido não pode ser nulo");
 
         if (this.orderStatus == OrderStatus.CANCELLED) {
             throw new OrderException(

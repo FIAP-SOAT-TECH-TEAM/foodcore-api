@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * Value Object que representa o preço do item de uma ordem
+ * Value Object que representa o preço do item de um pedido
  */
 public record OrderItemPrice(int quantity, BigDecimal unitPrice) implements Serializable {
 
@@ -22,7 +22,7 @@ public record OrderItemPrice(int quantity, BigDecimal unitPrice) implements Seri
 
     /**
      * Retorna a multiplicação entre a quantidade e o preço unitário do item
-     * @return o subtotal do item da ordem
+     * @return o subtotal do item do pedido
      */
     public BigDecimal getSubTotal() {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));

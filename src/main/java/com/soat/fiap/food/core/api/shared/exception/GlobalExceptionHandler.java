@@ -1,11 +1,13 @@
 package com.soat.fiap.food.core.api.shared.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -172,24 +174,8 @@ public class GlobalExceptionHandler {
             DataIntegrityViolationException ex, HttpServletRequest request) {
         
         logger.error("Erro de integridade de dados: {}", ex.getMessage());
-        
-        String mensagem = ex.getMessage();
-        
-        if (mensagem != null && mensagem.contains("products_category_id_fkey")) {
-            mensagem = "Não é possível excluir esta categoria porque existem produtos associados a ela";
-        }
-        else if (mensagem != null && mensagem.contains("users_document_key")) {
-            mensagem = "Já existe um usuário cadastrado com este documento/CPF";
-        }
-        else if (mensagem != null && mensagem.contains("users_email_key")) {
-            mensagem = "Já existe um usuário cadastrado com este E-mail";
-        }
-        else if (mensagem != null && mensagem.contains("users_username_key")) {
-            mensagem = "Já existe um usuário cadastrado com este username";
-        }
-        else {
-            mensagem = "Operação não permitida: viola regras de integridade de dados";
-        }
+
+        var mensagem = "Operação não permitida: viola regras de integridade de dados";
         
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
@@ -199,5 +185,51 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Trata erros de formato inválido
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidFormatException(
+            HttpMessageNotReadableException ex, HttpServletRequest request) {
+
+        logger.error("Erro ao tentar desserializar: {}", ex.getMessage());
+
+        String mensagem = "Erro de formato inválido na requisição";
+
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvalidFormatException invalidFormatEx) {
+            Class<?> targetType = invalidFormatEx.getTargetType();
+
+            if (targetType.isEnum()) {
+                String[] valoresAceitos = getEnumNames(targetType);
+                mensagem = String.format(
+                        "Valor inválido: %s. Valores aceitos para o campo: %s",
+                        invalidFormatEx.getValue(),
+                        String.join(", ", valoresAceitos)
+                );
+            } else {
+                mensagem = "Formato inválido para o campo: " + invalidFormatEx.getValue();
+            }
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                mensagem,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    private String[] getEnumNames(Class<?> enumType) {
+        Object[] enumConstants = enumType.getEnumConstants();
+        String[] names = new String[enumConstants.length];
+        for (int i = 0; i < enumConstants.length; i++) {
+            names[i] = enumConstants[i].toString();
+        }
+        return names;
     }
 } 

@@ -1,7 +1,9 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.order.application.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.order.application.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,5 +78,31 @@ public class OrderController {
         List<OrderResponse> activeOrders = orderUseCase.getActiveOrdersSorted();
 
         return ResponseEntity.ok(activeOrders);
+    }
+
+    @PatchMapping("/{orderId}/status")
+    @Operation(
+            summary = "Atualizar status do pedido",
+            description = "Atualiza o status de um pedido existente para um dos valores válidos: RECEIVED, PREPARING, READY, COMPLETED"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Status do pedido atualizado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OrderStatusResponse.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "Status inválido ou dados malformados", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
+    })
+    public ResponseEntity<OrderStatusResponse> updateOrderStatus(
+            @PathVariable Long orderId,
+            @Valid @RequestBody OrderStatusRequest orderStatusRequest) {
+
+        logger.debug("Requisição para atualizar status do pedido {} recebida", orderId);
+
+        OrderStatusResponse response = orderUseCase.updateOrderStatus(orderId, orderStatusRequest);
+
+        return ResponseEntity.ok(response);
     }
 } 

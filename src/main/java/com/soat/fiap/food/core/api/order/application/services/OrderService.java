@@ -2,15 +2,19 @@ package com.soat.fiap.food.core.api.order.application.services;
 
 
 import com.soat.fiap.food.core.api.order.application.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.order.application.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.order.application.mapper.request.CreateOrderRequestMapper;
 import com.soat.fiap.food.core.api.order.application.mapper.response.OrderResponseMapper;
+import com.soat.fiap.food.core.api.order.application.mapper.response.OrderStatusResponseMapper;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.service.OrderDiscountService;
+import com.soat.fiap.food.core.api.order.domain.service.OrderPaymentService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderProductService;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
@@ -31,9 +35,11 @@ public class OrderService implements OrderUseCase {
 
     private final OrderDiscountService orderDiscountService;
     private final OrderProductService orderProductService;
+    private final OrderPaymentService orderPaymentService;
 
     private final CreateOrderRequestMapper createOrderRequestMapper;
     private final OrderResponseMapper orderResponseMapper;
+    private final OrderStatusResponseMapper orderStatusResponseMapper;
 
     private final ApplicationEventPublisher eventPublisher;
     private final CustomLogger logger;
@@ -44,14 +50,18 @@ public class OrderService implements OrderUseCase {
             CreateOrderRequestMapper createOrderRequestMapper,
             OrderDiscountService orderDiscountService,
             OrderProductService orderProductService,
-            OrderResponseMapper orderResponseMapper) {
+            OrderPaymentService orderPaymentService,
+            OrderResponseMapper orderResponseMapper,
+            OrderStatusResponseMapper orderStatusResponseMapper) {
         this.eventPublisher = eventPublisher;
         this.orderRepository = orderRepository;
         this.createOrderRequestMapper = createOrderRequestMapper;
         this.logger = CustomLogger.getLogger(getClass());
         this.orderDiscountService = orderDiscountService;
         this.orderProductService = orderProductService;
+        this.orderPaymentService = orderPaymentService;
         this.orderResponseMapper = orderResponseMapper;
+        this.orderStatusResponseMapper = orderStatusResponseMapper;
     }
 
     @Override
@@ -92,23 +102,64 @@ public class OrderService implements OrderUseCase {
         return saveOrderToResponse;
     }
 
-
     @Override
     @Transactional
-    public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
-        logger.info("Atualizando status do pedido {} para {}", orderId, newStatus);
+    public void updateOrderStatusToPreparing(Long orderId) {
+        logger.info("Atualizando status do pedido {} para {}", orderId, OrderStatus.PREPARING);
 
         var order = orderRepository.findById(orderId);
 
         if (order.isEmpty()) {
-            throw new OrderNotFoundException("Ordem", orderId);
+            throw new OrderNotFoundException("Pedido", orderId);
         }
+
+        order.get().setOrderStatus(OrderStatus.PREPARING);
+
+        orderRepository.save(order.get());
+
+        logger.info("Status do pedido {} atualizado para {}", orderId, OrderStatus.PREPARING);
+    }
+
+    @Override
+    @Transactional
+    public void updateOrderStatusToCancelled(Long orderId) {
+        logger.info("Atualizando status do pedido {} para {}", orderId, OrderStatus.CANCELLED);
+
+        var order = orderRepository.findById(orderId);
+
+        if (order.isEmpty()) {
+            throw new OrderNotFoundException("Pedido", orderId);
+        }
+
+        order.get().setOrderStatus(OrderStatus.CANCELLED);
+
+        orderRepository.save(order.get());
+
+        logger.info("Status do pedido {} atualizado para {}", orderId, OrderStatus.CANCELLED);
+    }
+
+    @Override
+    @Transactional
+    public OrderStatusResponse updateOrderStatus(Long orderId, OrderStatusRequest orderStatusRequest) {
+        logger.info("Atualizando status do pedido {} para {}", orderId, orderStatusRequest.getOrderStatus());
+
+        var order = orderRepository.findById(orderId);
+        var newStatus = orderStatusRequest.getOrderStatus();
+
+        if (order.isEmpty()) {
+            throw new OrderNotFoundException("Pedido", orderId);
+        }
+
+        orderPaymentService.validateOrderPayment(order.get());
 
         order.get().setOrderStatus(newStatus);
 
         var updatedOrder = orderRepository.save(order.get());
+        var orderStatusToResponse = orderStatusResponseMapper.toResponse(updatedOrder);
 
         logger.info("Status do pedido {} atualizado para {}", orderId, newStatus);
+
+        return orderStatusToResponse;
     }
 
     @Override

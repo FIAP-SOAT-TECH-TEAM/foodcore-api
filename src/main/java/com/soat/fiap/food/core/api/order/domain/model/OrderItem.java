@@ -62,7 +62,7 @@ public class OrderItem {
             OrderItemPrice orderItemPrice
     ) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
-        Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
+        Objects.requireNonNull(orderItemPrice, "O preço do item do pedido não pode ser nulo");
 
         if (name.isEmpty()) {
             throw new OrderItemException("O nome do item do pedido não pode ser nulo");
@@ -88,7 +88,7 @@ public class OrderItem {
     }
 
     /**
-     * Retorna o preço do item da ordem
+     * Retorna o preço do item do pedido
      *
      */
     public BigDecimal getPrice() {

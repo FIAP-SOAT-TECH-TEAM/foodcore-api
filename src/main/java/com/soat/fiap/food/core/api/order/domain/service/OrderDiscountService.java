@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 /**
- * Serviço responsável pela aplicação de descontos em pedidos com base no tempo de cadastro do usuário.
+ * Serviço de domínio responsável pela aplicação de descontos em pedidos com base no tempo de cadastro do usuário.
  */
 @Data
 @Service

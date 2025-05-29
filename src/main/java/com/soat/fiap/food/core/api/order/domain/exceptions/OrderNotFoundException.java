@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.order.domain.exceptions;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 
 /**
- * Exceção lançada quando uma ordem não é encontrada
+ * Exceção lançada quando um pedido não é encontrado
  */
 public class OrderNotFoundException extends ResourceNotFoundException {
 

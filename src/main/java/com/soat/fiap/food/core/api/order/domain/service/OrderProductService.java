@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Serviço responsável pela validação de produtos associados aos itens de uma ordem.
+ * Serviço de domínio responsável pela validação de produtos associados aos itens de um pedido.
  */
 @Data
 @Service
@@ -29,14 +29,14 @@ public class OrderProductService {
     }
 
     /**
-     * Valida os produtos associados aos itens da ordem.
+     * Valida os produtos associados aos itens do pedido.
      * <p>
-     * Para cada item da ordem, verifica se o produto existe no catálogo e se o preço informado
+     * Para cada item do pedido, verifica se o produto existe no catálogo e se o preço informado
      * no item corresponde ao preço atual do produto no catálogo.
      *
-     * @param orderItems a lista de itens da ordem a serem validados
+     * @param orderItems a lista de itens do pedido a serem validados
      * @throws OrderException se algum produto não for encontrado no catálogo
-     * @throws OrderItemException se o preço do item da ordem não corresponder ao preço do produto
+     * @throws OrderItemException se o preço do item do pedido não corresponder ao preço do produto
      */
     public void validateOrderItemProduct(List<OrderItem> orderItems) {
 
@@ -45,13 +45,13 @@ public class OrderProductService {
             var catalog = catalogRepository.findByProductId(orderItem.getProductId());
 
             if (catalog.isEmpty()) {
-                throw new ProductNotFoundException("O produto do item da ordem não existe");
+                throw new ProductNotFoundException("O produto do item do pedido não existe");
             }
 
             var productOrderItem = catalog.get().getProductById(orderItem.getProductId());
 
             if (productOrderItem.getPrice().compareTo(orderItem.getPrice()) != 0) {
-                throw new OrderItemException("O preço unitário do item da ordem diverge do preço do produto");
+                throw new OrderItemException("O preço unitário do item do pedido diverge do preço do produto");
             }
             else if (!productOrderItem.getName().equals(orderItem.getName())) {
                 throw new OrderItemException("O nome do produto do item diverge do nome do produto cadastrado");
