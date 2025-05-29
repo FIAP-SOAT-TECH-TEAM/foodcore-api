@@ -64,6 +64,7 @@ public class PaymentService implements PaymentUseCase {
                     event.getId(),
                     generateQrCodeBody.getTotal_amount()
             );
+            generateQrCodeBody.setExpiration_date(payment.getISO8601ExpiresIn());
 
             var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
 
@@ -95,17 +96,16 @@ public class PaymentService implements PaymentUseCase {
         var longExternalRefernce = Long.parseLong(mercadoPagoPaymentResponse.getExternal_reference());
         var payment = paymentRepository.findByOrderId(longExternalRefernce);
 
-        var mercadoPagoPaymentStatus = mercadoPagoPaymentResponse.getStatus().toUpperCase();
-
         if (payment.isEmpty()) {
             log.warn("Pagamento não foi encontrado a partir da external_referente! {}", longExternalRefernce);
             throw new PaymentNotFoundException("Pagamento", longExternalRefernce);
         }
-        else if (mercadoPagoPaymentStatus.equals(PaymentStatus.APPROVED.name())) {
 
-            payment.get().setStatus(PaymentStatus.APPROVED);
-            paymentRepository.save(payment.get());
+        payment.get().setStatus(mercadoPagoPaymentResponse.getStatus());
+        payment.get().setType(mercadoPagoPaymentResponse.getPaymentType());
+        paymentRepository.save(payment.get());
 
+        if (mercadoPagoPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
             log.info("Pagamento aprovado: {}, Publicando evento!", payment.get().getId());
 
             eventPublisher.publishEvent(
@@ -119,7 +119,6 @@ public class PaymentService implements PaymentUseCase {
 
             log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.get().getId(), payment.get().getOrderId());
         }
-
     }
 
     @Override

@@ -18,4 +18,13 @@ public enum PaymentStatus {
         this.description = description;
     }
 
+    public static PaymentStatus fromValue(String value) {
+        for (PaymentStatus status : values()) {
+            if (status.name().equalsIgnoreCase(value)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Status desconhecido: " + value);
+    }
+
 } 

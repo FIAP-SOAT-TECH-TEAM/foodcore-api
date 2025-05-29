@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.payment.application.dto.response;
 
+
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,7 +16,7 @@ import java.util.Map;
 public class MercadoPagoPaymentsResponse {
 
     private Long id;
-    private String status;
+    private PaymentStatus status;
     private String status_detail;
     private String description;
     private BigDecimal transaction_amount;
@@ -57,6 +59,11 @@ public class MercadoPagoPaymentsResponse {
     private List<Object> fee_details;
     private List<Object> refunds;
 
+    public com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod getPaymentType() {
+        return this.payment_method.getType();
+    }
+
+
     @Data
     public static class AdditionalInfo {
         private String tracking_id;
@@ -77,7 +84,7 @@ public class MercadoPagoPaymentsResponse {
     public static class PaymentMethod {
         private String id;
         private String issuer_id;
-        private String type;
+        private com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod type;
     }
 
     @Data

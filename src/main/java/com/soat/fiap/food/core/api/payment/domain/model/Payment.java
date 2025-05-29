@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -22,7 +23,7 @@ public class Payment {
     private Long id;
     private Long userId;
     private Long orderId;
-    private PaymentMethod type = PaymentMethod.PIX;
+    private PaymentMethod type;
     private OffsetDateTime expiresIn = LocalDateTime
             .now()
             .plusMinutes(30)
@@ -34,6 +35,10 @@ public class Payment {
     private LocalDateTime paidAt;
     private String observations = "Pagamento via Mercado Pago";
     private AuditInfo auditInfo = new AuditInfo();
+
+    private static final DateTimeFormatter ISO_8601_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
 
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
@@ -134,6 +139,17 @@ public class Payment {
      */
     public void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
+    }
+
+
+    /**
+     * Retorna a data de expiração formatada como uma String no padrão ISO 8601
+     * (yyyy-MM-dd'T'HH:mm:ssz) exigido pela API do Mercado Pago.
+     *
+     * @return String com a data de expiração formatada.
+     */
+    public String getISO8601ExpiresIn() {
+        return this.expiresIn.format(ISO_8601_FORMATTER);
     }
 
 }
