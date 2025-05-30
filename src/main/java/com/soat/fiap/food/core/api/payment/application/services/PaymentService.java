@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 /**
@@ -155,9 +156,7 @@ public class PaymentService implements PaymentUseCase {
     @Transactional
     public void processExpiredPayments() {
 
-        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime
-                .now()
-                .atOffset(ZoneOffset.of("-04:00")));
+        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime.now(ZoneOffset.of("-04:00")));
 
         if (expiredPayments.isEmpty()) {
             log.info("Nenhum pagamento pendente expirado encontrado!");

@@ -24,10 +24,9 @@ public class Payment {
     private Long userId;
     private Long orderId;
     private PaymentMethod type;
-    private OffsetDateTime expiresIn = LocalDateTime
-            .now()
-            .plusMinutes(30)
-            .atOffset(ZoneOffset.of("-04:00"));
+    private OffsetDateTime expiresIn = OffsetDateTime
+            .now(ZoneOffset.of("-04:00"))
+            .plusMinutes(30);
     private String tid;
     private BigDecimal amount;
     private QrCode qrCode;
@@ -116,11 +115,7 @@ public class Payment {
      * @return {@code true} se o pagamento estiver expirado, {@code false} caso contrário
      */
     public boolean isExpired() {
-        return expiresIn.isBefore(
-                LocalDateTime
-                        .now()
-                        .atOffset(ZoneOffset.of("-04:00")
-        ));
+        return expiresIn.isBefore(OffsetDateTime.now(ZoneOffset.of("-04:00")));
     }
 
     /**
