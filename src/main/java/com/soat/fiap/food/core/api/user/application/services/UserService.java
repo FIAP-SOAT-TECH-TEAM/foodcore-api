@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.user.application.services;
 
 import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import com.soat.fiap.food.core.api.shared.service.JwtService;
 import com.soat.fiap.food.core.api.user.domain.vo.RoleType;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;

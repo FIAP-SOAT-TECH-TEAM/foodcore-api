@@ -1,9 +1,8 @@
-package com.soat.fiap.food.core.api.shared.infrastructure.logging;
+package com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.spi.LocationAwareLogger;
-import org.springframework.context.annotation.Bean;
 
 /**
  * Logger customizado que automaticamente resolve o contexto de classe e método para logging.

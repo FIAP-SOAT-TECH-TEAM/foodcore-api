@@ -17,7 +17,7 @@ import com.soat.fiap.food.core.api.order.domain.service.OrderDiscountService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderPaymentService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderProductService;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

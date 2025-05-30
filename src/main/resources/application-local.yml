@@ -79,3 +79,8 @@ mercado-pago:
   user-id: 2430659417
   pos-id: POCMP001POS001
   notification-url: https://major-jaguar-usable.ngrok-free.app/api/payments/webhook # NGROK (DEV)
+
+azure:
+  storage:
+    connection-string: "DefaultEndpointsProtocol=https;AccountName=fastfoodcoreapi;AccountKey=zdptHpyapo/jatHe2DdaajF1zUv7UzC6T81NAWtKCHoEL4NJNOEqiJ7iFxyjutnaAwlUL5i7Ri4P+ASt9KfI4g==;EndpointSuffix=core.windows.net"
+    container-name: "images"

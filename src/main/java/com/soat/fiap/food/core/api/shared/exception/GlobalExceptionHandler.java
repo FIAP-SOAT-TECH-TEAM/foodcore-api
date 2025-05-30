@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.shared.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;

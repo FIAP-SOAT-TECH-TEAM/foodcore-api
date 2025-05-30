@@ -39,6 +39,7 @@ ext {
     set('springModulithVersion', "1.3.5")
     set('retrofit', "3.0.0")
     set('converterGson', "3.0.0")
+    set('azureBlobSdk', "12.25.0")
 }
 
 dependencies {
@@ -97,6 +98,11 @@ dependencies {
 	// Retrofit
 	implementation "com.squareup.retrofit2:retrofit:${retrofit}"
 	implementation "com.squareup.retrofit2:converter-gson:${converterGson}"
+
+	// Azure Storage Blob
+	dependencies {
+		implementation("com.azure:azure-storage-blob:${azureBlobSdk}")
+	}
 
 }
 

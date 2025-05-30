@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.order.application.dto.request.OrderStatusRequ
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.application.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

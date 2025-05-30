@@ -22,8 +22,8 @@ import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
-import com.soat.fiap.food.core.api.shared.infrastructure.storage.ImageStorageService;
+import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStoragePort;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -48,9 +48,10 @@ public class CatalogService implements CatalogUseCase {
     private final CategoryResponseMapper categoryResponseMapper;
     private final ProductResponseMapper productResponseMapper;
 
+    private final ImageStoragePort imageStoragePort;
+
     private final ApplicationEventPublisher eventPublisher;
     private final CustomLogger logger;
-    private final ImageStorageService imageStorageService;
 
     public CatalogService(
             CatalogRepository catalogRepository,
@@ -61,7 +62,7 @@ public class CatalogService implements CatalogUseCase {
             ProductRequestMapper productRequestMapper,
             ProductResponseMapper productResponseMapper,
             ApplicationEventPublisher eventPublisher,
-            ImageStorageService imageStorageService
+            ImageStoragePort imageStoragePort
     ) {
         this.catalogRepository = catalogRepository;
         this.catalogRequestMapper = catalogRequestMapper;
@@ -72,7 +73,7 @@ public class CatalogService implements CatalogUseCase {
         this.productResponseMapper = productResponseMapper;
         this.eventPublisher = eventPublisher;
         this.logger = CustomLogger.getLogger(getClass());
-        this.imageStorageService = imageStorageService;
+        this.imageStoragePort = imageStoragePort;
     }
 
     /**
@@ -411,13 +412,13 @@ public class CatalogService implements CatalogUseCase {
             logger.debug("Processando upload de imagem para categoria ID: {}", categoryId);
 
             if (category.getImageUrl() != null && !category.imageUrlIsEmpty()) {
-                String currentImagePath = category.getImageUrlValue();
+                var currentImagePath = category.getImageUrlValue();
                 logger.debug("Removendo imagem anterior: {}", currentImagePath);
-                imageStorageService.deleteImage(currentImagePath);
+                imageStoragePort.deleteImage(currentImagePath);
             }
 
             String storagePath = "categories/" + categoryId;
-            String imagePath = imageStorageService.uploadImage(imageFile, storagePath);
+            String imagePath = imageStoragePort.uploadImage(storagePath, imageFile);
             logger.debug("Nova imagem enviada para o caminho: {}", imagePath);
 
             category.setImageUrlValue(imagePath);
@@ -643,11 +644,11 @@ public class CatalogService implements CatalogUseCase {
             if (product.getImageUrl() != null && !product.imageUrlIsEmpty()) {
                 String currentImagePath = product.getImageUrlValue();
                 logger.debug("Removendo imagem anterior: {}", currentImagePath);
-                imageStorageService.deleteImage(currentImagePath);
+                imageStoragePort.deleteImage(currentImagePath);
             }
 
             String storagePath = "products/" + productId;
-            String imagePath = imageStorageService.uploadImage(imageFile, storagePath);
+            String imagePath = imageStoragePort.uploadImage(storagePath, imageFile);
             logger.debug("Nova imagem enviada para o caminho: {}", imagePath);
 
             product.setImageUrlValue(imagePath);
