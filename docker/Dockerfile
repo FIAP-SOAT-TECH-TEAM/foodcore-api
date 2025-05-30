@@ -25,8 +25,7 @@ RUN apk add --no-cache curl wget
 # Adicionar usuário não-root para segurança
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Diretório para arquivos de upload
-RUN mkdir -p /app/cdn && chown -R appuser:appgroup /app
+
 
 # Copiar JAR construído
 COPY --from=build /app/build/libs/*.jar app.jar
@@ -37,8 +36,7 @@ USER appuser
 # Porta da aplicação (modificável via docker-compose)
 EXPOSE 8080
 
-# Volume para persistência de dados
-VOLUME /app/cdn
+
 
 # Parâmetros para Monitoramento
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication -Djava.security.egd=file:/dev/./urandom"

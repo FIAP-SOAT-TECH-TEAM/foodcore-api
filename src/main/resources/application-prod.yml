@@ -1,72 +1,66 @@
+# Configuração do JPA para produção
 spring:
-  # Configuração do JPA para produção
   jpa:
     show-sql: false
     properties:
       hibernate:
         format_sql: false
 
-  # Usar apenas o contexto de produção
+  # Configurações de banco de dados
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  # Liquibase (contexto exclusivo de produção)
   liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml
     contexts: prod
 
-  # Limitar endpoints do actuator em produção
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: health,info,metrics
+  # Configurações do servidor
+  server:
+    tomcat:
+      max-threads: 200
+      min-spare-threads: 20
+    port: ${SERVER_PORT}
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/plain
+      min-response-size: 2048
+
+# Actuator (endpoints restritos)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
     endpoint:
       health:
         show-details: when_authorized
-  data:
-    # Redis para cache
-    redis:
-      host: ${SPRING_REDIS_HOST}
-      port: ${SPRING_REDIS_PORT:6379}
-      password: ${SPRING_REDIS_PASSWORD:}
-      timeout: 2000
 
-# Configurações do servidor
-server:
-  tomcat:
-    max-threads: 200
-    min-spare-threads: 20
-  compression:
-    enabled: true
-    mime-types: application/json,application/xml,text/html,text/plain
-    min-response-size: 2048
-  port: ${SERVER_PORT:8080}
-
-# Configurações da aplicação
-app:
-  # Configurações do CDN para produção
-  cdn:
-    root-path: ${APP_CDN_ROOT_PATH:/app/cdn}
-    public-url: ${APP_CDN_PUBLIC_URL}
-    base-url: ${CDN_BASE_URL}
-
-# Configurações de log para produção
+# Logging (níveis reduzidos)
 logging:
   level:
     root: WARN
     com.fastfood: INFO
     org.springframework.web: WARN
     org.hibernate: WARN
-    org.hibernate.SQL: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
 
-#JWT Configuration
+# JWT
 jwt:
-  secret_key: "${JWT_SECRET:UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==}"
+  secret_key: ${JWT_SECRET}
   expiration: 3600
 
-#Mercado Pago Configuration
+# Mercado Pago
 mercado-pago:
-  base-url: https://api.mercadopago.com/
-  token: APP_USR-6067894635102235-051018-411ad7e519a24f5652d328ba205a2b9a-2430659417
-  user-id: 2430659417
-  pos-id: POCMP001POS001
-  notification-url: https://teste.com # definir posteriormente
+  base-url: ${MERCADO_PAGO_BASE_URL}
+  token: ${MERCADO_PAGO_TOKEN}
+  user-id: ${MERCADO_PAGO_USER_ID}
+  pos-id: ${MERCADO_PAGO_POS_ID}
+  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL}
+
+# Azure
+azure:
+  storage:
+    connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
+    container-name: ${AZURE_STORAGE_CONTAINER_NAME}
