@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Componente responsável por agendar e executar periodicamente o processamento
  * de pagamentos não aprovados expirados.
@@ -21,7 +23,7 @@ public class PaymentExpirationScheduler {
 
     private final PaymentUseCase paymentUseCase;
 
-    @Scheduled(fixedRate = 1_860_000)//
+    @Scheduled(fixedRate = 31, timeUnit = TimeUnit.MINUTES)//
     public void processExpiredPayments() {
         log.info("Iniciando processamento de pagamentos não aprovados expirados.");
         paymentUseCase.processExpiredPayments();
