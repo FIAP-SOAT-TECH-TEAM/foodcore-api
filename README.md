@@ -52,30 +52,30 @@ O projeto segue uma arquitetura modular baseada em **Domain-Driven Design (DDD)*
 graph TD
     subgraph "Arquitetura Hexagonal"
         DOMAIN[Domínio]
-        
+
         subgraph "Portas de Entrada"
             API_Port["API (Porta)"]
             Webhook_Port["Webhook (Porta)"]
             Event_Port["Eventos (Porta)"]
         end
-        
+
         subgraph "Portas de Saída"
             DB_Port["Banco de Dados (Porta)"]
             MercadoPago_Port["Mercado Pago (Porta)"]
             EventBus_Port["Eventos (Porta)"]
         end
-        
+
         DOMAIN --- API_Port
         DOMAIN --- Webhook_Port
         DOMAIN --- Event_Port
         DOMAIN --- DB_Port
         DOMAIN --- MercadoPago_Port
         DOMAIN --- EventBus_Port
-        
+
         API_Port --- API_Adapter["/api REST Controller"]
         Webhook_Port --- Webhook_Adapter["Webhook Controller"]
         Event_Port --- Event_Adapter["Event Listener"]
-        
+
         DB_Port --- DB_Adapter["JPA Repository"]
         MercadoPago_Port --- MercadoPago_Adapter["MercadoPago Client"]
         EventBus_Port --- EventBus_Adapter["ApplicationEventPublisher"]
@@ -91,21 +91,19 @@ graph TD
     subgraph "Monolito Modular"
         USER[Módulo Usuário]
         ORDER[Módulo Pedido]
-        CUSTOMER[Módulo Cliente]
-        PRODUCT[Módulo Produto]
+        CATÁLOGO[Módulo Catálagp]
         PAYMENT[Módulo Pagamento]
         SHARED[Componentes Compartilhados]
-        
-        USER --> PRODUCT
+
+        USER --> CATÁLOGO
         USER --> ORDER
-        ORDER --> CUSTOMER
-        ORDER --> PRODUCT
+        ORDER --> CATÁLOGO
         ORDER --> PAYMENT
         PAYMENT --> ORDER
-        
+
         SHARED --> ORDER
-        SHARED --> CUSTOMER
-        SHARED --> PRODUCT
+        SHARED --> USER
+        SHARED --> CATÁLOGO
         SHARED --> PAYMENT
     end
 ```
@@ -184,7 +182,7 @@ classDiagram
         +calculateTotalAmount()
         +updateStatus(OrderStatus)
     }
-    
+
     class OrderItem {
         -Long id
         -Product product
@@ -194,7 +192,7 @@ classDiagram
         -String observations
         +calculateSubtotal()
     }
-    
+
     class Product {
         -Long id
         -String name
@@ -204,7 +202,7 @@ classDiagram
         -String imageUrl
         -boolean active
     }
-    
+
     class Category {
         <<enumeration>>
         BURGER
@@ -212,7 +210,7 @@ classDiagram
         BEVERAGE
         DESSERT
     }
-    
+
     class Customer {
         -Long id
         -String name
@@ -223,7 +221,7 @@ classDiagram
         -LocalDateTime updatedAt
         -boolean active
     }
-    
+
     class OrderStatus {
         <<enumeration>>
         PENDING
@@ -232,7 +230,7 @@ classDiagram
         COMPLETED
         CANCELLED
     }
-    
+
     Order "1" *-- "many" OrderItem
     Order "many" -- "1" Customer
     OrderItem "many" -- "1" Product
@@ -244,24 +242,25 @@ classDiagram
 
 ```mermaid
 erDiagram
-    CUSTOMERS ||--o{ ORDERS : places
-    CUSTOMERS ||--o{ PAYMENTS : makes
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ PAYMENTS : makes
+    ROLES ||--o{ USERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
     PRODUCTS ||--o{ ORDER_ITEMS : includes
     PRODUCTS ||--|| STOCK : stored_in
+    CATALOG ||--o{ CATEGORIES : has
     CATEGORIES ||--o{ PRODUCTS : categorizes
-    ORDERS ||--o{ ORDER_PAYMENTS : has
-    PAYMENTS ||--o{ ORDER_PAYMENTS : completes
-    USERS ||--o{ USER_ROLES : has
-    ROLES ||--o{ USER_ROLES : assigned_to
-    USERS ||--o{ REFRESH_TOKENS : owns
+    ORDERS ||--o{ PAYMENTS : has
     USERS {
         int id PK "ID único do usuário"
-        string username "Nome de usuário único para login"
-        string email "E-mail do usuário (também único)"
-        string password_hash "Hash da senha do usuário"
         string name "Nome do usuário"
+        string username "Nome de usuário (único)"
+        string email "e-mail do usuário (único)"
+        string password "Hash da senha do usuário"
+        string document "Documento do usuário (único)"
         boolean active "Indica se o usuário está ativo"
+        boolean guest "Indica se o usuário é convidado"
+        int role_id "ID da role do usuário"
         timestamp last_login "Data do último login"
         timestamp created_at "Data de criação do registro"
         timestamp updated_at "Data da última atualização do registro"
@@ -269,62 +268,55 @@ erDiagram
 
     ROLES {
         int id PK "ID único da Role"
-        string name "Nome único do role (ex: ADMIN, USER)"
+        string name "Nome único do role (ex: ADMIN, USER, GUEST)"
         string description "Descrição das permissões do role"
         timestamp created_at "Data de criação do registro"
         timestamp updated_at "Data da última atualização do registro"
     }
 
-    USER_ROLES {
-        int id PK "ID único da Role do usuário"
-        int user_id FK "ID do usuário"
-        int role_id FK "ID do role associado"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
-    }
-
-    REFRESH_TOKENS {
-        int id PK "ID único do refresh token"
-        int user_id FK "ID do usuário"
-        string token "Token de refresh único"
-        boolean active "Indica se o Refresh Token está ativo"
-        timestamp expires_at "Data de expiração do token"
-        timestamp created_at "Data de criação do registro"
-    }
-    CUSTOMERS {
-        bigint id PK
-        varchar name
-        varchar email
-        varchar document
-        timestamp created_at
-        timestamp updated_at
-        boolean active
-    }
-
     ORDERS {
-        int id PK
-        int customer_id FK
+        int id PK "ID único da order"
+        int user_id FK
         varchar order_number
         varchar status
         decimal amount
-        timestamp created_at
-        timestamp updated_at
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     ORDER_ITEMS {
-        int id PK
+        int id PK "ID único da order_item"
         int order_id FK
         int product_id FK
+        string name
         int quantity
         decimal unit_price
-        decimal subtotal
         text observations
-        timestamp created_at
-        timestamp updated_at
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
+    }
+
+    CATALOG{
+        int id PK "ID único da catálogo"
+        string name "Nome do catálogo"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
+    }
+
+    CATEGORIES{
+        int id PK "ID único da categoria"
+        int catalog_id FK
+        string name "Nome da categoria"
+        string description "Descrição da categoria"
+        string image_url "URL da imagem da categoria"
+        int display_order "Ordem de exibição da categoria"
+        boolean active "Indica se a categoria está ativa ou não"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     PRODUCTS {
-        bigint id PK
+        bigint id PK "ID único do produto"
         bigint category_id FK
         varchar name
         varchar description
@@ -332,51 +324,35 @@ erDiagram
         varchar image_url
         int display_order
         boolean active
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CATEGORIES {
-        bigint id PK
-        varchar name
-        varchar description
-        varchar image_url
-        int display_order
-        boolean active
-        timestamp created_at
-        timestamp updated_at
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     STOCK {
-        bigint id PK
+        bigint id PK "ID único do stock"
         bigint product_id FK
         int quantity
-        timestamp created_at
-        timestamp updated_at
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     PAYMENTS {
-        int id PK
-        int customer_id FK
-        varchar type
-        timestamp expires_in
-        varchar tid
-        decimal amount
-        varchar qr_code_url
-        text observations
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    ORDER_PAYMENTS {
-        int id PK
+        int id PK "ID único do pagamento"
+        int user_id FK
         int order_id FK
-        int payment_id FK
+        varchar payment_type
+        timestamp expires_in
         varchar status
         timestamp paid_at
-        timestamp created_at
-        timestamp updated_at
+        varchar tid
+        decimal amount
+        varchar qr_code
+        text observations
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
+
+
 ```
 
 ### Fluxo de Realização do Pedido e Pagamento (Event Storming)
@@ -391,7 +367,7 @@ flowchart TD
     E5 --> E6[QRCodeGenerated]
     E6 --> E7[PaymentReceived]
     E7 --> E8[OrderReceived]
-    
+
     %% Comandos
     C1[IdentifyCustomer] --> E1
     C2[CreateOrder] --> E2
@@ -401,7 +377,7 @@ flowchart TD
     C6[GenerateQRCode] --> E6
     C7[ConfirmPayment] --> E7
     C8[ReceiveOrder] --> E8
-    
+
     %% Atores
     A1[Customer] --> C1
     A1 --> C2
@@ -422,14 +398,14 @@ flowchart TD
     E3 --> E4[CustomerNotified]
     E4 --> E5[OrderDelivered]
     E5 --> E6[OrderFinished]
-    
+
     %% Comandos
     C1[StartPreparation] --> E2
     C2[MarkAsReady] --> E3
     C3[NotifyCustomer] --> E4
     C4[DeliverOrder] --> E5
     C5[FinishOrder] --> E6
-    
+
     %% Atores
     A1[Cook] --> C1
     A1 --> C2
@@ -561,7 +537,7 @@ food-core-api/
 │   │   │   │   └── infrastructure/             # Implementações de adaptadores
 │   │   │   │
 │   │   │   ├── customer/                       # Módulo Cliente
-│   │   │   ├── product/                        # Módulo Produto 
+│   │   │   ├── product/                        # Módulo Produto
 │   │   │   ├── payment/                        # Módulo Pagamento
 │   │   │   └── shared/                         # Componentes compartilhados
 │   │   │
@@ -694,7 +670,7 @@ erDiagram
     PRODUCTS ||--o{ ORDER_ITEMS : included_in
     ORDERS ||--o{ ORDER_ITEMS : contains
     ORDERS ||--o| PAYMENTS : has
-    
+
     CUSTOMERS {
         id BIGINT PK
         name VARCHAR(100)
@@ -705,7 +681,7 @@ erDiagram
         updated_at TIMESTAMP
         active BOOLEAN
     }
-    
+
     PRODUCTS {
         id BIGINT PK
         name VARCHAR(100)
@@ -717,7 +693,7 @@ erDiagram
         updated_at TIMESTAMP
         active BOOLEAN
     }
-    
+
     ORDERS {
         id BIGINT PK
         order_number VARCHAR(20)
@@ -727,7 +703,7 @@ erDiagram
         created_at TIMESTAMP
         updated_at TIMESTAMP
     }
-    
+
     ORDER_ITEMS {
         id BIGINT PK
         order_id BIGINT FK
@@ -738,7 +714,7 @@ erDiagram
         total DECIMAL(10_2)
         observations TEXT
     }
-    
+
     PAYMENTS {
         id BIGINT PK
         order_id BIGINT FK
@@ -853,7 +829,7 @@ Existem duas abordagens:
 
 ```sql
 -- Conecte-se ao banco via Adminer e execute:
-DELETE FROM DATABASECHANGELOG 
+DELETE FROM DATABASECHANGELOG
 WHERE filename = 'db/changelog/modules/product/03-product-seed.sql';
 
 -- Aplique as migrações novamente
