@@ -37,7 +37,7 @@ public interface SpringDataOrderRepository extends JpaRepository<OrderEntity, Lo
      */
     @Query("""
     SELECT o FROM OrderEntity o
-    WHERE CAST(o.orderStatus AS string) <> 'COMPLETED'
+    WHERE CAST(o.orderStatus AS string) <> 'COMPLETED' AND CAST(o.orderStatus AS string) <> 'CANCELLED'
     ORDER BY
         CASE CAST(o.orderStatus AS string)
             WHEN 'READY' THEN 1
