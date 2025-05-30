@@ -50,11 +50,11 @@ public class OrderProductService {
 
             var productOrderItem = catalog.get().getProductById(orderItem.getProductId());
 
-            if (productOrderItem.getPrice().compareTo(orderItem.getPrice()) != 0) {
-                throw new OrderItemException("O preço unitário do item do pedido diverge do preço do produto");
-            }
-            else if (!productOrderItem.getName().equals(orderItem.getName())) {
+            if (!productOrderItem.getName().equals(orderItem.getName())) {
                 throw new OrderItemException("O nome do produto do item diverge do nome do produto cadastrado");
+            }
+            else if (productOrderItem.getPrice().compareTo(orderItem.getPrice()) != 0) {
+                throw new OrderItemException("O preço unitário do item do pedido diverge do preço do produto");
             }
             else if (!productOrderItem.isActive()) {
                 throw new OrderItemException("O pedido não pode possuir produtos inativos");

@@ -15,11 +15,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
  */
 @Component
 @Slf4j
-public class OrderEventListener {
+public class PaymentOrderEventListener {
     
     private final PaymentUseCase paymentUseCase;
     
-    public OrderEventListener(PaymentUseCase paymentUseCase) {
+    public PaymentOrderEventListener(PaymentUseCase paymentUseCase) {
         this.paymentUseCase = paymentUseCase;
     }
     

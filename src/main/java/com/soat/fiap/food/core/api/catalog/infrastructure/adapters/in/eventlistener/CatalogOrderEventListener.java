@@ -1,0 +1,36 @@
+package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.eventlistener;
+
+import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
+import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+/**
+ * Ouvinte de eventos de pedido no módulo de catalogo
+ */
+@Component
+@Slf4j
+public class CatalogOrderEventListener {
+
+    private final CatalogUseCase catalogUseCase;
+
+    public CatalogOrderEventListener(CatalogUseCase catalogUseCase) {
+        this.catalogUseCase = catalogUseCase;
+    }
+    
+    /**
+     * Processa o evento de pedido criado
+     * 
+     * @param event Evento de pedido criado
+     */
+    @EventListener
+    public void handleOrderCreatedEvent(OrderCreatedEvent event) {
+        log.info("Módulo Catalogo: Notificado de criação de pedido: {}),",
+                event.getId());
+
+        catalogUseCase.updateProductStockQuantity(event.getItems());
+
+        log.info("Quantidade em estoque atualizada para: {} produtos.", event.getItems().size());
+    }
+} 

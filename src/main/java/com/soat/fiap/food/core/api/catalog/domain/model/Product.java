@@ -125,6 +125,7 @@ public class Product {
      */
     void setStockQuantity(Integer quantity) {
         this.stock.setQuantity(quantity);
+        stock.markUpdatedNow();
     }
 
     /**
@@ -196,16 +197,6 @@ public class Product {
      */
     void setProductStock(Product product) {
         this.getStock().setProduct(product);
-    }
-
-    /**
-     * Atualiza a quantidade em estoque do produto.
-     *
-     * @param quantity nova quantidade
-     */
-    void updateStockQuantity(int quantity) {
-        stock.setQuantity(quantity);
-        stock.markUpdatedNow();
     }
 
     /**

@@ -7,6 +7,7 @@ import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogRespo
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -162,4 +163,11 @@ public interface CatalogUseCase {
      * @param imageFile Arquivo da nova imagem
      */
     void updateProductImage(Long catalogId, Long categoryId, Long productId, MultipartFile imageFile);
+
+    /**
+     * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
+     *
+     * @param orderItemCreatedEvents eventos de criação de item de pedido
+     */
+    void updateProductStockQuantity(List<OrderItemCreatedEvent> orderItemCreatedEvents);
 }

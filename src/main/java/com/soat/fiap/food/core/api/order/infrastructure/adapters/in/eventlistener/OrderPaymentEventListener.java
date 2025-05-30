@@ -16,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Slf4j
-public class PaymentEventListener {
+public class OrderPaymentEventListener {
     
     private final OrderUseCase orderUseCase;
     
-    public PaymentEventListener(OrderUseCase orderUseCase) {
+    public OrderPaymentEventListener(OrderUseCase orderUseCase) {
         this.orderUseCase = orderUseCase;
     }
     

@@ -7,12 +7,12 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Ouvinte de eventos de produto no módulo de pedidos
+ * Ouvinte de eventos de catalogo no módulo de pedidos
  */
 @Component
-public class ProductEventListener {
+public class OrderProductEventListener {
     
-    private static final Logger logger = LoggerFactory.getLogger(ProductEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderProductEventListener.class);
     
     /**
      * Processa o evento de produto criado

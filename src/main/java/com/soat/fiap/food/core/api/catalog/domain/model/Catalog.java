@@ -7,6 +7,7 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundExce
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import lombok.Data;
+import org.springframework.data.relational.core.sql.In;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -297,18 +298,28 @@ public class Catalog {
     }
 
     /**
-     * Atualiza a quantidade de estoque de um produto em uma categoria.
+     * Atualiza a quantidade de estoque de um produto.
      *
-     * @param categoryId o ID da categoria
      * @param productId o ID do produto
      * @param newQuantity a nova quantidade de estoque
      */
-    public void updateProductStockQuantity(Long categoryId, Long productId, int newQuantity) {
-        Objects.requireNonNull(categoryId, "O ID da categoria não pode ser nulo");
+    public void updateProductStockQuantity(Long productId, int newQuantity) {
         Objects.requireNonNull(productId, "O ID produto não pode ser nulo");
 
-        var product = getProductFromCategoryById(categoryId, productId);
-        product.updateStockQuantity(newQuantity);
+        var product = getProductById(productId);
+        product.setStockQuantity(newQuantity);
+    }
+
+    /**
+     * Obtem a quantidade de estoque de um produto.
+     *
+     * @param productId o ID do produto
+     */
+    public Integer getProductStockQuantity(Long productId) {
+        Objects.requireNonNull(productId, "O ID produto não pode ser nulo");
+
+        var product = getProductById(productId);
+        return product.getStockQuantity();
     }
 
     /**
