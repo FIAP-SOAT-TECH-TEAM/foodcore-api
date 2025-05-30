@@ -46,21 +46,3 @@ COMMENT ON COLUMN users.role_id IS 'Id da role do usuário';
 COMMENT ON COLUMN users.last_login IS 'Data do último login';
 COMMENT ON COLUMN users.created_at IS 'Data de criação do registro';
 COMMENT ON COLUMN users.updated_at IS 'Data da última atualização do registro';
-
---changeset user:03-user-tables runAlways:true
-CREATE TABLE IF NOT EXISTS refresh_tokens (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    token VARCHAR(255) UNIQUE NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT TRUE,
-    expires_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_refresh_tokens_user FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-COMMENT ON TABLE refresh_tokens IS 'Tabela de tokens de refresh para JWT';
-COMMENT ON COLUMN refresh_tokens.id IS 'ID único do refresh token';
-COMMENT ON COLUMN refresh_tokens.token IS 'Token de refresh único';
-COMMENT ON COLUMN refresh_tokens.expires_at IS 'Data de expiração do token';
-COMMENT ON COLUMN refresh_tokens.active IS 'Indica se o Refresh Token está ativo (logoff invalida o refresh token)';
-COMMENT ON COLUMN refresh_tokens.created_at IS 'Data de criação do registro';
