@@ -21,7 +21,7 @@ fi
 cd "$PROJECT_ROOT/docker"
 
 # Verificar quais contêineres de infraestrutura estão rodando
-INFRA_CONTAINERS=$(docker ps --filter "name=food-core-(db|redis|cdn)" --format "{{.Names}}")
+INFRA_CONTAINERS=$(docker ps --filter "name=food-core-(db)" --format "{{.Names}}")
 
 if [ -z "$INFRA_CONTAINERS" ]; then
   echo "Nenhum contêiner de infraestrutura em execução."
@@ -34,10 +34,10 @@ echo
 
 # Parar os contêineres de infraestrutura
 echo "-> Parando serviços de infraestrutura..."
-docker-compose stop db redis cdn
+docker-compose stop db
 
 # Verificar se todos os contêineres foram parados
-STILL_RUNNING=$(docker ps --filter "name=food-core-(db|redis|cdn)" --format "{{.Names}}")
+STILL_RUNNING=$(docker ps --filter "name=food-core-(db)" --format "{{.Names}}")
 if [ -z "$STILL_RUNNING" ]; then
   echo "===== Infraestrutura parada com sucesso! ====="
 else
@@ -48,7 +48,7 @@ else
   docker-compose down
   
   # Verificação final
-  STILL_RUNNING=$(docker ps --filter "name=food-core-(db|redis|cdn)" --format "{{.Names}}")
+  STILL_RUNNING=$(docker ps --filter "name=food-core-(db)" --format "{{.Names}}")
   if [ -z "$STILL_RUNNING" ]; then
     echo "===== Infraestrutura parada com sucesso! ====="
   else

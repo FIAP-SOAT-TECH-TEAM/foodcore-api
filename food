@@ -16,7 +16,7 @@ show_help() {
   echo
   echo "Comandos disponíveis:"
   echo "  start:all        Inicia toda a infraestrutura e a aplicação"
-  echo "  start:infra      Inicia apenas a infraestrutura (banco, redis, etc)"
+  echo "  start:infra      Inicia apenas a infraestrutura (banco)"
   echo "  start:app        Inicia apenas a aplicação"
   echo "  start:sonar      Inicia apenas o SonarQube"
   echo "  stop:all         Para todos os serviços"
@@ -34,7 +34,6 @@ show_help() {
   echo "  logs             Exibe logs dos containers"
   echo "  logs:app         Exibe logs apenas da aplicação"
   echo "  logs:db          Exibe logs apenas do banco de dados"
-  echo "  logs:redis       Exibe logs apenas do Redis"
   echo "  logs:sonar       Exibe logs do SonarQube"
   echo "  status           Exibe status dos containers"
   echo "  clean            Remove containers, imagens e volumes não utilizados"
@@ -234,10 +233,6 @@ case "$COMMAND" in
   logs:db)
     echo "Exibindo logs do banco de dados..."
     cd "$SCRIPT_DIR/docker" && docker-compose logs -f db
-    ;;
-  logs:redis)
-    echo "Exibindo logs do Redis..."
-    cd "$SCRIPT_DIR/docker" && docker-compose logs -f redis
     ;;
   logs:sonar)
     echo "Exibindo logs do SonarQube..."

@@ -15,11 +15,6 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
       - SPRING_LIQUIBASE_ENABLED=true
       - SPRING_LIQUIBASE_CHANGE_LOG=classpath:db/changelog/db.changelog-master.yaml
-      - SPRING_REDIS_HOST=redis
-      - SPRING_REDIS_PORT=6379
-      - APP_CDN_ROOT_PATH=/app/cdn
-      - APP_CDN_PUBLIC_URL=http://cdn:80
-      - APP_CDN_STORAGE_DIRECTORY=/app/cdn/public
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
       interval: 30s
@@ -28,8 +23,6 @@ services:
       start_period: 40s
     depends_on:
       db:
-        condition: service_healthy
-      redis:
         condition: service_healthy
     restart: unless-stopped
     networks:
@@ -40,8 +33,6 @@ services:
         limits:
           cpus: '1.0'
           memory: 1G
-    volumes:
-      - ./cdn/public:/app/cdn/public
 
   # Banco de dados PosgreSQL
   db:
@@ -76,24 +67,6 @@ services:
     networks:
       - fastfood-network
 
-  # Redis para cache
-  redis:
-    image: redis:7-alpine
-    container_name: food-core-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
-    command: redis-server --appendonly yes
-    networks:
-      - fastfood-network
-
   # Ferramenta para gerenciar banco de dados (aepnas local)
   adminer:
     image: adminer:latest
@@ -108,28 +81,9 @@ services:
     profiles:
       - local
 
-  # CDN para armazenamento de imagens de produtos
-  cdn:
-    image: nginx:alpine
-    container_name: food-core-cdn
-    ports:
-      - "8082:80"
-    volumes:
-      - ./cdn/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./cdn/public:/usr/share/nginx/html
-    healthcheck:
-      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost/healthcheck", "-q"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    networks:
-      - fastfood-network
-
 networks:
   fastfood-network:
     driver: bridge
 
 volumes:
   postgres_data:
-  redis_data:

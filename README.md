@@ -141,10 +141,9 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 - **MapStruct**: Mapeamento entre DTOs e entidades
 - **Lombok**: Redução de código boilerplate
 
-### Banco de Dados & Cache
+### Banco de Dados
 
 - **PostgreSQL**: Banco de dados relacional principal
-- **Redis**: Cache distribuído
 - **Liquibase**: Migrações de banco de dados
 
 ### Infraestrutura & Observabilidade
@@ -464,7 +463,7 @@ O projeto utiliza um script centralizador `food` para gerenciar todas as operaç
 | Comando | Descrição |
 |---------|-----------|
 | `start:all` | Inicia toda a infraestrutura e a aplicação |
-| `start:infra` | Inicia apenas a infraestrutura (banco, redis, cdn) |
+| `start:infra` | Inicia apenas a infraestrutura (banco) |
 | `start:app` | Inicia apenas a aplicação |
 | `stop:all` | Para todos os serviços |
 | `stop:infra` | Para apenas a infraestrutura |
@@ -495,7 +494,7 @@ cd food-core-api
 # Tornar o script principal executável
 chmod +x food
 
-# Iniciar infraestrutura (banco, redis, cdn, adminer)
+# Iniciar infraestrutura (banco, adminer)
 ./food start:infra
 
 # Resetar e configurar o banco de dados
@@ -518,7 +517,6 @@ chmod +x food
   - Usuário: postgres
   - Senha: postgres
   - Banco: fastfood
-- **CDN**: <http://localhost:8082>
 
 ### Ambientes e Dados de Seed
 
