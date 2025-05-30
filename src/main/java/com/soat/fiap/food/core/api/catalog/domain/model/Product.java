@@ -132,7 +132,7 @@ public class Product {
      *
      * @return quantidade de estoque
      */
-    Integer getStockQuantity() {
+    public Integer getStockQuantity() {
         return this.stock.getQuantity();
     }
 

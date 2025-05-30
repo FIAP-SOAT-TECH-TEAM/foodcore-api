@@ -62,6 +62,9 @@ public class OrderProductService {
             else if (!productOrderItem.categoryisActive()) {
                 throw new OrderItemException("A categoria do produto do pedido não pode estar inativa");
             }
+            else if (productOrderItem.getStockQuantity() < orderItem.getQuantity()) {
+                throw new OrderItemException(String.format("Quantidade insuficiente em estoque para o produto: %s", productOrderItem.getName()));
+            }
 
         }
     }
