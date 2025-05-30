@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadop
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.GenerateQrCodeRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.GenerateQrCodeResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoPaymentsResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.config.MercadoPagoProperties;
@@ -77,7 +78,34 @@ public class MercadoPagoAdapter implements MercadoPagoPort {
         } catch (MercadoPagoException e) {
             throw e;
         } catch (Exception e) {
-            log.error("Erro inesperado ao contatar API do mercado pago para gerar QrCode");
+            log.error("Erro inesperado ao contatar API do mercado pago obter dados do pagamento");
+            throw new MercadoPagoException("Erro inesperado ao chamar API Mercado Pago", e, 500);
+        }
+
+    }
+
+    @Override
+    public MercadoPagoOrderResponse getMercadoPagoOrder(Long orderId) {
+        try {
+            var response = client.getMercadoPagoOrder(orderId).execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body();
+            } else {
+                log.warn("Erro ao contatar API do mercado pago para obter dados do pedido");
+
+                String errorBody = response.errorBody() != null ? response.errorBody().string() : "Erro desconhecido";
+
+                throw new MercadoPagoException(
+                        "Erro na API Mercado Pago: " + errorBody + " | Status code: " + response.code(),
+                        null,
+                        response.code()
+                );
+            }
+        } catch (MercadoPagoException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao contatar API do mercado pago para obter dados do pedido");
             throw new MercadoPagoException("Erro inesperado ao chamar API Mercado Pago", e, 500);
         }
 

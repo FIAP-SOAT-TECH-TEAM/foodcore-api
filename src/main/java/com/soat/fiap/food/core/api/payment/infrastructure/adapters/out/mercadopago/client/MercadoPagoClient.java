@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadop
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.GenerateQrCodeRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.GenerateQrCodeResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoPaymentsResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,6 +25,11 @@ public interface MercadoPagoClient {
     @GET("/v1/payments/{payment_id}")
     Call<MercadoPagoPaymentsResponse> getMercadoPagoPayments(
             @Path("payment_id") String paymentId
+    );
+
+    @GET("/merchant_orders/{order_id}")
+    Call<MercadoPagoOrderResponse> getMercadoPagoOrder(
+            @Path("order_id") Long orderId
     );
 
 }

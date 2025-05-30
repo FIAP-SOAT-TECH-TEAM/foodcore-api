@@ -1,7 +1,9 @@
 package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
@@ -187,5 +189,18 @@ public class PaymentService implements PaymentUseCase {
         }
 
         return qrCodeResponseMapper.toResponse(payment.get());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MercadoPagoOrderResponse getMercadoPagoOrder(Long merchantOrder) {
+        var order = mercadoPagoPort.getMercadoPagoOrder(merchantOrder);
+
+        if (order == null) {
+            log.warn("Pedido não foi encontrado no mercado pago! Merchant Order: {}", merchantOrder);
+            throw new OrderNotFoundException("Pedido Mercado Pago", merchantOrder);
+        }
+
+        return order;
     }
 }

@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.payment.application.ports.in;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 
@@ -43,4 +44,11 @@ public interface PaymentUseCase {
      * @param orderId id do pedido
      */
      QrCodeResponse getOrderPaymentQrCode(Long orderId);
+
+    /**
+     * Retorna um pedido no mercado pago a partir de um merchant order
+     *
+     * @param merchantOrder id do merchant order
+     */
+     MercadoPagoOrderResponse getMercadoPagoOrder(Long merchantOrder);
 } 
