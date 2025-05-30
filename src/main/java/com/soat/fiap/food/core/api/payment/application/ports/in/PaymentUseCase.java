@@ -32,10 +32,10 @@ public interface PaymentUseCase {
     PaymentStatusResponse getOrderPaymentStatus(Long orderId);
 
     /**
-     * Processa pagamentos pendentes expirados
+     * Processa pagamentos não aprovados expirados
      *
      */
-    void processPendingExpiredPayments();
+    void processExpiredPayments();
 
     /**
      * Retorna o qr code de pagamento de um dado pedido

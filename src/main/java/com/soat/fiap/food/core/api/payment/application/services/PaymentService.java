@@ -151,9 +151,9 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public void processPendingExpiredPayments() {
+    public void processExpiredPayments() {
 
-        var expiredPayments = paymentRepository.findByStatusAndExpiresInBefore(PaymentStatus.PENDING, LocalDateTime
+        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime
                 .now()
                 .atOffset(ZoneOffset.of("-04:00")));
 

@@ -44,8 +44,8 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
     }
 
     @Override
-    public List<Payment> findByStatusAndExpiresInBefore(PaymentStatus status, OffsetDateTime now) {
-      var paymentEntities = repository.findByStatusAndExpiresInBefore(status, now);
+    public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime now) {
+      var paymentEntities = repository.findExpiredPaymentsWithoutApprovedOrCancelled(now);
 
       return mapper.toDomainList(paymentEntities);
     }

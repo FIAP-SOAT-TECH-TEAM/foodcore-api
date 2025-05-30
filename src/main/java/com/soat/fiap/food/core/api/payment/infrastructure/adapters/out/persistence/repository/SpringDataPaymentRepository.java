@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -25,7 +26,23 @@ public interface SpringDataPaymentRepository extends JpaRepository<PaymentEntity
     boolean existsByOrderId(Long orderId);
 
     /**
-     * Busca pagamentos expirados com um determinado status
+     * Busca pagamentos não aprovados expirados
      */
-    List<PaymentEntity> findByStatusAndExpiresInBefore(PaymentStatus status, OffsetDateTime now);
+    @Query("""
+    SELECT p
+    FROM PaymentEntity p
+    WHERE p.id IN (
+        SELECT MAX(p2.id)
+        FROM PaymentEntity p2
+        WHERE p2.expiresIn < :now
+          AND NOT EXISTS (
+              SELECT 1
+              FROM PaymentEntity p3
+              WHERE p3.orderId = p2.orderId
+                AND CAST(p3.status AS string) IN ('APPROVED', 'CANCELLED')
+          )
+        GROUP BY p2.orderId
+    )
+    """)
+    List<PaymentEntity> findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime now);
 } 

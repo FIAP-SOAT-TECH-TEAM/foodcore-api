@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Componente responsável por agendar e executar periodicamente o processamento
- * de pagamentos pendentes que expiraram.
+ * de pagamentos não aprovados expirados.
  *
  * <p>Este agendador executa a cada 31 minutos, identificando e processando
  * os pagamentos que passaram do tempo limite permitido para serem concluídos.</p>
@@ -23,7 +23,7 @@ public class PaymentExpirationScheduler {
 
     @Scheduled(fixedRate = 1_860_000)//
     public void verificarPedidosExpirados() {
-        log.info("Iniciando processamento de pagamentos pendentes expirados.");
-        paymentUseCase.processPendingExpiredPayments();
+        log.info("Iniciando processamento de pagamentos não aprovados expirados.");
+        paymentUseCase.processExpiredPayments();
     }
 }

@@ -29,12 +29,11 @@ public interface PaymentRepository {
     Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId);
 
     /**
-     * Busca pagamentos expirados com um determinado status
-     * @param status status do pagamento
+     * Busca pagamentos não aprovados expirados
      * @param now {@code OffsetDateTime} com o horário atual
-     * @return Pagamento encontrado ou vazio
+     * @return Lista de pagamento expirados
      */
-    List<Payment> findByStatusAndExpiresInBefore(PaymentStatus status, OffsetDateTime now);
+    List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime now);
 
     /**
      * Verifica se já existe um pagamento para o pedido
