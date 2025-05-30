@@ -151,11 +151,11 @@ public class Order {
     public void setOrderStatus(OrderStatus newStatus) {
         Objects.requireNonNull(newStatus, "O status do pedido não pode ser nulo");
 
-        validateStatusTransition(newStatus);
-
         if (this.orderStatus == newStatus) {
             return;
         }
+
+        validateStatusTransition(newStatus);
 
         this.orderStatus = newStatus;
         markUpdatedNow();
@@ -173,6 +173,22 @@ public class Order {
         if (this.orderStatus == OrderStatus.CANCELLED) {
             throw new OrderException(
                     "Não é possível alterar o status de um pedido cancelado"
+            );
+        }
+        else if (this.orderStatus == OrderStatus.COMPLETED) {
+            throw new OrderException(
+                    "Não é possível alterar o status de um pedido já entregue ao cliente"
+            );
+        }
+        else if (this.orderStatus != OrderStatus.RECEIVED && newStatus == OrderStatus.CANCELLED) {
+            throw new OrderException(
+                    "Não é possível alterar o status de um pedido para cancelado após o início do seu preparo"
+            );
+        }
+        else if (newStatus == OrderStatus.RECEIVED) {
+            throw new OrderException(
+                    String.format("Não é possível retornar o status da ordem para %s. Revise o fluxo: %s -> %s -> %s...",
+                            OrderStatus.RECEIVED, OrderStatus.RECEIVED, OrderStatus.PREPARING, OrderStatus.READY)
             );
         }
     }

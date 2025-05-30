@@ -135,9 +135,9 @@ public class OrderService implements OrderUseCase {
             throw new OrderNotFoundException("Pedido", orderId);
         }
 
-        orderPaymentService.validateOrderPayment(order.get());
-
         order.get().setOrderStatus(newStatus);
+
+        orderPaymentService.validateOrderPayment(order.get());
 
         var updatedOrder = orderRepository.save(order.get());
         var orderStatusToResponse = orderStatusResponseMapper.toResponse(updatedOrder);

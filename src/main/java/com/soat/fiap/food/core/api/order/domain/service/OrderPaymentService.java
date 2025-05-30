@@ -25,11 +25,8 @@ public class OrderPaymentService {
 
         var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(order.getId());
 
-        if (payment.isEmpty()) {
+        if (payment.isEmpty() && order.getOrderStatus() != OrderStatus.RECEIVED) {
             throw new PaymentNotFoundException("O pagamento do pedido não existe");
-        }
-        else if (order.getOrderStatus() != OrderStatus.PREPARING && order.getOrderStatus() != OrderStatus.READY) {
-            throw new OrderException("Só é possível alterar diretamente o status de ordens em preparo ou prontas para entrega");
         }
     }
 }
