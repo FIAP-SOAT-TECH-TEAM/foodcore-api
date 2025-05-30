@@ -21,8 +21,8 @@ public class PaymentExpirationScheduler {
 
     private final PaymentUseCase paymentUseCase;
 
-    @Scheduled(fixedRate = 1_860_000)//
-    public void verificarPedidosExpirados() {
+    @Scheduled(fixedRate = 60)//
+    public void processExpiredPayments() {
         log.info("Iniciando processamento de pagamentos não aprovados expirados.");
         paymentUseCase.processExpiredPayments();
     }
