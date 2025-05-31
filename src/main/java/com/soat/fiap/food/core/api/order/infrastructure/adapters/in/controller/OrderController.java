@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -39,7 +40,8 @@ public class OrderController {
     @PostMapping
     @Operation(
             summary = "Criar novo pedido",
-            description = "Cria um novo pedido com os itens, produtos e descontos especificados"
+            description = "Cria um novo pedido com os itens, produtos e descontos especificados",
+            security = @SecurityRequirement(name = "bearer-key")
     )
 
     @ApiResponses(value = {
@@ -62,7 +64,8 @@ public class OrderController {
     @GetMapping("/active")
     @Operation(
             summary = "Listar pedidos ativos ordenados",
-            description = "Retorna todos os pedidos com status RECEBIDO, EM_PREPARACAO ou PRONTO, ordenados por prioridade e data de criação"
+            description = "Retorna todos os pedidos com status RECEBIDO, EM_PREPARACAO ou PRONTO, ordenados por prioridade e data de criação",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -83,7 +86,8 @@ public class OrderController {
     @PatchMapping("/{orderId}/status")
     @Operation(
             summary = "Atualizar status do pedido",
-            description = "Atualiza o status de um pedido existente para um dos valores válidos: RECEIVED, PREPARING, READY, COMPLETED"
+            description = "Atualiza o status de um pedido existente para um dos valores válidos: RECEIVED, PREPARING, READY, COMPLETED",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(

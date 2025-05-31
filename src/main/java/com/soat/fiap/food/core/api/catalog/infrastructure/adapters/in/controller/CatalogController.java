@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class CatalogController {
     @Operation(
             summary = "Listar todos os catálogos",
             description = "Retorna uma lista com todos os catálogos cadastrados",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Catálogos" }
     )
     @ApiResponse(responseCode = "200", description = "Lista de catálogos retornada com sucesso",
@@ -58,6 +60,7 @@ public class CatalogController {
     @Operation(
             summary = "Buscar catálogo por ID",
             description = "Retorna um catálogo específico pelo seu ID",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Catálogos" }
     )
     @ApiResponses(value = {
@@ -78,6 +81,7 @@ public class CatalogController {
     @Operation(
             summary = "Criar novo catálogo",
             description = "Cria um novo catálogo com os dados fornecidos",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Catálogos" }
     )
     @ApiResponses(value = {
@@ -99,6 +103,7 @@ public class CatalogController {
     @Operation(
             summary = "Atualizar catálogo",
             description = "Atualiza os dados de um catálogo existente pelo seu ID",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Catálogos" }
     )
     @ApiResponses(value = {
@@ -123,6 +128,7 @@ public class CatalogController {
     @Operation(
             summary = "Excluir catálogo",
             description = "Exclui um catálogo pelo seu ID",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Catálogos" }
     )
     @ApiResponses(value = {
@@ -144,6 +150,7 @@ public class CatalogController {
     @Operation(
             summary = "Criar nova categoria",
             description = "Cria uma nova categoria vinculada a um catálogo existente",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Categorias" }
     )
     @ApiResponses(value = {
@@ -166,6 +173,7 @@ public class CatalogController {
     @Operation(
             summary = "Listar categorias do catálogo",
             description = "Retorna todas as categorias associadas a um catálogo",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Categorias" }
     )
     @ApiResponses(value = {
@@ -186,6 +194,7 @@ public class CatalogController {
     @Operation(
             summary = "Buscar categoria por ID",
             description = "Retorna uma categoria específica de um catálogo pelo ID da categoria",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Categorias" }
     )
     @ApiResponses(value = {
@@ -209,6 +218,7 @@ public class CatalogController {
     @Operation(
             summary = "Atualizar categoria",
             description = "Atualiza uma categoria vinculada a um catálogo existente",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Categorias" }
     )
     @ApiResponses(value = {
@@ -235,6 +245,7 @@ public class CatalogController {
     @Operation(
             summary = "Excluir categoria",
             description = "Exclui uma categoria específica de um catálogo",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Categorias" }
     )
     @ApiResponses(value = {
@@ -256,8 +267,9 @@ public class CatalogController {
     @PatchMapping(value = "/{catalogId}/categories/{categoryId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Atualizar imagem do category",
-    description = "Atualiza apenas a imagem de um categoryexistente",
-    tags = { "Categorias" }
+            description = "Atualiza apenas a imagem de um categoryexistente",
+            security = @SecurityRequirement(name = "bearer-key"),
+            tags = { "Categorias" }
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Imagem da categoria atualizada com sucesso"),
@@ -284,6 +296,7 @@ public class CatalogController {
     @Operation(
             summary = "Criar novo produto",
             description = "Cria um novo produto vinculado a uma categoria existente",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
@@ -308,6 +321,7 @@ public class CatalogController {
     @Operation(
             summary = "Listar produtos por categoria",
             description = "Retorna todos os produtos de uma determinada categoria dentro de um catálogo",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
@@ -332,6 +346,7 @@ public class CatalogController {
     @Operation(
             summary = "Buscar produto por ID",
             description = "Retorna um produto específico de uma categoria pelo ID do produto",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
@@ -357,6 +372,7 @@ public class CatalogController {
     @Operation(
             summary = "Atualizar produto",
             description = "Atualiza os dados de um produto existente",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
@@ -385,6 +401,7 @@ public class CatalogController {
     @Operation(
             summary = "Excluir produto",
             description = "Exclui um produto específico de uma categoria",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
@@ -408,6 +425,7 @@ public class CatalogController {
     @Operation(
             summary = "Atualizar imagem do produto",
             description = "Atualiza apenas a imagem de um produto existente",
+            security = @SecurityRequirement(name = "bearer-key"),
             tags = { "Produtos" }
     )
     @ApiResponses(value = {
