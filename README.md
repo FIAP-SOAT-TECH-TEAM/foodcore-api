@@ -237,11 +237,9 @@ classDiagram
     OrderItem "many" -- "1" Product
     Product -- Category
     Order -- OrderStatus
-```
 
 ### DER (Diagrama Entidade-Relacionamento)
 
-```mermaid
 erDiagram
     USERS ||--o{ ORDERS : places
     USERS ||--o{ PAYMENTS : makes
@@ -354,11 +352,8 @@ erDiagram
         timestamp updated_at
     }
 
-```
-
 ### Fluxo de Realização do Pedido e Pagamento (Event Storming)
 
-```mermaid
 flowchart TD
     %% Eventos de Domínio
     E1[CustomerIdentified] --> E2[OrderCreated]
@@ -387,11 +382,9 @@ flowchart TD
     A1 --> C5
     A2[PaymentSystem] --> C7
     A3[Attendant] --> C8
-```
 
 ### Fluxo de Preparação e Entrega do Pedido (Event Storming)
 
-```mermaid
 flowchart TD
     %% Eventos de Domínio
     E1[OrderReceived] --> E2[PreparationStarted]
