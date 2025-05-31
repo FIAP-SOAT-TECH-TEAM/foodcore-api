@@ -251,72 +251,73 @@ erDiagram
     CATALOG ||--o{ CATEGORIES : has
     CATEGORIES ||--o{ PRODUCTS : categorizes
     ORDERS ||--o{ PAYMENTS : has
+
     USERS {
-        int id PK "ID único do usuário"
-        string name "Nome do usuário"
-        string username "Nome de usuário (único)"
-        string email "e-mail do usuário (único)"
-        string password "Hash da senha do usuário"
-        string document "Documento do usuário (único)"
-        boolean active "Indica se o usuário está ativo"
-        boolean guest "Indica se o usuário é convidado"
-        int role_id "ID da role do usuário"
-        timestamp last_login "Data do último login"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
+        int id PK
+        string name
+        string username
+        string email
+        string password
+        string document
+        boolean active
+        boolean guest
+        int role_id
+        timestamp last_login
+        timestamp created_at
+        timestamp updated_at
     }
 
     ROLES {
-        int id PK "ID único da Role"
-        string name "Nome único do role (ex: ADMIN, USER, GUEST)"
-        string description "Descrição das permissões do role"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
+        int id PK
+        string name
+        string description
+        timestamp created_at
+        timestamp updated_at
     }
 
     ORDERS {
-        int id PK "ID único da order"
+        int id PK
         int user_id FK
         varchar order_number
         varchar status
         decimal amount
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        timestamp created_at
+        timestamp updated_at
     }
 
     ORDER_ITEMS {
-        int id PK "ID único da order_item"
+        int id PK
         int order_id FK
         int product_id FK
         string name
         int quantity
         decimal unit_price
         text observations
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        timestamp created_at
+        timestamp updated_at
     }
 
-    CATALOG{
-        int id PK "ID único da catálogo"
-        string name "Nome do catálogo"
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+    CATALOG {
+        int id PK
+        string name
+        timestamp created_at
+        timestamp updated_at
     }
 
-    CATEGORIES{
-        int id PK "ID único da categoria"
+    CATEGORIES {
+        int id PK
         int catalog_id FK
-        string name "Nome da categoria"
-        string description "Descrição da categoria"
-        string image_url "URL da imagem da categoria"
-        int display_order "Ordem de exibição da categoria"
-        boolean active "Indica se a categoria está ativa ou não"
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        string name
+        string description
+        string image_url
+        int display_order
+        boolean active
+        timestamp created_at
+        timestamp updated_at
     }
 
     PRODUCTS {
-        bigint id PK "ID único do produto"
+        bigint id PK
         bigint category_id FK
         varchar name
         varchar description
@@ -324,20 +325,20 @@ erDiagram
         varchar image_url
         int display_order
         boolean active
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        timestamp created_at
+        timestamp updated_at
     }
 
     STOCK {
-        bigint id PK "ID único do stock"
+        bigint id PK
         bigint product_id FK
         int quantity
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        timestamp created_at
+        timestamp updated_at
     }
 
     PAYMENTS {
-        int id PK "ID único do pagamento"
+        int id PK
         int user_id FK
         int order_id FK
         varchar payment_type
@@ -348,10 +349,9 @@ erDiagram
         decimal amount
         varchar qr_code
         text observations
-        timestamp created_at "Informações de auditoria"
-        timestamp updated_at "Informações de auditoria"
+        timestamp created_at
+        timestamp updated_at
     }
-
 
 ```
 
