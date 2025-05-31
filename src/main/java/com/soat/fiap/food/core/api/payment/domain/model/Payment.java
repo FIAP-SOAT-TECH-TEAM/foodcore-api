@@ -24,8 +24,8 @@ public class Payment {
     private Long userId;
     private Long orderId;
     private PaymentMethod type;
-    private OffsetDateTime expiresIn = OffsetDateTime
-            .now(ZoneOffset.of("-04:00"))
+    private LocalDateTime expiresIn = LocalDateTime
+            .now()
             .plusMinutes(30);
     private String tid;
     private BigDecimal amount;
@@ -115,7 +115,7 @@ public class Payment {
      * @return {@code true} se o pagamento estiver expirado, {@code false} caso contrário
      */
     public boolean isExpired() {
-        return expiresIn.isBefore(OffsetDateTime.now(ZoneOffset.of("-04:00")));
+        return expiresIn.isBefore(LocalDateTime.now());
     }
 
     /**
@@ -139,12 +139,14 @@ public class Payment {
 
     /**
      * Retorna a data de expiração formatada como uma String no padrão ISO 8601
-     * (yyyy-MM-dd'T'HH:mm:ssz) exigido pela API do Mercado Pago.
+     * (yyyy-MM-dd'T'HH:mm:ssz) no fuso horário -04:00 (La Paz).
      *
      * @return String com a data de expiração formatada.
      */
-    public String getISO8601ExpiresIn() {
-        return this.expiresIn.format(ISO_8601_FORMATTER);
+    public String getLaPazISO8601ExpiresIn() {
+        return this.expiresIn
+                .atOffset(ZoneOffset.of("-04:00"))
+                .format(ISO_8601_FORMATTER);
     }
 
 }
