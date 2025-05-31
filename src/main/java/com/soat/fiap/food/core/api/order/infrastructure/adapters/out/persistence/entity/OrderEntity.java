@@ -27,10 +27,10 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq_gen")
     @SequenceGenerator(name = "order_id_seq_gen", sequenceName = "orders_id_seq", allocationSize = 1)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Convert(converter = OrderNumberConverter.class)
     @Column(name = "order_number", length = 20, nullable = false, unique = true)

@@ -13,11 +13,6 @@ spring:
   liquibase:
     contexts: local,test,prod
 
-  # Spring Modulith
-  autoconfigure:
-    exclude:
-      - org.springframework.modulith.events.jdbc.JdbcEventPublicationAutoConfiguration
-
   # Cache
   cache:
     type: simple

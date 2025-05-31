@@ -14,14 +14,14 @@ public class OrderItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
     @Column(name = "product_id", nullable = false)
-    private Long productId;
+    private Integer productId;
 
     @Column(nullable = false)
     private String name;

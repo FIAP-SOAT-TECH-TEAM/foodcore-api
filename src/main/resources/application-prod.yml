@@ -13,6 +13,13 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
+  # SpringDoc
+  springdoc:
+    api-docs:
+      enabled: false
+    swagger-ui:
+      enabled: false
+
   # Liquibase (contexto exclusivo de produção)
   liquibase:
     contexts: prod

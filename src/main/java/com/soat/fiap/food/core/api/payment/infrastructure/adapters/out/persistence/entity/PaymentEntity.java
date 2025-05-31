@@ -27,13 +27,13 @@ public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "order_id")
-    private Long orderId;
+    private Integer orderId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "payment_type_enum")
