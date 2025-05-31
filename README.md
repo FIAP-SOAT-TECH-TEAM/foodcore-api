@@ -19,6 +19,7 @@ API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como p
   <a href="#arquitetura">Arquitetura</a> •
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#diagramas">Diagramas</a> •
+  <a href="#dicionario"> Dicionário de linguagem ubíqua</a>
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
   <a href="#apis">APIs</a> •
@@ -366,7 +367,7 @@ erDiagram
         timestamp expires_in "data de expiração do pagamento"
         varchar status "status do pagamento 'pago, cancelado, pendente'"
         timestamp paid_at "data do pagamento"
-        varchar tid "id do pagamento na adiquirente"
+        varchar tid "id do pagamento na adquirente"
         decimal amount "valor do pagamento"
         varchar qr_code "código do qr_code do pagamento"
         text observations "Observações do usuário para o pagamento"
@@ -489,6 +490,71 @@ flowchart TD
     A3[Attendant] --> C4
     A3 --> C5
 ```
+
+</details>
+
+<h2 id="dicionario">📖 Dicionário de linguagem ubíqua</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Termos essenciais para a aplicação
+
+- **Admin (Administrador)**
+  Usuário com privilégios elevados, responsável pela gestão de usuários, permissões e configurações do sistema.
+
+- **Adquirente**
+  Instituição financeira responsável por processar transações de pagamento do sistema. No nosso caso, a adquirente é representada pela integração com o [Mercado Pago](https://www.mercadopago.com.br).
+
+- **Authentication (Autenticação)**
+  Processo de validação da identidade de um usuário por meio de login.
+
+- **Authorization (Autorização)**
+  Controle de acesso baseado em permissões e papéis (roles). Exemplo: apenas administradores podem listar todos os usuários.
+
+- **Catalog (Catálogo de Produtos)**
+  Conjunto organizado dos produtos disponíveis para seleção e montagem de pedidos.
+
+- **Category (Categoria)**
+  Classificação dos produtos por tipo (ex.: lanches, bebidas, sobremesas).
+
+- **Combo**
+  Conjunto personalizado por um cliente, composto por: lanche, acompanhamento, bebida e sobremesa.
+
+- **Customer (Cliente)**
+  Pessoa que realiza um pedido no sistema. Pode se identificar com CPF, cadastrar nome/e-mail ou seguir como convidado (guest).
+
+- **Guest (Convidado)**
+  Cliente que realiza um pedido sem se identificar ou criar conta. Atua como usuário temporário.
+
+- **Mercado Pago Integration (Integração com Mercado Pago)**
+  Serviço externo utilizado para processar pagamentos eletrônicos dos pedidos.
+
+- **Order (Pedido)**
+  Conjunto de itens selecionados por um cliente para consumo. Pode incluir um ou mais combos.
+
+- **Order Item (Item do Pedido)**
+  Produto específico dentro de um pedido. Pode ser parte de um combo ou avulso.
+
+- **Payment (Pagamento)**
+  Etapa posterior à finalização do pedido. Utiliza integração com o Mercado Pago para processar as transações financeiras.
+
+- **Product (Produto)**
+  Qualquer item disponível para venda, como lanches, bebidas, sobremesas ou acompanhamentos.
+
+- **Role (Papel)**
+  Função atribuída a um usuário. Define suas permissões de acesso no sistema (ex.: ADMIN, ATENDENTE, GUEST).
+
+- **Status do Pedido**
+  Representa o estado atual de um pedido. Exemplos: *Em preparação*, *Pronto*, *Entregue*, *Cancelado*.
+
+- **Stock (Estoque)**
+  Representa a quantidade disponível de cada produto no sistema.
+
+- **TID (Transaction ID)**
+  Identificador único de uma transação na adquirente, fornecido após o pagamento.
+
+- **User (Usuário)**
+  Pessoa autenticada no sistema. Pode possuir diferentes papéis, como ADMIN, ATENDENTE ou GUEST.
 
 </details>
 
