@@ -47,8 +47,8 @@ public class Order {
             Long userId,
             List<OrderItem> orderItems
     ) {
-        validate(userId, orderItems);
-        this.userId = userId;
+        validate(orderItems);
+        this.userId = userId; // Validado via serviço de domínio
 
         for (OrderItem orderItem : orderItems) {
             addItem(orderItem);
@@ -58,16 +58,13 @@ public class Order {
     /**
      * Validação centralizada.
      *
-     * @param userId   ID do cliente
      * @param orderItems   Lista de itens do pedido
      * @throws NullPointerException     se qualquer parâmetro obrigatório for nulo
      * @throws OrderException se a lista de itens estiver vazia
      */
     private void validate(
-            Long userId,
             List<OrderItem> orderItems
     ) {
-        Objects.requireNonNull(userId, "O ID do cliente não pode ser nulo");
         Objects.requireNonNull(orderItems, "A lista de itens do pedido não pode ser nula");
 
         if (orderItems.isEmpty()) {

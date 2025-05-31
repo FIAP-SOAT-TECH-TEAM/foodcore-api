@@ -43,6 +43,13 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
 
     Optional<UserEntity> findByRoleId(Long roleId);
 
+    /**
+     * Busca o primeiro usuário com o campo guest igual a true.
+     *
+     * @return um {@link Optional} contendo o usuário encontrado ou vazio se não houver nenhum.
+     */
+     Optional<UserEntity> findFirstByGuestTrue();
+
     
     /**
      * Busca todos os usuários ativos

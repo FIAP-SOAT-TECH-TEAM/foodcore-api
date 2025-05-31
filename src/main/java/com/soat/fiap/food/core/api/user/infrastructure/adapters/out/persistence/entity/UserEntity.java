@@ -36,6 +36,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private Boolean guest;
+
     @Column(nullable = false, unique = true)
     private String document;
 

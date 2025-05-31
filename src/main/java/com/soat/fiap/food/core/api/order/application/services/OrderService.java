@@ -16,6 +16,7 @@ import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
 import com.soat.fiap.food.core.api.order.domain.service.OrderDiscountService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderPaymentService;
 import com.soat.fiap.food.core.api.order.domain.service.OrderProductService;
+import com.soat.fiap.food.core.api.order.domain.service.OrderUserService;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,7 @@ public class OrderService implements OrderUseCase {
     private final OrderDiscountService orderDiscountService;
     private final OrderProductService orderProductService;
     private final OrderPaymentService orderPaymentService;
+    private final OrderUserService orderUserService;
 
     private final CreateOrderRequestMapper createOrderRequestMapper;
     private final OrderResponseMapper orderResponseMapper;
@@ -52,6 +54,7 @@ public class OrderService implements OrderUseCase {
             OrderProductService orderProductService,
             OrderPaymentService orderPaymentService,
             OrderResponseMapper orderResponseMapper,
+            OrderUserService orderUserService,
             OrderStatusResponseMapper orderStatusResponseMapper) {
         this.eventPublisher = eventPublisher;
         this.orderRepository = orderRepository;
@@ -60,6 +63,7 @@ public class OrderService implements OrderUseCase {
         this.orderDiscountService = orderDiscountService;
         this.orderProductService = orderProductService;
         this.orderPaymentService = orderPaymentService;
+        this.orderUserService = orderUserService;
         this.orderResponseMapper = orderResponseMapper;
         this.orderStatusResponseMapper = orderStatusResponseMapper;
     }
@@ -71,6 +75,8 @@ public class OrderService implements OrderUseCase {
         logger.info("Criando novo pedido para o cliente ID: {}", createOrderRequest.getUserId());
 
         var order = createOrderRequestMapper.toDomain(createOrderRequest);
+
+        orderUserService.validateGuestCustomer(order);
 
         orderProductService.validateOrderItemProduct(order.getOrderItems());
 

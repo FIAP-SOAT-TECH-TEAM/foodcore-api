@@ -23,7 +23,7 @@ public class PaymentExpirationScheduler {
 
     private final PaymentUseCase paymentUseCase;
 
-    @Scheduled(fixedRate = 31, timeUnit = TimeUnit.MINUTES)//
+    @Scheduled(fixedRate = 31, timeUnit = TimeUnit.MINUTES)
     public void processExpiredPayments() {
         log.info("Iniciando processamento de pagamentos não aprovados expirados.");
         paymentUseCase.processExpiredPayments();
