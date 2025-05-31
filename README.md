@@ -91,7 +91,7 @@ graph TD
     subgraph "Monolito Modular"
         USER[Módulo Usuário]
         ORDER[Módulo Pedido]
-        CATÁLOGO[Módulo Catálagp]
+        CATÁLOGO[Módulo Catálago]
         PAYMENT[Módulo Pagamento]
         SHARED[Componentes Compartilhados]
 
