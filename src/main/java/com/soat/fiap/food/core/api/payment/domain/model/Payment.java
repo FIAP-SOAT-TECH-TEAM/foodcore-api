@@ -11,6 +11,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -145,8 +146,9 @@ public class Payment {
      */
     public String getLaPazISO8601ExpiresIn() {
         return this.expiresIn
-                .atOffset(ZoneOffset.of("-04:00"))
-                .format(ISO_8601_FORMATTER);
+                .atZone(ZoneId.of("America/Sao_Paulo"))
+                .withZoneSameInstant(ZoneId.of("America/La_Paz"))
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
 }
