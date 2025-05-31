@@ -720,40 +720,45 @@ O sistema utiliza PostgreSQL como banco de dados principal, com o seguinte esque
 
 ```mermaid
 erDiagram
-    CUSTOMERS ||--o{ ORDERS : places
-    PRODUCTS ||--o{ ORDER_ITEMS : included_in
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ PAYMENTS : makes
+    ROLES ||--o{ USERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
-    ORDERS ||--o| PAYMENTS : has
+    PRODUCTS ||--o{ ORDER_ITEMS : includes
+    PRODUCTS ||--|| STOCK : stored_in
+    CATALOG ||--o{ CATEGORIES : has
+    CATEGORIES ||--o{ PRODUCTS : categorizes
+    ORDERS ||--o{ PAYMENTS : has
 
-    CUSTOMERS {
+    USERS {
         id BIGINT PK
-        name VARCHAR(100)
-        email VARCHAR(100)
-        document VARCHAR(20)
-        phone VARCHAR(20)
+        name VARCHAR(200)
+        username VARCHAR(200)
+        email VARCHAR(200)
+        password VARCHAR(200)
+        document VARCHAR(11)
+        active BOOLEAN
+        guest BOOLEAN
+        role_id BIGINT FK
+        last_login TIMESTAMP
         created_at TIMESTAMP
         updated_at TIMESTAMP
-        active BOOLEAN
     }
 
-    PRODUCTS {
+    ROLES {
         id BIGINT PK
-        name VARCHAR(100)
-        description TEXT
-        category VARCHAR(20)
-        price DECIMAL(10_2)
-        image_url VARCHAR(255)
+        name VARCHAR(200)
+        description VARCHAR(200)
         created_at TIMESTAMP
         updated_at TIMESTAMP
-        active BOOLEAN
     }
 
     ORDERS {
         id BIGINT PK
-        order_number VARCHAR(20)
-        customer_id BIGINT FK
-        status VARCHAR(20)
-        total DECIMAL(10_2)
+        user_id BIGINT FK
+        order_number VARCHAR(200)
+        status VARCHAR(200)
+        amount DECIMAL(10_2)
         created_at TIMESTAMP
         updated_at TIMESTAMP
     }
@@ -762,24 +767,67 @@ erDiagram
         id BIGINT PK
         order_id BIGINT FK
         product_id BIGINT FK
-        product_name VARCHAR(100)
-        quantity INTEGER
+        name VARCHAR(200)
+        quantity INT
         unit_price DECIMAL(10_2)
-        total DECIMAL(10_2)
-        observations TEXT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    CATALOG{
+        id BIGINT PK
+        name VARCHAR(200)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    CATEGORIES{
+        id BIGINT PK
+        catalog_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    PRODUCTS {
+        id BIGINT PK
+        catagory_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        price DECIMAL(10_2)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    STOCK {
+        id BIGINT PK
+        product_id BIGINT FK
+        quantity INT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
     }
 
     PAYMENTS {
         id BIGINT PK
+        user_id BIGINT FK
         order_id BIGINT FK
-        external_id VARCHAR(100)
+        payment_type VARCHAR(100)
+        expires_in TIMESTAMP
+        status VARCHAR(100)
+        paid_at TIMESTAMP
+        tid VARCHAR(300)
         amount DECIMAL(10_2)
-        status VARCHAR(20)
-        payment_method VARCHAR(50)
-        qr_code_url VARCHAR(255)
-        qr_code_data TEXT
+        tid qr_code(300)
+        observations TEXT
         created_at TIMESTAMP
-        processed_at TIMESTAMP
+        updated_at TIMESTAMP
     }
 ```
 
