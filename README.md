@@ -170,9 +170,9 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 classDiagram
     class Order {
         -Long id
+        -User user
         -String orderNumber
         -OrderStatus status
-        -Customer customer
         -BigDecimal totalAmount
         -List~OrderItem~ items
         -LocalDateTime createdAt
@@ -193,38 +193,57 @@ classDiagram
         +calculateSubtotal()
     }
 
-    class Product {
+    class Catalog {
         -Long id
         -String name
-        -String description
-        -Category category
-        -BigDecimal price
-        -String imageUrl
-        -boolean active
     }
 
     class Category {
-        <<enumeration>>
-        BURGER
-        SIDE
-        BEVERAGE
-        DESSERT
+        -Long id
+        -Catalog catalog
+        -String name
+        -String description
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
     }
 
-    class Customer {
+    class Product {
+        -Long id
+        -Category category
+        -String name
+        -String description
+        -BigDecimal price
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+    }
+
+    class User {
         -Long id
         -String name
-        -String document
+        -String username
         -String email
-        -String phone
+        -String password
+        -String document
+        -Boolean active
+        -Boolean guest
+        -Role role
+        -LocalDateTime lastLogin
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
-        -boolean active
+    }
+
+    class Role{
+        <<enumeration>>
+        ADMIN
+        USER
+        GUEST
     }
 
     class OrderStatus {
         <<enumeration>>
-        PENDING
+        RECEIVED
         PREPARING
         READY
         COMPLETED
@@ -232,10 +251,13 @@ classDiagram
     }
 
     Order "1" *-- "many" OrderItem
-    Order "many" -- "1" Customer
+    Order "many" -- "1" User
     OrderItem "many" -- "1" Product
+    Catalog "many" -- "1" Category
+    Category "many" -- "1" Product
     Product -- Category
     Order -- OrderStatus
+    User -- Role
 ```
 
 ### DER (Diagrama Entidade-Relacionamento)
@@ -276,22 +298,22 @@ erDiagram
 
     ORDERS {
         int id PK "ID único da order"
-        int user_id FK
-        varchar order_number
-        varchar status
-        decimal amount
+        int user_id FK "ID do usuário que criou o pedido"
+        varchar order_number "hash aleatoria para identificar o pedido"
+        varchar status "status do pedido"
+        decimal amount "preço do pedido"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
 
     ORDER_ITEMS {
         int id PK "ID único da order_item"
-        int order_id FK
-        int product_id FK
-        string name
-        int quantity
-        decimal unit_price
-        text observations
+        int order_id FK "ID do pedido"
+        int product_id FK "ID do produto"
+        string name "nome do item"
+        int quantity "quantidade do item"
+        decimal unit_price "preço unitário"
+        text observations "oberservações do usuário"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
@@ -317,37 +339,37 @@ erDiagram
 
     PRODUCTS {
         bigint id PK "ID único do produto"
-        bigint category_id FK
-        varchar name
-        varchar description
-        decimal price
-        varchar image_url
-        int display_order
-        boolean active
+        bigint category_id FK "ID da categoria do produto"
+        varchar name "nome do produto"
+        varchar description "descrição do produto"
+        decimal price "preço do produto"
+        varchar image_url "URL da foto do produto"
+        int display_order "ordem de exibição do produto"
+        boolean active "status do produto 'ativo ou inativo'"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
 
     STOCK {
         bigint id PK "ID único do stock"
-        bigint product_id FK
-        int quantity
+        bigint product_id FK "ID do produto"
+        int quantity "quantidade disponivel"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
 
     PAYMENTS {
         int id PK "ID único do pagamento"
-        int user_id FK
-        int order_id FK
-        varchar payment_type
-        timestamp expires_in
-        varchar status
-        timestamp paid_at
-        varchar tid
-        decimal amount
-        varchar qr_code
-        text observations
+        int user_id FK "ID do usuário que criou o pagamento"
+        int order_id FK "ID do pedido pago"
+        varchar payment_type "tipo de pagamento"
+        timestamp expires_in "data de expiração do pagamento"
+        varchar status "status do pagamento 'pago, cancelado, pendente'"
+        timestamp paid_at "data do pagamento"
+        varchar tid "id do pagamento na adiquirente"
+        decimal amount "valor do pagamento"
+        varchar qr_code "código do qr_code do pagamento"
+        text observations "Observações do usuário para o pagamento"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
@@ -584,15 +606,15 @@ food-core-api/
 │   │   ├── java/com/soat/fiap/food/core/api/
 │   │   │   ├── FoodCoreApiApplication.java     # Aplicação principal
 │   │   │   │
-│   │   │   ├── order/                          # Módulo Pedido
+│   │   │   ├── catalog/                        # Módulo Catálogo
 │   │   │   │   ├── application/                # Portas e serviços de aplicação
 │   │   │   │   ├── domain/                     # Modelos de domínio e regras de negócio
 │   │   │   │   ├── mapper/                     # Mappers entre domínio e DTOs
 │   │   │   │   └── infrastructure/             # Implementações de adaptadores
 │   │   │   │
-│   │   │   ├── customer/                       # Módulo Cliente
-│   │   │   ├── product/                        # Módulo Produto
+│   │   │   ├── order/                          # Módulo Pedidos
 │   │   │   ├── payment/                        # Módulo Pagamento
+│   │   │   ├── user/                           # Módulo Usuários
 │   │   │   └── shared/                         # Componentes compartilhados
 │   │   │
 │   │   └── resources/
@@ -670,12 +692,12 @@ O sistema expõe duas interfaces principais de API:
 
 ### Endpoints Principais
 
-#### Clientes
+#### Usuários
 
 ```
-POST /api/customers                     # Cadastrar cliente
-GET /api/customers/{document}           # Obter cliente por documento
-GET /api/customers                      # Listar clientes
+POST /api/users                         # Cadastrar usuário
+GET /api/users/{id}                     # Obter usuário por id
+GET /api/users                          # Listar usuários
 ```
 
 #### Produtos
@@ -843,8 +865,8 @@ src/main/resources/db/changelog/
 │   │   ├── 01-order-tables.sql
 │   │   ├── 02-order-indexes.sql
 │   │   └── 03-order-seed.sql
-│   ├── customer/
-│   ├── product/
+│   ├── user/
+│   ├── catalog/
 │   └── payment/
 └── shared/
     └── 00-init-schema.sql
