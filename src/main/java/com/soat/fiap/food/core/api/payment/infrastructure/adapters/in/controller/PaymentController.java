@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +92,7 @@ public class PaymentController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Buscar pedido no Mercado Pago por ID da merchant_order")
+    @Operation(summary = "Buscar pedido no Mercado Pago por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido retornado com sucesso",
                     content = @Content(mediaType = "application/json",
@@ -108,7 +109,7 @@ public class PaymentController {
 
     // ========== PAGAMENTOS ==========
 
-    @Operation(summary = "Buscar status do pagamento por ID do pedido")
+    @Operation(summary = "Buscar status do pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status do pagamento retornado com sucesso",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentStatusResponse.class))),
@@ -122,7 +123,7 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Buscar QrCode de pagamento por ID do pedido")
+    @Operation(summary = "Buscar QrCode de pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Qr Code de pagamento retornado com sucesso",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = QrCodeResponse.class))),
