@@ -6,6 +6,7 @@ import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoO
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -36,6 +37,7 @@ public class PaymentController {
 
     // ========== MERCADO PAGO ==========
 
+    @Hidden
     @Operation(
             operationId = "webhookWithTopic",
             summary = "Webhook com parâmetros 'topic' e 'id'",
@@ -76,7 +78,7 @@ public class PaymentController {
             @ApiResponse(responseCode = "200", description = "Notificação processada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Notificação malformada")
     })
-    @PostMapping(value = "/webhook/", params = "!topic")
+    @PostMapping(value = "/webhook", params = "!topic")
     @Tag(name = "Mercado Pago", description = "Endpoints de integração Mercado Pago")
     public ResponseEntity<Void> mercadoPagoWebhook(@Valid @RequestBody MercadoPagoNotificationRequest notification) {
         log.info("Recebida notificação do Mercado Pago (completa): ação={}, id interno={}, id externo={}",
