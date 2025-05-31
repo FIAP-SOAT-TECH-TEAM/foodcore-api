@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.shared.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
+import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -146,26 +147,7 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
     }
-    
-    /**
-     * Trata erros de conflito de recursos (ex: CPF duplicado)
-     */
-    @ExceptionHandler(ResourceConflictException.class)
-    public ResponseEntity<ErrorResponse> handleResourceConflictException(
-            ResourceConflictException ex, HttpServletRequest request) {
-        
-        logger.error("Conflito de recurso: {}", ex.getMessage());
-        
-        ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-    
+
     /**
      * Trata erros de integridade de dados (ex: violação de chave estrangeira)
      */

@@ -1,7 +1,5 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.config.security;
 
-import com.soat.fiap.food.core.api.shared.exception.CustomAccessDeniedHandler;
-import com.soat.fiap.food.core.api.shared.exception.CustomAuthenticationEntryPoint;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.shared.service;
 
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.exception.JwtException;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -60,6 +61,17 @@ public class JwtService {
                 .compact();
     }
 
+    public void validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(this.key)
+                    .build()
+                    .parseClaimsJws(token);
+        } catch (Exception e) {
+            throw new JwtException("Token JWT inválido ou expirado.", e);
+        }
+    }
+
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(this.key)
@@ -78,7 +90,7 @@ public class JwtService {
 
         String role = claims.get("role", String.class);
 
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+        return List.of(new SimpleGrantedAuthority(String.format("ROLE_%s", role.toUpperCase())));
     }
 
 }

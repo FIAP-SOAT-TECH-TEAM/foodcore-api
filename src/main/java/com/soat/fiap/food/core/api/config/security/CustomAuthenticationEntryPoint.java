@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.shared.exception;
+package com.soat.fiap.food.core.api.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

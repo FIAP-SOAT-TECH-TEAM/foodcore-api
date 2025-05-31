@@ -1,6 +1,5 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.config.security;
 
-import com.soat.fiap.food.core.api.shared.exception.JwtException;
 import com.soat.fiap.food.core.api.shared.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
