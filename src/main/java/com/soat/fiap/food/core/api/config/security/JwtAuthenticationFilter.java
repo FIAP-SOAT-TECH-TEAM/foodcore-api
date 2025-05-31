@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.config.security;
 
 import com.soat.fiap.food.core.api.shared.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -35,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             try {
+                jwtService.validateToken(token);
                 String username = jwtService.extractUsername(token);
                 List<GrantedAuthority> authorities = jwtService.extractRoles(token);
 
@@ -42,8 +44,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                // Token inválido
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                SecurityContextHolder.clearContext();
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                String json = String.format("""
+                    {
+                        "timestamp": "%s",
+                        "status": 403,
+                        "error": "Acesso negado",
+                        "message": "%s",
+                        "path": "%s"
+                    }
+                    """, LocalDateTime.now(), e.getMessage(), request.getRequestURI());
+
+                response.getWriter().write(json);
                 return;
             }
         }

@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.config.security;
 
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,13 +21,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Qualifier("jwtAuthenticationFilter") Filter jwtFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            @Qualifier("jwtAuthenticationFilter") Filter jwtFilter,
+            CustomAccessDeniedHandler accessDeniedHandler,
+            CustomAuthenticationEntryPoint authenticationEntryPoint) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                  // Rotas públicas
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/payments/webhook").permitAll()
                 // Permitir acesso ao Swagger e OpenAPI
                 .requestMatchers(
                     AntPathRequestMatcher.antMatcher("/"),
@@ -41,11 +46,19 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/users/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/orders").hasAnyRole("USER", "GUEST")
+                .requestMatchers(HttpMethod.PATCH, "/orders/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/orders/active").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/catalogs/**").hasRole("ADMIN")
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
-                //.anyRequest().authenticated()
-                .anyRequest().permitAll()
-            ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated()
+                //.anyRequest().permitAll()
+            ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(ex -> ex
+            .accessDeniedHandler(accessDeniedHandler)
+            .authenticationEntryPoint(authenticationEntryPoint));
                 
         return http.build();
     }

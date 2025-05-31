@@ -19,6 +19,7 @@ API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como p
   <a href="#arquitetura">Arquitetura</a> •
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#diagramas">Diagramas</a> •
+  <a href="#dicionario"> Dicionário de linguagem ubíqua</a>
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
   <a href="#apis">APIs</a> •
@@ -52,30 +53,30 @@ O projeto segue uma arquitetura modular baseada em **Domain-Driven Design (DDD)*
 graph TD
     subgraph "Arquitetura Hexagonal"
         DOMAIN[Domínio]
-        
+
         subgraph "Portas de Entrada"
             API_Port["API (Porta)"]
             Webhook_Port["Webhook (Porta)"]
             Event_Port["Eventos (Porta)"]
         end
-        
+
         subgraph "Portas de Saída"
             DB_Port["Banco de Dados (Porta)"]
             MercadoPago_Port["Mercado Pago (Porta)"]
             EventBus_Port["Eventos (Porta)"]
         end
-        
+
         DOMAIN --- API_Port
         DOMAIN --- Webhook_Port
         DOMAIN --- Event_Port
         DOMAIN --- DB_Port
         DOMAIN --- MercadoPago_Port
         DOMAIN --- EventBus_Port
-        
+
         API_Port --- API_Adapter["/api REST Controller"]
         Webhook_Port --- Webhook_Adapter["Webhook Controller"]
         Event_Port --- Event_Adapter["Event Listener"]
-        
+
         DB_Port --- DB_Adapter["JPA Repository"]
         MercadoPago_Port --- MercadoPago_Adapter["MercadoPago Client"]
         EventBus_Port --- EventBus_Adapter["ApplicationEventPublisher"]
@@ -91,21 +92,19 @@ graph TD
     subgraph "Monolito Modular"
         USER[Módulo Usuário]
         ORDER[Módulo Pedido]
-        CUSTOMER[Módulo Cliente]
-        PRODUCT[Módulo Produto]
+        CATÁLOGO[Módulo Catálago]
         PAYMENT[Módulo Pagamento]
         SHARED[Componentes Compartilhados]
-        
-        USER --> PRODUCT
+
+        USER --> CATÁLOGO
         USER --> ORDER
-        ORDER --> CUSTOMER
-        ORDER --> PRODUCT
+        ORDER --> CATÁLOGO
         ORDER --> PAYMENT
         PAYMENT --> ORDER
-        
+
         SHARED --> ORDER
-        SHARED --> CUSTOMER
-        SHARED --> PRODUCT
+        SHARED --> USER
+        SHARED --> CATÁLOGO
         SHARED --> PAYMENT
     end
 ```
@@ -171,9 +170,9 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 classDiagram
     class Order {
         -Long id
+        -User user
         -String orderNumber
         -OrderStatus status
-        -Customer customer
         -BigDecimal totalAmount
         -List~OrderItem~ items
         -LocalDateTime createdAt
@@ -183,7 +182,7 @@ classDiagram
         +calculateTotalAmount()
         +updateStatus(OrderStatus)
     }
-    
+
     class OrderItem {
         -Long id
         -Product product
@@ -193,74 +192,97 @@ classDiagram
         -String observations
         +calculateSubtotal()
     }
-    
-    class Product {
+
+    class Catalog {
         -Long id
+        -String name
+    }
+
+    class Category {
+        -Long id
+        -Catalog catalog
         -String name
         -String description
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+    }
+
+    class Product {
+        -Long id
         -Category category
+        -String name
+        -String description
         -BigDecimal price
         -String imageUrl
-        -boolean active
+        -Integer displayOrder
+        -Boolean active
     }
-    
-    class Category {
-        <<enumeration>>
-        BURGER
-        SIDE
-        BEVERAGE
-        DESSERT
-    }
-    
-    class Customer {
+
+    class User {
         -Long id
         -String name
-        -String document
+        -String username
         -String email
-        -String phone
+        -String password
+        -String document
+        -Boolean active
+        -Boolean guest
+        -Role role
+        -LocalDateTime lastLogin
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
-        -boolean active
     }
-    
+
+    class Role{
+        <<enumeration>>
+        ADMIN
+        USER
+        GUEST
+    }
+
     class OrderStatus {
         <<enumeration>>
-        PENDING
+        RECEIVED
         PREPARING
         READY
         COMPLETED
         CANCELLED
     }
-    
+
     Order "1" *-- "many" OrderItem
-    Order "many" -- "1" Customer
+    Order "many" -- "1" User
     OrderItem "many" -- "1" Product
+    Catalog "many" -- "1" Category
+    Category "many" -- "1" Product
     Product -- Category
     Order -- OrderStatus
+    User -- Role
 ```
 
 ### DER (Diagrama Entidade-Relacionamento)
 
 ```mermaid
 erDiagram
-    CUSTOMERS ||--o{ ORDERS : places
-    CUSTOMERS ||--o{ PAYMENTS : makes
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ PAYMENTS : makes
+    ROLES ||--o{ USERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
     PRODUCTS ||--o{ ORDER_ITEMS : includes
     PRODUCTS ||--|| STOCK : stored_in
+    CATALOG ||--o{ CATEGORIES : has
     CATEGORIES ||--o{ PRODUCTS : categorizes
-    ORDERS ||--o{ ORDER_PAYMENTS : has
-    PAYMENTS ||--o{ ORDER_PAYMENTS : completes
-    USERS ||--o{ USER_ROLES : has
-    ROLES ||--o{ USER_ROLES : assigned_to
-    USERS ||--o{ REFRESH_TOKENS : owns
+    ORDERS ||--o{ PAYMENTS : has
     USERS {
         int id PK "ID único do usuário"
-        string username "Nome de usuário único para login"
-        string email "E-mail do usuário (também único)"
-        string password_hash "Hash da senha do usuário"
         string name "Nome do usuário"
+        string username "Nome de usuário"
+        string email "e-mail do usuário"
+        string password "Hash da senha do usuário"
+        string document "Documento do usuário"
         boolean active "Indica se o usuário está ativo"
+        boolean guest "Indica se o usuário é convidado"
+        int role_id "ID da role do usuário"
         timestamp last_login "Data do último login"
         timestamp created_at "Data de criação do registro"
         timestamp updated_at "Data da última atualização do registro"
@@ -268,114 +290,145 @@ erDiagram
 
     ROLES {
         int id PK "ID único da Role"
-        string name "Nome único do role (ex: ADMIN, USER)"
+        string name "Nome único da role"
         string description "Descrição das permissões do role"
         timestamp created_at "Data de criação do registro"
         timestamp updated_at "Data da última atualização do registro"
     }
 
-    USER_ROLES {
-        int id PK "ID único da Role do usuário"
-        int user_id FK "ID do usuário"
-        int role_id FK "ID do role associado"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
-    }
-
-    REFRESH_TOKENS {
-        int id PK "ID único do refresh token"
-        int user_id FK "ID do usuário"
-        string token "Token de refresh único"
-        boolean active "Indica se o Refresh Token está ativo"
-        timestamp expires_at "Data de expiração do token"
-        timestamp created_at "Data de criação do registro"
-    }
-    CUSTOMERS {
-        bigint id PK
-        varchar name
-        varchar email
-        varchar document
-        timestamp created_at
-        timestamp updated_at
-        boolean active
-    }
-
     ORDERS {
-        int id PK
-        int customer_id FK
-        varchar order_number
-        varchar status
-        decimal amount
-        timestamp created_at
-        timestamp updated_at
+        int id PK "ID único da order"
+        int user_id FK "ID do usuário que criou o pedido"
+        varchar order_number "hash aleatoria para identificar o pedido"
+        varchar status "status do pedido"
+        decimal amount "preço do pedido"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     ORDER_ITEMS {
-        int id PK
-        int order_id FK
-        int product_id FK
-        int quantity
-        decimal unit_price
-        decimal subtotal
-        text observations
-        timestamp created_at
-        timestamp updated_at
+        int id PK "ID único da order_item"
+        int order_id FK "ID do pedido"
+        int product_id FK "ID do produto"
+        string name "nome do item"
+        int quantity "quantidade do item"
+        decimal unit_price "preço unitário"
+        text observations "oberservações do usuário"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
+    }
+
+    CATALOG{
+        int id PK "ID único da catálogo"
+        string name "Nome do catálogo"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
+    }
+
+    CATEGORIES{
+        int id PK "ID único da categoria"
+        int catalog_id FK
+        string name "Nome da categoria"
+        string description "Descrição da categoria"
+        string image_url "URL da imagem da categoria"
+        int display_order "Ordem de exibição da categoria"
+        boolean active "Indica se a categoria está ativa ou não"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     PRODUCTS {
-        bigint id PK
-        bigint category_id FK
-        varchar name
-        varchar description
-        decimal price
-        varchar image_url
-        int display_order
-        boolean active
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CATEGORIES {
-        bigint id PK
-        varchar name
-        varchar description
-        varchar image_url
-        int display_order
-        boolean active
-        timestamp created_at
-        timestamp updated_at
+        bigint id PK "ID único do produto"
+        bigint category_id FK "ID da categoria do produto"
+        varchar name "nome do produto"
+        varchar description "descrição do produto"
+        decimal price "preço do produto"
+        varchar image_url "URL da foto do produto"
+        int display_order "ordem de exibição do produto"
+        boolean active "status do produto 'ativo ou inativo'"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     STOCK {
-        bigint id PK
-        bigint product_id FK
-        int quantity
-        timestamp created_at
-        timestamp updated_at
+        bigint id PK "ID único do stock"
+        bigint product_id FK "ID do produto"
+        int quantity "quantidade disponivel"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
 
     PAYMENTS {
-        int id PK
-        int customer_id FK
-        varchar type
-        timestamp expires_in
-        varchar tid
-        decimal amount
-        varchar qr_code_url
-        text observations
-        timestamp created_at
-        timestamp updated_at
+        int id PK "ID único do pagamento"
+        int user_id FK "ID do usuário que criou o pagamento"
+        int order_id FK "ID do pedido pago"
+        varchar payment_type "tipo de pagamento"
+        timestamp expires_in "data de expiração do pagamento"
+        varchar status "status do pagamento 'pago, cancelado, pendente'"
+        timestamp paid_at "data do pagamento"
+        varchar tid "id do pagamento na adquirente"
+        decimal amount "valor do pagamento"
+        varchar qr_code "código do qr_code do pagamento"
+        text observations "Observações do usuário para o pagamento"
+        timestamp created_at "Informações de auditoria"
+        timestamp updated_at "Informações de auditoria"
     }
+```
 
-    ORDER_PAYMENTS {
-        int id PK
-        int order_id FK
-        int payment_id FK
-        varchar status
-        timestamp paid_at
-        timestamp created_at
-        timestamp updated_at
-    }
+```mermaid
+flowchart TD
+    %% Eventos de Domínio
+    E1[CustomerIdentified] --> E2[OrderCreated]
+    E2 --> E3[ItemAdded]
+    E3 --> E4[OrderConfirmed]
+    E4 --> E5[PaymentRequested]
+    E5 --> E6[QRCodeGenerated]
+    E6 --> E7[PaymentReceived]
+    E7 --> E8[OrderReceived]
+
+    %% Comandos
+    C1[IdentifyCustomer] --> E1
+    C2[CreateOrder] --> E2
+    C3[AddItem] --> E3
+    C4[ConfirmOrder] --> E4
+    C5[RequestPayment] --> E5
+    C6[GenerateQRCode] --> E6
+    C7[ConfirmPayment] --> E7
+    C8[ReceiveOrder] --> E8
+
+    %% Atores
+    A1[Customer] --> C1
+    A1 --> C2
+    A1 --> C3
+    A1 --> C4
+    A1 --> C5
+    A2[PaymentSystem] --> C7
+    A3[Attendant] --> C8
+```
+
+```mermaid
+flowchart TD
+    %% Eventos de Domínio
+    E1[OrderReceived] --> E2[PreparationStarted]
+    E2 --> E3[OrderReady]
+    E3 --> E4[CustomerNotified]
+    E4 --> E5[OrderDelivered]
+    E5 --> E6[OrderFinished]
+
+    %% Comandos
+    C1[StartPreparation] --> E2
+    C2[MarkAsReady] --> E3
+    C3[NotifyCustomer] --> E4
+    C4[DeliverOrder] --> E5
+    C5[FinishOrder] --> E6
+
+    %% Atores
+    A1[Cook] --> C1
+    A1 --> C2
+    A2[System] --> C3
+    A3[Attendant] --> C4
+    A3 --> C5
+
 ```
 
 ### Fluxo de Realização do Pedido e Pagamento (Event Storming)
@@ -390,7 +443,7 @@ flowchart TD
     E5 --> E6[QRCodeGenerated]
     E6 --> E7[PaymentReceived]
     E7 --> E8[OrderReceived]
-    
+
     %% Comandos
     C1[IdentifyCustomer] --> E1
     C2[CreateOrder] --> E2
@@ -400,7 +453,7 @@ flowchart TD
     C6[GenerateQRCode] --> E6
     C7[ConfirmPayment] --> E7
     C8[ReceiveOrder] --> E8
-    
+
     %% Atores
     A1[Customer] --> C1
     A1 --> C2
@@ -421,14 +474,14 @@ flowchart TD
     E3 --> E4[CustomerNotified]
     E4 --> E5[OrderDelivered]
     E5 --> E6[OrderFinished]
-    
+
     %% Comandos
     C1[StartPreparation] --> E2
     C2[MarkAsReady] --> E3
     C3[NotifyCustomer] --> E4
     C4[DeliverOrder] --> E5
     C5[FinishOrder] --> E6
-    
+
     %% Atores
     A1[Cook] --> C1
     A1 --> C2
@@ -436,6 +489,71 @@ flowchart TD
     A3[Attendant] --> C4
     A3 --> C5
 ```
+
+</details>
+
+<h2 id="dicionario">📖 Dicionário de linguagem ubíqua</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Termos essenciais para a aplicação
+
+- **Admin (Administrador)**
+  Usuário com privilégios elevados, responsável pela gestão de usuários, permissões e configurações do sistema.
+
+- **Adquirente**
+  Instituição financeira responsável por processar transações de pagamento do sistema. No nosso caso, a adquirente é representada pela integração com o [Mercado Pago](https://www.mercadopago.com.br).
+
+- **Authentication (Autenticação)**
+  Processo de validação da identidade de um usuário por meio de login.
+
+- **Authorization (Autorização)**
+  Controle de acesso baseado em permissões e papéis (roles). Exemplo: apenas administradores podem listar todos os usuários.
+
+- **Catalog (Catálogo de Produtos)**
+  Conjunto organizado dos produtos disponíveis para seleção e montagem de pedidos.
+
+- **Category (Categoria)**
+  Classificação dos produtos por tipo (ex.: lanches, bebidas, sobremesas).
+
+- **Combo**
+  Conjunto personalizado por um cliente, composto por: lanche, acompanhamento, bebida e sobremesa.
+
+- **Customer (Cliente)**
+  Pessoa que realiza um pedido no sistema. Pode se identificar com CPF, cadastrar nome/e-mail ou seguir como convidado (guest).
+
+- **Guest (Convidado)**
+  Cliente que realiza um pedido sem se identificar ou criar conta. Atua como usuário temporário.
+
+- **Mercado Pago Integration (Integração com Mercado Pago)**
+  Serviço externo utilizado para processar pagamentos eletrônicos dos pedidos.
+
+- **Order (Pedido)**
+  Conjunto de itens selecionados por um cliente para consumo. Pode incluir um ou mais combos.
+
+- **Order Item (Item do Pedido)**
+  Produto específico dentro de um pedido. Pode ser parte de um combo ou avulso.
+
+- **Payment (Pagamento)**
+  Etapa posterior à finalização do pedido. Utiliza integração com o Mercado Pago para processar as transações financeiras.
+
+- **Product (Produto)**
+  Qualquer item disponível para venda, como lanches, bebidas, sobremesas ou acompanhamentos.
+
+- **Role (Papel)**
+  Função atribuída a um usuário. Define suas permissões de acesso no sistema (ex.: ADMIN, ATENDENTE, GUEST).
+
+- **Status do Pedido**
+  Representa o estado atual de um pedido. Exemplos: *Em preparação*, *Pronto*, *Entregue*, *Cancelado*.
+
+- **Stock (Estoque)**
+  Representa a quantidade disponível de cada produto no sistema.
+
+- **TID (Transaction ID)**
+  Identificador único de uma transação na adquirente, fornecido após o pagamento.
+
+- **User (Usuário)**
+  Pessoa autenticada no sistema. Pode possuir diferentes papéis, como ADMIN, ATENDENTE ou GUEST.
 
 </details>
 
@@ -552,15 +670,15 @@ food-core-api/
 │   │   ├── java/com/soat/fiap/food/core/api/
 │   │   │   ├── FoodCoreApiApplication.java     # Aplicação principal
 │   │   │   │
-│   │   │   ├── order/                          # Módulo Pedido
+│   │   │   ├── catalog/                        # Módulo Catálogo
 │   │   │   │   ├── application/                # Portas e serviços de aplicação
 │   │   │   │   ├── domain/                     # Modelos de domínio e regras de negócio
 │   │   │   │   ├── mapper/                     # Mappers entre domínio e DTOs
 │   │   │   │   └── infrastructure/             # Implementações de adaptadores
 │   │   │   │
-│   │   │   ├── customer/                       # Módulo Cliente
-│   │   │   ├── product/                        # Módulo Produto 
+│   │   │   ├── order/                          # Módulo Pedidos
 │   │   │   ├── payment/                        # Módulo Pagamento
+│   │   │   ├── user/                           # Módulo Usuários
 │   │   │   └── shared/                         # Componentes compartilhados
 │   │   │
 │   │   └── resources/
@@ -638,12 +756,12 @@ O sistema expõe duas interfaces principais de API:
 
 ### Endpoints Principais
 
-#### Clientes
+#### Usuários
 
 ```
-POST /api/customers                     # Cadastrar cliente
-GET /api/customers/{document}           # Obter cliente por documento
-GET /api/customers                      # Listar clientes
+POST /api/users                         # Cadastrar usuário
+GET /api/users/{id}                     # Obter usuário por id
+GET /api/users                          # Listar usuários
 ```
 
 #### Produtos
@@ -688,66 +806,114 @@ O sistema utiliza PostgreSQL como banco de dados principal, com o seguinte esque
 
 ```mermaid
 erDiagram
-    CUSTOMERS ||--o{ ORDERS : places
-    PRODUCTS ||--o{ ORDER_ITEMS : included_in
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ PAYMENTS : makes
+    ROLES ||--o{ USERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
-    ORDERS ||--o| PAYMENTS : has
-    
-    CUSTOMERS {
+    PRODUCTS ||--o{ ORDER_ITEMS : includes
+    PRODUCTS ||--|| STOCK : stored_in
+    CATALOG ||--o{ CATEGORIES : has
+    CATEGORIES ||--o{ PRODUCTS : categorizes
+    ORDERS ||--o{ PAYMENTS : has
+
+    USERS {
         id BIGINT PK
-        name VARCHAR(100)
-        email VARCHAR(100)
-        document VARCHAR(20)
-        phone VARCHAR(20)
+        name VARCHAR(200)
+        username VARCHAR(200)
+        email VARCHAR(200)
+        password VARCHAR(200)
+        document VARCHAR(11)
+        active BOOLEAN
+        guest BOOLEAN
+        role_id BIGINT FK
+        last_login TIMESTAMP
         created_at TIMESTAMP
         updated_at TIMESTAMP
-        active BOOLEAN
     }
-    
-    PRODUCTS {
+
+    ROLES {
         id BIGINT PK
-        name VARCHAR(100)
-        description TEXT
-        category VARCHAR(20)
-        price DECIMAL(10_2)
-        image_url VARCHAR(255)
+        name VARCHAR(200)
+        description VARCHAR(200)
         created_at TIMESTAMP
         updated_at TIMESTAMP
-        active BOOLEAN
     }
-    
+
     ORDERS {
         id BIGINT PK
-        order_number VARCHAR(20)
-        customer_id BIGINT FK
-        status VARCHAR(20)
-        total DECIMAL(10_2)
+        user_id BIGINT FK
+        order_number VARCHAR(200)
+        status VARCHAR(200)
+        amount DECIMAL(10_2)
         created_at TIMESTAMP
         updated_at TIMESTAMP
     }
-    
+
     ORDER_ITEMS {
         id BIGINT PK
         order_id BIGINT FK
         product_id BIGINT FK
-        product_name VARCHAR(100)
-        quantity INTEGER
+        name VARCHAR(200)
+        quantity INT
         unit_price DECIMAL(10_2)
-        total DECIMAL(10_2)
-        observations TEXT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
     }
-    
+
+    CATALOG{
+        id BIGINT PK
+        name VARCHAR(200)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    CATEGORIES{
+        id BIGINT PK
+        catalog_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    PRODUCTS {
+        id BIGINT PK
+        catagory_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        price DECIMAL(10_2)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    STOCK {
+        id BIGINT PK
+        product_id BIGINT FK
+        quantity INT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
     PAYMENTS {
         id BIGINT PK
+        user_id BIGINT FK
         order_id BIGINT FK
-        external_id VARCHAR(100)
+        payment_type VARCHAR(100)
+        expires_in TIMESTAMP
+        status VARCHAR(100)
+        paid_at TIMESTAMP
+        tid VARCHAR(300)
         amount DECIMAL(10_2)
-        status VARCHAR(20)
-        payment_method VARCHAR(50)
-        qr_code_url VARCHAR(255)
-        qr_code_data TEXT
+        tid qr_code(300)
+        observations TEXT
         created_at TIMESTAMP
-        processed_at TIMESTAMP
+        updated_at TIMESTAMP
     }
 ```
 
@@ -763,8 +929,8 @@ src/main/resources/db/changelog/
 │   │   ├── 01-order-tables.sql
 │   │   ├── 02-order-indexes.sql
 │   │   └── 03-order-seed.sql
-│   ├── customer/
-│   ├── product/
+│   ├── user/
+│   ├── catalog/
 │   └── payment/
 └── shared/
     └── 00-init-schema.sql
@@ -851,7 +1017,7 @@ Existem duas abordagens:
 
 ```sql
 -- Conecte-se ao banco via Adminer e execute:
-DELETE FROM DATABASECHANGELOG 
+DELETE FROM DATABASECHANGELOG
 WHERE filename = 'db/changelog/modules/product/03-product-seed.sql';
 
 -- Aplique as migrações novamente
