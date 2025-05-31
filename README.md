@@ -164,79 +164,7 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-### Modelo de Domínio
 
-```mermaid
-classDiagram
-    class Order {
-        -Long id
-        -String orderNumber
-        -OrderStatus status
-        -Customer customer
-        -BigDecimal totalAmount
-        -List~OrderItem~ items
-        -LocalDateTime createdAt
-        -LocalDateTime updatedAt
-        +addItem(OrderItem)
-        +removeItem(OrderItem)
-        +calculateTotalAmount()
-        +updateStatus(OrderStatus)
-    }
-
-    class OrderItem {
-        -Long id
-        -Product product
-        -Integer quantity
-        -BigDecimal unitPrice
-        -BigDecimal subtotal
-        -String observations
-        +calculateSubtotal()
-    }
-
-    class Product {
-        -Long id
-        -String name
-        -String description
-        -Category category
-        -BigDecimal price
-        -String imageUrl
-        -boolean active
-    }
-
-    class Category {
-        <<enumeration>>
-        BURGER
-        SIDE
-        BEVERAGE
-        DESSERT
-    }
-
-    class Customer {
-        -Long id
-        -String name
-        -String document
-        -String email
-        -String phone
-        -LocalDateTime createdAt
-        -LocalDateTime updatedAt
-        -boolean active
-    }
-
-    class OrderStatus {
-        <<enumeration>>
-        PENDING
-        PREPARING
-        READY
-        COMPLETED
-        CANCELLED
-    }
-
-    Order "1" *-- "many" OrderItem
-    Order "many" -- "1" Customer
-    OrderItem "many" -- "1" Product
-    Product -- Category
-    Order -- OrderStatus
-```
 
 ### DER (Diagrama Entidade-Relacionamento)
 
