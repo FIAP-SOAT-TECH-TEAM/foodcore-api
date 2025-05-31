@@ -164,7 +164,6 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-
 ### Modelo de Domínio
 
 ```mermaid
@@ -255,10 +254,10 @@ erDiagram
     USERS {
         int id PK "ID único do usuário"
         string name "Nome do usuário"
-        string username "Nome de usuário (único)"
-        string email "e-mail do usuário (único)"
+        string username "Nome de usuário"
+        string email "e-mail do usuário"
         string password "Hash da senha do usuário"
-        string document "Documento do usuário (único)"
+        string document "Documento do usuário"
         boolean active "Indica se o usuário está ativo"
         boolean guest "Indica se o usuário é convidado"
         int role_id "ID da role do usuário"
@@ -269,7 +268,7 @@ erDiagram
 
     ROLES {
         int id PK "ID único da Role"
-        string name "Nome único do role (ex: ADMIN, USER, GUEST)"
+        string name "Nome único da role"
         string description "Descrição das permissões do role"
         timestamp created_at "Data de criação do registro"
         timestamp updated_at "Data da última atualização do registro"
