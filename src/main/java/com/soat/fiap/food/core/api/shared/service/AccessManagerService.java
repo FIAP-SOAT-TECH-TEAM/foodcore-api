@@ -6,7 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccessManagerService implements PaymentAccessManager {
+public class AccessManagerService implements AccessManager {
 
     private final AuthenticatedUserProvider userProvider;
 
