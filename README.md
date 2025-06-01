@@ -150,6 +150,7 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 - **Docker**: Containerização
 - **Gradle**: Gerenciamento de dependências e builds
 - **SonarQube/SonarCloud**: Análise estática de código
+- **Azure DevOps**: Armazenamento de imagens com o Azure Blob Storage
 - **GitHub Actions**: CI/CD
 - **Swagger/OpenAPI**: Documentação de API
 
@@ -764,30 +765,33 @@ GET /api/users/{id}                     # Obter usuário por id
 GET /api/users                          # Listar usuários
 ```
 
-#### Produtos
+#### Catálogo
 
 ```
-GET /api/products                       # Listar produtos
-GET /api/products?category={category}   # Listar produtos por categoria
-GET /api/products/{id}                  # Obter produto por ID
+GET  /api/catalogs                          # Listar todos os catálogos
+GET  /api/catalogs/{id}                     # Listar catálogo por ID
+POST /api/catalogs                          # Criar catálogo
+GET /api/catalogs/{id}/categories           # Listar categorias de um catálogo
+POST /api/catalogs/{id}/categories          # Criar categoria no catálogo
+GET /api/catalogs/{id}/products             # Listar produtos de uma categoria
+POST /api/catalogs/{id}/products            # Criar produto na categoria
+GET /api/catalogs/{id}/products/{productId} # Obter produto por ID
 ```
 
 #### Pedidos
 
 ```
-POST /api/orders                        # Criar pedido
-GET /api/orders                         # Listar pedidos
-GET /api/orders?status={status}         # Listar pedidos por status
-GET /api/orders/{id}                    # Obter pedido por ID
-PATCH /api/orders/{id}/status           # Atualizar status do pedido
-POST /api/orders/{id}/items             # Adicionar item ao pedido
+POST  /api/orders                        # Criar pedido
+PATCH /api/orders/{id}/status            # Atualizar status do pedido
+GET   /api/orders/active                 # Listar pedidos ativos
 ```
 
 #### Pagamentos
 
 ```
-POST /api/orders/{orderId}/payments     # Processar pagamento
-GET /api/orders/{orderId}/payments      # Obter informações de pagamento
+GET  /api/payments/{orderId}/status     # Obter status do pagamento
+GET  /api/payments/{orderId}/qrCode     # Obter informações do QRCode de pagamento
+POST /api/payments/webhook              # Webhook de notificação de pagamento
 ```
 
 Para documentação completa e interativa, consulte o Swagger/OpenAPI disponível em:
