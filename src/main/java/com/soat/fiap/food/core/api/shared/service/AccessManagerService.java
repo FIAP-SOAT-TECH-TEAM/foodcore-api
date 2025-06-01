@@ -6,11 +6,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultPaymentAccessManager implements PaymentAccessManager {
+public class AccessManagerService implements PaymentAccessManager {
 
     private final AuthenticatedUserProvider userProvider;
 
-    public DefaultPaymentAccessManager(AuthenticatedUserProvider userProvider) {
+    public AccessManagerService(AuthenticatedUserProvider userProvider) {
         this.userProvider = userProvider;
     }
 

@@ -1,5 +1,5 @@
 package com.soat.fiap.food.core.api.shared.application.security;
 
-public interface PaymentAccessManager {
+public interface AccessManager {
     void validateAccess(Long paymentUserId);
 }
