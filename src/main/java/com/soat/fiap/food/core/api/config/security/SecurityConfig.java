@@ -56,8 +56,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/catalogs/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/catalogs/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/catalogs/**").hasRole("ADMIN")
-                //.requestMatchers(HttpMethod.GET, "/payments/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/payments/*/qrCode").hasAnyRole("ADMIN", "USER", "GUEST")
+                .requestMatchers(HttpMethod.GET, "/payments/*/status").hasAnyRole("ADMIN", "USER", "GUEST")
 
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
                 .anyRequest().authenticated()
