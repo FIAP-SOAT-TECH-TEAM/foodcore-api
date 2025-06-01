@@ -13,13 +13,13 @@ SELECT
     'CREDIT_CARD',
     NOW() + interval '30 days',
     'APPROVED',
-    NOW() - interval '1 hour',
+    NOW(),
     '112673020299',
     32.80,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento aprovado via cartão',
-    NOW() - interval '2 hour',
-    NOW() - interval '1 hour'
+    NOW(),
+    NOW()
 FROM users u
 WHERE u.email = 'joao@email.com'
   AND NOT EXISTS (
@@ -34,15 +34,15 @@ SELECT
     u.id,
     (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
     'DEBIT_CARD',
-    NOW() + interval '1 hour',
+    NOW(),
     'APPROVED',
-    NOW() - interval '25 minute',
+    NOW(),
     '872379520298',
     79.70,
     '000201010asdasd43650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B',
     'Pagamento via débito automático',
-    NOW() - interval '30 minute',
-    NOW() - interval '25 minute'
+    NOW(),
+    NOW()
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
@@ -64,8 +64,8 @@ SELECT
     19.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***6304A13B',
     'QR Code gerado para pagamento',
-    NOW() - interval '5 minute',
-    NOW() - interval '5 minute'
+    NOW(),
+    NOW()
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (
@@ -87,8 +87,8 @@ SELECT
     4.90,
     '00020101021243650016COM.MERCADOLIBRE02013063682409cafe-9876-abcd-1234-1234567890cd5204000053039865802BR5912Maria Silva6009RIO BRANCO62070503***6304C7D2',
     'QR Code gerado para pagamento',
-    NOW() - interval '5 minute',
-    NOW() - interval '5 minute'
+    NOW(),
+    NOW()
 FROM users u
 WHERE u.email = 'maria@email.com'
   AND NOT EXISTS (

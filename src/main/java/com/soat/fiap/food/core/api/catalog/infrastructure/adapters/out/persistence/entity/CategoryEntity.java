@@ -23,7 +23,7 @@ public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "catalog_id", foreignKey = @ForeignKey(name = "fk_category_catalog"))

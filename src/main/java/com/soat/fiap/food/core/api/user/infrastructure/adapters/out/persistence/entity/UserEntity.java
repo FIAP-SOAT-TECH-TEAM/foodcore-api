@@ -22,7 +22,7 @@ public class UserEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     
     @Column(nullable = false)
     private String name;
@@ -35,6 +35,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private Boolean guest;
 
     @Column(nullable = false, unique = true)
     private String document;

@@ -10,8 +10,8 @@ SELECT
     'ORD-2025-00000001',
     'COMPLETED',
     32.80,
-    now() - interval '2 hour',
-    now() - interval '1 hour'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000001'
 );
@@ -26,8 +26,8 @@ SELECT
     1,
     22.90,
     'Sem cebola',
-    now() - interval '2 hour',
-    now() - interval '2 hour'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001')
@@ -43,8 +43,8 @@ SELECT
     1,
     6.90,
     null,
-    now() - interval '2 hour',
-    now() - interval '2 hour'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001')
@@ -58,8 +58,8 @@ SELECT
     'ORD-2025-00000002',
     'READY',
     79.70,
-    now() - interval '30 minute',
-    now() - interval '25 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000002'
 );
@@ -73,8 +73,8 @@ SELECT
     2,
     20.90,
     null,
-    now() - interval '30 minute',
-    now() - interval '30 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
@@ -90,8 +90,8 @@ SELECT
     1,
     24.90,
     null,
-    now() - interval '30 minute',
-    now() - interval '30 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
@@ -107,8 +107,8 @@ SELECT
     2,
     6.90,
     null,
-    now() - interval '30 minute',
-    now() - interval '30 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002')
@@ -122,8 +122,8 @@ SELECT
     'ORD-2025-00000003',
     'RECEIVED',
     19.90,
-    now() - interval '5 minute',
-    now() - interval '5 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000003'
 );
@@ -137,8 +137,8 @@ SELECT
     1,
     4.90,
     null,
-    now() - interval '5 minute',
-    now() - interval '5 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003')
@@ -154,8 +154,8 @@ SELECT
     1,
     15.00,
     null,
-    now() - interval '5 minute',
-    now() - interval '5 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003')
@@ -169,8 +169,8 @@ SELECT
     'ORD-2025-00000004',
     'RECEIVED',
     4.90,
-    now() - interval '3 minute',
-    now() - interval '3 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM orders WHERE order_number = 'ORD-2025-00000004'
 );
@@ -184,8 +184,8 @@ SELECT
     1,
     4.90,
     null,
-    now() - interval '3 minute',
-    now() - interval '3 minute'
+    now(),
+    now()
 WHERE NOT EXISTS (
     SELECT 1 FROM order_items
     WHERE order_id = (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000004')

@@ -3,7 +3,6 @@ plugins {
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.liquibase.gradle' version '2.2.0'
-	id 'org.sonarqube' version '4.4.1.3373'
 	id 'jacoco'
 }
 
@@ -50,7 +49,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	
@@ -125,24 +123,12 @@ jacocoTestReport {
 	}
 }
 
-sonar {
-	properties {
-		property 'sonar.projectKey', 'com.soat.fiap.food-core-api'
-		property 'sonar.projectName', 'Food Core API'
-		property 'sonar.host.url', 'http://localhost:9001'
-		property 'sonar.token', System.getenv('SONAR_TOKEN') ?: ''
-		property 'sonar.java.coveragePlugin', 'jacoco'
-		property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-		property 'sonar.exclusions', '**/config/**,**/FoodCoreApiApplication.java'
-	}
-}
-
 // Configuração do Liquibase para usar o arquivo de changelog
 liquibase {
 	activities {
 		main {
 			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-			url 'jdbc:postgresql://localhost:5432/fastfood'
+			url 'jdbc:postgresql://localhost:', System.getenv('DB_PORT') ?: '5432', '/fastfood'
 			username 'postgres'
 			password 'postgres'
 		}

@@ -2,11 +2,10 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.PaymentEntityMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +43,7 @@ public class PaymentRepositoryAdapter implements PaymentRepository {
     }
 
     @Override
-    public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime now) {
+    public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
       var paymentEntities = repository.findExpiredPaymentsWithoutApprovedOrCancelled(now);
 
       return mapper.toDomainList(paymentEntities);

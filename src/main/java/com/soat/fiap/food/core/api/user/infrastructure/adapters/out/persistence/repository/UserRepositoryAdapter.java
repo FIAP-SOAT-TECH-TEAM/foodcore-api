@@ -1,9 +1,8 @@
-package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence;
+package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.mapper.UserEntityMapper;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.repository.SpringDataUserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -59,6 +58,16 @@ public class UserRepositoryAdapter implements UserRepository {
     public Optional<User> findByRoleId(Long roleId) {
         return springDataUserRepository.findByRoleId(roleId)
                 .map(userEntityMapper::toDomain); // converte de entidade para domínio
+    }
+
+    /**
+     * Busca o primeiro usuário com o campo guest igual a true.
+     *
+     * @return um {@link Optional} contendo o usuário encontrado ou vazio se não houver nenhum.
+     */
+    public Optional<User> findFirstByGuestTrue() {
+        return springDataUserRepository.findFirstByGuestTrue()
+                .map(userEntityMapper::toDomain);
     }
 
 

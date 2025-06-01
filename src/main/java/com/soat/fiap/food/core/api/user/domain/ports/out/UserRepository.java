@@ -52,6 +52,13 @@ public interface UserRepository {
      */
 
     Optional<User> findByRoleId(Long roleId);
+
+    /**
+     * Busca o primeiro usuário com o campo guest igual a true.
+     *
+     * @return um {@link Optional} contendo o usuário encontrado ou vazio se não houver nenhum.
+     */
+    Optional<User> findFirstByGuestTrue();
     
     /**
      * Lista todos os usuário

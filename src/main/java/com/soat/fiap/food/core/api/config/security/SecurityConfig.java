@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/catalogs/**").hasRole("ADMIN")
                 // Permitir acesso a todos os endpoints (para desenvolvimento)
                 .anyRequest().authenticated()
-                //.anyRequest().permitAll()
+//                .anyRequest().permitAll()
             ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> ex
             .accessDeniedHandler(accessDeniedHandler)

@@ -111,14 +111,14 @@ if [ -z "$APP_CONTAINER" ]; then
 fi
 
 echo "-> Aguardando aplicação inicializar..."
-HEALTH_CHECK_URL="http://localhost:$APP_PORT/actuator/health"
-MAX_RETRIES=30
+MAX_RETRIES=100
 RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-  HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $HEALTH_CHECK_URL || echo "000")
+  HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$APP_CONTAINER")
   
-  if [ "$HTTP_STATUS" == "200" ]; then
+  if [ "$HEALTH_STATUS" == "healthy" ]; then
+    APP_PORT=$(docker ps --filter "id=$APP_CONTAINER" --format "{{.Ports}}" | grep -oP '\d+(?=->)' | head -n 1)
     echo "===== Aplicação iniciada com sucesso! ====="
     echo "- API: http://localhost:$APP_PORT"
     echo "- Documentação Swagger: http://localhost:$APP_PORT/swagger-ui.html"

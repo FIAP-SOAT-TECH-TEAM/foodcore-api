@@ -24,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -74,7 +72,7 @@ public class PaymentService implements PaymentUseCase {
                     event.getId(),
                     generateQrCodeBody.getTotal_amount()
             );
-            generateQrCodeBody.setExpiration_date(payment.getISO8601ExpiresIn());
+            generateQrCodeBody.setExpiration_date(payment.getLaPazISO8601ExpiresIn());
 
             var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
 
@@ -156,7 +154,7 @@ public class PaymentService implements PaymentUseCase {
     @Transactional
     public void processExpiredPayments() {
 
-        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(OffsetDateTime.now(ZoneOffset.of("-04:00")));
+        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime.now());
 
         if (expiredPayments.isEmpty()) {
             log.info("Nenhum pagamento pendente expirado encontrado!");

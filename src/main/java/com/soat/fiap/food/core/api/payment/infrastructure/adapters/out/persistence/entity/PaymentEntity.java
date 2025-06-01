@@ -12,7 +12,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 
@@ -27,13 +26,13 @@ public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "order_id")
-    private Long orderId;
+    private Integer orderId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "payment_type_enum")
@@ -41,7 +40,7 @@ public class PaymentEntity {
     private PaymentMethod type;
 
     @Column(name = "expires_in", nullable = false)
-    private OffsetDateTime expiresIn;
+    private LocalDateTime expiresIn;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "payment_status_enum")
