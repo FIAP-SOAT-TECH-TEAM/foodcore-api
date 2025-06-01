@@ -27,6 +27,9 @@ public class JwtService {
     @Value("${jwt.secret_key}")
     private String secret;
 
+    @Value("${jwt.expiration}")
+    private Integer expiration;
+
     private SecretKey key;
 
     @PostConstruct
@@ -46,17 +49,15 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
-        if (user.isGuest()) {
-            throw new BusinessException("Usuários convidados não podem gerar novos tokens.");
-        }
-
-        System.out.println("Gerando token JWT para o usuário: " + user.getRole().getName());
-
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getId().toString())
+                .claim("id", user.getId())
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("name", user.getName())
                 .claim("role", user.getRole().getName())
                 .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)))
+                .setExpiration(Date.from(Instant.now().plus(expiration, ChronoUnit.MINUTES)))
                 .signWith(this.key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -72,13 +73,24 @@ public class JwtService {
         }
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parserBuilder()
+    public Long extractUserId(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
+
+        return claims.get("id", Long.class);
+    }
+
+    public String extractUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(this.key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
     }
 
     public List<GrantedAuthority> extractRoles(String token) {

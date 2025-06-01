@@ -18,6 +18,7 @@ import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundExce
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
+import com.soat.fiap.food.core.api.shared.application.security.PaymentAccessManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class PaymentService implements PaymentUseCase {
     private final PaymentStatusResponseMapper paymentStatusResponseMapper;
     private final QrCodeResponseMapper qrCodeResponseMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final PaymentAccessManager accessManager;
 
     public PaymentService(
             PaymentRepository paymentRepository,
@@ -45,13 +47,15 @@ public class PaymentService implements PaymentUseCase {
             GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
             ApplicationEventPublisher eventPublisher,
             PaymentStatusResponseMapper paymentStatusResponseMapper,
-            QrCodeResponseMapper qrCodeResponseMapper) {
+            QrCodeResponseMapper qrCodeResponseMapper,
+            PaymentAccessManager accessManager) {
         this.paymentRepository = paymentRepository;
         this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;
         this.paymentStatusResponseMapper = paymentStatusResponseMapper;
         this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
         this.qrCodeResponseMapper = qrCodeResponseMapper;
+        this.accessManager = accessManager;
     }
 
     @Override
@@ -147,6 +151,9 @@ public class PaymentService implements PaymentUseCase {
             throw new PaymentNotFoundException("Pagamento", orderId);
         }
 
+        accessManager.validateAccess(payment.get().getUserId());
+
+
         return paymentStatusResponseMapper.toResponse(payment.get());
     }
 
@@ -184,6 +191,8 @@ public class PaymentService implements PaymentUseCase {
             log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
             throw new PaymentNotFoundException("Pagamento", orderId);
         }
+
+        accessManager.validateAccess(payment.get().getUserId());
 
         return qrCodeResponseMapper.toResponse(payment.get());
     }
