@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Schema(name = "UserRequest", description = "DTO para criação ou atualização de usuários")
 public class UserRequest {
 
-    @Schema(description = "Identifica se o usuário é guest ou não", example = "true", required = false)
+    @Schema(description = "Identifica se o usuário é guest ou não", example = "false", required = false)
     private boolean guest;
 
     @Schema(description = "Nome completo do usuário", example = "João Silva", required = false)
@@ -38,10 +38,6 @@ public class UserRequest {
     private String password;
 
     @Builder.Default
-    @Schema(description = "Documento do usuário (apenas números ou formatado)", example = "123.456.789-00", required = false)
+    @Schema(description = "Documento do usuário (apenas números ou formatado)", example = "845.641.190-60", required = false)
     private String document = null;
-
-    @Builder.Default
-    @Schema(description = "Tipo de role (ADMIN=1, USER=2)", example = "2")
-    private RoleType role = RoleType.USER; //define a role user como default caso nenhuma seja informada
 }
