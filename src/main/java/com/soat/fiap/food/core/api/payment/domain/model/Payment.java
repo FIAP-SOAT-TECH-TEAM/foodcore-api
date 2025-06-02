@@ -10,10 +10,10 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -37,9 +37,13 @@ public class Payment {
     private String observations = "Pagamento via Mercado Pago";
     private AuditInfo auditInfo = new AuditInfo();
 
-    private static final DateTimeFormatter ISO_8601_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-
+    private static final DateTimeFormatter ISO_OFFSET_DATE_TIME_MILLIS_FIXED =
+            new DateTimeFormatterBuilder()
+                    .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
+                    .appendLiteral('.')
+                    .appendValue(ChronoField.MILLI_OF_SECOND, 3)
+                    .appendOffsetId()
+                    .toFormatter();
 
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
@@ -150,7 +154,7 @@ public class Payment {
                 .atZone(ZoneId.of("America/Sao_Paulo"))
                 .withZoneSameInstant(ZoneId.of("America/La_Paz"))
                 .truncatedTo(ChronoUnit.MILLIS)
-                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                .format(ISO_OFFSET_DATE_TIME_MILLIS_FIXED);
     }
 
 }
