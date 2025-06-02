@@ -18,7 +18,8 @@ API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como p
   <a href="#arquitetura">Arquitetura</a> •
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#diagramas">Diagramas</a> •
-  <a href="#dicionario"> Dicionário de linguagem ubíqua</a>
+  <a href="#taskboard">Task Board</a> •
+  <a href="#dicionario">Dicionário de linguagem ubíqua</a>
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
   <a href="#apis">APIs</a> •
@@ -490,6 +491,14 @@ flowchart TD
     A3 --> C5
 ```
 
+</details>
+
+<h2 id="taskboard"> 📌Task Board</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Board de tarefas Linear App
+![image](https://github.com/user-attachments/assets/0c1a5e19-aae3-4270-84ad-64c67daf64b9)
 </details>
 
 <h2 id="dicionario">📖 Dicionário de linguagem ubíqua</h2>
