@@ -6,7 +6,7 @@ import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductReques
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResponse;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
-import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -169,5 +169,12 @@ public interface CatalogUseCase {
      *
      * @param orderItemCreatedEvents eventos de criação de item de pedido
      */
-    void updateProductStockQuantity(List<OrderItemCreatedEvent> orderItemCreatedEvents);
+    void updateStockForCreatedItems(List<OrderItemCreatedEvent> orderItemCreatedEvents);
+
+    /**
+     * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
+     *
+     * @param orderItemCanceledEvents eventos de cancelamento de item de pedido
+     */
+    void updateStockForCanceledItems(List<OrderItemCanceledEvent> orderItemCanceledEvents);
 }

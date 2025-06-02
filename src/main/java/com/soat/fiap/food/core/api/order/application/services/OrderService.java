@@ -9,7 +9,9 @@ import com.soat.fiap.food.core.api.order.application.mapper.request.CreateOrderR
 import com.soat.fiap.food.core.api.order.application.mapper.response.OrderResponseMapper;
 import com.soat.fiap.food.core.api.order.application.mapper.response.OrderStatusResponseMapper;
 import com.soat.fiap.food.core.api.order.application.ports.in.OrderUseCase;
+import com.soat.fiap.food.core.api.order.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.order.domain.ports.out.OrderRepository;
@@ -124,9 +126,30 @@ public class OrderService implements OrderUseCase {
 
         order.get().setOrderStatus(orderStatus);
 
-        orderRepository.save(order.get());
+        var updatedOrder = orderRepository.save(order.get());
 
         logger.info("Status do pedido {} atualizado para {}", orderId, orderStatus);
+
+        if (orderStatus == OrderStatus.CANCELLED) {
+            var orderCanceledEvent = new OrderCanceledEvent();
+
+            BeanUtils.copyProperties(updatedOrder, orderCanceledEvent);
+            List<OrderItemCanceledEvent> itemEvents = updatedOrder.getOrderItems().stream()
+                    .map(itemResponse -> {
+                        var itemEvent = new OrderItemCanceledEvent();
+                        BeanUtils.copyProperties(itemResponse, itemEvent);
+                        return itemEvent;
+                    })
+                    .toList();
+
+            orderCanceledEvent.setItems(itemEvents);
+
+            BeanUtils.copyProperties(updatedOrder.getOrderItems(), orderCanceledEvent.getItems());
+
+            logger.info("Publicando evento de ordem cancelada {}", orderId);
+
+            eventPublisher.publishEvent(orderCanceledEvent);
+        }
     }
 
     @Override
@@ -140,6 +163,9 @@ public class OrderService implements OrderUseCase {
         if (order.isEmpty()) {
             throw new OrderNotFoundException("Pedido", orderId);
         }
+        else if (order.get().getOrderStatus() == newStatus) {
+            return orderStatusResponseMapper.toResponse(order.get());
+        }
 
         order.get().setOrderStatus(newStatus);
 
@@ -149,6 +175,27 @@ public class OrderService implements OrderUseCase {
         var orderStatusToResponse = orderStatusResponseMapper.toResponse(updatedOrder);
 
         logger.info("Status do pedido {} atualizado para {}", orderId, newStatus);
+
+        if (orderStatusRequest.getOrderStatus() == OrderStatus.CANCELLED) {
+            var orderCanceledEvent = new OrderCanceledEvent();
+
+            BeanUtils.copyProperties(updatedOrder, orderCanceledEvent);
+            List<OrderItemCanceledEvent> itemEvents = updatedOrder.getOrderItems().stream()
+                    .map(itemResponse -> {
+                        var itemEvent = new OrderItemCanceledEvent();
+                        BeanUtils.copyProperties(itemResponse, itemEvent);
+                        return itemEvent;
+                    })
+                    .toList();
+
+            orderCanceledEvent.setItems(itemEvents);
+
+            BeanUtils.copyProperties(updatedOrder.getOrderItems(), orderCanceledEvent.getItems());
+
+            logger.info("Publicando evento de ordem cancelada {}", orderId);
+
+            eventPublisher.publishEvent(orderCanceledEvent);
+        }
 
         return orderStatusToResponse;
     }

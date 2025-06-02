@@ -20,6 +20,7 @@ import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
 import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStoragePort;
@@ -668,7 +669,7 @@ public class CatalogService implements CatalogUseCase {
      */
     @Override
     @Transactional
-    public void updateProductStockQuantity(List<OrderItemCreatedEvent> orderItemCreatedEvents) {
+    public void updateStockForCreatedItems(List<OrderItemCreatedEvent> orderItemCreatedEvents) {
         if (orderItemCreatedEvents.isEmpty()) {
             throw new OrderItemNotFoundException("Lista de itens de pedido está vazia. Não é possível recuperar produtos para atualização de quantidade em estoque.");
         }
@@ -689,6 +690,38 @@ public class CatalogService implements CatalogUseCase {
             catalogRepository.save(catalog.get());
 
             logger.info("Atualização de quantidade em estoque realizada com sucesso! ProductId {}", orderItemCreatedEvent.getProductId());
+        }
+
+    }
+
+    /**
+     * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
+     *
+     * @param orderItemCanceledEvents eventos de cancelamento de item de pedido
+     */
+    @Override
+    @Transactional
+    public void updateStockForCanceledItems(List<OrderItemCanceledEvent> orderItemCanceledEvents) {
+        if (orderItemCanceledEvents.isEmpty()) {
+            throw new OrderItemNotFoundException("Lista de itens de pedido está vazia. Não é possível recuperar produtos para atualização de quantidade em estoque.");
+        }
+
+        for (OrderItemCanceledEvent orderItemCanceledEvent : orderItemCanceledEvents) {
+            var catalog = catalogRepository.findByProductId(orderItemCanceledEvent.getProductId());
+            if (catalog.isEmpty()) {
+                throw new CatalogNotFoundException("Catálogo do produto do item de pedido não encontrado. Não é possível atualizar quantidade em estoque.");
+            }
+
+            var currentProductQuantity = catalog.get().getProductStockQuantity(orderItemCanceledEvent.getProductId());
+            var newProductQuantity =  currentProductQuantity + orderItemCanceledEvent.getQuantity();
+
+            logger.info("Iniciando atualização de quantidade em estoque: ProductId {}, atual: {}, nova: {}", orderItemCanceledEvent.getProductId(), currentProductQuantity, newProductQuantity);
+
+            catalog.get().updateProductStockQuantity(orderItemCanceledEvent.getProductId(), newProductQuantity);
+
+            catalogRepository.save(catalog.get());
+
+            logger.info("Atualização de quantidade em estoque realizada com sucesso! ProductId {}", orderItemCanceledEvent.getProductId());
         }
 
     }

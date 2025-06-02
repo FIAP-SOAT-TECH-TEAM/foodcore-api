@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.eventlistener;
 
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
+import com.soat.fiap.food.core.api.order.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -29,7 +30,22 @@ public class CatalogOrderEventListener {
         log.info("Módulo Catalogo: Notificado de criação de pedido: {}),",
                 event.getId());
 
-        catalogUseCase.updateProductStockQuantity(event.getItems());
+        catalogUseCase.updateStockForCreatedItems(event.getItems());
+
+        log.info("Quantidade em estoque atualizada para: {} produtos.", event.getItems().size());
+    }
+
+    /**
+     * Processa o evento de pedido cancelado
+     *
+     * @param event Evento de pedido cancelado
+     */
+    @EventListener
+    public void handleOrderCanceledEvent(OrderCanceledEvent event) {
+        log.info("Módulo Catalogo: Notificado de cancelamento de pedido: {}),",
+                event.getId());
+
+        catalogUseCase.updateStockForCanceledItems(event.getItems());
 
         log.info("Quantidade em estoque atualizada para: {} produtos.", event.getItems().size());
     }
