@@ -16,7 +16,7 @@ COPY src/ ./src/
 RUN ./gradlew build -x test --no-daemon
 
 # Imagem final
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine AS runtime
 WORKDIR /app
 
 # Atualizar ferramentas básicas para health checks
