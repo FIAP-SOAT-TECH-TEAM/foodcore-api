@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.config.security;
 
-import com.soat.fiap.food.core.api.shared.service.JwtService;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.auth.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +18,9 @@ import java.util.List;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtTokenProvider jwtService;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtTokenProvider jwtService) {
         this.jwtService = jwtService;
     }
 

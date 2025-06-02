@@ -18,7 +18,7 @@ import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundExce
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
-import com.soat.fiap.food.core.api.shared.application.security.PaymentAccessManager;
+import com.soat.fiap.food.core.api.shared.application.ports.in.AccessManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class PaymentService implements PaymentUseCase {
     private final PaymentStatusResponseMapper paymentStatusResponseMapper;
     private final QrCodeResponseMapper qrCodeResponseMapper;
     private final ApplicationEventPublisher eventPublisher;
-    private final PaymentAccessManager accessManager;
+    private final AccessManager accessManager;
 
     public PaymentService(
             PaymentRepository paymentRepository,
@@ -48,7 +48,7 @@ public class PaymentService implements PaymentUseCase {
             ApplicationEventPublisher eventPublisher,
             PaymentStatusResponseMapper paymentStatusResponseMapper,
             QrCodeResponseMapper qrCodeResponseMapper,
-            PaymentAccessManager accessManager) {
+            AccessManager accessManager) {
         this.paymentRepository = paymentRepository;
         this.mercadoPagoPort = mercadoPagoPort;
         this.eventPublisher = eventPublisher;

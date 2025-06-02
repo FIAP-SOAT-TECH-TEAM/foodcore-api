@@ -1,15 +1,21 @@
-package com.soat.fiap.food.core.api.shared.infrastructure.security.impl;
+package com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.auth;
 
+import com.soat.fiap.food.core.api.shared.application.ports.out.AuthenticatedUserProvider;
 import com.soat.fiap.food.core.api.shared.exception.JwtException;
-import com.soat.fiap.food.core.api.shared.infrastructure.security.AuthenticatedUserProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementação de {@link AuthenticatedUserProvider} que extrai informações do usuário a partir do contexto JWT.
+ */
 @Component
 public class JwtAuthenticatedUserProvider implements AuthenticatedUserProvider {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Long getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -25,6 +31,9 @@ public class JwtAuthenticatedUserProvider implements AuthenticatedUserProvider {
         throw new JwtException("ID do usuário não encontrado no contexto de autenticação.");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,5 +46,5 @@ public class JwtAuthenticatedUserProvider implements AuthenticatedUserProvider {
                 .map(GrantedAuthority::getAuthority)
                 .map(role -> role.replace("ROLE_", ""))
                 .orElseThrow(() -> new JwtException("Role não encontrada no token"));
-        }
     }
+}

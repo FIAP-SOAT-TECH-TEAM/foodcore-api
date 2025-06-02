@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.user.application.services;
 import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
-import com.soat.fiap.food.core.api.shared.service.JwtService;
+import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.auth.JwtTokenProvider;
 import com.soat.fiap.food.core.api.user.domain.vo.RoleType;
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
@@ -25,10 +25,10 @@ public class UserService implements UserUseCase {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomLogger logger;
-    private final JwtService jwtService;
+    private final JwtTokenProvider jwtService;
 
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtService) {
         this.userRepository = userRepository;
         this.logger = CustomLogger.getLogger(getClass());
         this.passwordEncoder = passwordEncoder;
