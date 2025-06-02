@@ -1,12 +1,10 @@
-package com.soat.fiap.food.core.api.shared.service;
+package com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.auth;
 
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.exception.JwtException;
 import com.soat.fiap.food.core.api.user.domain.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +19,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Serviço responsável pela geração, validação e extração de informações do token JWT.
+ */
 @Service
-public class JwtService {
+public class JwtTokenProvider {
 
     @Value("${jwt.secret_key}")
     private String secret;
@@ -32,6 +33,9 @@ public class JwtService {
 
     private SecretKey key;
 
+    /**
+     * Inicializa a chave secreta para assinatura de tokens JWT.
+     */
     @PostConstruct
     public void init() {
         if (secret == null || secret.isBlank()) {
@@ -40,7 +44,6 @@ public class JwtService {
 
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
 
-
         if (keyBytes.length < 64) {
             throw new IllegalArgumentException("A chave JWT precisa ter pelo menos 64 bytes para HS512.");
         }
@@ -48,6 +51,12 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    /**
+     * Gera um token JWT com os dados do usuário.
+     *
+     * @param user Usuário para quem o token será gerado.
+     * @return Token JWT como {@code String}.
+     */
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getId().toString())
@@ -62,6 +71,12 @@ public class JwtService {
                 .compact();
     }
 
+    /**
+     * Valida a integridade e expiração de um token JWT.
+     *
+     * @param token Token JWT a ser validado.
+     * @throws JwtException se o token for inválido ou expirado.
+     */
     public void validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -73,6 +88,12 @@ public class JwtService {
         }
     }
 
+    /**
+     * Extrai o ID do usuário a partir do token JWT.
+     *
+     * @param token Token JWT.
+     * @return ID do usuário.
+     */
     public Long extractUserId(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
@@ -83,6 +104,12 @@ public class JwtService {
         return claims.get("id", Long.class);
     }
 
+    /**
+     * Extrai o nome de usuário (username) do token JWT.
+     *
+     * @param token Token JWT.
+     * @return Nome de usuário.
+     */
     public String extractUsername(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
@@ -93,6 +120,12 @@ public class JwtService {
         return claims.getSubject();
     }
 
+    /**
+     * Extrai os papéis (roles) do token JWT.
+     *
+     * @param token Token JWT.
+     * @return Lista de autoridades do Spring Security.
+     */
     public List<GrantedAuthority> extractRoles(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
@@ -104,5 +137,4 @@ public class JwtService {
 
         return List.of(new SimpleGrantedAuthority(String.format("ROLE_%s", role.toUpperCase())));
     }
-
 }
