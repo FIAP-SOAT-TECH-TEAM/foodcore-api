@@ -2,14 +2,13 @@
 
 <div align="center">
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_food-core-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=soat-fiap_food-core-api)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_food-core-api&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=soat-fiap_food-core-api)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_food-core-api&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=soat-fiap_food-core-api)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_food-core-api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=soat-fiap_food-core-api)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_food-core-api&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=soat-fiap_food-core-api)
-[![Tests](https://github.com/soat-fiap/food-core-api/actions/workflows/tests.yml/badge.svg)](https://github.com/soat-fiap/food-core-api/actions/workflows/tests.yml)
-[![Build](https://github.com/soat-fiap/food-core-api/actions/workflows/build.yml/badge.svg)](https://github.com/soat-fiap/food-core-api/actions/workflows/build.yml)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=alert_status&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=code_smells&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=duplicated_lines_density&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=ncloc&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=reliability_rating&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=sqale_index&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=sqale_rating&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
 </div>
 
 API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como parte do curso de Arquitetura de Software da FIAP (Tech Challenge).
