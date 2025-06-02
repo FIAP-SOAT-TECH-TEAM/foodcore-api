@@ -652,8 +652,8 @@ chmod +x food
 
 ### Acessando a Aplicação
 
-- **API**: <http://localhost:8083/api>
-- **Swagger/OpenAPI**: <http://localhost:8083/swagger-ui.html>
+- **API**: <http://localhost/api>
+- **Swagger/OpenAPI**: <http://localhost/api/swagger-ui.html>
 - **Adminer (gerenciador de banco de dados)**: <http://localhost:8081>
   - Sistema: PostgreSQL
   - Servidor: db
