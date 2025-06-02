@@ -18,6 +18,7 @@ API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como p
   <a href="#arquitetura">Arquitetura</a> •
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#diagramas">Diagramas</a> •
+  <a href="#eventstorming">Event Storming</a> •
   <a href="#taskboard">Task Board</a> •
   <a href="#dicionario">Dicionário de linguagem ubíqua</a>
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
@@ -492,6 +493,18 @@ flowchart TD
 ```
 
 </details>
+
+<h2 id="eventstorming"> 💡Event Storming</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Event Storming Miro
+- https://miro.com/app/board/uXjVIAFD_zg=/?share_link_id=933422566141
+  
+![image](https://github.com/user-attachments/assets/1c5261a3-60ab-45de-ae4c-86b3afe28db9)
+![image](https://github.com/user-attachments/assets/29611638-e684-4244-b3b6-6ae19e725bc4)
+</details>
+
 
 <h2 id="taskboard"> 📌Task Board</h2>
 <details>
