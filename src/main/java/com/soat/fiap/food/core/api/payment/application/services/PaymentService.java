@@ -2,15 +2,15 @@ package com.soat.fiap.food.core.api.payment.application.services;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
-import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
-import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
 import com.soat.fiap.food.core.api.payment.application.mapper.response.PaymentStatusResponseMapper;
 import com.soat.fiap.food.core.api.payment.application.mapper.response.QrCodeResponseMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.application.ports.out.AcquirerPort;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 public class PaymentService implements PaymentUseCase {
 
     private final PaymentRepository paymentRepository;
-    private final MercadoPagoPort mercadoPagoPort;
+    private final AcquirerPort acquirerPort;
     private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
     private final PaymentStatusResponseMapper paymentStatusResponseMapper;
     private final QrCodeResponseMapper qrCodeResponseMapper;
@@ -43,14 +43,14 @@ public class PaymentService implements PaymentUseCase {
 
     public PaymentService(
             PaymentRepository paymentRepository,
-            MercadoPagoPort mercadoPagoPort,
+            AcquirerPort acquirerPort,
             GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
             ApplicationEventPublisher eventPublisher,
             PaymentStatusResponseMapper paymentStatusResponseMapper,
             QrCodeResponseMapper qrCodeResponseMapper,
             AccessManager accessManager) {
         this.paymentRepository = paymentRepository;
-        this.mercadoPagoPort = mercadoPagoPort;
+        this.acquirerPort = acquirerPort;
         this.eventPublisher = eventPublisher;
         this.paymentStatusResponseMapper = paymentStatusResponseMapper;
         this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
@@ -78,7 +78,7 @@ public class PaymentService implements PaymentUseCase {
             );
             generateQrCodeBody.setExpiration_date(payment.getLaPazISO8601ExpiresIn());
 
-            var generateQrCodeResponse = mercadoPagoPort.generateQrCode(generateQrCodeBody);
+            var generateQrCodeResponse = acquirerPort.generateQrCode(generateQrCodeBody);
 
             payment.setQrCode(generateQrCodeResponse.getQr_data());
 
@@ -101,10 +101,10 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public void processPaymentNotification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest) {
+    public void processPaymentNotification(AcquirerNotificationRequest acquirerNotificationRequest) {
 
-        var mercadoPagoPaymentResponse = mercadoPagoPort.getMercadoPagoPayments(mercadoPagoNotificationRequest.getDataId());
-        var longExternalRefernce = Long.parseLong(mercadoPagoPaymentResponse.getExternal_reference());
+        var acquirerPaymentResponse = acquirerPort.getAcquirerPayments(acquirerNotificationRequest.getDataId());
+        var longExternalRefernce = Long.parseLong(acquirerPaymentResponse.getExternal_reference());
         var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(longExternalRefernce);
 
         if (payment.isEmpty()) {
@@ -120,12 +120,12 @@ public class PaymentService implements PaymentUseCase {
             payment.get().setId(null);
         }
 
-        payment.get().setStatus(mercadoPagoPaymentResponse.getStatus());
-        payment.get().setType(mercadoPagoPaymentResponse.getPaymentType());
-        payment.get().setTid(mercadoPagoNotificationRequest.getDataId());
+        payment.get().setStatus(acquirerPaymentResponse.getStatus());
+        payment.get().setType(acquirerPaymentResponse.getPaymentType());
+        payment.get().setTid(acquirerNotificationRequest.getDataId());
         paymentRepository.save(payment.get());
 
-        if (mercadoPagoPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
+        if (acquirerPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
             log.info("Pagamento aprovado: {}, Publicando evento!", payment.get().getId());
 
             eventPublisher.publishEvent(
@@ -199,12 +199,12 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public MercadoPagoOrderResponse getMercadoPagoOrder(Long merchantOrder) {
-        var order = mercadoPagoPort.getMercadoPagoOrder(merchantOrder);
+    public AcquirerOrderResponse getAcquirerOrder(Long merchantOrder) {
+        var order = acquirerPort.getAcquirerOrder(merchantOrder);
 
         if (order == null) {
-            log.warn("Pedido não foi encontrado no mercado pago! Merchant Order: {}", merchantOrder);
-            throw new OrderNotFoundException("Pedido Mercado Pago", merchantOrder);
+            log.warn("Pedido não foi encontrado no adquirente! Merchant Order: {}", merchantOrder);
+            throw new OrderNotFoundException("Pedido adquirente", merchantOrder);
         }
 
         return order;

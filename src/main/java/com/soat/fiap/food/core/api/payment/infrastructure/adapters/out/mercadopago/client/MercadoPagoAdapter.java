@@ -2,9 +2,9 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadop
 
 import com.soat.fiap.food.core.api.payment.application.dto.request.GenerateQrCodeRequest;
 import com.soat.fiap.food.core.api.payment.application.dto.response.GenerateQrCodeResponse;
-import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
-import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoPaymentsResponse;
-import com.soat.fiap.food.core.api.payment.application.ports.out.MercadoPagoPort;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerPaymentsResponse;
+import com.soat.fiap.food.core.api.payment.application.ports.out.AcquirerPort;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.config.MercadoPagoProperties;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.exceptions.MercadoPagoException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import retrofit2.Response;
  */
 @Component
 @Slf4j
-public class MercadoPagoAdapter implements MercadoPagoPort {
+public class MercadoPagoAdapter implements AcquirerPort {
 
     private final MercadoPagoClient client;
     private final MercadoPagoProperties properties;
@@ -58,7 +58,7 @@ public class MercadoPagoAdapter implements MercadoPagoPort {
     }
 
     @Override
-    public MercadoPagoPaymentsResponse getMercadoPagoPayments(String id) {
+    public AcquirerPaymentsResponse getAcquirerPayments(String id) {
         try {
             var response = client.getMercadoPagoPayments(id).execute();
 
@@ -85,7 +85,7 @@ public class MercadoPagoAdapter implements MercadoPagoPort {
     }
 
     @Override
-    public MercadoPagoOrderResponse getMercadoPagoOrder(Long orderId) {
+    public AcquirerOrderResponse getAcquirerOrder(Long orderId) {
         try {
             var response = client.getMercadoPagoOrder(orderId).execute();
 

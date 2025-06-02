@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.payment.application.ports.in;
 
 import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
-import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 
@@ -19,11 +19,11 @@ public interface PaymentUseCase {
     void initializePayment(OrderCreatedEvent orderCreatedEvent);
 
     /**
-     * Gerencia notificação de pagamento mercado pago
+     * Gerencia notificação de pagamento adquirente
      *
-     * @param mercadoPagoNotificationRequest notificação de pagamento mercado pago
+     * @param acquirerNotificationRequest notificação de pagamento adquirente
      */
-    void processPaymentNotification(MercadoPagoNotificationRequest mercadoPagoNotificationRequest);
+    void processPaymentNotification(AcquirerNotificationRequest acquirerNotificationRequest);
 
     /**
      * Retorna o status de pagamento de um pedido
@@ -46,9 +46,9 @@ public interface PaymentUseCase {
      QrCodeResponse getOrderPaymentQrCode(Long orderId);
 
     /**
-     * Retorna um pedido no mercado pago a partir de um merchant order
+     * Retorna um pedido no adquirente a partir de um id
      *
      * @param merchantOrder id do merchant order
      */
-     MercadoPagoOrderResponse getMercadoPagoOrder(Long merchantOrder);
+     AcquirerOrderResponse getAcquirerOrder(Long merchantOrder);
 } 

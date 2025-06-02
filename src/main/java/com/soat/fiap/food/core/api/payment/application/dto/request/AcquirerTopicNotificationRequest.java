@@ -6,11 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * Entidade que representa o body de envio de notificações simplificadas do Mercado Pago
+ * Entidade que representa o body de envio de notificações simplificadas do adquirente
  */
 @Data
-@Schema(description = "Notificação simplificada recebida do Mercado Pago via Webhook (topic e id)")
-public class MercadoPagoTopicNotificationRequest {
+@Schema(description = "Notificação simplificada recebida do adquirente via Webhook (topic e id)")
+public class AcquirerTopicNotificationRequest {
 
     @NotBlank(message = "O campo 'topic' não pode estar em branco")
     @Schema(description = "Tipo de recurso notificado (ex: merchant_order ou payment)", example = "merchant_order")

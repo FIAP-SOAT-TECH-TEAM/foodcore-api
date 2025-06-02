@@ -10,12 +10,12 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 
 /**
- * Entidade que representa o body de envio de notificações por parte do mercado pago
- * <a href="https://www.mercadopago.com.br/developers/pt/docs/your-integrations/notifications/webhooks">...</a>
+ * Entidade que representa o body de envio de notificações por parte do adquirente
+ *
  */
 @Data
-@Schema(description = "Notificação recebida do Mercado Pago via Webhook")
-public class MercadoPagoNotificationRequest {
+@Schema(description = "Notificação recebida do adquirente via Webhook")
+public class AcquirerNotificationRequest {
 
     @NotNull(message = "O campo 'id' não pode ser nulo")
     @Schema(description = "Identificador da notificação", example = "123456789")

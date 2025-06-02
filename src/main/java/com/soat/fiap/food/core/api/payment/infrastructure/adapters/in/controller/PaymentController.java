@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
 
-import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoNotificationRequest;
-import com.soat.fiap.food.core.api.payment.application.dto.request.MercadoPagoTopicNotificationRequest;
-import com.soat.fiap.food.core.api.payment.application.dto.response.MercadoPagoOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerTopicNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
@@ -36,13 +36,13 @@ public class PaymentController {
     }
 
 
-    // ========== MERCADO PAGO ==========
+    // ========== ADQUIRENTE ==========
 
     @Hidden
     @Operation(
             operationId = "webhookWithTopic",
             summary = "Webhook com parâmetros 'topic' e 'id'",
-            description = "Recebe notificações simplificadas do Mercado Pago com parâmetros 'topic' e 'id' na URL",
+            description = "Recebe notificações simplificadas do adquirente com parâmetros 'topic' e 'id' na URL",
             parameters = {
                     @Parameter(name = "topic",
                             description = "Tipo do tópico da notificação (ex: 'merchant_order')",
@@ -59,30 +59,30 @@ public class PaymentController {
             @ApiResponse(responseCode = "400", description = "Notificação malformada")
     })
     @PostMapping(value = "/webhook", params = {"topic", "id"})
-    @Tag(name = "Mercado Pago", description = "Endpoints de integração Mercado Pago")
-    public ResponseEntity<Void> mercadoPagoTopicWebhook(
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<Void> acquirerTopicWebhook(
             @RequestParam String topic,
             @RequestParam String id,
-            @Valid @RequestBody MercadoPagoTopicNotificationRequest notification
+            @Valid @RequestBody AcquirerTopicNotificationRequest notification
     ) {
-        log.info("Recebida notificação do Mercado Pago (topic): topic={}, resource={}", topic, notification.getResource());
+        log.info("Recebida notificação do adquirente (topic): topic={}, resource={}", topic, notification.getResource());
 
         return ResponseEntity.ok().build();
     }
 
     @Operation(
             operationId = "webhookWithoutTopic",
-            summary = "Webhook completo do Mercado Pago",
-            description = "Recebe notificações de eventos de pagamento do Mercado Pago com corpo JSON completo"
+            summary = "Webhook completo do adquirente",
+            description = "Recebe notificações de eventos de pagamento do adquirente com corpo JSON completo"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Notificação processada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Notificação malformada")
     })
     @PostMapping(value = "/webhook", params = "!topic")
-    @Tag(name = "Mercado Pago", description = "Endpoints de integração Mercado Pago")
-    public ResponseEntity<Void> mercadoPagoWebhook(@Valid @RequestBody MercadoPagoNotificationRequest notification) {
-        log.info("Recebida notificação do Mercado Pago (completa): ação={}, id interno={}, id externo={}",
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<Void> acquirerWebhook(@Valid @RequestBody AcquirerNotificationRequest notification) {
+        log.info("Recebida notificação do adquirente (completa): ação={}, id interno={}, id externo={}",
                 notification.getAction(),
                 notification.getId(),
                 notification.getData() != null ? notification.getData().getId() : "sem id externo");
@@ -92,18 +92,18 @@ public class PaymentController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Buscar pedido no Mercado Pago por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
+    @Operation(summary = "Buscar pedido no adquirente por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido retornado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = MercadoPagoOrderResponse.class))),
+                            schema = @Schema(implementation = AcquirerOrderResponse.class))),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
     })
     @GetMapping("/merchant_orders/{merchantOrderId}")
-    @Tag(name = "Mercado Pago", description = "Endpoints de integração Mercado Pago")
-    public ResponseEntity<MercadoPagoOrderResponse> getMercadoPagoOrder(@PathVariable Long merchantOrderId) {
-        log.info("Recebida requisição para obter dados do pedido no Mercado Pago. merchantOrderId={}", merchantOrderId);
-        var response = paymentUseCase.getMercadoPagoOrder(merchantOrderId);
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<AcquirerOrderResponse> getAcquirerOrder(@PathVariable Long merchantOrderId) {
+        log.info("Recebida requisição para obter dados do pedido no adquirente. merchantOrderId={}", merchantOrderId);
+        var response = paymentUseCase.getAcquirerOrder(merchantOrderId);
         return ResponseEntity.ok(response);
     }
 

@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Representa a resposta da API de consulta de um pedido no Mercado Pago.
+ * Representa a resposta da API de consulta de um pedido no adquirente.
  */
 @Data
-@Schema(name = "MercadoPagoOrderResponse", description = "Resposta da API Mercado Pago para um pedido")
-public class MercadoPagoOrderResponse {
+@Schema(name = "AcquirerOrderResponse", description = "Resposta do adquirente para um pedido")
+public class AcquirerOrderResponse {
 
     @Schema(description = "ID do pedido", example = "123456789")
     private long id;
 
     @Schema(description = "Status do pedido", example = "opened")
-    private MercadoPagoOrderNotificationStatus status;
+    private AcquirerOrderNotificationStatus status;
 
     @Schema(description = "Referência externa", example = "REF1234")
     private String external_reference;
@@ -79,7 +79,7 @@ public class MercadoPagoOrderResponse {
     private String application_id;
 
     @Schema(description = "Status do pedido no sistema", example = "paid")
-    private MercadoPagoOrderStatus order_status;
+    private AcquirerOrderStatus order_status;
 
     @Data
     @Schema(name = "Payment", description = "Detalhes de um pagamento")

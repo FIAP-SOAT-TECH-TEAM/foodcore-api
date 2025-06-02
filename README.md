@@ -63,7 +63,7 @@ graph TD
 
         subgraph "Portas de Saída"
             DB_Port["Banco de Dados (Porta)"]
-            MercadoPago_Port["Mercado Pago (Porta)"]
+            Acquirer_Port["Adquirente (Porta)"]
             EventBus_Port["Eventos (Porta)"]
         end
 
@@ -71,7 +71,7 @@ graph TD
         DOMAIN --- Webhook_Port
         DOMAIN --- Event_Port
         DOMAIN --- DB_Port
-        DOMAIN --- MercadoPago_Port
+        DOMAIN --- Acquirer_Port
         DOMAIN --- EventBus_Port
 
         API_Port --- API_Adapter["/api REST Controller"]
@@ -79,7 +79,7 @@ graph TD
         Event_Port --- Event_Adapter["Event Listener"]
 
         DB_Port --- DB_Adapter["JPA Repository"]
-        MercadoPago_Port --- MercadoPago_Adapter["MercadoPago Client"]
+        Acquirer_Port --- MercadoPago_Adapter["MercadoPago Client"]
         EventBus_Port --- EventBus_Adapter["ApplicationEventPublisher"]
     end
 ```

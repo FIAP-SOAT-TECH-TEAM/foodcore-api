@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Representa a resposta da API de consulta de um pagamento no Mercado Pago.
+ * Representa a resposta da API de consulta de um pagamento no adquirente.
  */
 @Data
-public class MercadoPagoPaymentsResponse {
+public class AcquirerPaymentsResponse {
 
     private Long id;
     private PaymentStatus status;
