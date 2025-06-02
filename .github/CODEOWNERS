@@ -1,0 +1,30 @@
+# Mantenedores globais do projeto
+* @soat-fiap/tech-leads
+
+# Arquivos de configuração e build
+*.gradle @soat-fiap/tech-leads
+build.gradle @soat-fiap/tech-leads
+settings.gradle @soat-fiap/tech-leads
+.github/ @soat-fiap/tech-leads
+docker/ @soat-fiap/tech-leads
+
+# Módulo de produtos
+/src/main/java/com/soat/fiap/food/core/api/product/ @soat-fiap/product-team
+
+# Módulo de usuários
+/src/main/java/com/soat/fiap/food/core/api/user/ @soat-fiap/user-team
+
+# Módulo de pedidos
+/src/main/java/com/soat/fiap/food/core/api/order/ @soat-fiap/order-team
+
+# Módulo de pagamentos
+/src/main/java/com/soat/fiap/food/core/api/payment/ @soat-fiap/payment-team
+
+# Código compartilhado
+/src/main/java/com/soat/fiap/food/core/api/shared/ @soat-fiap/tech-leads
+
+# Migrações de banco de dados
+/src/main/resources/db/ @soat-fiap/db-team
+
+# Documentação
+/docs/ @soat-fiap/tech-leads 

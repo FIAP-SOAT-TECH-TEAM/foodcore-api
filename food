@@ -5,6 +5,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="$SCRIPT_DIR/scripts"
+ACT_DIR="$SCRIPT_DIR/docker/act"
 
 # Função para exibir ajuda
 show_help() {
@@ -14,7 +15,7 @@ show_help() {
   echo
   echo "Comandos disponíveis:"
   echo "  start:all        Inicia toda a infraestrutura e a aplicação"
-  echo "  start:infra      Inicia apenas a infraestrutura (banco, redis, etc)"
+  echo "  start:infra      Inicia apenas a infraestrutura (banco)"
   echo "  start:app        Inicia apenas a aplicação"
   echo "  stop:all         Para todos os serviços"
   echo "  stop:infra       Para apenas a infraestrutura"
@@ -23,10 +24,11 @@ show_help() {
   echo "  restart:app      Reinicia apenas a aplicação"
   echo "  db:up            Aplica migrações do banco de dados"
   echo "  db:reset         Reseta o banco de dados (cuidado!)"
+  echo "  run:action       Executa GitHub Actions localmente usando Act"
+  echo "  run:workflow     Executa um workflow específico do GitHub Actions"
   echo "  logs             Exibe logs dos containers"
   echo "  logs:app         Exibe logs apenas da aplicação"
   echo "  logs:db          Exibe logs apenas do banco de dados"
-  echo "  logs:redis       Exibe logs apenas do Redis"
   echo "  status           Exibe status dos containers"
   echo "  clean            Remove containers, imagens e volumes não utilizados"
   echo "  help             Exibe esta mensagem de ajuda"
@@ -39,6 +41,8 @@ show_help() {
   echo "  ./food start:all --build    Inicia tudo reconstruindo as imagens"
   echo "  ./food stop:all             Para todos os serviços"
   echo "  ./food db:up                Aplica migrações do banco"
+  echo "  ./food run:action           Executa todos os GitHub Actions localmente"
+  echo "  ./food run:workflow .github/workflows/ci-cd.yml  Executa um workflow específico"
 }
 
 # Verificar se o Docker está rodando
@@ -86,6 +90,11 @@ case "$COMMAND" in
     echo "Iniciando toda a infraestrutura e aplicação..."
     "$SCRIPTS_DIR/infra-up.sh" $FORCE_FLAG
     "$SCRIPTS_DIR/app-up.sh" $BUILD_FLAG
+    # Verificar se a rede fastfood-network existe, se não, criar
+    if ! docker network ls | grep -q fastfood-network; then
+      echo "Criando rede compartilhada fastfood-network..."
+      docker network create fastfood-network
+    fi
     ;;
   start:infra)
     echo "Iniciando apenas a infraestrutura..."
@@ -132,6 +141,51 @@ case "$COMMAND" in
     echo "Resetando o banco de dados..."
     "$SCRIPTS_DIR/reset-db.sh"
     ;;
+  run:action)
+    echo "Executando GitHub Actions localmente..."
+    # Verificar se o Act está instalado
+    if ! command -v act &> /dev/null; then
+      echo "ERRO: Act não está instalado."
+      echo "Instale-o seguindo as instruções em: https://github.com/nektos/act"
+      exit 1
+    fi
+    
+    # Verificar se há arquivo de secrets
+    if [ -f "$ACT_DIR/secrets.env" ]; then
+      echo "Usando secrets do arquivo $ACT_DIR/secrets.env"
+      act --secret-file "$ACT_DIR/secrets.env" "$@"
+    else
+      echo "Arquivo de secrets não encontrado. Usando configuração padrão."
+      echo "Para configurar secrets, crie um arquivo em $ACT_DIR/secrets.env"
+      act "$@"
+    fi
+    ;;
+  run:workflow)
+    echo "Executando workflow específico do GitHub Actions..."
+    # Verificar se o Act está instalado
+    if ! command -v act &> /dev/null; then
+      echo "ERRO: Act não está instalado."
+      echo "Instale-o seguindo as instruções em: https://github.com/nektos/act"
+      exit 1
+    fi
+    
+    # Verificar se o workflow foi especificado
+    if [ -z "$1" ]; then
+      echo "ERRO: Especifique o workflow a ser executado."
+      echo "Exemplo: ./food run:workflow .github/workflows/ci-cd.yml"
+      exit 1
+    fi
+    
+    # Verificar se há arquivo de secrets
+    if [ -f "$ACT_DIR/secrets.env" ]; then
+      echo "Usando secrets do arquivo $ACT_DIR/secrets.env"
+      act workflow_dispatch -W "$1" --secret-file "$ACT_DIR/secrets.env" "${@:2}"
+    else
+      echo "Arquivo de secrets não encontrado. Usando configuração padrão."
+      echo "Para configurar secrets, crie um arquivo em $ACT_DIR/secrets.env"
+      act workflow_dispatch -W "$1" "${@:2}"
+    fi
+    ;;
   logs)
     echo "Exibindo logs de todos os containers..."
     cd "$SCRIPT_DIR/docker" && docker-compose logs -f
@@ -143,10 +197,6 @@ case "$COMMAND" in
   logs:db)
     echo "Exibindo logs do banco de dados..."
     cd "$SCRIPT_DIR/docker" && docker-compose logs -f db
-    ;;
-  logs:redis)
-    echo "Exibindo logs do Redis..."
-    cd "$SCRIPT_DIR/docker" && docker-compose logs -f redis
     ;;
   status)
     echo "Status dos containers:"

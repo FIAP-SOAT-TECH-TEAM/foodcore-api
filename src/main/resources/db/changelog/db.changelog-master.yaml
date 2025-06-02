@@ -1,55 +1,67 @@
 databaseChangeLog:
-  - preConditions:
-    - runningAs:
-        username: postgres
+  - property:
+      name: now
+      value: current_timestamp
+      dbms: postgresql
 
-  # Shared types
+  # Clear checksums
+  - changeSet:
+      id: clearChecksums
+      author: system
+      changes:
+        - tagDatabase:
+            tag: clear-checksums
+      labels: clear-checksums
+
   - include:
-      file: db/changelog/shared/00-init-schema.sql
-      
+      file: shared/00-init-schema.sql
+      relativeToChangelogFile: true
+
   # Spring Modulith
   - include:
-      file: db/changelog/shared/01-modulith-tables.sql
+      file: shared/01-modulith-tables.sql
+      relativeToChangelogFile: true
 
-  # Product Module
+  # User module
   - include:
-      file: db/changelog/modules/product/01-product-tables.sql
-      relativeToChangelogFile: false
+      file: modules/user/01-user-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/product/02-product-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/user/02-user-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/user/03-user-seed.sql
+      relativeToChangelogFile: true
 
-  # Customer Module  
+  # Catalog module
   - include:
-      file: db/changelog/modules/customer/01-customer-tables.sql
-      relativeToChangelogFile: false
+      file: modules/catalog/01-catalog-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/customer/02-customer-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/catalog/02-catalog-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/catalog/03-catalog-seed.sql
+      relativeToChangelogFile: true
 
-  # Order Module
+  # Order module
   - include:
-      file: db/changelog/modules/order/01-order-tables.sql
-      relativeToChangelogFile: false
+      file: modules/order/01-order-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/order/02-order-indexes.sql
-      relativeToChangelogFile: false
+      file: modules/order/02-order-indexes.sql
+      relativeToChangelogFile: true
+  - include:
+      file: modules/order/03-order-seed.sql
+      relativeToChangelogFile: true
 
-  # Payment Module
+  # Payment module
   - include:
-      file: db/changelog/modules/payment/01-payment-tables.sql
-      relativeToChangelogFile: false
+      file: modules/payment/01-payment-tables.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/payment/02-payment-indexes.sql
-      relativeToChangelogFile: false
-
-  # Seed Data
+      file: modules/payment/02-payment-indexes.sql
+      relativeToChangelogFile: true
   - include:
-      file: db/changelog/modules/product/03-product-seed.sql
-      relativeToChangelogFile: false
-  - include:
-      file: db/changelog/modules/customer/03-customer-seed.sql
-  - include:
-      file: db/changelog/modules/order/03-order-seed.sql
-  - include:
-      file: db/changelog/modules/payment/03-payment-seed.sql 
+      file: modules/payment/03-payment-seed.sql
+      relativeToChangelogFile: true
