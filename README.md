@@ -559,6 +559,9 @@ flowchart TD
 - **Payment (Pagamento)**
   Etapa posterior à finalização do pedido. Utiliza integração com o Mercado Pago para processar as transações financeiras.
 
+- **Expiração (Pagamento)**
+  Tempo de expiração para pagamento de QrCode gerado pelo adquirente. Por padrão, 30 minutos, após esgotar o tempo o pedido relacionado é cancelado.
+
 - **Product (Produto)**
   Qualquer item disponível para venda, como lanches, bebidas, sobremesas ou acompanhamentos.
 
