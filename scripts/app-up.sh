@@ -121,7 +121,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     APP_PORT=$(docker ps --filter "id=$APP_CONTAINER" --format "{{.Ports}}" | grep -oP '\d+(?=->)' | head -n 1)
     echo "===== Aplicação iniciada com sucesso! ====="
     echo "- API: http://localhost:$APP_PORT"
-    echo "- Documentação Swagger: http://localhost:$APP_PORT/swagger-ui.html"
+    echo "- Documentação Swagger: http://localhost:$APP_PORT/api/swagger-ui.html"
     exit 0
   fi
   
