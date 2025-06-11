@@ -5,7 +5,6 @@ import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogRe
 import com.soat.fiap.food.core.api.catalog.application.usecases.catalog.GetAllCatalogsUseCase;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class GetAllCatalogsUseCaseImpl implements GetAllCatalogsUseCase {
      * @return Lista contendo todos os catálogos
      */
     @Override
-    @Transactional(readOnly = true)
     public List<CatalogResponse> getAllCatalogs() {
         log.debug("Buscando todos os catálogos");
         var existingCatalogs = catalogGateway.findAll();

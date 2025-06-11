@@ -6,7 +6,6 @@ import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class UpdateProductStockForCanceledItemsUseCaseImpl implements UpdateProd
      * @param orderItemCanceledEvents eventos de cancelamento de item de pedido
      */
     @Override
-    @Transactional
     public void updateStockForCanceledItems(List<OrderItemCanceledEvent> orderItemCanceledEvents) {
         if (orderItemCanceledEvents.isEmpty()) {
             throw new OrderItemNotFoundException("Lista de itens de pedido está vazia. Não é possível recuperar produtos para atualização de quantidade em estoque.");

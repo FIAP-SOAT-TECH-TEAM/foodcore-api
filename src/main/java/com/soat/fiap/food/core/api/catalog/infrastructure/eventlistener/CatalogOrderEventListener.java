@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.eventlistener;
+package com.soat.fiap.food.core.api.catalog.infrastructure.eventlistener;
 
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.order.domain.events.OrderCanceledEvent;

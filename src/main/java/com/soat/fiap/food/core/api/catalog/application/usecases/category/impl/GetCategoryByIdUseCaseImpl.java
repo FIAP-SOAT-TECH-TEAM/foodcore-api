@@ -6,7 +6,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.category.GetCate
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Obter categoria por identificador.
@@ -34,7 +33,6 @@ public class GetCategoryByIdUseCaseImpl implements GetCategoryByIdUseCase {
      * @return Categoria encontrada
      */
     @Override
-    @Transactional(readOnly = true)
     public CategoryResponse getCategoryById(Long catalogId, Long categoryId) {
         log.debug("Buscando categoria de id: {} no catalogo de id: {}", categoryId, catalogId);
 

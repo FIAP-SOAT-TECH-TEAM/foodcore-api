@@ -10,7 +10,6 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundExce
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.EventPublisherGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Salvar produto.
@@ -44,7 +43,6 @@ public class SaveProductUseCaseImpl implements SaveProductUseCase {
      * @return Produto salvo com identificadores atualizados
      */
     @Override
-    @Transactional
     public ProductResponse saveProduct(Long catalogId, ProductRequest productRequest) {
         log.debug("Criando produto: {}", productRequest.getName());
 

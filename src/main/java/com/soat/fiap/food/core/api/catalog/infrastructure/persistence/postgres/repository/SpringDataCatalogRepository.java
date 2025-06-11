@@ -1,6 +1,6 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.repository;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.repository;
 
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CatalogEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CatalogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

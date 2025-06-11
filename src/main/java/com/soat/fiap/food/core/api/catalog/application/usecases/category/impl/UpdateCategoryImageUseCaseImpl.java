@@ -5,7 +5,6 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundExce
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStorageGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -37,7 +36,6 @@ public class UpdateCategoryImageUseCaseImpl implements UpdateCategoryImageUseCas
      * @throws RuntimeException se ocorrer um erro durante o upload da imagem
      */
     @Override
-    @Transactional
     public void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile) {
         log.debug("Atualizando imagem do categoria ID: {}", categoryId);
 

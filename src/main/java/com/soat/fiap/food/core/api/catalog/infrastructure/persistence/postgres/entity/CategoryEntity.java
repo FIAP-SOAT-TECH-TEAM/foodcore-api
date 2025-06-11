@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity;
 
 import com.soat.fiap.food.core.api.catalog.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.domain.vo.ImageUrl;
@@ -7,32 +7,30 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Entidade JPA para produto
+ * Entidade JPA para categoria
  */
 @Entity
-@Table(name = "products", uniqueConstraints = {
-        @UniqueConstraint(name = "un_product_category", columnNames = {"name", "category_id"})
+@Table(name = "categories", uniqueConstraints = {
+        @UniqueConstraint(name = "un_category_catalog", columnNames = {"name", "catalog_id"})
 })
 @Getter
 @Setter
-public class ProductEntity {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_product_category"))
-    private CategoryEntity category;
+    @JoinColumn(name = "catalog_id", foreignKey = @ForeignKey(name = "fk_category_catalog"))
+    private CatalogEntity catalog;
 
     @Embedded
     private Details details;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
 
     @Embedded
     private ImageUrl imageUrl;
@@ -46,9 +44,9 @@ public class ProductEntity {
     @Embedded
     private AuditInfo auditInfo = new AuditInfo();
 
-    @OneToOne(mappedBy = "product",
+    @OneToMany(mappedBy = "category",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private StockEntity stock;
+            orphanRemoval = true)
+    private List<ProductEntity> products = new ArrayList<>();
+
 }

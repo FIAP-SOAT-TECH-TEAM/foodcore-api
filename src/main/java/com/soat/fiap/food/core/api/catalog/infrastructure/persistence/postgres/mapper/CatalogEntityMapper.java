@@ -1,7 +1,7 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.mapper;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper;
 
-import com.soat.fiap.food.core.api.catalog.domain.model.Stock;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.StockEntity;
+import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
@@ -11,10 +11,10 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 
 /**
- * Mapper que converte entre a entidade de domínio Stock e a entidade JPA StockEntity
+ * Mapper que converte entre a entidade de domínio Catalog e a entidade JPA CatalogEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface StockEntityMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CategoryEntityMapper.class})
+public interface CatalogEntityMapper {
 
     /**
      * Converte uma entidade JPA para uma entidade de domínio
@@ -22,7 +22,7 @@ public interface StockEntityMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos
      * @return Entidade de domínio
      */
-    Stock toDomain(StockEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+    Catalog toDomain(CatalogEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**
      * Converte uma lista de entidades JPA para uma lista de entidades de domínio
@@ -30,27 +30,27 @@ public interface StockEntityMapper {
      * @param cycleAvoidingMappingContext Contexto para evitar ciclos
      * @return Lista de entidades de domínio
      */
-    List<Stock> toDomainList(List<StockEntity> entities, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+    List<Catalog> toDomainList(List<CatalogEntity> entities, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     /**
      * Converte uma entidade de domínio para uma entidade JPA
      * @param domain Entidade de domínio
      * @return Entidade JPA
      */
-    StockEntity toEntity(Stock domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+    CatalogEntity toEntity(Catalog domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
-    default Stock toDomain(StockEntity entity) {
+    default Catalog toDomain(CatalogEntity entity) {
         return toDomain(entity, new CycleAvoidingMappingContext());
     }
 
     @DoIgnore
-    default List<Stock> toDomainList(List<StockEntity> entities) {
+    default List<Catalog> toDomainList(List<CatalogEntity> entities) {
         return toDomainList(entities, new CycleAvoidingMappingContext());
     }
 
     @DoIgnore
-    default StockEntity toEntity(Stock domain) {
+    default CatalogEntity toEntity(Catalog domain) {
         return toEntity(domain, new CycleAvoidingMappingContext());
     }
 }

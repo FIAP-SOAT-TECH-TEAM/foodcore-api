@@ -8,7 +8,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.category.SaveCat
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Salvar categoria.
@@ -38,7 +37,6 @@ public class SaveCategoryUseCaseImpl implements SaveCategoryUseCase {
      * @return Categoria salva com identificadores atualizados
      */
     @Override
-    @Transactional
     public CategoryResponse saveCategory(CategoryRequest categoryRequest) {
 
         var category = categoryRequestMapper.toDomain(categoryRequest);

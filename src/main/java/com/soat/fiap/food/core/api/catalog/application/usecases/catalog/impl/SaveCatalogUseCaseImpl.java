@@ -8,7 +8,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.catalog.SaveCata
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Salvar catálogo.
@@ -38,7 +37,6 @@ public class SaveCatalogUseCaseImpl implements SaveCatalogUseCase {
      * @return Catálogo salvo com identificadores atualizados
      */
     @Override
-    @Transactional
     public CatalogResponse saveCatalog(CatalogRequest catalogRequest) {
 
         var catalog = catalogRequestMapper.toDomain(catalogRequest);

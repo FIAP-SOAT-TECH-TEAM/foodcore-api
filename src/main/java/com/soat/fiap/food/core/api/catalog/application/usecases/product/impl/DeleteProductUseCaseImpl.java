@@ -4,7 +4,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.product.DeletePr
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Remover produto pelo seu identificador.
@@ -29,7 +28,6 @@ public class DeleteProductUseCaseImpl implements DeleteProductUseCase {
      * @param productId  ID do produto a ser removido
      */
     @Override
-    @Transactional
     public void deleteProduct(Long catalogId, Long categoryId, Long productId) {
         log.debug("Excluindo produto de id: {} da categoria de id: {} do catalogo de id: {}", productId, categoryId, catalogId);
 

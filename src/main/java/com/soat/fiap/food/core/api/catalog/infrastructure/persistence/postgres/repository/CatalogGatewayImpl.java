@@ -1,26 +1,27 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.repository;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.repository;
 
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CatalogEntity;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.mapper.CatalogEntityMapper;
+import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CatalogEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper.CatalogEntityMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Adaptador que implementa a porta de saída CatalogRepository
+ * Implementação concreta: Gateway para persistência do agregado Catálogo.
  * responsável por operações sobre o agregado Catálogo.
  */
 @Component
-public class CatalogRepositoryAdapter implements CatalogGateway {
+public class CatalogGatewayImpl implements CatalogGateway {
 
     private final SpringDataCatalogRepository springDataCatalogRepository;
     private final CatalogEntityMapper catalogEntityMapper;
 
-    public CatalogRepositoryAdapter(
+    public CatalogGatewayImpl(
             SpringDataCatalogRepository springDataCatalogRepository,
             CatalogEntityMapper catalogEntityMapper
     ) {
@@ -35,6 +36,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return Agregado salvo com identificadores atualizados
      */
     @Override
+    @Transactional
     public Catalog save(Catalog catalog) {
         CatalogEntity entity = catalogEntityMapper.toEntity(catalog);
         CatalogEntity saved = springDataCatalogRepository.save(entity);
@@ -48,6 +50,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
     @Override
+    @Transactional(readOnly = true)
     public Optional<Catalog> findById(Long id) {
         return springDataCatalogRepository.findById(id)
                 .map(catalogEntityMapper::toDomain);
@@ -60,6 +63,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
     @Override
+    @Transactional(readOnly = true)
     public Optional<Catalog> findByName(String name) {
         return springDataCatalogRepository.findByName(name)
                 .map(catalogEntityMapper::toDomain);
@@ -71,6 +75,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return Lista de catálogos
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Catalog> findAll() {
         return springDataCatalogRepository.findAll().stream()
                 .map(catalogEntityMapper::toDomain)
@@ -84,6 +89,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return true se existir um catálogo com um determinado ID, false caso contrário
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return springDataCatalogRepository.existsById(id);
     }
@@ -95,6 +101,7 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return true se existir um catálogo com um determinado nome, false caso contrário
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByName(String name) {
         return springDataCatalogRepository.existsByName(name);
     }
@@ -107,11 +114,13 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByNameAndIdNot(String name, Long id) {
         return springDataCatalogRepository.existsByNameAndIdNot(name, id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsCategoryByCatalogId(Long catalogId) {
         return springDataCatalogRepository.existsCategoryByCatalogId(catalogId);
     }
@@ -122,11 +131,13 @@ public class CatalogRepositoryAdapter implements CatalogGateway {
      * @param id ID do catálogo a ser removido
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         springDataCatalogRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Catalog> findByProductId(Long productId) {
         return springDataCatalogRepository.findByProductId(productId).map(catalogEntityMapper::toDomain);
     }

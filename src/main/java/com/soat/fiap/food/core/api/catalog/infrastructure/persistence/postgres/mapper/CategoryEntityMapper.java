@@ -1,12 +1,11 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.mapper;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper;
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
-import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CategoryEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CategoryEntity;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;

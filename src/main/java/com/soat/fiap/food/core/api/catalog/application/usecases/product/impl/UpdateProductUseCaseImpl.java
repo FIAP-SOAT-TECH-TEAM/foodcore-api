@@ -8,7 +8,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.product.UpdatePr
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Atualizar produto.
@@ -41,7 +40,6 @@ public class UpdateProductUseCaseImpl implements UpdateProductUseCase {
      * @return Produto atualizado com identificadores atualizados
      */
     @Override
-    @Transactional
     public ProductResponse updateProduct(Long catalogId, Long categoryId, Long productId, ProductRequest productRequest) {
         log.debug("Atualizando produto: {}", productId);
 

@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity;
+package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity;
 
 import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
 import jakarta.persistence.*;

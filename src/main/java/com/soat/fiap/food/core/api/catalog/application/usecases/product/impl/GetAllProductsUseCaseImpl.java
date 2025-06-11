@@ -6,7 +6,6 @@ import com.soat.fiap.food.core.api.catalog.application.usecases.product.GetAllPr
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class GetAllProductsUseCaseImpl implements GetAllProductsUseCase {
      * @return Lista de produtos
      */
     @Override
-    @Transactional(readOnly = true)
     public List<ProductResponse> getAllProducts(Long catalogId, Long categoryId) {
         log.debug("Buscando todos os produtos da categoria de id: {}", categoryId);
 

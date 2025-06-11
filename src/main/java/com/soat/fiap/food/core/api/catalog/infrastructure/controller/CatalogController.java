@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.in.controller;
+package com.soat.fiap.food.core.api.catalog.infrastructure.controller;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;

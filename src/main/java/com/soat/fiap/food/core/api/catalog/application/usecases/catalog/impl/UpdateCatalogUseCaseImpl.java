@@ -9,7 +9,6 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundExce
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Atualizar catálogo.
@@ -37,7 +36,6 @@ public class UpdateCatalogUseCaseImpl implements UpdateCatalogUseCase {
      * @return Catálogo salvo com identificadores atualizados
      */
     @Override
-    @Transactional
     public CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest) {
 
         var existingCatalog = catalogGateway.findById(id);

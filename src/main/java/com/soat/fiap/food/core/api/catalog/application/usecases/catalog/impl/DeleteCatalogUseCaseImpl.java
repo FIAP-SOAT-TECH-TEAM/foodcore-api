@@ -5,7 +5,6 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogConflictExce
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Caso de uso (implementação concreta): Remover catálogo pelo seu identificador.
@@ -28,7 +27,6 @@ public class DeleteCatalogUseCaseImpl implements DeleteCatalogUseCase {
      * @param id Identificador do catálogo a ser removido
      */
     @Override
-    @Transactional
     public void deleteCatalog(Long id) {
         log.debug("Excluindo catalogo de id: {}", id);
 
