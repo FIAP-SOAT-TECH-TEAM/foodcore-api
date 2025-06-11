@@ -2,7 +2,10 @@ package com.soat.fiap.food.core.api.shared.application.ports.out;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface ImageStoragePort {
+/**
+ * Gateway para persistência de imagens.
+ */
+public interface ImageStorageGateway {
 
     /**
      * Realiza o upload de uma imagem para um determinado caminho no serviço de armazenamento.

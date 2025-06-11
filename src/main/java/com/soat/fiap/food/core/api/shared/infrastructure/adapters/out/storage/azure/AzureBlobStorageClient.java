@@ -4,12 +4,10 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
-import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStoragePort;
+import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.storage.azure.config.AzureStorageProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,13 +15,13 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * Implementação do {@link ImageStoragePort} que realiza o upload e a exclusão de imagens
+ * Implementação do {@link ImageStorageGateway} que realiza o upload e a exclusão de imagens
  * no serviço Azure Blob Storage.
  */
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AzureBlobStorageClient implements ImageStoragePort {
+public class AzureBlobStorageClient implements ImageStorageGateway {
 
     private final AzureStorageProperties properties;
 

@@ -19,14 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateCatalogUseCaseImpl implements UpdateCatalogUseCase {
 
     private final CatalogResponseMapper catalogResponseMapper;
-    private final CatalogGateway catalogRepository;
+    private final CatalogGateway catalogGateway;
 
     public UpdateCatalogUseCaseImpl(
             CatalogResponseMapper catalogResponseMapper,
             CatalogGateway catalogRepository
     ) {
         this.catalogResponseMapper = catalogResponseMapper;
-        this.catalogRepository = catalogRepository;
+        this.catalogGateway = catalogRepository;
     }
 
     /**
@@ -40,7 +40,7 @@ public class UpdateCatalogUseCaseImpl implements UpdateCatalogUseCase {
     @Transactional
     public CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest) {
 
-        var existingCatalog = catalogRepository.findById(id);
+        var existingCatalog = catalogGateway.findById(id);
 
         log.debug("Atualizando catalogo: {}", id);
 
@@ -48,7 +48,7 @@ public class UpdateCatalogUseCaseImpl implements UpdateCatalogUseCase {
             log.warn("Tentativa de atualizar catalogo inexistente. Id: {}", id);
             throw new CatalogNotFoundException("Catalogo", id);
         }
-        else if (catalogRepository.existsByNameAndIdNot(catalogRequest.getName(), id)) {
+        else if (catalogGateway.existsByNameAndIdNot(catalogRequest.getName(), id)) {
             log.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogRequest.getName());
             throw new CatalogConflictException("Catalogo", "Nome", catalogRequest.getName());
         }
@@ -56,7 +56,7 @@ public class UpdateCatalogUseCaseImpl implements UpdateCatalogUseCase {
         BeanUtils.copyProperties(catalogRequest, existingCatalog.get());
 
         existingCatalog.get().markUpdatedNow();
-        var updatedCatalog = catalogRepository.save(existingCatalog.get());
+        var updatedCatalog = catalogGateway.save(existingCatalog.get());
 
         log.debug("Catalogo atualizado com sucesso: {}", id);
 

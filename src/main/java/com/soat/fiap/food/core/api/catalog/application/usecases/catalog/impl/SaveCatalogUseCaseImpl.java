@@ -19,7 +19,7 @@ public class SaveCatalogUseCaseImpl implements SaveCatalogUseCase {
 
     private final CatalogRequestMapper catalogRequestMapper;
     private final CatalogResponseMapper catalogResponseMapper;
-    private final CatalogGateway catalogRepository;
+    private final CatalogGateway catalogGateway;
 
     public SaveCatalogUseCaseImpl (
             CatalogRequestMapper catalogRequestMapper,
@@ -28,7 +28,7 @@ public class SaveCatalogUseCaseImpl implements SaveCatalogUseCase {
     ) {
         this.catalogRequestMapper = catalogRequestMapper;
         this.catalogResponseMapper = catalogResponseMapper;
-        this.catalogRepository = catalogRepository;
+        this.catalogGateway = catalogRepository;
     }
 
     /**
@@ -44,12 +44,12 @@ public class SaveCatalogUseCaseImpl implements SaveCatalogUseCase {
         var catalog = catalogRequestMapper.toDomain(catalogRequest);
         log.debug("Criando catalogo: {}", catalog.getName());
 
-        if (catalogRepository.existsByName(catalog.getName())) {
+        if (catalogGateway.existsByName(catalog.getName())) {
             log.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalog.getName());
             throw new CatalogConflictException("Catalogo", "Nome", catalog.getName());
         }
 
-        var savedCatalog = catalogRepository.save(catalog);
+        var savedCatalog = catalogGateway.save(catalog);
 
         log.debug("Catalogo criado com sucesso: {}", catalog.getId());
 
