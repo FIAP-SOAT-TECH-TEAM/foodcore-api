@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.adapters.out.persistence.mapper.CatalogEntityMapper;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * responsável por operações sobre o agregado Catálogo.
  */
 @Component
-public class CatalogRepositoryAdapter implements CatalogRepository {
+public class CatalogRepositoryAdapter implements CatalogGateway {
 
     private final SpringDataCatalogRepository springDataCatalogRepository;
     private final CatalogEntityMapper catalogEntityMapper;

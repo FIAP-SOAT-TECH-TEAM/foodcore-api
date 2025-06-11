@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.order.domain.service;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
-import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
@@ -17,14 +17,14 @@ import java.util.List;
 @Service
 public class OrderProductService {
 
-    private final CatalogRepository catalogRepository;
+    private final CatalogGateway catalogRepository;
 
     /**
      * Cria uma instância do serviço com o repositório de catálogo.
      *
      * @param catalogRepository o repositório de catálogos utilizado para busca de produtos
      */
-    public OrderProductService(CatalogRepository catalogRepository) {
+    public OrderProductService(CatalogGateway catalogRepository) {
         this.catalogRepository = catalogRepository;
     }
 

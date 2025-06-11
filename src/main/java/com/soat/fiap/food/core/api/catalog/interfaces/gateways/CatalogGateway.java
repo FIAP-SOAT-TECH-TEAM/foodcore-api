@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.domain.ports.out;
+package com.soat.fiap.food.core.api.catalog.interfaces.gateways;
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 
@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Porta de saída para persistência do agregado Catálogo.
+ * Gateway para persistência do agregado Catálogo.
  */
-public interface CatalogRepository {
+public interface CatalogGateway {
 
     /**
      * Salva o agregado Catálogo.

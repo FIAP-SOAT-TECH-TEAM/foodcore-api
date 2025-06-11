@@ -1,6 +1,5 @@
 package com.soat.fiap.food.core.api.catalog.application.services;
 
-import com.soat.fiap.food.core.api.catalog.application.dto.request.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.request.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
@@ -9,7 +8,6 @@ import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductRespo
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.CatalogRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.CategoryRequestMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.request.ProductRequestMapper;
-import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.CategoryResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
@@ -19,13 +17,12 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundExce
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.domain.model.Product;
-import com.soat.fiap.food.core.api.catalog.domain.ports.out.CatalogRepository;
+import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
 import com.soat.fiap.food.core.api.shared.application.ports.out.ImageStoragePort;
 import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +36,11 @@ import java.util.List;
 @Service
 public class CatalogService implements CatalogUseCase {
 
-    private final CatalogRepository catalogRepository;
 
-    private final CatalogRequestMapper catalogRequestMapper;
     private final CategoryRequestMapper categoryRequestMapper;
     private final ProductRequestMapper productRequestMapper;
 
-    private final CatalogResponseMapper catalogResponseMapper;
+
     private final CategoryResponseMapper categoryResponseMapper;
     private final ProductResponseMapper productResponseMapper;
 
@@ -55,9 +50,9 @@ public class CatalogService implements CatalogUseCase {
     private final CustomLogger logger;
 
     public CatalogService(
-            CatalogRepository catalogRepository,
+            CatalogGateway catalogRepository,
             CatalogRequestMapper catalogRequestMapper,
-            CatalogResponseMapper catalogResponseMapper,
+
             CategoryRequestMapper categoryRequestMapper,
             CategoryResponseMapper categoryResponseMapper,
             ProductRequestMapper productRequestMapper,
@@ -65,9 +60,6 @@ public class CatalogService implements CatalogUseCase {
             ApplicationEventPublisher eventPublisher,
             ImageStoragePort imageStoragePort
     ) {
-        this.catalogRepository = catalogRepository;
-        this.catalogRequestMapper = catalogRequestMapper;
-        this.catalogResponseMapper = catalogResponseMapper;
         this.categoryRequestMapper = categoryRequestMapper;
         this.categoryResponseMapper = categoryResponseMapper;
         this.productRequestMapper = productRequestMapper;
@@ -77,64 +69,9 @@ public class CatalogService implements CatalogUseCase {
         this.imageStoragePort = imageStoragePort;
     }
 
-    /**
-     * Salva um catálogo.
-     *
-     * @param catalogRequest Catálogo a ser salvo
-     * @return Catálogo salvo com identificadores atualizados
-     */
-    @Override
-    @Transactional
-    public CatalogResponse saveCatalog(CatalogRequest catalogRequest) {
 
-        var catalog = catalogRequestMapper.toDomain(catalogRequest);
-        logger.debug("Criando catalogo: {}", catalog.getName());
 
-        if (catalogRepository.existsByName(catalog.getName())) {
-            logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalog.getName());
-            throw new CatalogConflictException("Catalogo", "Nome", catalog.getName());
-        }
 
-        var savedCatalog = catalogRepository.save(catalog);
-
-        logger.debug("Catalogo criado com sucesso: {}", catalog.getId());
-
-        return catalogResponseMapper.toResponse(savedCatalog);
-    }
-
-    /**
-     * Atualiza um catálogo.
-     *
-     * @param id Identificador do catálogo
-     * @param catalogRequest Catálogo a ser atualizado
-     * @return Catálogo salvo com identificadores atualizados
-     */
-    @Override
-    @Transactional
-    public CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest) {
-
-        var existingCatalog = catalogRepository.findById(id);
-
-        logger.debug("Atualizando catalogo: {}", id);
-
-        if (existingCatalog.isEmpty()) {
-            logger.warn("Tentativa de atualizar catalogo inexistente. Id: {}", id);
-            throw new CatalogNotFoundException("Catalogo", id);
-        }
-        else if (catalogRepository.existsByNameAndIdNot(catalogRequest.getName(), id)) {
-            logger.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogRequest.getName());
-            throw new CatalogConflictException("Catalogo", "Nome", catalogRequest.getName());
-        }
-
-        BeanUtils.copyProperties(catalogRequest, existingCatalog.get());
-
-        existingCatalog.get().markUpdatedNow();
-        var updatedCatalog = catalogRepository.save(existingCatalog.get());
-
-        logger.debug("Catalogo atualizado com sucesso: {}", id);
-
-        return catalogResponseMapper.toResponse(updatedCatalog);
-    }
 
     /**
      * Busca um catálogo pelo seu ID.
