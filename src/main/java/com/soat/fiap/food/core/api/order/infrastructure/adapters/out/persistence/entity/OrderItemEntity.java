@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity;
 
 import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

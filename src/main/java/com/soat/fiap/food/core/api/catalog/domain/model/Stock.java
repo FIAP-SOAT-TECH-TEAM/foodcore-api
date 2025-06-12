@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.catalog.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.StockException;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

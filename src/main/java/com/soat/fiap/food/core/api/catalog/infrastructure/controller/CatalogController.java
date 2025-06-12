@@ -8,7 +8,7 @@ import com.soat.fiap.food.core.api.catalog.application.dto.response.CategoryResp
 import com.soat.fiap.food.core.api.catalog.application.dto.response.ProductResponse;
 import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.application.services.CatalogService;
-import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

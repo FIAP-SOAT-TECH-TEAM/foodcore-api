@@ -5,9 +5,8 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryConflictExc
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
 import lombok.Data;
-import org.springframework.data.relational.core.sql.In;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,7 +1,10 @@
 package com.soat.fiap.food.core.api.catalog.application.usecases.product;
 
+import com.soat.fiap.food.core.api.catalog.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
-import org.springframework.web.multipart.MultipartFile;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -9,12 +12,44 @@ import java.util.List;
  * Caso de uso: Atualizar quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
  *
  */
-public interface UpdateProductStockForCreatedItemsUseCase {
+@Slf4j
+public class UpdateProductStockForCreatedItemsUseCase {
+
+    private final CatalogGateway catalogGateway;
+
+    public UpdateProductStockForCreatedItemsUseCase(
+            CatalogGateway catalogGateway
+    ) {
+        this.catalogGateway = catalogGateway;
+    }
 
     /**
      * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
      *
      * @param orderItemCreatedEvents eventos de criação de item de pedido
      */
-    void updateStockForCreatedItems(List<OrderItemCreatedEvent> orderItemCreatedEvents);
+    public void updateStockForCreatedItems(List<OrderItemCreatedEvent> orderItemCreatedEvents) {
+        if (orderItemCreatedEvents.isEmpty()) {
+            throw new OrderItemNotFoundException("Lista de itens de pedido está vazia. Não é possível recuperar produtos para atualização de quantidade em estoque.");
+        }
+
+        for (OrderItemCreatedEvent orderItemCreatedEvent : orderItemCreatedEvents) {
+            var catalog = catalogGateway.findByProductId(orderItemCreatedEvent.getProductId());
+            if (catalog.isEmpty()) {
+                throw new CatalogNotFoundException("Catálogo do produto do item de pedido não encontrado. Não é possível atualizar quantidade em estoque.");
+            }
+
+            var currentProductQuantity = catalog.get().getProductStockQuantity(orderItemCreatedEvent.getProductId());
+            var newProductQuantity =  currentProductQuantity - orderItemCreatedEvent.getQuantity();
+
+            log.info("Iniciando atualização de quantidade em estoque: ProductId {}, atual: {}, nova: {}", orderItemCreatedEvent.getProductId(), currentProductQuantity, newProductQuantity);
+
+            catalog.get().updateProductStockQuantity(orderItemCreatedEvent.getProductId(), newProductQuantity);
+
+            catalogGateway.save(catalog.get());
+
+            log.info("Atualização de quantidade em estoque realizada com sucesso! ProductId {}", orderItemCreatedEvent.getProductId());
+        }
+
+    }
 }

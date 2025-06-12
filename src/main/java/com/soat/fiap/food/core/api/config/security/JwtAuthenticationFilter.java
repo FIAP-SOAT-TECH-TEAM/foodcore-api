@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.config.security;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.adapters.out.auth.JwtTokenProvider;
+import com.soat.fiap.food.core.api.shared.infrastructure.auth.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.user.domain.model;
 
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
 import com.soat.fiap.food.core.api.user.domain.exceptions.UserException;
 
 import lombok.Data;

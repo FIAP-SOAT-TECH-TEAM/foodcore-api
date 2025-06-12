@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.interfaces.gateways;
 
 import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.infrastructure.shared.DataSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,15 @@ import java.util.Optional;
 /**
  * Gateway para persistência do agregado Catálogo.
  */
-public interface CatalogGateway {
+public class CatalogGateway {
+
+    private final DataSource dataSource;
+
+    public CatalogGateway(
+            DataSource dataSource
+    ) {
+        this.dataSource = dataSource;
+    }
 
     /**
      * Salva o agregado Catálogo.
@@ -16,55 +25,69 @@ public interface CatalogGateway {
      * @param catalog Agregado Catálogo a ser salvo
      * @return Agregado salvo com identificadores atualizados
      */
-    Catalog save(Catalog catalog);
+    public Catalog save(Catalog catalog) {
+        return dataSource.save(catalog);
+    }
 
     /**
-     * Busca um catálogo por ID.
+     * Busca um catálogo pelo ID.
      *
      * @param id ID do catálogo
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
-    Optional<Catalog> findById(Long id);
+    public Optional<Catalog> findById(Long id) {
+        return dataSource.findById(id);
+    }
 
     /**
-     * Busca um catálogo por nome.
+     * Busca um catálogo pelo nome.
      *
-     * @param name Nome do catalogo
+     * @param name nome do catálogo
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
-    Optional<Catalog> findByName(String name);
+    public Optional<Catalog> findByName(String name) {
+        return dataSource.findByName(name);
+    }
 
     /**
-     * Lista todos os catálogos.
+     * Lista todos os catálogos persistidos.
      *
      * @return Lista de catálogos
      */
-    List<Catalog> findAll();
+    public List<Catalog> findAll() {
+        return dataSource.findAll();
+    }
 
     /**
      * Verifica se existe um catalogo com um determinado ID.
      *
      * @param id ID do catálogo
-     * @return true se existir um catalogo com um determinado ID, false caso contrário
+     * @return true se existir um catálogo com um determinado ID, false caso contrário
      */
-    boolean existsById(Long id);
+    public boolean existsById(Long id) {
+        return dataSource.existsById(id);
+    }
 
     /**
      * Verifica se existe um catalogo com um determinado nome.
      *
      * @param name Nome do catálogo
-     * @return true se existir um catalogo com um determinado nome, false caso contrário
+     * @return true se existir um catálogo com um determinado nome, false caso contrário
      */
-    boolean existsByName(String name);
+    public boolean existsByName(String name) {
+        return dataSource.existsByName(name);
+    }
 
     /**
      * Verifica se existe outro catálogo com o mesmo nome, mas com ID diferente.
      *
      * @param name Nome do catálogo
-     * @param id   ID do catálogo a ser desconsiderado na verificação
+     * @param id   ID do catálogo que está sendo atualizado
      * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
      */
-    boolean existsByNameAndIdNot(String name, Long id);
+    public boolean existsByNameAndIdNot(String name, Long id) {
+        return dataSource.existsByNameAndIdNot(name, id);
+    }
 
     /**
      * Verifica se existe pelo menos uma categoria associada ao catálogo com o ID informado.
@@ -72,19 +95,25 @@ public interface CatalogGateway {
      * @param catalogId ID do catálogo
      * @return true se houver ao menos uma categoria associada, false caso contrário
      */
-    boolean existsCategoryByCatalogId(Long catalogId);
+    public boolean existsCategoryByCatalogId(Long catalogId) {
+        return dataSource.existsCategoryByCatalogId(catalogId);
+    }
 
     /**
-     * Verifica se um produto existe pelo id.
+     * Remove um catálogo com base em seu ID.
      *
      * @param id ID do catálogo a ser removido
      */
-    void delete(Long id);
+    public void delete(Long id) {
+        dataSource.delete(id);
+    }
 
     /**
      * Retorna um catalogo pelo ID do produto
      *
      * @param productId ID do produto
      */
-    Optional<Catalog> findByProductId (Long productId);
+    public Optional<Catalog> findByProductId(Long productId) {
+        return dataSource.findByProductId(productId);
+    }
 }

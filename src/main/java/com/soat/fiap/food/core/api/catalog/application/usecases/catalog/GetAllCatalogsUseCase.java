@@ -1,6 +1,9 @@
 package com.soat.fiap.food.core.api.catalog.application.usecases.catalog;
 
 import com.soat.fiap.food.core.api.catalog.application.dto.response.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.application.mapper.response.CatalogResponseMapper;
+import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -8,12 +11,30 @@ import java.util.List;
  * Caso de uso: Obter todos catálogo.
  *
  */
-public interface GetAllCatalogsUseCase {
+@Slf4j
+public class GetAllCatalogsUseCase {
+
+    private final CatalogResponseMapper catalogResponseMapper;
+    private final CatalogGateway catalogGateway;
+
+    public GetAllCatalogsUseCase(
+            CatalogResponseMapper catalogResponseMapper,
+            CatalogGateway catalogGateway
+    ) {
+        this.catalogResponseMapper = catalogResponseMapper;
+        this.catalogGateway = catalogGateway;
+    }
 
     /**
-     * Lista todos os catálogos disponíveis.
+     * Lista todos os catálogos.
      *
      * @return Lista contendo todos os catálogos
      */
-    List<CatalogResponse> getAllCatalogs();
+    public List<CatalogResponse> getAllCatalogs() {
+        log.debug("Buscando todos os catálogos");
+        var existingCatalogs = catalogGateway.findAll();
+        log.debug("Encontradas {} catalogos", existingCatalogs.size());
+
+        return catalogResponseMapper.toResponseList(existingCatalogs);
+    }
 }

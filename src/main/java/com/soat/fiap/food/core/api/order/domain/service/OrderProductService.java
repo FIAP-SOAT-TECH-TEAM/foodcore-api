@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.order.domain.service;
 
 import com.soat.fiap.food.core.api.catalog.domain.exceptions.ProductNotFoundException;
-import com.soat.fiap.food.core.api.catalog.interfaces.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;

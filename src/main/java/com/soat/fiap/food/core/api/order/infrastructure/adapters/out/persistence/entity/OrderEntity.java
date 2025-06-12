@@ -3,12 +3,11 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.converter.OrderNumberConverter;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
