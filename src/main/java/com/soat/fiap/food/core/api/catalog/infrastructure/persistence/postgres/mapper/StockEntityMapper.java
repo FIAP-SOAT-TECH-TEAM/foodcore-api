@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper;
 
-import com.soat.fiap.food.core.api.catalog.domain.model.Stock;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
 import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.StockEntity;
 import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;

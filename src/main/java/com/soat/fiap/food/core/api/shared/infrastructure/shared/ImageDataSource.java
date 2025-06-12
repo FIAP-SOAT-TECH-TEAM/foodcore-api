@@ -1,10 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.shared;
 
-import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * DataSource para persistência de imagens.

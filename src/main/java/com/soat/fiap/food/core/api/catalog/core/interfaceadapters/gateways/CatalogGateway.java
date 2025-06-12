@@ -1,29 +1,22 @@
-package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.repository;
+package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CatalogEntity;
-import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper.CatalogEntityMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.shared.DataSource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
- * Implementação concreta: DataSource para persistência do agregado Catálogo.
+ * Gateway para persistência do agregado Catálogo.
  */
-public class PostgresDataSource implements DataSource {
+public class CatalogGateway {
 
-    private final SpringDataCatalogRepository springDataCatalogRepository;
-    private final CatalogEntityMapper catalogEntityMapper;
+    private final DataSource dataSource;
 
-    public PostgresDataSource(
-            SpringDataCatalogRepository springDataCatalogRepository,
-            CatalogEntityMapper catalogEntityMapper
+    public CatalogGateway(
+            DataSource dataSource
     ) {
-        this.springDataCatalogRepository = springDataCatalogRepository;
-        this.catalogEntityMapper = catalogEntityMapper;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -32,12 +25,8 @@ public class PostgresDataSource implements DataSource {
      * @param catalog Agregado Catálogo a ser salvo
      * @return Agregado salvo com identificadores atualizados
      */
-    @Override
-    @Transactional
     public Catalog save(Catalog catalog) {
-        CatalogEntity entity = catalogEntityMapper.toEntity(catalog);
-        CatalogEntity saved = springDataCatalogRepository.save(entity);
-        return catalogEntityMapper.toDomain(saved);
+        return dataSource.save(catalog);
     }
 
     /**
@@ -46,11 +35,8 @@ public class PostgresDataSource implements DataSource {
      * @param id ID do catálogo
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
-    @Override
-    @Transactional(readOnly = true)
     public Optional<Catalog> findById(Long id) {
-        return springDataCatalogRepository.findById(id)
-                .map(catalogEntityMapper::toDomain);
+        return dataSource.findById(id);
     }
 
     /**
@@ -59,11 +45,8 @@ public class PostgresDataSource implements DataSource {
      * @param name nome do catálogo
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
-    @Override
-    @Transactional(readOnly = true)
     public Optional<Catalog> findByName(String name) {
-        return springDataCatalogRepository.findByName(name)
-                .map(catalogEntityMapper::toDomain);
+        return dataSource.findByName(name);
     }
 
     /**
@@ -71,12 +54,8 @@ public class PostgresDataSource implements DataSource {
      *
      * @return Lista de catálogos
      */
-    @Override
-    @Transactional(readOnly = true)
     public List<Catalog> findAll() {
-        return springDataCatalogRepository.findAll().stream()
-                .map(catalogEntityMapper::toDomain)
-                .collect(Collectors.toList());
+        return dataSource.findAll();
     }
 
     /**
@@ -85,10 +64,8 @@ public class PostgresDataSource implements DataSource {
      * @param id ID do catálogo
      * @return true se existir um catálogo com um determinado ID, false caso contrário
      */
-    @Override
-    @Transactional(readOnly = true)
     public boolean existsById(Long id) {
-        return springDataCatalogRepository.existsById(id);
+        return dataSource.existsById(id);
     }
 
     /**
@@ -97,10 +74,8 @@ public class PostgresDataSource implements DataSource {
      * @param name Nome do catálogo
      * @return true se existir um catálogo com um determinado nome, false caso contrário
      */
-    @Override
-    @Transactional(readOnly = true)
     public boolean existsByName(String name) {
-        return springDataCatalogRepository.existsByName(name);
+        return dataSource.existsByName(name);
     }
 
     /**
@@ -110,10 +85,8 @@ public class PostgresDataSource implements DataSource {
      * @param id   ID do catálogo que está sendo atualizado
      * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
      */
-    @Override
-    @Transactional(readOnly = true)
     public boolean existsByNameAndIdNot(String name, Long id) {
-        return springDataCatalogRepository.existsByNameAndIdNot(name, id);
+        return dataSource.existsByNameAndIdNot(name, id);
     }
 
     /**
@@ -122,10 +95,8 @@ public class PostgresDataSource implements DataSource {
      * @param catalogId ID do catálogo
      * @return true se houver ao menos uma categoria associada, false caso contrário
      */
-    @Override
-    @Transactional(readOnly = true)
     public boolean existsCategoryByCatalogId(Long catalogId) {
-        return springDataCatalogRepository.existsCategoryByCatalogId(catalogId);
+        return dataSource.existsCategoryByCatalogId(catalogId);
     }
 
     /**
@@ -133,10 +104,8 @@ public class PostgresDataSource implements DataSource {
      *
      * @param id ID do catálogo a ser removido
      */
-    @Override
-    @Transactional
     public void delete(Long id) {
-        springDataCatalogRepository.deleteById(id);
+        dataSource.delete(id);
     }
 
     /**
@@ -144,9 +113,7 @@ public class PostgresDataSource implements DataSource {
      *
      * @param productId ID do produto
      */
-    @Override
-    @Transactional(readOnly = true)
     public Optional<Catalog> findByProductId(Long productId) {
-        return springDataCatalogRepository.findByProductId(productId).map(catalogEntityMapper::toDomain);
+        return dataSource.findByProductId(productId);
     }
 }

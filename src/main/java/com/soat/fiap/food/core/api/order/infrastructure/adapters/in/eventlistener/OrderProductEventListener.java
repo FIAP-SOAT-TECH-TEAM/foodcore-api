@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.in.eventlistener;
 
-import com.soat.fiap.food.core.api.catalog.domain.events.ProductCreatedEvent;
+import com.soat.fiap.food.core.api.catalog.core.domain.events.ProductCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

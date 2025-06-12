@@ -1,0 +1,44 @@
+package com.soat.fiap.food.core.api.catalog.core.application.usecases.category;
+
+import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Caso de uso: Remover categoria pelo seu identificador.
+ *
+ */
+@Slf4j
+public class DeleteCategoryUseCase {
+
+    private final CatalogGateway catalogGateway;
+
+    public DeleteCategoryUseCase(
+            CatalogGateway catalogGateway
+    ) {
+        this.catalogGateway = catalogGateway;
+    }
+
+    /**
+     * Exclui uma categoria de um catálogo.
+     *
+     * @param catalogId  ID do catálogo
+     * @param categoryId ID da categoria
+     */
+    public void deleteCategory(Long catalogId, Long categoryId) {
+        log.debug("Excluindo categoria de id: {} do catalogo de id: {}", categoryId, catalogId);
+
+        var catalog = catalogGateway.findById(catalogId);
+
+        if (catalog.isEmpty()) {
+            log.warn("Tentativa de excluir categoria com catálogo inexistente. Id: {}", catalogId);
+            throw new CatalogNotFoundException("Catalogo", catalogId);
+        }
+
+        catalog.get().removeCategory(categoryId, true);
+
+        catalogGateway.save(catalog.get());
+
+        log.debug("Categoria excluída com sucesso: {}", categoryId);
+    }
+}

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.shared;
 
-import com.soat.fiap.food.core.api.catalog.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 
 import java.util.List;
 import java.util.Optional;
