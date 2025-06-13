@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.entity;
 
 
-import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

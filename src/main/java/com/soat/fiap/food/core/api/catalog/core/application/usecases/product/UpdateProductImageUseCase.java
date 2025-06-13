@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.application.usecases.product;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.shared.interfaces.gateways.ImageStorageGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 

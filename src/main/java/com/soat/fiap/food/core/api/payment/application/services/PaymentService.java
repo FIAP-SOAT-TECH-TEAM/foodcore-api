@@ -18,7 +18,7 @@ import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundExce
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
-import com.soat.fiap.food.core.api.shared.application.ports.in.AccessManager;
+import com.soat.fiap.food.core.api.shared.core.application.ports.in.AccessManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.auth;
 
-import com.soat.fiap.food.core.api.shared.application.ports.out.AuthenticatedUserProvider;
+import com.soat.fiap.food.core.api.shared.core.application.ports.out.AuthenticatedUserProvider;
 import com.soat.fiap.food.core.api.shared.exception.JwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

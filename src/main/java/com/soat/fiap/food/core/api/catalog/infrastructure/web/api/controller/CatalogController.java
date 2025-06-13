@@ -1,9 +1,11 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.web.api.controller;
 
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.web.api.controller.SaveCatalogController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.DeleteCatalogController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.SaveCatalogController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.UpdateCatalogController;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CatalogResponse;
-import com.soat.fiap.food.core.api.catalog.infrastructure.shared.DataSource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,7 +29,7 @@ import java.util.List;
 @Slf4j
 public class CatalogController {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public CatalogController(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -115,7 +117,7 @@ public class CatalogController {
             @PathVariable Long id,
             @Valid @RequestBody CatalogRequest request) {
         log.debug("Requisição para atualizar catálogo: {}", id);
-        var response = catalogUseCase.updateCatalog(id, request);
+        var response = UpdateCatalogController.updateCatalog(id, request, dataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -136,7 +138,7 @@ public class CatalogController {
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
         log.debug("Requisição para excluir catálogo: {}", id);
-        catalogUseCase.deleteCatalog(id);
+        DeleteCatalogController.deleteCatalog(id, dataSource);
         return ResponseEntity.noContent().build();
     }
 }

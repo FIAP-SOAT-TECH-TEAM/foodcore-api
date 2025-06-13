@@ -8,7 +8,7 @@ import com.soat.fiap.food.core.api.catalog.domain.exceptions.*;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
-import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Getter;
 import lombok.Setter;
 

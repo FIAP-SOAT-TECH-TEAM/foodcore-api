@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.shared.EventPublisher;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.EventPublisher;
 
 /**
  * Gateway pela publicação de eventos de domínio.

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.mapper;
 
-import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import org.mapstruct.Named;
 
 import java.time.LocalDateTime;

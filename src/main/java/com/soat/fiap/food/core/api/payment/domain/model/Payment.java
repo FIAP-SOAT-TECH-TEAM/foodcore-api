@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.domain.vo.QrCode;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
-import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Data;
 
 import java.math.BigDecimal;

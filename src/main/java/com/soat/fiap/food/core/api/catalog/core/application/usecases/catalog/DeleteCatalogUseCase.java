@@ -12,32 +12,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DeleteCatalogUseCase {
 
-    private final CatalogGateway catalogGateway;
-
-    public DeleteCatalogUseCase(
-            CatalogGateway catalogGateway
-    ) {
-        this.catalogGateway = catalogGateway;
-    }
-
     /**
      * Remove um catálogo pelo seu ID.
      *
      * @param id Identificador do catálogo a ser removido
+     * @param gateway Gateway para comunicação com o mundo exterior
      */
-    public void deleteCatalog(Long id) {
+    public static void deleteCatalog(Long id, CatalogGateway gateway) {
         log.debug("Excluindo catalogo de id: {}", id);
 
-        if (!catalogGateway.existsById(id)) {
+        if (!gateway.existsById(id)) {
             log.warn("Tentativa de excluir catalogo inexistente. Id: {}", id);
             throw new CatalogNotFoundException("Catalogo", id);
         }
-        if (catalogGateway.existsCategoryByCatalogId(id)) {
+        if (gateway.existsCategoryByCatalogId(id)) {
             log.warn("Tentativa de excluir catalogo com categorias associadas. Id: {}", id);
             throw new CatalogConflictException("Não é possível excluir este catalogo porque existem categorias associadas a ele");
         }
 
-        catalogGateway.delete(id);
+        gateway.delete(id);
 
         log.debug("Catalogo excluido com sucesso: {}", id);
     }

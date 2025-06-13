@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.
 
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.shared.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

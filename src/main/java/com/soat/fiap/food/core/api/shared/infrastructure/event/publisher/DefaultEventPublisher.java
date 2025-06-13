@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.event.publisher;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.shared.EventPublisher;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.EventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
 
 /**

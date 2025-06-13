@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.persistence.postgres.mapper.CatalogEntityMapper;
-import com.soat.fiap.food.core.api.catalog.infrastructure.shared.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

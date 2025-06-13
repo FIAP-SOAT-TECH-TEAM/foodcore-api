@@ -5,10 +5,9 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.soat.fiap.food.core.api.shared.infrastructure.persistence.azureblobstorage.config.AzureStorageProperties;
-import com.soat.fiap.food.core.api.shared.infrastructure.shared.ImageDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.ImageDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
