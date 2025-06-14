@@ -33,9 +33,9 @@ public class UpdateCatalogUseCase {
             log.warn("Tentativa de atualizar catalogo inexistente. Id: {}", id);
             throw new CatalogNotFoundException("Catalogo", id);
         }
-        else if (gateway.existsByNameAndIdNot(catalogInput.getName(), id)) {
-            log.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogInput.getName());
-            throw new CatalogConflictException("Catalogo", "Nome", catalogInput.getName());
+        else if (gateway.existsByNameAndIdNot(catalogInput.name(), id)) {
+            log.warn("Tentativa de cadastrar catalogo com nome repetido. Nome: {}", catalogInput.name());
+            throw new CatalogConflictException("Catalogo", "Nome", catalogInput.name());
         }
 
         BeanUtils.copyProperties(catalogInput, existingCatalog.get());

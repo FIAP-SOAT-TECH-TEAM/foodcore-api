@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
 
 import java.util.List;
 import java.util.Optional;

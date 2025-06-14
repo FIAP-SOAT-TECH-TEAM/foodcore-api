@@ -6,7 +6,7 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductConflic
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -250,7 +250,7 @@ public class Category {
     }
 
     /**
-     * Obtem a data de criação de um catalogo.
+     * Obtem a data de criação de uma categoria.
      *
      */
     public LocalDateTime getCreatedAt() {
@@ -258,7 +258,7 @@ public class Category {
     }
 
     /**
-     * Obtem a data de última atualização de um catalogo.
+     * Obtem a data de última atualização de uma categoria.
      *
      */
     public LocalDateTime getUpdatedAt() {

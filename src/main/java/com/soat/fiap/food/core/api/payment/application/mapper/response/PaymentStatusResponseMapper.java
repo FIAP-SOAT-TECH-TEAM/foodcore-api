@@ -2,8 +2,8 @@ package com.soat.fiap.food.core.api.payment.application.mapper.response;
 
 import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 

@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.catalog.GetCatalogByIdUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.CatalogPresenter;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**

@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.CatalogInput;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CatalogRequest;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 
 /**
  * Classe utilitária responsável por mapear objetos entre diferentes camadas
@@ -32,6 +32,6 @@ public class CatalogMapper {
      * @return Uma entidade {@link Catalog} representando o modelo de domínio.
      */
     public static Catalog toDomain(CatalogInput input) {
-        return new Catalog(input.getName());
+        return new Catalog(input.name());
     }
 }

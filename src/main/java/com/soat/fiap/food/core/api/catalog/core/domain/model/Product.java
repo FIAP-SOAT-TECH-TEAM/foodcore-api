@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -158,7 +158,7 @@ public class Product {
      *
      * @return descrição do produto
      */
-    String getDescription() {
+    public String getDescription() {
         return this.details.description();
     }
 
@@ -215,6 +215,22 @@ public class Product {
      */
     public boolean categoryisActive() {
         return category.isActive();
+    }
+
+    /**
+     * Obtem a data de criação de um produto.
+     *
+     */
+    public LocalDateTime getCreatedAt() {
+        return auditInfo.getCreatedAt();
+    }
+
+    /**
+     * Obtem a data de última atualização de um produto.
+     *
+     */
+    public LocalDateTime getUpdatedAt() {
+        return auditInfo.getUpdatedAt();
     }
 
     /**

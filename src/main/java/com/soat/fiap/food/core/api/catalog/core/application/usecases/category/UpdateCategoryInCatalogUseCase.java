@@ -34,17 +34,17 @@ public class UpdateCategoryInCatalogUseCase {
             log.warn("Tentativa de atualizar categoria com catálogo inexistente. Id: {}", catalogId);
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
-        else if (!categoryInput.getCatalogId().equals(catalogId)) {
+        else if (!categoryInput.catalogId().equals(catalogId)) {
 
-            var newCatalog = gateway.findById(categoryInput.getCatalogId());
+            var newCatalog = gateway.findById(categoryInput.catalogId());
 
             if (newCatalog.isEmpty()) {
-                log.warn("Tentativa de mover categoria para catálogo inexistente. Id: {}", categoryInput.getCatalogId());
-                throw new CatalogNotFoundException("Catalogo", categoryInput.getCatalogId());
+                log.warn("Tentativa de mover categoria para catálogo inexistente. Id: {}", categoryInput.catalogId());
+                throw new CatalogNotFoundException("Catalogo", categoryInput.catalogId());
             }
 
             existingCatalog.get().moveCatalogCategory(newCatalog.get(), categoryId);
-            log.debug("Categoria movida com sucesso para catálogo: {}", categoryInput.getCatalogId());
+            log.debug("Categoria movida com sucesso para catálogo: {}", categoryInput.catalogId());
 
             newCatalog.get().updateCategory(category);
 

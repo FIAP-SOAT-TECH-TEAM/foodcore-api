@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.domain.model;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.StockException;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +57,22 @@ public class Stock {
             throw new StockException("A quantidade de estoque deve ser positiva");
         }
         this.quantity = quantity;
+    }
+
+    /**
+     * Obtem a data de criação de um estoque.
+     *
+     */
+    public LocalDateTime getCreatedAt() {
+        return auditInfo.getCreatedAt();
+    }
+
+    /**
+     * Obtem a data de última atualização de um estoque.
+     *
+     */
+    public LocalDateTime getUpdatedAt() {
+        return auditInfo.getUpdatedAt();
     }
 
     /**

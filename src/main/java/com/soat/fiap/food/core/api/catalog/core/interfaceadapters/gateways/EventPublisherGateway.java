@@ -1,18 +1,18 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.common.EventPublisher;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 
 /**
  * Gateway pela publicação de eventos de domínio.
  */
 public class EventPublisherGateway {
 
-    private final EventPublisher eventPublisher;
+    private final EventPublisherSource eventPublisherSource;
 
     public EventPublisherGateway(
-            EventPublisher eventPublisher
+            EventPublisherSource eventPublisherSource
     ) {
-        this.eventPublisher = eventPublisher;
+        this.eventPublisherSource = eventPublisherSource;
     }
 
     /**
@@ -21,6 +21,6 @@ public class EventPublisherGateway {
      * @param event Evento de domínio que será publicado
      */
     public void publishEvent(Object event) {
-        eventPublisher.publishEvent(event);
+        eventPublisherSource.publishEvent(event);
     }
 }

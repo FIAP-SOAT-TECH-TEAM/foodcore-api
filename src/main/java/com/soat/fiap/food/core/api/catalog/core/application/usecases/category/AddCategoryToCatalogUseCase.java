@@ -22,15 +22,15 @@ public class AddCategoryToCatalogUseCase {
      * @return Catalogo com a categoria adicionada
      */
     public static Catalog addCategoryToCatalog(CategoryInput categoryInput, CatalogGateway gateway) {
+        log.debug("Criando categoria: {}", categoryInput.name());
+
         var category = CategoryMapper.toDomain(categoryInput);
-        var catalog = gateway.findById(categoryInput.getCatalogId());
+        var catalog = gateway.findById(categoryInput.catalogId());
 
         if (catalog.isEmpty()) {
-            log.warn("Tentativa de cadastrar categoria com catalogo inexistente. ID catalogo: {}", categoryInput.getCatalogId());
-            throw new CatalogNotFoundException("Catalogo", categoryInput.getCatalogId());
+            log.warn("Tentativa de cadastrar categoria com catalogo inexistente. ID catalogo: {}", categoryInput.catalogId());
+            throw new CatalogNotFoundException("Catalogo", categoryInput.catalogId());
         }
-
-        log.debug("Criando categoria: {}", categoryInput.getName());
 
         catalog.get().addCategory(category);
 

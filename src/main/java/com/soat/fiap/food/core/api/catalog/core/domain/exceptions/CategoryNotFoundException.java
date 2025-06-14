@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.core.domain.exceptions;
 
-import com.soat.fiap.food.core.api.shared.exception.ResourceConflictException;
-import com.soat.fiap.food.core.api.shared.exception.ResourceNotFoundException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
 
 /**
  * Exceção lançada quando uma categoria não é encontrada

@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.CategoryInput
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 
 /**
  * Classe utilitária responsável por mapear objetos entre diferentes camadas
@@ -41,10 +41,10 @@ public class CategoryMapper {
      */
     public static Category toDomain(CategoryInput input) {
         return new Category(
-                new Details(input.getName(), input.getDescription()),
+                new Details(input.name(), input.description()),
                 new ImageUrl(""),
-                input.getDisplayOrder(),
-                input.isActive()
+                input.displayOrder(),
+                input.active()
         );
     }
 }

@@ -1,55 +1,43 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.product;
 
+import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductStockUpdateInput;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
 /**
- * Caso de uso: Atualizar quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
+ * Caso de uso: Atualizar quantidade em estoque de um produto de acordo com a quantidade solicitada em um pedido.
  *
  */
 @Slf4j
 public class UpdateProductStockForCreatedItemsUseCase {
 
-    private final CatalogGateway catalogGateway;
-
-    public UpdateProductStockForCreatedItemsUseCase(
-            CatalogGateway catalogGateway
-    ) {
-        this.catalogGateway = catalogGateway;
-    }
-
     /**
-     * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
+     * Atualiza quantidade em estoque de um produto de acordo com a quantidade solicitada em um pedido.
      *
-     * @param orderItemCreatedEvents eventos de criação de item de pedido
+     * @param productStockItemInput item do pedido
+     * @param gateway Gateway de catalogo para comunicação com o mundo exterior
+     * @return Catalogo com o estoque de produto atualizado
      */
-    public void updateStockForCreatedItems(List<OrderItemCreatedEvent> orderItemCreatedEvents) {
-        if (orderItemCreatedEvents.isEmpty()) {
-            throw new OrderItemNotFoundException("Lista de itens de pedido está vazia. Não é possível recuperar produtos para atualização de quantidade em estoque.");
+    public static Catalog updateStockForCreatedItem(ProductStockUpdateInput.ProductStockItemInput productStockItemInput, CatalogGateway gateway) {
+        if (productStockItemInput == null) {
+            throw new OrderItemNotFoundException("Itens de pedido é nulo. Não é possível efetuar atualização de quantidade em estoque.");
         }
 
-        for (OrderItemCreatedEvent orderItemCreatedEvent : orderItemCreatedEvents) {
-            var catalog = catalogGateway.findByProductId(orderItemCreatedEvent.getProductId());
-            if (catalog.isEmpty()) {
-                throw new CatalogNotFoundException("Catálogo do produto do item de pedido não encontrado. Não é possível atualizar quantidade em estoque.");
-            }
-
-            var currentProductQuantity = catalog.get().getProductStockQuantity(orderItemCreatedEvent.getProductId());
-            var newProductQuantity =  currentProductQuantity - orderItemCreatedEvent.getQuantity();
-
-            log.info("Iniciando atualização de quantidade em estoque: ProductId {}, atual: {}, nova: {}", orderItemCreatedEvent.getProductId(), currentProductQuantity, newProductQuantity);
-
-            catalog.get().updateProductStockQuantity(orderItemCreatedEvent.getProductId(), newProductQuantity);
-
-            catalogGateway.save(catalog.get());
-
-            log.info("Atualização de quantidade em estoque realizada com sucesso! ProductId {}", orderItemCreatedEvent.getProductId());
+        var catalog = gateway.findByProductId(productStockItemInput.productId());
+        if (catalog.isEmpty()) {
+            throw new CatalogNotFoundException("Catálogo do produto do item de pedido não encontrado. Não é possível atualizar quantidade em estoque.");
         }
 
+        var currentProductQuantity = catalog.get().getProductStockQuantity(productStockItemInput.productId());
+        var newProductQuantity =  currentProductQuantity - productStockItemInput.quantity();
+
+        log.info("Iniciando atualização de quantidade em estoque: ProductId {}, atual: {}, nova: {}", productStockItemInput.productId(), currentProductQuantity, newProductQuantity);
+
+        catalog.get().updateProductStockQuantity(productStockItemInput.productId(), newProductQuantity);
+
+        return catalog.get();
     }
 }

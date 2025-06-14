@@ -4,9 +4,9 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Categ
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryInCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.CategoryPresenter;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CategoryRequest;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CategoryResponse;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.common.ImageDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.core.domain.vo;
 
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

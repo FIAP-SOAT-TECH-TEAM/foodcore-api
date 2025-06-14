@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.RemoveCategoryFromCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 /**

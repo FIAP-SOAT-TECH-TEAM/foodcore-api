@@ -4,8 +4,8 @@ import com.soat.fiap.food.core.api.order.application.dto.response.OrderItemRespo
 import com.soat.fiap.food.core.api.order.domain.model.OrderItem;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.shared.mapper.AuditInfoMapper;
-import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 import org.mapstruct.*;
 
 import java.util.List;

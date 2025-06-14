@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.order.domain.model;
 
 import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.*;
 import java.math.BigDecimal;

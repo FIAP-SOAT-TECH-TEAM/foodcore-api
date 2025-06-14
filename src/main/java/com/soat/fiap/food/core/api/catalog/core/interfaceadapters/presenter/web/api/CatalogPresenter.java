@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CatalogResponse;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.core.domain.exceptions;
 
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 
 /**
  * Exceção lançada quando uma regra de negócio referente a entidade estoque é violada

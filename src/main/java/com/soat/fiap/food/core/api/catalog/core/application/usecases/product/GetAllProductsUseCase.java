@@ -1,8 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.product;
 
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.ProductResponse;
-import com.soat.fiap.food.core.api.catalog.core.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,27 +14,16 @@ import java.util.List;
 @Slf4j
 public class GetAllProductsUseCase {
 
-    private final ProductResponseMapper productResponseMapper;
-    private final CatalogGateway catalogGateway;
-
-    public GetAllProductsUseCase(
-            ProductResponseMapper productResponseMapper,
-            CatalogGateway catalogGateway
-    ) {
-        this.productResponseMapper = productResponseMapper;
-        this.catalogGateway = catalogGateway;
-    }
-
     /**
      * Lista todos os produtos de uma categoria.
      *
      * @param catalogId ID do catálogo
+     * @param categoryId ID da categoria
+     * @param gateway Gateway para comunicação com o mundo exterior
      * @return Lista de produtos
      */
-    public List<ProductResponse> getAllProducts(Long catalogId, Long categoryId) {
-        log.debug("Buscando todos os produtos da categoria de id: {}", categoryId);
-
-        var catalog = catalogGateway.findById(catalogId);
+    public static List<Product> getAllProducts(Long catalogId, Long categoryId, CatalogGateway gateway) {
+        var catalog = gateway.findById(catalogId);
 
         if (catalog.isEmpty()) {
             log.warn("Catalogo não encontrado. Id: {}", catalogId);
@@ -46,6 +34,6 @@ public class GetAllProductsUseCase {
 
         log.debug("Encontrados {} produtos", products.size());
 
-        return productResponseMapper.toResponseList(products);
+        return products;
     }
 }

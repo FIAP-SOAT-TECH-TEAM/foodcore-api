@@ -3,11 +3,10 @@ package com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persiste
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.entity.PaymentEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.persistence.mapper.shared.QrCodeMapper;
-import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;

@@ -3,11 +3,10 @@ package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistenc
 import com.soat.fiap.food.core.api.order.domain.model.Order;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.mapper.shared.OrderNumberMapper;
-import com.soat.fiap.food.core.api.shared.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.mapper.DoIgnore;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;

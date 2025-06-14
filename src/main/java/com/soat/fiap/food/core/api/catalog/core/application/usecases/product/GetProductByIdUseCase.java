@@ -1,8 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.product;
 
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.ProductResponse;
-import com.soat.fiap.food.core.api.catalog.core.application.mapper.response.ProductResponseMapper;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,37 +12,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GetProductByIdUseCase {
 
-    private final ProductResponseMapper productResponseMapper;
-    private final CatalogGateway catalogGateway;
-
-    public GetProductByIdUseCase(
-            ProductResponseMapper productResponseMapper,
-            CatalogGateway catalogGateway
-    ) {
-        this.productResponseMapper = productResponseMapper;
-        this.catalogGateway = catalogGateway;
-    }
-
     /**
      * Busca um produto por ID dentro de uma categoria.
      *
      * @param catalogId  ID do catálogo
      * @param categoryId ID da categoria
      * @param productId  ID do produto
+     * @param gateway Gateway para comunicação com o mundo exterior
      * @return Produto encontrado
      */
-    public ProductResponse getProductById(Long catalogId, Long categoryId, Long productId) {
-        log.debug("Buscando produto de id: {} na categoria de id: {} no catalogo de id: {}", productId, categoryId, catalogId);
-
-        var catalog = catalogGateway.findById(catalogId);
+    public static Product getProductById(Long catalogId, Long categoryId, Long productId, CatalogGateway gateway) {
+        var catalog = gateway.findById(catalogId);
 
         if (catalog.isEmpty()) {
             log.warn("Catalogo não encontrado. Id: {}", catalogId);
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
 
-        var product = catalog.get().getProductFromCategoryById(categoryId, productId);
-
-        return productResponseMapper.toResponse(product);
+        return catalog.get().getProductFromCategoryById(categoryId, productId);
     }
 }

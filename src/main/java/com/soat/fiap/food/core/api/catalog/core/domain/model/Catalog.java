@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryConfli
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -271,7 +271,7 @@ public class Catalog {
      * Move um produto para uma nova categoria.
      *
      * @param newCategoryId ID da nova categoria que receberá o produto
-     * @param productId o ID do produto a ser movida
+     * @param productId o ID do produto a ser movido
      */
     public void moveCategoryProduct(Long currentCategoryId, Long newCategoryId, Long productId) {
 
