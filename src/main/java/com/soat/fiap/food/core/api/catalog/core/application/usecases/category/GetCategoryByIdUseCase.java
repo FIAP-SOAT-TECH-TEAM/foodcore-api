@@ -1,8 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.category;
 
-import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CategoryResponse;
-import com.soat.fiap.food.core.api.catalog.core.application.mapper.response.CategoryResponseMapper;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,36 +12,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GetCategoryByIdUseCase{
 
-    private final CategoryResponseMapper categoryResponseMapper;
-    private final CatalogGateway catalogGateway;
-
-    public GetCategoryByIdUseCase(
-            CategoryResponseMapper categoryResponseMapper,
-            CatalogGateway catalogGateway
-    ) {
-        this.categoryResponseMapper = categoryResponseMapper;
-        this.catalogGateway = catalogGateway;
-    }
-
     /**
      * Busca uma categoria por ID dentro de um catálogo.
      *
      * @param catalogId  ID do catálogo
      * @param categoryId ID da categoria
+     * @param gateway Gateway para comunicação com o mundo exterior
      * @return Categoria encontrada
      */
-    public CategoryResponse getCategoryById(Long catalogId, Long categoryId) {
-        log.debug("Buscando categoria de id: {} no catalogo de id: {}", categoryId, catalogId);
-
-        var catalog = catalogGateway.findById(catalogId);
+    public static Category getCategoryById(Long catalogId, Long categoryId, CatalogGateway gateway) {
+        var catalog = gateway.findById(catalogId);
 
         if (catalog.isEmpty()) {
             log.warn("Catalogo não encontrado. Id: {}", catalogId);
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
 
-        var category = catalog.get().getCategoryById(categoryId);
-
-        return categoryResponseMapper.toResponse(category);
+        return catalog.get().getCategoryById(categoryId);
     }
 }

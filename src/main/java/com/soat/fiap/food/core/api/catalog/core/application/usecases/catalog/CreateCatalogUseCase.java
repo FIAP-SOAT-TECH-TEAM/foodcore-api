@@ -21,7 +21,7 @@ public class CreateCatalogUseCase {
      * @param gateway Gateway para comunicação com o mundo exterior
      * @return Catálogo criado
      */
-    public static Catalog createCatalogUseCase(CatalogInput catalogInput, CatalogGateway gateway) {
+    public static Catalog createCatalog(CatalogInput catalogInput, CatalogGateway gateway) {
 
         var catalog = CatalogMapper.toDomain(catalogInput);
 

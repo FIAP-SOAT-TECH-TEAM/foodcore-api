@@ -19,8 +19,6 @@ public class DeleteCatalogUseCase {
      * @param gateway Gateway para comunicação com o mundo exterior
      */
     public static void deleteCatalog(Long id, CatalogGateway gateway) {
-        log.debug("Excluindo catalogo de id: {}", id);
-
         if (!gateway.existsById(id)) {
             log.warn("Tentativa de excluir catalogo inexistente. Id: {}", id);
             throw new CatalogNotFoundException("Catalogo", id);

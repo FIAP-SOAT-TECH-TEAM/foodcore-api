@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api;
+package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog;
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.CatalogMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.catalog.UpdateCatalogUseCase;
@@ -10,7 +10,7 @@ import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Controller: Criar catálogo.
+ * Controller: Atualizar catálogo.
  *
  */
 @Slf4j

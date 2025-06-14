@@ -4,8 +4,8 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
-import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.exception.BusinessException;
 import lombok.Data;
 
 import java.time.LocalDateTime;

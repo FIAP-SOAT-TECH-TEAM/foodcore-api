@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.category;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import lombok.extern.slf4j.Slf4j;
@@ -11,18 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @Slf4j
-public class UpdateCategoryImageUseCase {
-
-    private final CatalogGateway catalogGateway;
-    private final ImageStorageGateway imageStorageGateway;
-
-    public UpdateCategoryImageUseCase(
-            CatalogGateway catalogGateway,
-            ImageStorageGateway imageStorageGateway
-    ) {
-        this.catalogGateway = catalogGateway;
-        this.imageStorageGateway = imageStorageGateway;
-    }
+public class UpdateCategoryImageInCatalogUseCase {
 
     /**
      * Atualiza apenas a imagem de uma categoria existente.
@@ -30,17 +20,18 @@ public class UpdateCategoryImageUseCase {
      * @param catalogId ID do catálogo
      * @param categoryId ID da categoria do categoria
      * @param imageFile Arquivo da nova imagem
+     * @param catalogGateway Gateway de catalogo para comunicação com o mundo exterior
+     * @param imageStorageGateway Gateway de imagens para comunicação com o mundo exterior
      * @throws CatalogNotFoundException se o catálogo não for encontrado
      * @throws IllegalArgumentException se o arquivo de imagem for nulo ou vazio
      * @throws RuntimeException se ocorrer um erro durante o upload da imagem
+     * @return Catalogo com a categoria atualizada
      */
-    public void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile) {
-        log.debug("Atualizando imagem do categoria ID: {}", categoryId);
-
+    public static Catalog updateCategoryImageInCatalog(Long catalogId, Long categoryId, MultipartFile imageFile, CatalogGateway catalogGateway, ImageStorageGateway imageStorageGateway) {
         var catalog = catalogGateway.findById(catalogId);
 
         if (catalog.isEmpty()) {
-            log.warn("Tentativa de excluir categoria com catálogo inexistente. Id: {}", catalogId);
+            log.warn("Tentativa de atualizar imagem de categoria com catálogo inexistente. Id: {}", catalogId);
             throw new CatalogNotFoundException("Catalogo", catalogId);
         }
 
@@ -52,23 +43,21 @@ public class UpdateCategoryImageUseCase {
         var category = catalog.get().getCategoryById(categoryId);
 
         try {
-
             log.debug("Processando upload de imagem para categoria ID: {}", categoryId);
 
             if (category.getImageUrl() != null && !category.imageUrlIsEmpty()) {
                 var currentImagePath = category.getImageUrlValue();
-                log.debug("Removendo imagem anterior: {}", currentImagePath);
                 imageStorageGateway.deleteImage(currentImagePath);
             }
 
-            String storagePath = "categories/" + categoryId;
-            String imagePath = imageStorageGateway.uploadImage(storagePath, imageFile);
-            log.debug("Nova imagem enviada para o caminho: {}", imagePath);
+            var storagePath = "categories/" + categoryId;
+            var imagePath = imageStorageGateway.uploadImage(storagePath, imageFile);
 
             category.setImageUrlValue(imagePath);
 
             catalog.get().updateCategory(category);
-            catalogGateway.save(catalog.get());
+
+            return catalog.get();
 
         } catch (Exception e) {
             log.error("Erro ao processar upload de imagem: {}", e.getMessage(), e);

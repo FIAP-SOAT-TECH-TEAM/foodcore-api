@@ -1,11 +1,13 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.ImageDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Gateway para persistência de imagens.
  */
+@Slf4j
 public class ImageStorageGateway {
 
     private final ImageDataSource imageDataSource;
@@ -25,7 +27,9 @@ public class ImageStorageGateway {
      * @throws RuntimeException se ocorrer uma falha ao realizar o upload
      */
     public String uploadImage(String path, MultipartFile file) {
-        return imageDataSource.uploadImage(path, file);
+        var url = imageDataSource.uploadImage(path, file);
+        log.debug("Nova imagem enviada para o caminho: {}", path);
+        return url;
     }
 
     /**
@@ -36,6 +40,7 @@ public class ImageStorageGateway {
      * @throws RuntimeException se o container não existir ou se o blob não for encontrado
      */
     public void deleteImage(String imageUrl) {
+        log.debug("Removendo imagem: {}", imageUrl);
         imageDataSource.deleteImage(imageUrl);
     }
 }

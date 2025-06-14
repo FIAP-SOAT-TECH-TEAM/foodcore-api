@@ -1,10 +1,10 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.web.api.controller;
 
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.category.*;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CategoryResponse;
-import com.soat.fiap.food.core.api.catalog.application.ports.in.CatalogUseCase;
-import com.soat.fiap.food.core.api.catalog.application.services.CatalogService;
-import com.soat.fiap.food.core.api.shared.infrastructure.logging.CustomLogger;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.ImageDataSource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/catalogs")
+@Slf4j
 public class CategoryController {
 
-    private final CatalogUseCase catalogUseCase;
-    private final CustomLogger logger;
+    private final DataSource dataSource;
+    private final ImageDataSource imageDataSource;
 
-    public CategoryController(CatalogService catalogService) {
-        this.catalogUseCase = catalogService;
-        this.logger = CustomLogger.getLogger(getClass());
+    public CategoryController(DataSource dataSource, ImageDataSource imageDataSource) {
+        this.dataSource = dataSource;
+        this.imageDataSource = imageDataSource;
     }
 
     @PostMapping("/categories")
@@ -53,8 +55,8 @@ public class CategoryController {
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request) {
-        logger.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
-        CategoryResponse response = catalogUseCase.saveCategory(request);
+        log.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
+        CategoryResponse response = SaveCategoryController.saveCategory(request, dataSource);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -75,7 +77,7 @@ public class CategoryController {
     public ResponseEntity<List<CategoryResponse>> getAllCategories(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId) {
-        List<CategoryResponse> responseList = catalogUseCase.getAllCategories(catalogId);
+        List<CategoryResponse> responseList =  GetAllCategoriesController.getAllCategories(catalogId, dataSource);
         return ResponseEntity.ok(responseList);
     }
 
@@ -99,7 +101,7 @@ public class CategoryController {
             @Parameter(description = "ID da categoria", example = "10", required = true)
             @PathVariable Long categoryId
     ) {
-        CategoryResponse response = catalogUseCase.getCategoryById(catalogId, categoryId);
+        CategoryResponse response = GetCategoryByIdController.getCategoryById(catalogId, categoryId, dataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -125,8 +127,8 @@ public class CategoryController {
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Long categoryId,
             @Valid @RequestBody CategoryRequest request) {
-        logger.debug("Requisição para atualizar categoria no catálogo: {}", request.getCatalogId());
-        CategoryResponse response = catalogUseCase.updateCategory(catalogId, categoryId, request);
+        log.debug("Requisição para atualizar categoria no catálogo: {}", request.getCatalogId());
+        CategoryResponse response = UpdateCategoryController.updateCategory(catalogId, categoryId, request, dataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -149,7 +151,7 @@ public class CategoryController {
             @Parameter(description = "ID da categoria", example = "10", required = true)
             @PathVariable Long categoryId
     ) {
-        catalogUseCase.deleteCategory(catalogId, categoryId);
+        DeleteCategoryController.deleteCategory(catalogId, categoryId, dataSource);
         return ResponseEntity.noContent().build();
     }
 
@@ -175,8 +177,8 @@ public class CategoryController {
             @Parameter(description = "Arquivo da nova imagem", required = true)
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
-        logger.debug("Requisição para atualizar imagem da categoria {} do catálogo {}", categoryId, catalogId);
-        catalogUseCase.updateCategoryImage(catalogId, categoryId, imageFile);
+        log.debug("Requisição para atualizar imagem da categoria {} do catálogo {}", categoryId, catalogId);
+        UpdateCategoryImageInCatalogController.updateCategoryImageInCatalog(catalogId, categoryId, imageFile, dataSource, imageDataSource);
         return ResponseEntity.noContent().build();
     }
 

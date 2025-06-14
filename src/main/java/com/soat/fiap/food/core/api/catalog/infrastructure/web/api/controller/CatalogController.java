@@ -1,8 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.web.api.controller;
 
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.DeleteCatalogController;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.SaveCatalogController;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.UpdateCatalogController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog.*;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.DataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CatalogResponse;
@@ -48,7 +46,7 @@ public class CatalogController {
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<List<CatalogResponse>> getAllCatalogs() {
         log.debug("Requisição para listar todos os catálogos");
-        return ResponseEntity.ok(catalogUseCase.getAllCatalogs());
+        return ResponseEntity.ok(GetAllCatalogsController.getAllCatalogs(dataSource));
     }
 
     @GetMapping("/{id}")
@@ -69,7 +67,7 @@ public class CatalogController {
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
         log.debug("Requisição para buscar catálogo por ID: {}", id);
-        return ResponseEntity.ok(catalogUseCase.getCatalogById(id));
+        return ResponseEntity.ok(GetCatalogByIdController.getCatalogById(id, dataSource));
     }
 
     @PostMapping

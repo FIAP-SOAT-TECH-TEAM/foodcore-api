@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api;
+package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog;
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.catalog.DeleteCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
@@ -19,6 +19,8 @@ public class DeleteCatalogController {
      * @param dataSource Origem de dados para o gateway
      */
     public static void deleteCatalog(Long id, DataSource dataSource) {
+        log.debug("Excluindo catalogo de id: {}", id);
+
         var gateway = new CatalogGateway(dataSource);
 
         DeleteCatalogUseCase.deleteCatalog(id, gateway);

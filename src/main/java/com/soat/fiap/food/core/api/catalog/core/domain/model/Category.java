@@ -4,7 +4,6 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductConflictException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
-import com.soat.fiap.food.core.api.catalog.domain.exceptions.*;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.shared.exception.BusinessException;
@@ -140,7 +139,7 @@ public class Category {
      *
      * @return nome da categoria
      */
-    String getName() {
+    public String getName() {
         return this.details.name();
     }
 
@@ -149,7 +148,7 @@ public class Category {
      *
      * @return descrição da categoria
      */
-    String getDescription() {
+    public String getDescription() {
         return this.details.description();
     }
 
@@ -248,6 +247,22 @@ public class Category {
         var product = getProductById(productId);
 
         products.remove(product);
+    }
+
+    /**
+     * Obtem a data de criação de um catalogo.
+     *
+     */
+    public LocalDateTime getCreatedAt() {
+        return auditInfo.getCreatedAt();
+    }
+
+    /**
+     * Obtem a data de última atualização de um catalogo.
+     *
+     */
+    public LocalDateTime getUpdatedAt() {
+        return auditInfo.getUpdatedAt();
     }
 
     /**

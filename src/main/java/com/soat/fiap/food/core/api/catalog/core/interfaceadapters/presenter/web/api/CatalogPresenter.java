@@ -3,6 +3,9 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.web.api.dto.responses.CatalogResponse;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Presenter responsável por converter objetos do domínio {@link Catalog}
  * em objetos de resposta {@link CatalogResponse} utilizados especificamente
@@ -24,5 +27,23 @@ public class CatalogPresenter {
                 catalog.getCreatedAt(),
                 catalog.getUpdatedAt()
         );
+    }
+
+    /**
+     * Converte uma lista de instâncias da entidade {@link Catalog} para uma lista de {@link CatalogResponse},
+     * utilizada na exposição de dados via API REST (web.api).
+     *
+     * @param catalogs A lista de entidades de domínio {@link Catalog} a serem convertidas.
+     * @return Uma lista de DTOs {@link CatalogResponse} com os dados dos catálogos formatados para resposta HTTP.
+     */
+    public static List<CatalogResponse> toListCatalogResponse(List<Catalog> catalogs) {
+        return catalogs.stream()
+                .map(catalog -> new CatalogResponse(
+                        catalog.getId(),
+                        catalog.getName(),
+                        catalog.getCreatedAt(),
+                        catalog.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }
