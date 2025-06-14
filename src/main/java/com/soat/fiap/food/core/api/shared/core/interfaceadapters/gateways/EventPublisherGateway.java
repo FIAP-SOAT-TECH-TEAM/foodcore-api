@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
+package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 

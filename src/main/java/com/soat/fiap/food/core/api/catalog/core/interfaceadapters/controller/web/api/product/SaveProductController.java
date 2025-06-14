@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Produ
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.AddProductToCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.events.ProductCreatedEvent;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.ProductPresenter;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
