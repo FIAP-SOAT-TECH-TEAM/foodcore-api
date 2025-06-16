@@ -7,7 +7,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
-import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,17 +43,6 @@ public class SpringDocConfig {
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-                .tags(List.of(
-                        new Tag()
-                                .name("Catálogos")
-                                .description("Operações para gerenciamento de catálogos de categorias de produtos"),
-                        new Tag()
-                                .name("Categorias")
-                                .description("Operações para gerenciamento de categorias de produtos"),
-                        new Tag()
-                                .name("Produtos")
-                                .description("Operações para gerenciamento de produtos")
-                ))
                 .servers(List.of(
                         new Server()
                                 .url(contextPath)
@@ -65,9 +53,9 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi catalogApi() {
         return GroupedOpenApi.builder()
-                .group("catálogo")
+                .group("catálogos")
                 .packagesToScan("com.soat.fiap.food.core.api.catalog")
-                .pathsToMatch("/api/catalogs/**")
+                .pathsToMatch("/catalogs/**")
                 .build();
     }
 
@@ -76,7 +64,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("usuários")
                 .packagesToScan("com.soat.fiap.food.core.api.user")
-                .pathsToMatch("/api/users/**")
+                .pathsToMatch("/users/**")
                 .build();
     }
 
@@ -85,7 +73,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("pedidos")
                 .packagesToScan("com.soat.fiap.food.core.api.order")
-                .pathsToMatch("/api/orders/**")
+                .pathsToMatch("/orders/**")
                 .build();
     }
 
@@ -94,7 +82,7 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
                 .group("pagamentos")
                 .packagesToScan("com.soat.fiap.food.core.api.payment")
-                .pathsToMatch("/api/payments/**")
+                .pathsToMatch("/payments/**")
                 .build();
     }
 } 

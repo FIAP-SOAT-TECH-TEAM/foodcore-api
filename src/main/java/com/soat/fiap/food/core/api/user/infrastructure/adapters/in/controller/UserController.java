@@ -2,10 +2,10 @@ package com.soat.fiap.food.core.api.user.infrastructure.adapters.in.controller;
 
 import com.soat.fiap.food.core.api.user.application.ports.in.UserUseCase;
 import com.soat.fiap.food.core.api.user.domain.model.User;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.LoginRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.request.UserRequest;
-import com.soat.fiap.food.core.api.user.infrastructure.adapters.in.dto.response.UserResponse;
-import com.soat.fiap.food.core.api.user.mapper.UserDtoMapper;
+import com.soat.fiap.food.core.api.user.application.dto.request.LoginRequest;
+import com.soat.fiap.food.core.api.user.application.dto.request.UserRequest;
+import com.soat.fiap.food.core.api.user.application.dto.response.UserResponse;
+import com.soat.fiap.food.core.api.user.application.mapper.UserDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import java.util.List;
  * Controlador REST para gerenciamento de usuários
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Tag(name = "Usuários", description = "API para gerenciamento de usuários")
 public class UserController {
 
@@ -42,7 +43,7 @@ public class UserController {
      * @return Lista de usuários
      */
     @GetMapping
-    @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
+    @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados", security = @SecurityRequirement(name = "bearer-key") )
     @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
@@ -57,7 +58,7 @@ public class UserController {
      * @return Usuário encontrado ou 404
      */
     @GetMapping("/{id}")
-    @Operation(summary = "Buscar usuário por ID", description = "Retorna um usuário específico pelo seu ID")
+    @Operation(summary = "Buscar usuário por ID", description = "Retorna um usuário específico pelo seu ID", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -79,7 +80,7 @@ public class UserController {
      * @return Usuário encontrado ou 404
      */
     @GetMapping("/document/{document}")
-    @Operation(summary = "Buscar usuário por DOCUMENT", description = "Retorna um usuário específico pelo seu DOCUMENT")
+    @Operation(summary = "Buscar usuário por DOCUMENT", description = "Retorna um usuário específico pelo seu DOCUMENT", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -152,7 +153,7 @@ public class UserController {
      * @return Usuário atualizado ou 404
      */
     @PutMapping("/{id}")
-    @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
+    @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -182,7 +183,7 @@ public class UserController {
      * @return 204 sem conteúdo ou 404
      */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Remover usuário", description = "Remove um usuário pelo seu ID")
+    @Operation(summary = "Remover usuário", description = "Remove um usuário pelo seu ID", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso",
                     content = @Content),

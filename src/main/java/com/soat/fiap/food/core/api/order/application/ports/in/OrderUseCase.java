@@ -1,78 +1,47 @@
 package com.soat.fiap.food.core.api.order.application.ports.in;
 
-import com.soat.fiap.food.core.api.order.domain.model.Order;
+import com.soat.fiap.food.core.api.order.application.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.order.application.dto.request.OrderStatusRequest;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.application.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Interface do caso de uso de pedidos
  */
 public interface OrderUseCase {
-    
+
     /**
      * Cria um novo pedido
-     * 
-     * @param userId ID do usuário (opcional)
-     * @param items Lista de IDs de produtos e quantidades
+     *
+     * @param createOrderRequest dados de criação do pedido
      * @return Pedido criado
      */
-    Order createOrder(Long userId, List<OrderItemRequest> items);
-    
-    /**
-     * Busca um pedido pelo ID
-     * 
-     * @param orderId ID do pedido
-     * @return Pedido encontrado ou vazio
-     */
-    Optional<Order> findOrderById(Long orderId);
-    
-    /**
-     * Lista todos os pedidos com determinado status
-     * 
-     * @param status Status dos pedidos
-     * @return Lista de pedidos
-     */
-    List<Order> findOrdersByStatus(OrderStatus status);
-    
+    OrderResponse createOrder(CreateOrderRequest createOrderRequest);
+
     /**
      * Atualiza o status de um pedido
-     * 
+     *
      * @param orderId ID do pedido
-     * @param newStatus Novo status
-     * @return Pedido atualizado
+     * @param orderStatus novo status do pedido
      */
-    Order updateOrderStatus(Long orderId, OrderStatus newStatus);
-    
+    void updateOrderStatus(Long orderId, OrderStatus orderStatus);
+
     /**
-     * Adiciona um item a um pedido existente
-     * 
+     * Atualiza o status de um pedido
+     *
      * @param orderId ID do pedido
-     * @param productId ID do produto
-     * @param quantity Quantidade
-     * @return Pedido atualizado
+     * @param orderStatusRequest novo status do pedido
      */
-    Order addItemToOrder(Long orderId, Long productId, Integer quantity);
-    
+    OrderStatusResponse updateOrderStatus(Long orderId, OrderStatusRequest orderStatusRequest);
+
     /**
-     * Classe interna para representar um item de pedido na requisição
+     * Busca pedidos que não estejam finalizados, ordenados por prioridade de status e data de criação.
+     * A ordem de prioridade de status é: PRONTO > EM_PREPARACAO > RECEBIDO.
+     * Pedidos com status FINALIZADO não são retornados.
+     *
      */
-    class OrderItemRequest {
-        private Long productId;
-        private Integer quantity;
-        
-        public OrderItemRequest(Long productId, Integer quantity) {
-            this.productId = productId;
-            this.quantity = quantity;
-        }
-        
-        public Long getProductId() {
-            return productId;
-        }
-        
-        public Integer getQuantity() {
-            return quantity;
-        }
-    }
+    List<OrderResponse> getActiveOrdersSorted();
 } 

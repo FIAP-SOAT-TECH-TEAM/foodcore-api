@@ -25,8 +25,8 @@ WHERE NOT EXISTS (
 );
 
 -- Criação do usuário GUEST
-INSERT INTO users (name, username, active, role_id, created_at, updated_at)
-SELECT 'Guest', 'user_guest', true, 3, now(), now()
+INSERT INTO users (name, username, active, guest,  role_id, created_at, updated_at)
+SELECT 'Guest', 'user_guest', true, true,3, now(), now()
 WHERE NOT EXISTS (
     SELECT 1 FROM users WHERE username = 'user_guest'
 );

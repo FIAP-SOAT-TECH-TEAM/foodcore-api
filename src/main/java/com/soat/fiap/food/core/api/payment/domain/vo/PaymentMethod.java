@@ -10,12 +10,25 @@ public enum PaymentMethod {
     CREDIT_CARD("Cartão de Crédito"),
     DEBIT_CARD("Cartão de Débito"),
     PIX("PIX"),
-    CASH("Dinheiro");
+    ACCOUNT_MONEY("Dinheiro");
     
     private final String description;
     
     PaymentMethod(String description) {
         this.description = description;
+    }
+
+    public static PaymentMethod fromValue(String value) {
+
+        String normalized = value.trim().toUpperCase().replace("-", "_").replace(" ", "_");
+
+        for (PaymentMethod method : values()) {
+            if (method.name().equalsIgnoreCase(normalized)) {
+                return method;
+            }
+        }
+
+        throw new IllegalArgumentException("PaymentMethod desconhecido: " + value);
     }
 
 } 

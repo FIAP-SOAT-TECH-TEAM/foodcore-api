@@ -3,7 +3,7 @@
  * 
  * Responsabilidades:
  * - CRUD de produtos e categorias
- * - Gestão de imagens de produtos com integração com CDN
+ * - Gestão de imagens de produtos com integração com blob storage
  * - Emissão de eventos para outros módulos
  */
 @ApplicationModule(

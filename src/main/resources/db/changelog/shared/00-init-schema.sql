@@ -4,7 +4,7 @@
 -- Tipos enumerados (necessários em todos os ambientes)
 -- Enum para tipo de pagamento
 --changeset payment-types:create-payment-type-enum runOnChange:true
-CREATE TYPE payment_type_enum AS ENUM ('CREDIT_CARD', 'DEBIT_CARD', 'PIX', 'CASH');
+CREATE TYPE payment_type_enum AS ENUM ('CREDIT_CARD', 'DEBIT_CARD', 'PIX', 'ACCOUNT_MONEY');
 
 -- Enum para status de pagamento
 --changeset payment-types:create-payment-status-enum runOnChange:true

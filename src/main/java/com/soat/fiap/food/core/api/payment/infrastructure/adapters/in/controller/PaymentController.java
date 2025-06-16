@@ -1,13 +1,23 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.controller;
 
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerTopicNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
-import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.request.ProcessPaymentRequest;
-import com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.dto.response.PaymentResponse;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,97 +25,115 @@ import org.springframework.web.bind.annotation.*;
  * Controlador REST para pagamentos
  */
 @RestController
-@RequestMapping("/api/orders/{orderId}/payments")
+@RequestMapping("/payments")
 @Slf4j
 public class PaymentController {
-    
+
     private final PaymentUseCase paymentUseCase;
-    private final PaymentRepository paymentRepository;
-    
-    public PaymentController(PaymentUseCase paymentUseCase, PaymentRepository paymentRepository) {
+
+    public PaymentController(PaymentUseCase paymentUseCase) {
         this.paymentUseCase = paymentUseCase;
-        this.paymentRepository = paymentRepository;
     }
-    
-    /**
-     * Processa o pagamento de um pedido
-     * 
-     * @param orderId ID do pedido
-     * @param request DTO com método de pagamento
-     * @return Resposta com informações do pagamento
-     */
-    @PostMapping
-    public ResponseEntity<PaymentResponse> processPayment(
-            @PathVariable Long orderId,
-            @Valid @RequestBody ProcessPaymentRequest request) {
-        
-        log.info("Recebida requisição para processar pagamento do pedido {} com método {}", 
-                orderId, request.getPaymentMethod());
-        
-        Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> {
-                    paymentUseCase.initializePayment(orderId, null);
-                    return new IllegalStateException("Pagamento não foi inicializado corretamente para o pedido: " + orderId);
-                });
-        
-        PaymentResponse response = mapToResponse(payment);
-        
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
-    }
-    
-    /**
-     * Busca o status do pagamento de um pedido
-     * 
-     * @param orderId ID do pedido
-     * @return Resposta com informações do pagamento
-     */
-    @GetMapping
-    public ResponseEntity<PaymentResponse> getPaymentStatus(@PathVariable Long orderId) {
-        log.info("Consultando status do pagamento para o pedido: {}", orderId);
-        
-        Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado para o pedido: " + orderId));
-        
-        return ResponseEntity.ok(mapToResponse(payment));
-    }
-    
-    /**
-     * Recebe notificação de pagamento (webhook)
-     * 
-     * @param externalId ID externo do pagamento
-     * @param status Novo status do pagamento
-     * @return Resposta vazia com código 200
-     */
-    @PostMapping("/webhook/{externalId}")
-    public ResponseEntity<Void> handlePaymentWebhook(
-            @PathVariable String externalId,
-            @RequestParam("status") String status) {
-        
-        log.info("Recebido webhook de pagamento: {} com status: {}", externalId, status);
-        
-        paymentUseCase.processPaymentNotification(externalId, status);
-        
+
+
+    // ========== ADQUIRENTE ==========
+
+    @Hidden
+    @Operation(
+            operationId = "webhookWithTopic",
+            summary = "Webhook com parâmetros 'topic' e 'id'",
+            description = "Recebe notificações simplificadas do adquirente com parâmetros 'topic' e 'id' na URL",
+            parameters = {
+                    @Parameter(name = "topic",
+                            description = "Tipo do tópico da notificação (ex: 'merchant_order')",
+                            required = true,
+                    in = ParameterIn.QUERY),
+                    @Parameter(name = "id",
+                            description = "ID do recurso associado à notificação (ex: ID da merchant_order)",
+                            required = true,
+                            in = ParameterIn.QUERY)
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notificação processada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Notificação malformada")
+    })
+    @PostMapping(value = "/webhook", params = {"topic", "id"})
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<Void> acquirerTopicWebhook(
+            @RequestParam String topic,
+            @RequestParam String id,
+            @Valid @RequestBody AcquirerTopicNotificationRequest notification
+    ) {
+        log.info("Recebida notificação do adquirente (topic): topic={}, resource={}", topic, notification.getResource());
+
         return ResponseEntity.ok().build();
     }
-    
-    /**
-     * Mapeia do modelo de domínio para o DTO de resposta
-     * 
-     * @param payment Modelo de domínio
-     * @return DTO de resposta
-     */
-    private PaymentResponse mapToResponse(Payment payment) {
-        return PaymentResponse.builder()
-                .id(payment.getId())
-                .orderId(payment.getOrderId())
-                .externalId(payment.getExternalId())
-                .amount(payment.getAmount())
-                .paymentMethod(payment.getMethod().name())
-                .status(payment.getStatus().name())
-                .qrCodeUrl(payment.getQrCodeUrl())
-                .qrCodeData(payment.getQrCodeData())
-                .createdAt(payment.getCreatedAt())
-                .processedAt(payment.getProcessedAt())
-                .build();
+
+    @Operation(
+            operationId = "webhookWithoutTopic",
+            summary = "Webhook completo do adquirente",
+            description = "Recebe notificações de eventos de pagamento do adquirente com corpo JSON completo"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notificação processada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Notificação malformada")
+    })
+    @PostMapping(value = "/webhook", params = "!topic")
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<Void> acquirerWebhook(@Valid @RequestBody AcquirerNotificationRequest notification) {
+        log.info("Recebida notificação do adquirente (completa): ação={}, id interno={}, id externo={}",
+                notification.getAction(),
+                notification.getId(),
+                notification.getData() != null ? notification.getData().getId() : "sem id externo");
+
+        paymentUseCase.processPaymentNotification(notification);
+
+        return ResponseEntity.ok().build();
     }
-} 
+
+    @Operation(summary = "Buscar pedido no adquirente por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedido retornado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AcquirerOrderResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
+    })
+    @GetMapping("/merchant_orders/{merchantOrderId}")
+    @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    public ResponseEntity<AcquirerOrderResponse> getAcquirerOrder(@PathVariable Long merchantOrderId) {
+        log.info("Recebida requisição para obter dados do pedido no adquirente. merchantOrderId={}", merchantOrderId);
+        var response = paymentUseCase.getAcquirerOrder(merchantOrderId);
+        return ResponseEntity.ok(response);
+    }
+
+    // ========== PAGAMENTOS ==========
+
+    @Operation(summary = "Buscar status do pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status do pagamento retornado com sucesso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentStatusResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)
+    })
+    @GetMapping("/{orderId}/status")
+    @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
+    public ResponseEntity<PaymentStatusResponse> getOrderPaymentStatus(@PathVariable Long orderId) {
+        log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
+        var response = paymentUseCase.getOrderPaymentStatus(orderId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Buscar QrCode de pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Qr Code de pagamento retornado com sucesso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = QrCodeResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)
+    })
+    @GetMapping("/{orderId}/qrCode")
+    @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
+    public ResponseEntity<QrCodeResponse> getOrderPaymentQrCode(@PathVariable Long orderId) {
+        log.info("Recebida requisição para obter qr de pagamento para orderId {}", orderId);
+        var response = paymentUseCase.getOrderPaymentQrCode(orderId);
+        return ResponseEntity.ok(response);
+    }
+}

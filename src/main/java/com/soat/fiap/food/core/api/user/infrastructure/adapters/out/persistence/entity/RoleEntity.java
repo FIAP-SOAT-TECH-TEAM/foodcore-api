@@ -1,6 +1,5 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.entity;
 
-import com.soat.fiap.food.core.api.user.domain.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;

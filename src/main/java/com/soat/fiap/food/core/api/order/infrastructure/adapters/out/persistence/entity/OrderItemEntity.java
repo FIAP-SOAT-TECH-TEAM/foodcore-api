@@ -1,66 +1,37 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-/**
- * Entidade JPA para item de pedido
- */
 @Entity
 @Table(name = "order_items")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class OrderItemEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Integer id;
+
+    @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
-    
+
     @Column(name = "product_id", nullable = false)
-    private Long productId;
-    
-    @Column(name = "product_name")
-    private String productName;
-    
+    private Integer productId;
+
     @Column(nullable = false)
-    private Integer quantity;
-    
-    @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal unitPrice;
-    
-    @Column(name = "total", nullable = false, precision = 10, scale = 2)
-    private BigDecimal subtotal;
-    
-    @Column(name = "observations")
-    private String observations;
-    
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    /**
-     * Calcula o subtotal do item (quantidade * preço unitário)
-     * @return Subtotal do item
-     */
-    @PrePersist
-    @PreUpdate
-    public void calculateSubtotal() {
-        if (quantity != null && unitPrice != null) {
-            this.subtotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
-        }
-    }
-} 
+    private String name;
+
+    @Embedded
+    private OrderItemPrice orderItemPrice;
+
+    @Column(columnDefinition = "TEXT")
+    private String observations = "";
+
+    @Embedded
+    private AuditInfo auditInfo = new AuditInfo();
+}

@@ -16,17 +16,18 @@ COPY src/ ./src/
 RUN ./gradlew build -x test --no-daemon
 
 # Imagem final
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine AS runtime
 WORKDIR /app
 
 # Atualizar ferramentas básicas para health checks
-RUN apk add --no-cache curl wget
+RUN apk add --no-cache curl wget tzdata
+
+# Definir timezone para GMT-3 (exemplo America/Sao_Paulo)
+RUN cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && \
+    echo "America/Sao_Paulo" > /etc/timezone
 
 # Adicionar usuário não-root para segurança
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-
-# Diretório para arquivos de upload
-RUN mkdir -p /app/cdn && chown -R appuser:appgroup /app
 
 # Copiar JAR construído
 COPY --from=build /app/build/libs/*.jar app.jar
@@ -37,9 +38,6 @@ USER appuser
 # Porta da aplicação (modificável via docker-compose)
 EXPOSE 8080
 
-# Volume para persistência de dados
-VOLUME /app/cdn
-
 # Parâmetros para Monitoramento
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication -Djava.security.egd=file:/dev/./urandom"
 
@@ -48,4 +46,4 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD wget --spider -q http://localhost:8080/actuator/health || exit 1
 
 # Iniciar aplicação
-ENTRYPOINT ["java", "-jar", "/app/app.jar"] 
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

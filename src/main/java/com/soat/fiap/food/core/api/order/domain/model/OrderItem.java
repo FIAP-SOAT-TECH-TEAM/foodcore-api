@@ -1,7 +1,9 @@
 package com.soat.fiap.food.core.api.order.domain.model;
 
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.domain.vo.OrderItemPrice;
-import com.soat.fiap.food.core.api.shared.vo.AuditInfo;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,12 +12,13 @@ import java.util.Objects;
 /**
  * Entidade de domínio que representa um item de pedido
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 public class OrderItem {
 
     private Long id;
     private Long productId;
+    private String name;
     private OrderItemPrice orderItemPrice;
     private String observations = "";
 
@@ -26,18 +29,21 @@ public class OrderItem {
      * Construtor que cria um item de pedido com os dados informados
      *
      * @param productId        ID do produto
+     * @param name   Nome do item do pedido
      * @param orderItemPrice   Preço do item
      * @param observations     Observações sobre o item
      * @throws NullPointerException se qualquer parâmetro for nulo
      */
     public OrderItem(
             Long productId,
+            String name,
             OrderItemPrice orderItemPrice,
             String observations
     ) {
-        validate(productId, orderItemPrice);
+        validate(productId, name, orderItemPrice);
 
         this.productId = productId;
+        this.name = name;
         this.orderItemPrice = orderItemPrice;
         this.observations = observations;
     }
@@ -47,15 +53,20 @@ public class OrderItem {
      *
      * @param productId        ID do produto
      * @param orderItemPrice   Preço do item
+     * @param name   Nome do item do pedido
      * @throws NullPointerException se qualquer parâmetro for nulo
      */
     private void validate(
             Long productId,
+            String name,
             OrderItemPrice orderItemPrice
     ) {
         Objects.requireNonNull(productId, "O ID do produto não pode ser nulo");
-        Objects.requireNonNull(orderItemPrice, "O preço do item da ordem não pode ser nulo");
+        Objects.requireNonNull(orderItemPrice, "O preço do item do pedido não pode ser nulo");
 
+        if (name.isEmpty()) {
+            throw new OrderItemException("O nome do item do pedido não pode ser nulo");
+        }
     }
 
     /**
@@ -70,9 +81,23 @@ public class OrderItem {
     /**
      * Atualiza o campo updatedAt com o horário atual.
      *
-     * @throws IllegalStateException se o horário atual for menor ou igual ao createdAt
+     * @throws BusinessException se o horário atual for menor ou igual ao createdAt
      */
     void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
     }
+
+    /**
+     * Retorna o preço do item do pedido
+     *
+     */
+    public BigDecimal getPrice() {
+        return orderItemPrice.unitPrice();
+    }
+
+    /**
+     * Retorna a quantidade do item do pedido
+     *
+     */
+    public Integer getQuantity() {return orderItemPrice.quantity();}
 }

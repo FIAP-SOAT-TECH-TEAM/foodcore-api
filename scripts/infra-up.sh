@@ -40,8 +40,8 @@ if [ -n "$RUNNING_CONTAINERS" ]; then
 fi
 
 # Iniciar serviços principais primeiro
-echo "-> Iniciando principais serviços (DB e Redis)..."
-docker-compose up -d db redis
+echo "-> Iniciando principais serviços (DB)..."
+docker-compose up -d db
 
 # Verificar se o PostgreSQL está rodando
 echo "-> Verificando status do PostgreSQL..."
@@ -63,23 +63,13 @@ if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
     echo "AVISO: Tempo limite excedido aguardando o PostgreSQL inicializar"
 fi
 
-# Verificar se o Redis está rodando
-echo "-> Verificando status do Redis..."
-if docker-compose exec redis redis-cli ping | grep -q "PONG"; then
-    echo "-> Redis está pronto!"
-else
-    echo "AVISO: Redis pode não estar completamente inicializado"
-fi
-
-# Agora que os serviços principais estão prontos, iniciar o CDN e Adminer
-echo "-> Iniciando serviços adicionais (CDN e Adminer)..."
-docker-compose up -d cdn adminer
+# Agora que os serviços principais estão prontos, iniciar o Adminer
+echo "-> Iniciando serviços adicionais (Adminer)..."
+docker-compose up -d adminer
 
 echo "===== Infraestrutura iniciada com sucesso! ====="
 echo "Serviços disponíveis:"
 echo "- PostgreSQL: localhost:5432"
-echo "- Redis: localhost:6379"
-echo "- CDN: localhost:8082"
 echo "- Adminer (gerenciador de BD): http://localhost:8081"
 echo "  Sistema: PostgreSQL"
 echo "  Servidor: db"

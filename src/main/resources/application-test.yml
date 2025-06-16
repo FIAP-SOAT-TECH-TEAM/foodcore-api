@@ -1,43 +1,30 @@
+# Configuração de datasource para testes (usando H2 em memória)
 spring:
-  # Configuração de datasource para testes (usando H2 em memória)
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
-  
+
   # Configuração do JPA para testes
   jpa:
     hibernate:
       ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
-        show_sql: true
-  
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.H2Dialect
+          format_sql: true
+          show_sql: true
+
   # Desabilitar o liquibase em testes (usamos o DDL auto create)
   liquibase:
     enabled: false
-  
 
   # Configurações do H2 console (útil para debug)
   h2:
     console:
       enabled: true
       path: /h2-console
-  data:
-    # Configuração do Redis (mock em memória para testes)
-    redis:
-      port: 6379
-      host: localhost
-
-# Configurações da aplicação para testes
-app:
-  # Configurações do CDN para testes (usando diretório temporário)
-  cdn:
-    root-path: ./target/test-cdn
-    public-url: http://localhost:8082
 
 # Configurações de log para testes
 logging:
@@ -46,8 +33,3 @@ logging:
     com.fastfood: DEBUG
     org.springframework.test: INFO
     org.hibernate.SQL: DEBUG
-
-#JWT Configuration
-jwt:
-  secret_key: "${JWT_SECRET:UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==}"
-  expiration: 3600

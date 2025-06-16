@@ -1,0 +1,95 @@
+### Modelo de Domínio
+
+```mermaid
+classDiagram
+    class Order {
+        -Long id
+        -User user
+        -String orderNumber
+        -OrderStatus status
+        -BigDecimal totalAmount
+        -List~OrderItem~ items
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +addItem(OrderItem)
+        +removeItem(OrderItem)
+        +calculateTotalAmount()
+        +updateStatus(OrderStatus)
+    }
+
+    class OrderItem {
+        -Long id
+        -Product product
+        -Integer quantity
+        -BigDecimal unitPrice
+        -BigDecimal subtotal
+        -String observations
+        +calculateSubtotal()
+    }
+
+    class Catalog {
+        -Long id
+        -String name
+    }
+
+    class Category {
+        -Long id
+        -Catalog catalog
+        -String name
+        -String description
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+    }
+
+    class Product {
+        -Long id
+        -Category category
+        -String name
+        -String description
+        -BigDecimal price
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+    }
+
+    class User {
+        -Long id
+        -String name
+        -String username
+        -String email
+        -String password
+        -String document
+        -Boolean active
+        -Boolean guest
+        -Role role
+        -LocalDateTime lastLogin
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Role{
+        <<enumeration>>
+        ADMIN
+        USER
+        GUEST
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        RECEIVED
+        PREPARING
+        READY
+        COMPLETED
+        CANCELLED
+    }
+
+    Order "1" *-- "many" OrderItem
+    Order "many" -- "1" User
+    OrderItem "many" -- "1" Product
+    Catalog "many" -- "1" Category
+    Category "many" -- "1" Product
+    Product -- Category
+    Order -- OrderStatus
+    User -- Role
+```

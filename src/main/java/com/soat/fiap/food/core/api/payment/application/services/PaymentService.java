@@ -1,19 +1,30 @@
 package com.soat.fiap.food.core.api.payment.application.services;
 
+import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.order.domain.exceptions.OrderNotFoundException;
+import com.soat.fiap.food.core.api.payment.application.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.application.dto.response.AcquirerOrderResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.PaymentStatusResponse;
+import com.soat.fiap.food.core.api.payment.application.dto.response.QrCodeResponse;
+import com.soat.fiap.food.core.api.payment.application.mapper.request.GenerateQrCodeRequestMapper;
+import com.soat.fiap.food.core.api.payment.application.mapper.response.PaymentStatusResponseMapper;
+import com.soat.fiap.food.core.api.payment.application.mapper.response.QrCodeResponseMapper;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
-import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.application.ports.out.AcquirerPort;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentExpiredEvent;
+import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
+import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.api.payment.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.domain.vo.PaymentMethod;
-import com.soat.fiap.food.core.api.order.domain.vo.OrderPaymentStatus;
+import com.soat.fiap.food.core.api.payment.domain.ports.out.PaymentRepository;
+import com.soat.fiap.food.core.api.payment.domain.vo.PaymentStatus;
+import com.soat.fiap.food.core.api.shared.core.application.ports.in.AccessManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Implementação do caso de uso de pagamento
@@ -21,90 +32,181 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class PaymentService implements PaymentUseCase {
-    
+
     private final PaymentRepository paymentRepository;
+    private final AcquirerPort acquirerPort;
+    private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
+    private final PaymentStatusResponseMapper paymentStatusResponseMapper;
+    private final QrCodeResponseMapper qrCodeResponseMapper;
     private final ApplicationEventPublisher eventPublisher;
-    
+    private final AccessManager accessManager;
+
     public PaymentService(
             PaymentRepository paymentRepository,
-            ApplicationEventPublisher eventPublisher) {
+            AcquirerPort acquirerPort,
+            GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
+            ApplicationEventPublisher eventPublisher,
+            PaymentStatusResponseMapper paymentStatusResponseMapper,
+            QrCodeResponseMapper qrCodeResponseMapper,
+            AccessManager accessManager) {
         this.paymentRepository = paymentRepository;
+        this.acquirerPort = acquirerPort;
         this.eventPublisher = eventPublisher;
+        this.paymentStatusResponseMapper = paymentStatusResponseMapper;
+        this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
+        this.qrCodeResponseMapper = qrCodeResponseMapper;
+        this.accessManager = accessManager;
     }
-    
-    @Override
-    @Transactional
-    public String initializePayment(Long orderId, BigDecimal totalAmount) {
-        log.info("Inicializando pagamento para o pedido {} no valor de {}", orderId, totalAmount);
-        
-        var existingPayment = paymentRepository.findByOrderId(orderId);
-        if (existingPayment.isPresent()) {
-            log.info("Pagamento já existe para o pedido {}: {}", orderId, existingPayment.get().getId());
-            return existingPayment.get().getExternalId();
-        }
-        
-        var payment = Payment.builder()
-                .orderId(orderId)
-                .amount(totalAmount)
-                .method(PaymentMethod.PIX) // Assumindo PIX como padrão por enquanto
-                .status(OrderPaymentStatus.PENDING)
-                .externalId("PAY-" + UUID.randomUUID().toString())
-                .createdAt(LocalDateTime.now())
-                .build();
-        
-        // TODO: integração com gateway de pagamento (ex: Mercado Pago)
-        // Implementar lógica para gerar QR Code
-        payment.setQrCodeUrl("https://api.exemplo.com/qrcode/" + payment.getExternalId());
-        payment.setQrCodeData("00020126580014BR.GOV.BCB.PIX0136a629534e-7693-46c9-8551-b9b94b54fec10" + 
-                totalAmount.toString().replace(".", ""));
-        
-        var savedPayment = paymentRepository.save(payment);
-        log.info("Pagamento inicializado com ID: {}, externalId: {}", 
-                savedPayment.getId(), savedPayment.getExternalId());
-        
-        return savedPayment.getExternalId();
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public String checkPaymentStatus(String paymentId) {
-        log.info("Verificando status do pagamento: {}", paymentId);
-        
-        var payment = paymentRepository.findByExternalId(paymentId)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado: " + paymentId));
-        
-        return payment.getStatus().name();
-    }
-    
-    @Override
-    @Transactional
-    public void processPaymentNotification(String paymentId, String status) {
-        log.info("Processando notificação de pagamento: {} com status: {}", paymentId, status);
-        
-        var payment = paymentRepository.findByExternalId(paymentId)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado: " + paymentId));
-        
-        OrderPaymentStatus newStatus;
-        try {
-            newStatus = OrderPaymentStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            log.error("Status de pagamento inválido: {}", status);
-            throw new IllegalArgumentException("Status de pagamento inválido: " + status);
-        }
-        
-        payment.updateStatus(newStatus);
-        paymentRepository.save(payment);
 
-        if (newStatus == OrderPaymentStatus.APPROVED) {
-            log.info("Pagamento {} aprovado! Publicando evento.", paymentId);
+    @Override
+    @Transactional
+    public void initializePayment(OrderCreatedEvent event) {
+
+        try {
+            log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
+
+            if (paymentRepository.existsByOrderId(event.getId())) {
+                log.info("Pagamento já existe para o pedido {}", event.getId());
+                return;
+            }
+
+            var generateQrCodeBody = generateQrCodeRequestMapper.toRequest(event);
+            var payment = new Payment(
+                    event.getUserId(),
+                    event.getId(),
+                    generateQrCodeBody.getTotal_amount()
+            );
+            generateQrCodeBody.setExpiration_date(payment.getLaPazISO8601ExpiresIn());
+
+            var generateQrCodeResponse = acquirerPort.generateQrCode(generateQrCodeBody);
+
+            payment.setQrCode(generateQrCodeResponse.getQr_data());
+
+            var savedPayment = paymentRepository.save(payment);
+
+            log.info("Pagamento inicializado com ID: {}, qrCode: {}, pedido: {}",
+                    savedPayment.getId(), savedPayment.getQrCode(), savedPayment.getOrderId());
+
+        }
+        catch (Exception ex) {
+
+            log.warn("Erro na inicialização do pagamento. Pedido: {}, Causa: {}", event.getId(), ex.getMessage());
+
+            var paymentInitializationErrorEvent = new PaymentInitializationErrorEvent(event.getId(), ex.getMessage());
+            eventPublisher.publishEvent(paymentInitializationErrorEvent);
+
+            throw  ex;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void processPaymentNotification(AcquirerNotificationRequest acquirerNotificationRequest) {
+
+        var acquirerPaymentResponse = acquirerPort.getAcquirerPayments(acquirerNotificationRequest.getDataId());
+        var longExternalRefernce = Long.parseLong(acquirerPaymentResponse.getExternal_reference());
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(longExternalRefernce);
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
+            throw new PaymentNotFoundException("Pagamento", longExternalRefernce);
+        }
+        else if(payment.get().getStatus() == PaymentStatus.APPROVED) {
+            log.info("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
+            return;
+        }
+        // Indica que se trata de uma segunda tentativa de pagamento
+        else if(payment.get().getStatus() != PaymentStatus.PENDING) {
+            payment.get().setId(null);
+        }
+
+        payment.get().setStatus(acquirerPaymentResponse.getStatus());
+        payment.get().setType(acquirerPaymentResponse.getPaymentType());
+        payment.get().setTid(acquirerNotificationRequest.getDataId());
+        paymentRepository.save(payment.get());
+
+        if (acquirerPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
+            log.info("Pagamento aprovado: {}, Publicando evento!", payment.get().getId());
+
             eventPublisher.publishEvent(
                 PaymentApprovedEvent.of(
-                    payment.getId(),
-                    payment.getOrderId(),
-                    payment.getAmount(),
-                    payment.getMethod().name()
+                    payment.get().getId(),
+                    payment.get().getOrderId(),
+                    payment.get().getAmount(),
+                    payment.get().getTypeName()
                 )
             );
+
+            log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.get().getId(), payment.get().getOrderId());
         }
     }
-} 
+
+    @Override
+    @Transactional(readOnly = true)
+    public PaymentStatusResponse getOrderPaymentStatus(Long orderId) {
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(orderId);
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
+            throw new PaymentNotFoundException("Pagamento", orderId);
+        }
+
+        accessManager.validateAccess(payment.get().getUserId());
+
+
+        return paymentStatusResponseMapper.toResponse(payment.get());
+    }
+
+    @Override
+    @Transactional
+    public void processExpiredPayments() {
+
+        var expiredPayments = paymentRepository.findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime.now());
+
+        if (expiredPayments.isEmpty()) {
+            log.info("Nenhum pagamento pendente expirado encontrado!");
+            return;
+        }
+
+        for (Payment expiredPayment: expiredPayments) {
+            log.info("Iniciando processamento expirado: {}, pedido: {}, expirado em: {}", expiredPayment.getId(), expiredPayment.getOrderId(), expiredPayment.getExpiresIn().toString());
+            expiredPayment.setStatus(PaymentStatus.CANCELLED);
+            paymentRepository.save(expiredPayment);
+
+            log.info("Pagamento expirado cancelado: {}", expiredPayment.getId());
+
+            var expiredEvent = new PaymentExpiredEvent(expiredPayment.getId(), expiredPayment.getOrderId(), expiredPayment.getExpiresIn());
+            eventPublisher.publishEvent(expiredEvent);
+
+            log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QrCodeResponse getOrderPaymentQrCode(Long orderId) {
+        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(orderId);
+
+        if (payment.isEmpty()) {
+            log.warn("Pagamento não foi encontrado a partir do orderId! {}", orderId);
+            throw new PaymentNotFoundException("Pagamento", orderId);
+        }
+
+        accessManager.validateAccess(payment.get().getUserId());
+
+        return qrCodeResponseMapper.toResponse(payment.get());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AcquirerOrderResponse getAcquirerOrder(Long merchantOrder) {
+        var order = acquirerPort.getAcquirerOrder(merchantOrder);
+
+        if (order == null) {
+            log.warn("Pedido não foi encontrado no adquirente! Merchant Order: {}", merchantOrder);
+            throw new OrderNotFoundException("Pedido adquirente", merchantOrder);
+        }
+
+        return order;
+    }
+}

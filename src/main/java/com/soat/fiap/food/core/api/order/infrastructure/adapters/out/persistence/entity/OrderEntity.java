@@ -1,83 +1,58 @@
 package com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.entity;
 
+import com.soat.fiap.food.core.api.order.domain.vo.OrderNumber;
+import com.soat.fiap.food.core.api.order.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.infrastructure.adapters.out.persistence.converter.OrderNumberConverter;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entidade JPA para pedido
- */
+import static org.hibernate.type.SqlTypes.NAMED_ENUM;
+
 @Entity
 @Table(name = "orders")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class OrderEntity {
-    
+
+    // GenerationType IDENTITY não acionará o @PrePersist de criação do orderNumber
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(name = "order_number")
-    private String orderNumber;
-    
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderStatusEntity status;
-    
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq_gen")
+    @SequenceGenerator(name = "order_id_seq_gen", sequenceName = "orders_id_seq", allocationSize = 1)
+    private Integer id;
+
     @Column(name = "user_id")
-    private Long userId;
-    
-    @Column(name = "total", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalAmount;
-    
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<OrderItemEntity> items = new ArrayList<>();
-    
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    /**
-     * Adiciona um item ao pedido e atualiza o relacionamento
-     * 
-     * @param item Item a ser adicionado
-     */
-    public void addItem(OrderItemEntity item) {
-        items.add(item);
-        item.setOrder(this);
+    private Integer userId;
+
+    @Convert(converter = OrderNumberConverter.class)
+    @Column(name = "order_number", length = 20, nullable = false, unique = true)
+    private OrderNumber orderNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "order_status_enum ")
+    @JdbcTypeCode(NAMED_ENUM)
+    private OrderStatus orderStatus = OrderStatus.RECEIVED;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amount;
+
+    @Embedded
+    private AuditInfo auditInfo = new AuditInfo();
+
+    @OneToMany(mappedBy = "order",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            orphanRemoval = true)
+    private List<OrderItemEntity> orderItems = new ArrayList<>();
+
+    @PrePersist
+    public void generateOrderNumber() {
+        this.orderNumber = new OrderNumber(LocalDate.now().getYear(), this.id.intValue());
     }
-    
-    /**
-     * Remove um item do pedido
-     * 
-     * @param item Item a ser removido
-     */
-    public void removeItem(OrderItemEntity item) {
-        items.remove(item);
-        item.setOrder(null);
-    }
-    
-    /**
-     * Enum que representa os possíveis status de um pedido no banco de dados
-     */
-    public enum OrderStatusEntity {
-        RECEIVED,
-        WAITING_PAYMENT,
-        PREPARING,
-        READY,
-        COMPLETED,
-        CANCELLED
-    }
-} 
+}

@@ -42,6 +42,7 @@ docker run --rm \
   --network=$NETWORK \
   -v $(pwd)/src/main/resources:/liquibase/changelog \
   -v $(pwd)/build/dependencies:/liquibase/lib \
+  -e TZ=America/Sao_Paulo \
   liquibase/liquibase:4.25.1 \
   --driver=org.postgresql.Driver \
   --classpath=/liquibase/changelog:/liquibase/lib/postgresql.jar \
@@ -61,6 +62,7 @@ docker run --rm \
   --network=$NETWORK \
   -v $(pwd)/src/main/resources:/liquibase/changelog \
   -v $(pwd)/build/dependencies:/liquibase/lib \
+  -e TZ=America/Sao_Paulo \
   liquibase/liquibase:4.25.1 \
   --driver=org.postgresql.Driver \
   --classpath=/liquibase/changelog:/liquibase/lib/postgresql.jar \
@@ -78,4 +80,4 @@ echo "  Sistema: PostgreSQL"
 echo "  Servidor: $DB_HOST"
 echo "  Usuário: postgres"
 echo "  Senha: postgres"
-echo "  Banco de dados: fastfood" 
+echo "  Banco de dados: fastfood"
