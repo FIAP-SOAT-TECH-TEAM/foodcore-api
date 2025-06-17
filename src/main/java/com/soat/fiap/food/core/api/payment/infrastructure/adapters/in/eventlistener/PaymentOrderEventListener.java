@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.adapters.in.eventlistener;
 
-import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.ports.in.PaymentUseCase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

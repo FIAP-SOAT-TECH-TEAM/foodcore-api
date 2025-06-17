@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductStockUpdateInput;
-import com.soat.fiap.food.core.api.order.domain.events.OrderItemCanceledEvent;
-import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCanceledEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 
 import java.util.List;
 

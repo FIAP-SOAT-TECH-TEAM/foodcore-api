@@ -5,7 +5,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Produ
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductStockForCreatedItemsUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
-import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 /**

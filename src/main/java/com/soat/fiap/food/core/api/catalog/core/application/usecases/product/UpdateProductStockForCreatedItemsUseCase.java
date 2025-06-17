@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductStockU
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.order.domain.exceptions.OrderItemNotFoundException;
+import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
