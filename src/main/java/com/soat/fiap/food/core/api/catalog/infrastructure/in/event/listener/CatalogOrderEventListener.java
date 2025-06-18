@@ -2,9 +2,9 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.in.event.listener;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product.UpdateProductStockForCanceledItemsController;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product.UpdateProductStockForCreatedItemsController;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
-import com.soat.fiap.food.core.api.order.domain.events.OrderCanceledEvent;
-import com.soat.fiap.food.core.api.order.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderCanceledEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CatalogOrderEventListener {
 
-    private final DataSource dataSource;
+    private final CatalogDataSource catalogDataSource;
 
-    public CatalogOrderEventListener(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public CatalogOrderEventListener(CatalogDataSource catalogDataSource) {
+        this.catalogDataSource = catalogDataSource;
     }
 
     /**
@@ -32,7 +32,7 @@ public class CatalogOrderEventListener {
         log.info("Módulo Catalogo: Notificado de criação de pedido: {}),",
                 event.getId());
 
-        UpdateProductStockForCreatedItemsController.updateProductStockForCreatedItems(event, dataSource);
+        UpdateProductStockForCreatedItemsController.updateProductStockForCreatedItems(event, catalogDataSource);
 
         log.info("Quantidade em estoque atualizada para: {} produtos.", event.getItems().size());
     }
@@ -47,7 +47,7 @@ public class CatalogOrderEventListener {
         log.info("Módulo Catalogo: Notificado de cancelamento de pedido: {}),",
                 event.getId());
 
-        UpdateProductStockForCanceledItemsController.updateProductStockForCanceledItems(event, dataSource);
+        UpdateProductStockForCanceledItemsController.updateProductStockForCanceledItems(event, catalogDataSource);
 
         log.info("Quantidade em estoque atualizada para: {} produtos.", event.getItems().size());
     }

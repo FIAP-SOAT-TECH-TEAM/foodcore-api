@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +11,12 @@ import java.util.Optional;
  */
 public class CatalogGateway {
 
-    private final DataSource dataSource;
+    private final CatalogDataSource catalogDataSource;
 
     public CatalogGateway(
-            DataSource dataSource
+            CatalogDataSource catalogDataSource
     ) {
-        this.dataSource = dataSource;
+        this.catalogDataSource = catalogDataSource;
     }
 
     /**
@@ -26,7 +26,7 @@ public class CatalogGateway {
      * @return Agregado salvo com identificadores atualizados
      */
     public Catalog save(Catalog catalog) {
-        return dataSource.save(catalog);
+        return catalogDataSource.save(catalog);
     }
 
     /**
@@ -36,7 +36,7 @@ public class CatalogGateway {
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
     public Optional<Catalog> findById(Long id) {
-        return dataSource.findById(id);
+        return catalogDataSource.findById(id);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CatalogGateway {
      * @return Optional contendo o catálogo ou vazio se não encontrado
      */
     public Optional<Catalog> findByName(String name) {
-        return dataSource.findByName(name);
+        return catalogDataSource.findByName(name);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CatalogGateway {
      * @return Lista de catálogos
      */
     public List<Catalog> findAll() {
-        return dataSource.findAll();
+        return catalogDataSource.findAll();
     }
 
     /**
@@ -65,7 +65,7 @@ public class CatalogGateway {
      * @return true se existir um catálogo com um determinado ID, false caso contrário
      */
     public boolean existsById(Long id) {
-        return dataSource.existsById(id);
+        return catalogDataSource.existsById(id);
     }
 
     /**
@@ -75,7 +75,7 @@ public class CatalogGateway {
      * @return true se existir um catálogo com um determinado nome, false caso contrário
      */
     public boolean existsByName(String name) {
-        return dataSource.existsByName(name);
+        return catalogDataSource.existsByName(name);
     }
 
     /**
@@ -86,7 +86,7 @@ public class CatalogGateway {
      * @return true se existir outro catálogo com o mesmo nome e ID diferente, false caso contrário
      */
     public boolean existsByNameAndIdNot(String name, Long id) {
-        return dataSource.existsByNameAndIdNot(name, id);
+        return catalogDataSource.existsByNameAndIdNot(name, id);
     }
 
     /**
@@ -96,7 +96,7 @@ public class CatalogGateway {
      * @return true se houver ao menos uma categoria associada, false caso contrário
      */
     public boolean existsCategoryByCatalogId(Long catalogId) {
-        return dataSource.existsCategoryByCatalogId(catalogId);
+        return catalogDataSource.existsCategoryByCatalogId(catalogId);
     }
 
     /**
@@ -105,7 +105,7 @@ public class CatalogGateway {
      * @param id ID do catálogo a ser removido
      */
     public void delete(Long id) {
-        dataSource.delete(id);
+        catalogDataSource.delete(id);
     }
 
     /**
@@ -114,6 +114,6 @@ public class CatalogGateway {
      * @param productId ID do produto
      */
     public Optional<Catalog> findByProductId(Long productId) {
-        return dataSource.findByProductId(productId);
+        return catalogDataSource.findByProductId(productId);
     }
 }

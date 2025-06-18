@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.payment.application.mapper.request;
 
-import com.soat.fiap.food.core.api.order.domain.events.OrderItemCreatedEvent;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.payment.application.dto.request.GenerateQrCodeItemRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.controller;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog.*;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,10 +27,10 @@ import java.util.List;
 @Slf4j
 public class CatalogController {
 
-    private final DataSource dataSource;
+    private final CatalogDataSource catalogDataSource;
 
-    public CatalogController(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public CatalogController(CatalogDataSource catalogDataSource) {
+        this.catalogDataSource = catalogDataSource;
     }
 
     @GetMapping
@@ -46,7 +46,7 @@ public class CatalogController {
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
     public ResponseEntity<List<CatalogResponse>> getAllCatalogs() {
         log.debug("Requisição para listar todos os catálogos");
-        return ResponseEntity.ok(GetAllCatalogsController.getAllCatalogs(dataSource));
+        return ResponseEntity.ok(GetAllCatalogsController.getAllCatalogs(catalogDataSource));
     }
 
     @GetMapping("/{id}")
@@ -67,7 +67,7 @@ public class CatalogController {
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
         log.debug("Requisição para buscar catálogo por ID: {}", id);
-        return ResponseEntity.ok(GetCatalogByIdController.getCatalogById(id, dataSource));
+        return ResponseEntity.ok(GetCatalogByIdController.getCatalogById(id, catalogDataSource));
     }
 
     @PostMapping
@@ -89,7 +89,7 @@ public class CatalogController {
             @Valid @RequestBody CatalogRequest request) {
         log.debug("Requisição para criar novo catálogo");
 
-        var response = SaveCatalogController.saveCatalog(request, dataSource);
+        var response = SaveCatalogController.saveCatalog(request, catalogDataSource);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -115,7 +115,7 @@ public class CatalogController {
             @PathVariable Long id,
             @Valid @RequestBody CatalogRequest request) {
         log.debug("Requisição para atualizar catálogo: {}", id);
-        var response = UpdateCatalogController.updateCatalog(id, request, dataSource);
+        var response = UpdateCatalogController.updateCatalog(id, request, catalogDataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -136,7 +136,7 @@ public class CatalogController {
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
         log.debug("Requisição para excluir catálogo: {}", id);
-        DeleteCatalogController.deleteCatalog(id, dataSource);
+        DeleteCatalogController.deleteCatalog(id, catalogDataSource);
         return ResponseEntity.noContent().build();
     }
 }

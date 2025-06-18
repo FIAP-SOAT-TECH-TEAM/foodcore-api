@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.GetProductByIdUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.ProductPresenter;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,13 +20,13 @@ public class GetProductByIdController {
      * @param catalogId  ID do catálogo
      * @param categoryId ID da categoria
      * @param productId  ID do produto
-     * @param dataSource Origem de dados para o gateway
+     * @param catalogDataSource Origem de dados para o gateway
      * @return o produto encontrado
      */
-    public static ProductResponse getProductById(Long catalogId, Long categoryId, Long productId, DataSource dataSource) {
+    public static ProductResponse getProductById(Long catalogId, Long categoryId, Long productId, CatalogDataSource catalogDataSource) {
         log.debug("Buscando produto de id: {} na categoria de id: {} no catalogo de id: {}", productId, categoryId, catalogId);
 
-        var gateway = new CatalogGateway(dataSource);
+        var gateway = new CatalogGateway(catalogDataSource);
 
         var existingProduct = GetProductByIdUseCase.getProductById(catalogId, categoryId, productId, gateway);
 
