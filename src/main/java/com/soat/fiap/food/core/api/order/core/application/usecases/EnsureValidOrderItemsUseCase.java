@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
@@ -18,14 +19,15 @@ public class EnsureValidOrderItemsUseCase {
      * Valida os produtos dos itens do pedido com base no catálogo.
      *
      * @param orderItems Lista de itens do pedido
+     * @param gateway Gateway para comunicação com o mundo exterior
      * @throws OrderException se o produto não for encontrado
      * @throws OrderItemException se houver divergência nos dados dos produtos
      */
-    public static void ensureValidOrderItems(List<OrderItem> orderItems) {
+    public static void ensureValidOrderItems(List<OrderItem> orderItems, CatalogGateway gateway) {
 
         for (OrderItem orderItem : orderItems) {
 
-            var catalog = catalogRepository.findByProductId(orderItem.getProductId());
+            var catalog = gateway.findByProductId(orderItem.getProductId());
 
             if (catalog.isEmpty()) {
                 throw new ProductNotFoundException("O produto do item do pedido não existe");

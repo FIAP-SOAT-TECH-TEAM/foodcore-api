@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Porta de saída para persistência de usuários
+ * DataSource para persistência de usuários
  */
-public interface DataSource {
+public interface UserDataSource {
     
     /**
      * Salva um usuário

@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.core.domain.model.Order;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -16,14 +17,12 @@ public class GetActiveOrdersSortedUseCase {
      * A ordem de prioridade de status é: PRONTO > EM_PREPARACAO > RECEBIDO.
      * Pedidos com status FINALIZADO não são retornados.
      *
+     * @param gateway Gateway para comunicação com o mundo exterior
+     * @return Pedidos ativos ordenados por odem de prioridade
      */
-    public List<OrderResponse> getActiveOrdersSorted() {
-        logger.info("Buscando pedidos ativos ordenados por prioridade e data de criação.");
+    public static List<Order> getActiveOrdersSorted(OrderGateway gateway) {
+        log.info("Buscando pedidos ativos ordenados por prioridade e data de criação.");
 
-        var activeOrders = dataSource.findActiveOrdersSorted();
-
-        return activeOrders.stream()
-                .map(orderResponseMapper::toResponse)
-                .toList();
+        return gateway.findActiveOrdersSorted();
     }
 }

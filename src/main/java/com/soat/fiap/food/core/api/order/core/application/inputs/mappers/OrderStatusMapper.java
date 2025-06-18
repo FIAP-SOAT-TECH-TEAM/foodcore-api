@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.order.core.application.inputs.OrderStatusInput;
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 
 /**
  * Classe utilitária responsável por mapear objetos entre {@link OrderStatusRequest} e {@link OrderStatusInput}.

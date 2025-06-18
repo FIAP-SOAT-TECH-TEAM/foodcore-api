@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postg
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.CatalogEntityMapper;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
  * Implementação concreta: DataSource para persistência do agregado Catálogo.
  */
 @Component
-public class PostgresDataSource implements DataSource {
+public class PostgresCatalogDataSource implements CatalogDataSource {
 
     private final SpringDataCatalogRepository springDataCatalogRepository;
     private final CatalogEntityMapper catalogEntityMapper;
 
-    public PostgresDataSource(
+    public PostgresCatalogDataSource(
             SpringDataCatalogRepository springDataCatalogRepository,
             CatalogEntityMapper catalogEntityMapper
     ) {

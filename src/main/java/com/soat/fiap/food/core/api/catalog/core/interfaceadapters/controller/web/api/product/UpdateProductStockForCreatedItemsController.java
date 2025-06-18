@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductStockU
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.ProductStockUpdateMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductStockForCreatedItemsUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,10 +18,10 @@ public class UpdateProductStockForCreatedItemsController {
      * Atualiza quantidade em estoque de produtos de acordo com a quantidade solicitada em um pedido.
      *
      * @param orderCreatedEvent evento de criação de pedido
-     * @param dataSource Origem de dados para o gateway
+     * @param catalogDataSource Origem de dados para o gateway
      */
-    public static void updateProductStockForCreatedItems(OrderCreatedEvent orderCreatedEvent, DataSource dataSource) {
-        var catalogGateway = new CatalogGateway(dataSource);
+    public static void updateProductStockForCreatedItems(OrderCreatedEvent orderCreatedEvent, CatalogDataSource catalogDataSource) {
+        var catalogGateway = new CatalogGateway(catalogDataSource);
         var productStockUpdateInput = ProductStockUpdateMapper.toInput(orderCreatedEvent.getItems());
 
         for (ProductStockUpdateInput.ProductStockItemInput productStockItemInput: productStockUpdateInput.items()) {

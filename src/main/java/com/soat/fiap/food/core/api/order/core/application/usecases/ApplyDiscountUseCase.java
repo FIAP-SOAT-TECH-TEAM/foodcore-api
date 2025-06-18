@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.order.core.application.usecases;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.user.domain.exceptions.UserNotFoundException;
+import com.soat.fiap.food.core.api.user.interfaceadapters.gateways.UserGateway;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -21,11 +22,12 @@ public class ApplyDiscountUseCase {
      * Caso o cliente não seja encontrado, uma exceção {@link OrderException} é lançada.
      *
      * @param order pedido no qual o desconto será aplicado
+     * @param gateway Gateway para comunicação com o mundo exterior
      * @throws OrderException se o cliente do pedido não for encontrado
      */
-    public static void applyDiscount(Order order) {
+    public static void applyDiscount(Order order, UserGateway gateway) {
 
-        var user = userRepository.findById(order.getUserId());
+        var user = gateway.findById(order.getUserId());
 
         if (user.isEmpty()) {
             throw new UserNotFoundException("Cliente do pedido não encontrado");

@@ -1,10 +1,14 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.event.listener;
 
-import com.soat.fiap.food.core.api.order.core.application.ports.in.OrderUseCase;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.UpdateOrderStatusRequest;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.domain.events.PaymentInitializationErrorEvent;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -17,11 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Slf4j
 public class OrderPaymentEventListener {
+
+    private final OrderDataSource orderDataSource;
+    private final PaymentDataSource paymentDataSource;
+    private final EventPublisherSource eventPublisherSource;
     
-    private final OrderUseCase orderUseCase;
-    
-    public OrderPaymentEventListener(OrderUseCase orderUseCase) {
-        this.orderUseCase = orderUseCase;
+    public OrderPaymentEventListener(OrderDataSource orderDataSource, PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource) {
+        this.orderDataSource = orderDataSource;
+        this.paymentDataSource = paymentDataSource;
+        this.eventPublisherSource = eventPublisherSource;
     }
     
     /**
@@ -34,8 +42,14 @@ public class OrderPaymentEventListener {
     public void handlePaymentApprovedEvent(PaymentApprovedEvent event) {
         log.info("Módulo Order: Recebido evento de pagamento aprovado para o pedido: {}, valor: {}",
                 event.getOrderId(), event.getAmount());
-        
-          orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.PREPARING);
+
+          var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.PREPARING);
+          UpdateOrderStatusController.updateOrderStatus(
+                  event.getOrderId(),
+                  orderUpddateStatusRequest,
+                  orderDataSource,
+                  paymentDataSource,
+                  eventPublisherSource);
 
           log.info("Pedido {} atualizado para status PREPARING após pagamento aprovado", event.getOrderId());
     }
@@ -50,7 +64,13 @@ public class OrderPaymentEventListener {
     public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
         log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
 
-        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.CANCELLED);
+        var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.CANCELLED);
+        UpdateOrderStatusController.updateOrderStatus(
+                event.getOrderId(),
+                orderUpddateStatusRequest,
+                orderDataSource,
+                paymentDataSource,
+                eventPublisherSource);
     }
 
     /**
@@ -63,6 +83,12 @@ public class OrderPaymentEventListener {
     public void handlePaymentExpiredEvent(PaymentExpiredEvent event) {
         log.info("Módulo Order: Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(), event.getPaymentId());
 
-        orderUseCase.updateOrderStatus(event.getOrderId(), OrderStatus.CANCELLED);
+        var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.CANCELLED);
+        UpdateOrderStatusController.updateOrderStatus(
+                event.getOrderId(),
+                orderUpddateStatusRequest,
+                orderDataSource,
+                paymentDataSource,
+                eventPublisherSource);
     }
 } 

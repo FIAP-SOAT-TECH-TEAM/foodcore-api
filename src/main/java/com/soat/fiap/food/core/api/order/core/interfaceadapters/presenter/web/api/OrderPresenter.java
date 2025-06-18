@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.order.core.interfaceadapters.presenter.web.a
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderItemResponse;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
 
 import java.util.List;
 
@@ -32,5 +33,31 @@ public class OrderPresenter {
                 order.getCreatedAt(),
                 order.getUpdatedAt()
         );
+    }
+
+    /**
+     * Converte uma instância da entidade {@link Order} para um {@link OrderStatusResponse}.
+     *
+     * @param order A entidade de domínio {@link Order} a ser convertida.
+     * @return Um DTO {@link OrderStatusResponse} com os dados do status do pedido.
+     */
+    public static OrderStatusResponse toOrderStatusResponse(Order order) {
+        return OrderStatusResponse.builder()
+                .orderId(order.getId())
+                .orderStatus(order.getOrderStatus())
+                .build();
+    }
+
+    /**
+     * Converte uma lista de instâncias da entidade {@link Order} para uma lista de {@link OrderResponse},
+     * utilizada na exposição de dados via API REST (web.api).
+     *
+     * @param orders A lista de entidades de domínio {@link Order} a serem convertidas.
+     * @return Uma lista de DTOs {@link OrderResponse} com os dados dos pedidos formatados para resposta HTTP.
+     */
+    public static List<OrderResponse> toListOrderResponse(List<Order> orders) {
+        return orders.stream()
+                .map(OrderPresenter::toOrderResponse)
+                .toList();
     }
 }

@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.controller;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product.*;
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
@@ -30,12 +30,12 @@ import java.util.List;
 @Slf4j
 public class ProductController {
 
-    private final DataSource dataSource;
+    private final CatalogDataSource catalogDataSource;
     private final ImageDataSource imageDataSource;
     private final EventPublisherSource eventPublisherSource;
 
-    public ProductController(DataSource dataSource, ImageDataSource imageDataSource, EventPublisherSource eventPublisherSource) {
-        this.dataSource = dataSource;
+    public ProductController(CatalogDataSource catalogDataSource, ImageDataSource imageDataSource, EventPublisherSource eventPublisherSource) {
+        this.catalogDataSource = catalogDataSource;
         this.imageDataSource = imageDataSource;
         this.eventPublisherSource = eventPublisherSource;
     }
@@ -61,7 +61,7 @@ public class ProductController {
             @PathVariable Long catalogId,
             @Valid @RequestBody ProductRequest request) {
         log.debug("Requisição para criar novo produto na categoria {} do catálogo {}", request.getCategoryId(), catalogId);
-        ProductResponse response = SaveProductController.saveProduct(catalogId, request, dataSource, eventPublisherSource);
+        ProductResponse response = SaveProductController.saveProduct(catalogId, request, catalogDataSource, eventPublisherSource);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -86,7 +86,7 @@ public class ProductController {
             @PathVariable Long categoryId
     ) {
         log.debug("Requisição para listar produtos da categoria {} no catálogo {}", categoryId, catalogId);
-        List<ProductResponse> products = GetAllProductsController.getAllProducts(catalogId, categoryId, dataSource);
+        List<ProductResponse> products = GetAllProductsController.getAllProducts(catalogId, categoryId, catalogDataSource);
         return ResponseEntity.ok(products);
     }
 
@@ -112,7 +112,7 @@ public class ProductController {
             @Parameter(description = "ID do produto", example = "100", required = true)
             @PathVariable Long productId) {
         log.debug("Requisição para buscar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
-        ProductResponse response = GetProductByIdController.getProductById(catalogId, categoryId, productId, dataSource);
+        ProductResponse response = GetProductByIdController.getProductById(catalogId, categoryId, productId, catalogDataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -141,7 +141,7 @@ public class ProductController {
             @PathVariable Long productId,
             @Valid @RequestBody ProductRequest request) {
         log.debug("Requisição para atualizar produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
-        ProductResponse response = UpdateProductController.updateProduct(catalogId, categoryId, productId, request, dataSource);
+        ProductResponse response = UpdateProductController.updateProduct(catalogId, categoryId, productId, request, catalogDataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -165,7 +165,7 @@ public class ProductController {
             @Parameter(description = "ID do produto", example = "100", required = true)
             @PathVariable Long productId) {
         log.debug("Requisição para excluir produto {} da categoria {} do catálogo {}", productId, categoryId, catalogId);
-        DeleteProductController.deleteProduct(catalogId, categoryId, productId, dataSource);
+        DeleteProductController.deleteProduct(catalogId, categoryId, productId, catalogDataSource);
         return ResponseEntity.noContent().build();
     }
 
@@ -194,7 +194,7 @@ public class ProductController {
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
         log.debug("Requisição para atualizar imagem do produto {} na categoria {} do catálogo {}", productId, categoryId, catalogId);
-        UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, imageFile, dataSource, imageDataSource);
+        UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, imageFile, catalogDataSource, imageDataSource);
         return ResponseEntity.noContent().build();
     }
 

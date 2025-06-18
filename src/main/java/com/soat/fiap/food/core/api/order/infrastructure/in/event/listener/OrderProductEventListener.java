@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.event.listener;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.events.ProductCreatedEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -10,10 +11,9 @@ import org.springframework.stereotype.Component;
  * Ouvinte de eventos de catalogo no módulo de pedidos
  */
 @Component
+@Slf4j
 public class OrderProductEventListener {
-    
-    private static final Logger logger = LoggerFactory.getLogger(OrderProductEventListener.class);
-    
+
     /**
      * Processa o evento de produto criado
      * 
@@ -21,7 +21,7 @@ public class OrderProductEventListener {
      */
     @EventListener
     public void handleProductCreatedEvent(ProductCreatedEvent event) {
-        logger.info("Módulo Order: Notificado da criação do produto: {} (ID: {}), com preço: {}",
+        log.info("Módulo Order: Notificado da criação do produto: {} (ID: {}), com preço: {}",
                 event.getProductName(), event.getProductId(), event.getPrice());
     }
 } 

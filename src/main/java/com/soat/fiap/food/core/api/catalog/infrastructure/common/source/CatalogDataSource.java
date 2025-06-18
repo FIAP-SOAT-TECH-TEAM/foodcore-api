@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * DataSource para persistência do agregado Catálogo.
  */
-public interface DataSource {
+public interface CatalogDataSource {
 
     /**
      * Salva o agregado Catálogo.

@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * DataSource para persistência de pedidos
  */
-public interface DataSource {
+public interface OrderDataSource {
 
     /**
      * Salva um pedido

@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.api.order.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +12,10 @@ import java.util.Optional;
  */
 public class OrderGateway {
 
-    private final DataSource dataSource;
+    private final OrderDataSource orderDataSource;
 
-    public OrderGateway(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public OrderGateway(OrderDataSource orderDataSource) {
+        this.orderDataSource = orderDataSource;
     }
 
     /**
@@ -25,7 +25,7 @@ public class OrderGateway {
      * @return Pedido salvo com identificadores atualizados
      */
     public Order save(Order order) {
-        return dataSource.save(order);
+        return orderDataSource.save(order);
     }
 
     /**
@@ -35,7 +35,7 @@ public class OrderGateway {
      * @return Optional contendo o pedido ou vazio se não encontrado
      */
     public Optional<Order> findById(Long id) {
-        return dataSource.findById(id);
+        return orderDataSource.findById(id);
     }
 
     /**
@@ -44,7 +44,7 @@ public class OrderGateway {
      * @return Lista de pedidos
      */
     public List<Order> findAll() {
-        return dataSource.findAll();
+        return orderDataSource.findAll();
     }
 
     /**
@@ -53,7 +53,7 @@ public class OrderGateway {
      * @param id ID do pedido a ser removido
      */
     public void delete(Long id) {
-        dataSource.delete(id);
+        orderDataSource.delete(id);
     }
 
     /**
@@ -63,7 +63,7 @@ public class OrderGateway {
      * @return Lista de pedidos com o status informado
      */
     public List<Order> findByOrderStatus(OrderStatus status) {
-        return dataSource.findByOrderStatus(status);
+        return orderDataSource.findByOrderStatus(status);
     }
 
     /**
@@ -73,7 +73,7 @@ public class OrderGateway {
      * @return Lista de pedidos do cliente
      */
     public List<Order> findByUserId(Long userId) {
-        return dataSource.findByUserId(userId);
+        return orderDataSource.findByUserId(userId);
     }
 
     /**
@@ -85,6 +85,6 @@ public class OrderGateway {
      * @return Lista de pedidos ativos ordenados
      */
     public List<Order> findActiveOrdersSorted() {
-        return dataSource.findActiveOrdersSorted();
+        return orderDataSource.findActiveOrdersSorted();
     }
 }

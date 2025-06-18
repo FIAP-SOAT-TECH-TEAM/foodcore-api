@@ -1,12 +1,17 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.web.api.controller;
 
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.GetActiveOrdersSortedController;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.SaveOrderController;
-import com.soat.fiap.food.core.api.order.infrastructure.common.source.DataSource;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.UpdateOrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,13 +36,22 @@ import java.util.List;
 @Slf4j
 public class OrderController {
 
-    private final DataSource dataSource;
+    private final OrderDataSource orderDataSource;
+    private final UserDataSource userDataSource;
+    private final CatalogDataSource catalogDataSource;
+    private final PaymentDataSource paymentDataSource;
     private final EventPublisherSource eventPublisherSource;
 
-    public OrderController(DataSource dataSource,
-        EventPublisherSource eventPublisherSource) {
-        this.dataSource = dataSource;
+    public OrderController(OrderDataSource orderDataSource,
+                           UserDataSource userDataSource,
+                           CatalogDataSource catalogDataSource,
+                           PaymentDataSource paymentDataSource,
+                           EventPublisherSource eventPublisherSource) {
+        this.orderDataSource = orderDataSource;
+        this.userDataSource = userDataSource;
+        this.catalogDataSource = catalogDataSource;
         this.eventPublisherSource = eventPublisherSource;
+        this.paymentDataSource = paymentDataSource;
     }
 
     @PostMapping
@@ -60,7 +74,12 @@ public class OrderController {
     })
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
         log.debug("Requisição para criar novo pedido recebida");
-        OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, dataSource, eventPublisherSource);
+        OrderResponse orderResponse = SaveOrderController.saveOrder(
+                createOrderRequest,
+                orderDataSource,
+                userDataSource,
+                catalogDataSource,
+                eventPublisherSource);
         return ResponseEntity.status(201).body(orderResponse);
     }
 
@@ -81,7 +100,7 @@ public class OrderController {
     public ResponseEntity<List<OrderResponse>> getActiveOrders() {
         log.debug("Requisição para listar pedidos ativos recebida");
 
-        List<OrderResponse> activeOrders = orderUseCase.getActiveOrdersSorted();
+        List<OrderResponse> activeOrders = GetActiveOrdersSortedController.getActiveOrdersSorted(orderDataSource);
 
         return ResponseEntity.ok(activeOrders);
     }
@@ -104,11 +123,16 @@ public class OrderController {
     })
     public ResponseEntity<OrderStatusResponse> updateOrderStatus(
             @PathVariable Long orderId,
-            @Valid @RequestBody OrderStatusRequest orderStatusRequest) {
+            @Valid @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest) {
 
         log.debug("Requisição para atualizar status do pedido {} recebida", orderId);
 
-        OrderStatusResponse response = orderUseCase.updateOrderStatus(orderId, orderStatusRequest);
+        OrderStatusResponse response = UpdateOrderStatusController.updateOrderStatus(
+                orderId,
+                updateOrderStatusRequest,
+                orderDataSource,
+                paymentDataSource,
+                eventPublisherSource);
 
         return ResponseEntity.ok(response);
     }
