@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.order.core.application.usecases;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
-import com.soat.fiap.food.core.api.payment.domain.exceptions.PaymentNotFoundException;
-import com.soat.fiap.food.core.api.payment.interfaceadapters.gateways.PaymentGateway;
+import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentNotFoundException;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import lombok.extern.slf4j.Slf4j;
 
 /**
