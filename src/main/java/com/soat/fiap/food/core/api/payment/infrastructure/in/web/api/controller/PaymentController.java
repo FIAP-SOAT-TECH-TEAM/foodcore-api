@@ -1,11 +1,13 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.controller;
 
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerTopicNotificationRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
-import com.soat.fiap.food.core.api.payment.core.application.ports.in.PaymentUseCase;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,10 +31,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class PaymentController {
 
-    private final PaymentUseCase paymentUseCase;
+    private final PaymentDataSource paymentDataSource;
+    private final AcquirerSource acquirerSource;
+    private final EventPublisherSource eventPublisherSource;
 
-    public PaymentController(PaymentUseCase paymentUseCase) {
-        this.paymentUseCase = paymentUseCase;
+    public PaymentController(PaymentDataSource paymentDataSource, AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
+        this.paymentDataSource = paymentDataSource;
+        this.acquirerSource = acquirerSource;
+        this.eventPublisherSource = eventPublisherSource;
     }
 
 

@@ -37,14 +37,6 @@ public class Payment {
     private String observations = "Pagamento via Mercado Pago";
     private AuditInfo auditInfo = new AuditInfo();
 
-    private static final DateTimeFormatter ISO_OFFSET_DATE_TIME_MILLIS_FIXED =
-            new DateTimeFormatterBuilder()
-                    .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
-                    .appendLiteral('.')
-                    .appendValue(ChronoField.MILLI_OF_SECOND, 3)
-                    .appendOffsetId()
-                    .toFormatter();
-
     /**
      * Construtor que cria uma nova instância de pagamento com os dados fornecidos.
      *
@@ -140,21 +132,6 @@ public class Payment {
      */
     public void markUpdatedNow() {
         this.auditInfo.setUpdatedAt(LocalDateTime.now());
-    }
-
-
-    /**
-     * Retorna a data de expiração formatada como uma String no padrão ISO 8601
-     * (yyyy-MM-dd'T'HH:mm:ssz) no fuso horário -04:00 (La Paz).
-     *
-     * @return String com a data de expiração formatada.
-     */
-    public String getLaPazISO8601ExpiresIn() {
-        return this.expiresIn
-                .atZone(ZoneId.of("America/Sao_Paulo"))
-                .withZoneSameInstant(ZoneId.of("America/La_Paz"))
-                .truncatedTo(ChronoUnit.MILLIS)
-                .format(ISO_OFFSET_DATE_TIME_MILLIS_FIXED);
     }
 
 }
