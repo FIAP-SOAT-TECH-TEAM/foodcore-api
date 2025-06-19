@@ -1,12 +1,12 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.request;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.GenerateQrCodeRequest;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoGenerateQrCodeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 /**
- * Mapper responsável por converter um {@link OrderCreatedInput} em um {@link GenerateQrCodeRequest},
+ * Mapper responsável por converter um {@link OrderCreatedInput} em um {@link MercadoPagoGenerateQrCodeEntity},
  * representando o corpo da requisição enviado ao adquirente para geração de um QR Code de pagamento.
  *
  * Este mapeamento é utilizado na integração com serviços externos como o Mercado Pago.
@@ -17,7 +17,7 @@ import org.mapstruct.Mapping;
 public interface GenerateQrCodeRequestMapper {
 
     /**
-     * Converte os dados de um {@link OrderCreatedInput} para um {@link GenerateQrCodeRequest},
+     * Converte os dados de um {@link OrderCreatedInput} para um {@link MercadoPagoGenerateQrCodeEntity},
      * que será enviado ao adquirente para geração do QR Code de pagamento.
      *
      * @param input Dados da criação de pedido, contendo ID, número do pedido, valor total e itens.
@@ -30,5 +30,5 @@ public interface GenerateQrCodeRequestMapper {
     @Mapping(target = "total_amount", source = "totalAmount")
     @Mapping(target = "items", source = "items")
     @Mapping(target = "expiration_date", ignore = true)
-    GenerateQrCodeRequest toRequest(OrderCreatedInput input);
+    MercadoPagoGenerateQrCodeEntity toRequest(OrderCreatedInput input);
 }

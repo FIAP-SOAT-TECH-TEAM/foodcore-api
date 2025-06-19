@@ -1,49 +1,52 @@
 package com.soat.fiap.food.core.api.payment.core.application.usecases;
 
-import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.api.payment.core.application.inputs.AcquirerNotificationInput;
 import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentNotFoundException;
+import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.AcquirerGateway;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Caso de uso: Processar notificação de pagamento recebida do adquirente.
+ */
+@Slf4j
 public class ProcessPaymentNotificationUseCase {
 
-    public void processPaymentNotification(AcquirerNotificationRequest acquirerNotificationRequest) {
+    /**
+     * Processa uma notificação de pagamento vinda do adquirente
+     *
+     * @param acquirerNotificationInput Dados da notificação recebida do adquirente
+     * @param acquirerGateway Gateway para comunicação com o adquirente
+     * @param paymentGateway Gateway para persistência e consulta de pagamentos
+     * @return Objeto {@link Payment} atualizado com os dados da notificação
+     */
+    public static Payment processPaymentNotification(
+            AcquirerNotificationInput acquirerNotificationInput,
+            AcquirerGateway acquirerGateway,
+            PaymentGateway paymentGateway) {
 
-        var acquirerPaymentResponse = acquirerSource.getAcquirerPayments(acquirerNotificationRequest.getDataId());
-        var longExternalRefernce = Long.parseLong(acquirerPaymentResponse.getExternal_reference());
-        var payment = paymentRepository.findTopByOrderIdOrderByIdDesc(longExternalRefernce);
+        var acquirerPaymentOutput = acquirerGateway.getAcquirerPayments(acquirerNotificationInput.dataId());
+        var payment = paymentGateway.findTopByOrderIdOrderByIdDesc(acquirerPaymentOutput.externalReference());
 
         if (payment.isEmpty()) {
-            log.warn("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
-            throw new PaymentNotFoundException("Pagamento", longExternalRefernce);
+            log.warn("Pagamento não foi encontrado a partir da external_reference! {}", acquirerPaymentOutput.externalReference());
+            throw new PaymentNotFoundException("Pagamento", acquirerPaymentOutput.externalReference());
         }
-        else if(payment.get().getStatus() == PaymentStatus.APPROVED) {
-            log.info("Pagamento não foi encontrado a partir da external_reference! {}", longExternalRefernce);
-            return;
+        else if (payment.get().getStatus() == PaymentStatus.APPROVED) {
+            log.info("Pagamento já aprovado {}!", acquirerPaymentOutput.externalReference());
+            return payment.get();
         }
         // Indica que se trata de uma segunda tentativa de pagamento
-        else if(payment.get().getStatus() != PaymentStatus.PENDING) {
+        else if (payment.get().getStatus() != PaymentStatus.PENDING) {
             payment.get().setId(null);
         }
 
-        payment.get().setStatus(acquirerPaymentResponse.getStatus());
-        payment.get().setType(acquirerPaymentResponse.getPaymentType());
-        payment.get().setTid(acquirerNotificationRequest.getDataId());
-        paymentRepository.save(payment.get());
+        payment.get().setStatus(acquirerPaymentOutput.status());
+        payment.get().setType(acquirerPaymentOutput.type());
+        payment.get().setTid(acquirerNotificationInput.dataId());
 
-        if (acquirerPaymentResponse.getStatus() == PaymentStatus.APPROVED) {
-            log.info("Pagamento aprovado: {}, Publicando evento!", payment.get().getId());
-
-            eventPublisher.publishEvent(
-                    PaymentApprovedEvent.of(
-                            payment.get().getId(),
-                            payment.get().getOrderId(),
-                            payment.get().getAmount(),
-                            payment.get().getTypeName()
-                    )
-            );
-
-            log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.get().getId(), payment.get().getOrderId());
-        }
+        return payment.get();
     }
 }

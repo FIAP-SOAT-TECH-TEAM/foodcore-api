@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
-import com.soat.fiap.food.core.api.user.domain.exceptions.UserNotFoundException;
-import com.soat.fiap.food.core.api.user.interfaceadapters.gateways.UserGateway;
+import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserNotFoundException;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import lombok.extern.slf4j.Slf4j;
 
 /**

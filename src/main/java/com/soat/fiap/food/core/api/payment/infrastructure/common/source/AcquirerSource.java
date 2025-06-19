@@ -1,11 +1,9 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.common.source;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.GenerateQrCodeRequest;
+import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerPaymentsResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.GenerateQrCodeResponse;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderEntity;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +24,7 @@ public interface AcquirerSource {
      *
      * @param id Identificador do pagamento.
      */
-    AcquirerPaymentsResponse getAcquirerPayments(String id);
+    AcquirerPaymentOutput getAcquirerPayments(String id);
 
     /**
      * Consulta um pedido (order) do adquirente pelo seu ID.

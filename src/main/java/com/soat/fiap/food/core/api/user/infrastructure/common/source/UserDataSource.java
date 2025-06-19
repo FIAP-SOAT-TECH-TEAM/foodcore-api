@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.user.infrastructure.common.source;
 
-import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.model.User;
 
 import java.util.List;
 import java.util.Optional;

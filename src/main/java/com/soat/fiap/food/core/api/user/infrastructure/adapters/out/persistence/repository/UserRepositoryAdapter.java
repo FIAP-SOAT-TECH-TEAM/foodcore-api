@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.repository;
 
-import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.domain.ports.out.UserRepository;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.mapper.UserEntityMapper;
 import org.springframework.stereotype.Component;

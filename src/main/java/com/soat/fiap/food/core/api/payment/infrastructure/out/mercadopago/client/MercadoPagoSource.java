@@ -1,14 +1,14 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.client;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.GenerateQrCodeRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerPaymentsResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.GenerateQrCodeResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.config.MercadoPagoProperties;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoQrCodeEntity;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.exceptions.MercadoPagoException;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.response.MercadoPagoPaymentOutputMapper;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.request.GenerateQrCodeRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -30,6 +30,7 @@ public class MercadoPagoSource implements AcquirerSource {
 
     private final MercadoPagoClient client;
     private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
+    private final MercadoPagoPaymentOutputMapper mercadoPagoPaymentOutputMapper;
     private final MercadoPagoProperties properties;
     private static final DateTimeFormatter ISO_OFFSET_DATE_TIME_MILLIS_FIXED =
             new DateTimeFormatterBuilder()
@@ -40,11 +41,12 @@ public class MercadoPagoSource implements AcquirerSource {
                     .toFormatter();
 
     public MercadoPagoSource(
-            MercadoPagoClient client, GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
+            MercadoPagoClient client, GenerateQrCodeRequestMapper generateQrCodeRequestMapper, MercadoPagoPaymentOutputMapper mercadoPagoPaymentOutputMapper,
             MercadoPagoProperties mercadoPagoProperties
     ) {
         this.client = client;
         this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
+        this.mercadoPagoPaymentOutputMapper = mercadoPagoPaymentOutputMapper;
         this.properties = mercadoPagoProperties;
     }
 
@@ -61,7 +63,7 @@ public class MercadoPagoSource implements AcquirerSource {
                     .format(ISO_OFFSET_DATE_TIME_MILLIS_FIXED);
             request.setExpiration_date(laPazExpirationDate);
 
-            Response<GenerateQrCodeResponse> response = client.generateQrCode(
+            Response<MercadoPagoQrCodeEntity> response = client.generateQrCode(
                     properties.getUserId(),
                     properties.getPosId(),
                     request
@@ -86,12 +88,15 @@ public class MercadoPagoSource implements AcquirerSource {
     }
 
     @Override
-    public AcquirerPaymentsResponse getAcquirerPayments(String id) {
+    public AcquirerPaymentOutput getAcquirerPayments(String id) {
         try {
             var response = client.getMercadoPagoPayments(id).execute();
 
             if (response.isSuccessful() && response.body() != null) {
-                return response.body();
+
+                var mercadoPagoPaymentEntity = response.body();
+
+                return mercadoPagoPaymentOutputMapper.toOutput(mercadoPagoPaymentEntity);
             } else {
                 log.warn("Erro ao contatar API do mercado pago para obter dados do pagamento");
 

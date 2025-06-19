@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.mapper;
 
-import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.infrastructure.adapters.out.persistence.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

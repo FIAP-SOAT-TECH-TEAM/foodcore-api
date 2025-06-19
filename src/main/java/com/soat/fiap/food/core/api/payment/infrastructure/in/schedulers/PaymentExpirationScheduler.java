@@ -1,6 +1,8 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.in.schedulers;
 
-import com.soat.fiap.food.core.api.payment.core.application.ports.in.PaymentUseCase;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.ProcessExpiredPaymentsController;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,11 +23,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PaymentExpirationScheduler {
 
-    private final PaymentUseCase paymentUseCase;
+    private final PaymentDataSource paymentDataSource;
+    private final EventPublisherSource eventPublisherSource;
 
     @Scheduled(fixedRate = 31, timeUnit = TimeUnit.MINUTES)
     public void processExpiredPayments() {
         log.info("Iniciando processamento de pagamentos não aprovados expirados.");
-        paymentUseCase.processExpiredPayments();
+        ProcessExpiredPaymentsController.processExpiredPayments(paymentDataSource, eventPublisherSource);
     }
 }

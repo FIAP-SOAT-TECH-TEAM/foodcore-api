@@ -1,5 +1,9 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.controller;
 
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetAcquirerOrderController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetOrderPaymentQrCodeController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetOrderPaymentStatusController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.ProcessPaymentNotificationController;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
@@ -93,7 +97,7 @@ public class PaymentController {
                 notification.getId(),
                 notification.getData() != null ? notification.getData().getId() : "sem id externo");
 
-        paymentUseCase.processPaymentNotification(notification);
+        ProcessPaymentNotificationController.processPaymentNotification(notification, paymentDataSource, acquirerSource, eventPublisherSource);
 
         return ResponseEntity.ok().build();
     }
@@ -109,7 +113,7 @@ public class PaymentController {
     @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
     public ResponseEntity<AcquirerOrderResponse> getAcquirerOrder(@PathVariable Long merchantOrderId) {
         log.info("Recebida requisição para obter dados do pedido no adquirente. merchantOrderId={}", merchantOrderId);
-        var response = paymentUseCase.getAcquirerOrder(merchantOrderId);
+        var response = GetAcquirerOrderController.getAcquirerOrder(merchantOrderId, acquirerSource);
         return ResponseEntity.ok(response);
     }
 
@@ -125,7 +129,7 @@ public class PaymentController {
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
     public ResponseEntity<PaymentStatusResponse> getOrderPaymentStatus(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
-        var response = paymentUseCase.getOrderPaymentStatus(orderId);
+        var response = GetOrderPaymentStatusController.getOrderPaymentStatus(orderId, paymentDataSource);
         return ResponseEntity.ok(response);
     }
 
@@ -139,7 +143,7 @@ public class PaymentController {
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
     public ResponseEntity<QrCodeResponse> getOrderPaymentQrCode(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter qr de pagamento para orderId {}", orderId);
-        var response = paymentUseCase.getOrderPaymentQrCode(orderId);
+        var response = GetOrderPaymentQrCodeController.getOrderPaymentQrCode(orderId, paymentDataSource);
         return ResponseEntity.ok(response);
     }
 }
