@@ -3,13 +3,11 @@ package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.clien
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.config.MercadoPagoProperties;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoQrCodeEntity;
-import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.exceptions.MercadoPagoException;
-import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.response.MercadoPagoPaymentOutputMapper;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.request.GenerateQrCodeRequestMapper;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.response.MercadoPagoPaymentOutputMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
@@ -118,7 +116,7 @@ public class MercadoPagoSource implements AcquirerSource {
     }
 
     @Override
-    public AcquirerOrderResponse getAcquirerOrder(Long orderId) {
+    public Object getAcquirerOrder(Long orderId) {
         try {
             var response = client.getMercadoPagoOrder(orderId).execute();
 

@@ -2,8 +2,6 @@ package com.soat.fiap.food.core.api.payment.infrastructure.common.source;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderEntity;
 
 import java.time.LocalDateTime;
 
@@ -31,5 +29,5 @@ public interface AcquirerSource {
      *
      * @param orderId Identificador do pedido.
      */
-    AcquirerOrderResponse getAcquirerOrder(Long orderId);
+    Object getAcquirerOrder(Long orderId);
 }

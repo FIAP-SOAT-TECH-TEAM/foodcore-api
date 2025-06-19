@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways;
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 
 import java.time.LocalDateTime;
 
@@ -47,9 +46,9 @@ public class AcquirerGateway {
      * Consulta os detalhes de um pedido no adquirente.
      *
      * @param orderId ID do pedido a ser consultado.
-     * @return Resposta com os detalhes do pedido.
+     * @return Resposta bruta com os detalhes do pedido.
      */
-    public AcquirerOrderResponse getAcquirerOrder(Long orderId) {
+    public Object getAcquirerOrder(Long orderId) {
         return acquirerSource.getAcquirerOrder(orderId);
     }
 }

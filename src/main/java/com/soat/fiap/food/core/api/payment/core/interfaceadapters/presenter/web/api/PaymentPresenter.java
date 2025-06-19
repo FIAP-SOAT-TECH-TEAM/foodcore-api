@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.payment.core.interfaceadapters.presenter.web.api;
 
 import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
 
@@ -35,5 +36,19 @@ public class PaymentPresenter {
                 .expiresIn(payment.getExpiresIn())
                 .qrCode(payment.getQrCode())
                 .build();
+    }
+
+    /**
+     * Converte um {@link Object} retornado pelo adquirente
+     * para uma instância do DTO {@link AcquirerOrderResponse}.
+     *
+     * Este método assume que o objeto possui exatamente os mesmos campos
+     * e estrutura compatível com {@link AcquirerOrderResponse}.
+     *
+     * @param rawResponse objeto bruto retornado pelo adquirente
+     * @return Uma instância de {@link AcquirerOrderResponse} com os dados convertidos.
+     */
+    public static AcquirerOrderResponse toAcquirerOrderResponse(Object rawResponse) {
+        return (AcquirerOrderResponse) rawResponse;
     }
 }
