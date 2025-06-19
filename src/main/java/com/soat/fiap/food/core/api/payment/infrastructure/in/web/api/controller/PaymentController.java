@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +38,13 @@ public class PaymentController {
 
     private final PaymentDataSource paymentDataSource;
     private final AcquirerSource acquirerSource;
+    private final AccessManagerSource accessManagerSource;
     private final EventPublisherSource eventPublisherSource;
 
-    public PaymentController(PaymentDataSource paymentDataSource, AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
+    public PaymentController(PaymentDataSource paymentDataSource, AcquirerSource acquirerSource, AccessManagerSource accessManagerSource, EventPublisherSource eventPublisherSource) {
         this.paymentDataSource = paymentDataSource;
         this.acquirerSource = acquirerSource;
+        this.accessManagerSource = accessManagerSource;
         this.eventPublisherSource = eventPublisherSource;
     }
 
@@ -129,7 +132,7 @@ public class PaymentController {
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
     public ResponseEntity<PaymentStatusResponse> getOrderPaymentStatus(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
-        var response = GetOrderPaymentStatusController.getOrderPaymentStatus(orderId, paymentDataSource);
+        var response = GetOrderPaymentStatusController.getOrderPaymentStatus(orderId, paymentDataSource, accessManagerSource);
         return ResponseEntity.ok(response);
     }
 
@@ -143,7 +146,7 @@ public class PaymentController {
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
     public ResponseEntity<QrCodeResponse> getOrderPaymentQrCode(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter qr de pagamento para orderId {}", orderId);
-        var response = GetOrderPaymentQrCodeController.getOrderPaymentQrCode(orderId, paymentDataSource);
+        var response = GetOrderPaymentQrCodeController.getOrderPaymentQrCode(orderId, paymentDataSource, accessManagerSource);
         return ResponseEntity.ok(response);
     }
 }

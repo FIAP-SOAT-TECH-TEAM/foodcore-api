@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Adaptador que implementa a interface do repositório de pagamentos
- * Faz a ponte entre o domínio e a infraestrutura de persistência
+ * Implementação concreta: DataSource para persistência do agregado Pagamento.
  */
 @Component
 public class PostgresPaymentDataSource implements PaymentDataSource {

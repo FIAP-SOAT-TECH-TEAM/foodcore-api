@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
-import com.soat.fiap.food.core.api.shared.core.application.ports.out.AuthenticatedUserProvider;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.exceptions.JwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,10 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementação de {@link AuthenticatedUserProvider} que extrai informações do usuário a partir do contexto JWT.
+ * Implementação de {@link AuthenticatedUserSource} que extrai informações do usuário a partir do contexto JWT.
  */
 @Component
-public class JwtAuthenticatedUserProvider implements AuthenticatedUserProvider {
+public class JwtAuthenticatedUserSource implements AuthenticatedUserSource {
 
     /**
      * {@inheritDoc}

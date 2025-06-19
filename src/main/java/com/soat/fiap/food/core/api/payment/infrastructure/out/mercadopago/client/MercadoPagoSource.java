@@ -22,7 +22,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Implementação da porta de saída referente a API do mercado pago
+ * Implementação concreta: DataSource para comunicação com o adquirente (MercadoPago).
  */
 @Component
 @Slf4j

@@ -1,9 +1,9 @@
-package com.soat.fiap.food.core.api.shared.core.application.ports.out;
+package com.soat.fiap.food.core.api.shared.infrastructure.common.source;
 
 /**
- * Porta de saída responsável por fornecer informações do usuário autenticado no sistema.
+ * Fornecer informaçõe do usuário autenticado no sistema.
  */
-public interface AuthenticatedUserProvider {
+public interface AuthenticatedUserSource {
 
     /**
      * Obtém o ID do usuário autenticado.
