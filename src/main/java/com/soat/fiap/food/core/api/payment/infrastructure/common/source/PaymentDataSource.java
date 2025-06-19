@@ -1,13 +1,13 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.common.source;
 
-import com.soat.fiap.food.core.api.payment.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *  * DataSource para persistência de pagamentos
+ *  DataSource para persistência de pagamentos
  */
 public interface PaymentDataSource {
 

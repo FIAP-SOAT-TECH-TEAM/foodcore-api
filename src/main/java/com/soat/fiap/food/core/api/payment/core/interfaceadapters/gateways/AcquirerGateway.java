@@ -1,0 +1,54 @@
+package com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways;
+
+import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
+
+import java.time.LocalDateTime;
+
+/**
+ * Gateway para comunicação com o adquirente de pagamentos.
+ *
+ * Atua como intermediário entre a aplicação e o {@link AcquirerSource},
+ * responsável por gerar QR Codes e consultar informações de pedidos e pagamentos
+ * junto ao adquirente.
+ */
+public class AcquirerGateway {
+
+    private final AcquirerSource acquirerSource;
+
+    public AcquirerGateway(AcquirerSource acquirerSource) {
+        this.acquirerSource = acquirerSource;
+    }
+
+    /**
+     * Gera um QR Code de pagamento a partir dos dados fornecidos.
+     *
+     * @param input Requisição com dados necessários para gerar o QR Code.
+     * @param expireIn Data de expiração do qrCode.
+     * @return o QR Code gerado.
+     */
+    public String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn) {
+        return acquirerSource.generateQrCode(input, expireIn);
+    }
+
+    /**
+     * Consulta os pagamentos realizados no adquirente usando o ID informado.
+     *
+     * @param id Identificador do pagamento no adquirente.
+     * @return Resposta com os detalhes dos pagamentos.
+     */
+    public AcquirerPaymentOutput getAcquirerPayments(String id) {
+        return acquirerSource.getAcquirerPayments(id);
+    }
+
+    /**
+     * Consulta os detalhes de um pedido no adquirente.
+     *
+     * @param orderId ID do pedido a ser consultado.
+     * @return Resposta bruta com os detalhes do pedido.
+     */
+    public Object getAcquirerOrder(Long orderId) {
+        return acquirerSource.getAcquirerOrder(orderId);
+    }
+}

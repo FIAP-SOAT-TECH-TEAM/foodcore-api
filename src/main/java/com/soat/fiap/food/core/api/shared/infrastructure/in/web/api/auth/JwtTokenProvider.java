@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.exceptions.JwtException;
-import com.soat.fiap.food.core.api.user.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

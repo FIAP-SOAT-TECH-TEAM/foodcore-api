@@ -12,7 +12,7 @@ import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
-import com.soat.fiap.food.core.api.user.interfaceadapters.gateways.UserGateway;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import lombok.extern.slf4j.Slf4j;
 
 /**
