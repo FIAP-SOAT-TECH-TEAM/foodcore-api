@@ -26,18 +26,35 @@ public class User {
     private String email;
     private String password;
     private String document;
-    private boolean active;
+    private boolean active = true;
     private boolean guest;
-    private Role role;
+    private Role role = new Role();
     private LocalDateTime lastLogin;
     private transient String token;
     private AuditInfo auditInfo = new AuditInfo();
+
+    public User(
+            boolean guest,
+            String name,
+            String username,
+            String email,
+            String password,
+            String document
+    ) {
+        validateInternalState();
+
+        this.guest = guest;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.document = document;
+    }
 
     /**
      * Verifica se o usuário é um convidado (guest)
      * @return true se for um usuário convidado, false caso contrário
      */
-
     public boolean isGuest() {
         return (this.document == null || this.document.isBlank()) &&
                 (this.email == null || this.email.isBlank()) &&
