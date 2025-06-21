@@ -14,7 +14,7 @@ public class GetAcquirerOrderController {
      *
      * @param orderId         ID do pedido no adquirente.
      * @param acquirerSource gateway para comunicação com o adquirente
-     * @return Objeto {@link Object} bruto com os dados do pedido. Obs: não utiliza um presenter pois o objetivo deste endpoint é retornar ipsis litteris a resposta do adquirente
+     * @return Objeto {@link Object} bruto com os dados do pedido. Obs: não utiliza um presenter pois o objetivo é retornar ipsis litteris a resposta do adquirente
      */
     public static Object getAcquirerOrder(
             Long orderId,
