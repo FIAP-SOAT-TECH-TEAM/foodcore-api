@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
-import com.soat.fiap.food.core.api.shared.infrastructure.utils.logging.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,17 +24,16 @@ import java.util.Map;
 /**
  * Handler global de exceções
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    private final CustomLogger logger = CustomLogger.getLogger(getClass());
-
+    
     /**
      * Trata exceções genéricas
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-        logger.error("Erro não tratado: {}", ex.getMessage(), ex);
+        log.error("Erro não tratado: {}", ex.getMessage(), ex);
         
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
@@ -53,7 +52,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ValidationErrorResponse> handleValidationErrors(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
         
-        logger.error("Erro de validação: {}", ex.getMessage());
+        log.error("Erro de validação: {}", ex.getMessage());
         
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> 
@@ -78,7 +77,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMaxSizeException(
             MaxUploadSizeExceededException ex, HttpServletRequest request) {
         
-        logger.error("Erro de tamanho de arquivo: {}", ex.getMessage());
+        log.error("Erro de tamanho de arquivo: {}", ex.getMessage());
         
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
@@ -97,7 +96,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, HttpServletRequest request) {
         
-        logger.error("Recurso não encontrado: {}", ex.getMessage());
+        log.error("Recurso não encontrado: {}", ex.getMessage());
         
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
@@ -116,7 +115,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(
             BusinessException ex, HttpServletRequest request) {
         
-        logger.error("Erro de regra de negócio: {}", ex.getMessage());
+        log.error("Erro de regra de negócio: {}", ex.getMessage());
         
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
@@ -158,7 +157,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex, HttpServletRequest request) {
         
-        logger.error("Erro de integridade de dados: {}", ex.getMessage());
+        log.error("Erro de integridade de dados: {}", ex.getMessage());
 
         var mensagem = "Operação não permitida: viola regras de integridade de dados";
         
@@ -179,7 +178,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidFormatException(
             HttpMessageNotReadableException ex, HttpServletRequest request) {
 
-        logger.error("Erro ao tentar desserializar: {}", ex.getMessage());
+        log.error("Erro ao tentar desserializar: {}", ex.getMessage());
 
         String mensagem = "Erro de formato inválido na requisição";
 

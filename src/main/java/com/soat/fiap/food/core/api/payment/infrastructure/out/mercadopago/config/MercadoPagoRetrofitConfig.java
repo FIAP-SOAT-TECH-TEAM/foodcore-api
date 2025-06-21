@@ -7,7 +7,6 @@ import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.respons
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.client.MercadoPagoClient;
-import com.soat.fiap.food.core.api.payment.infrastructure.adapters.out.mercadopago.deserializers.*;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.deserializers.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

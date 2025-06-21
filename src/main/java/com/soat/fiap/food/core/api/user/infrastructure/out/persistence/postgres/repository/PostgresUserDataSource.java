@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.repository;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.mapper.UserEntityMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.Optional;
  * Implementação concreta: DataSource para persistência do agregado Usuário.
  */
 @Component
-public class PostgresUserDataSource {
+public class PostgresUserDataSource implements UserDataSource {
 
     private final SpringDataUserRepository springDataUserRepository;
     private final UserEntityMapper userEntityMapper;

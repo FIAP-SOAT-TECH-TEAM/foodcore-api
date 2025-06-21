@@ -6,7 +6,7 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.a
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.UpdateOrderStatusRequest;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
@@ -123,13 +123,13 @@ public class OrderController {
     })
     public ResponseEntity<OrderStatusResponse> updateOrderStatus(
             @PathVariable Long orderId,
-            @Valid @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest) {
+            @Valid @RequestBody OrderStatusRequest orderStatusRequest) {
 
         log.debug("Requisição para atualizar status do pedido {} recebida", orderId);
 
         OrderStatusResponse response = UpdateOrderStatusController.updateOrderStatus(
                 orderId,
-                updateOrderStatusRequest,
+                orderStatusRequest,
                 orderDataSource,
                 paymentDataSource,
                 eventPublisherSource);

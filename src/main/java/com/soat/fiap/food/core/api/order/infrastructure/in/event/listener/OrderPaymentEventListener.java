@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.in.event.listener;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.UpdateOrderStatusRequest;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentInitializationErrorEvent;
@@ -43,7 +43,7 @@ public class OrderPaymentEventListener {
         log.info("Módulo Order: Recebido evento de pagamento aprovado para o pedido: {}, valor: {}",
                 event.getOrderId(), event.getAmount());
 
-          var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.PREPARING);
+          var orderUpddateStatusRequest = new OrderStatusRequest(OrderStatus.PREPARING);
           UpdateOrderStatusController.updateOrderStatus(
                   event.getOrderId(),
                   orderUpddateStatusRequest,
@@ -64,7 +64,7 @@ public class OrderPaymentEventListener {
     public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
         log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
 
-        var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.CANCELLED);
+        var orderUpddateStatusRequest = new OrderStatusRequest(OrderStatus.CANCELLED);
         UpdateOrderStatusController.updateOrderStatus(
                 event.getOrderId(),
                 orderUpddateStatusRequest,
@@ -83,7 +83,7 @@ public class OrderPaymentEventListener {
     public void handlePaymentExpiredEvent(PaymentExpiredEvent event) {
         log.info("Módulo Order: Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(), event.getPaymentId());
 
-        var orderUpddateStatusRequest = new UpdateOrderStatusRequest(OrderStatus.CANCELLED);
+        var orderUpddateStatusRequest = new OrderStatusRequest(OrderStatus.CANCELLED);
         UpdateOrderStatusController.updateOrderStatus(
                 event.getOrderId(),
                 orderUpddateStatusRequest,

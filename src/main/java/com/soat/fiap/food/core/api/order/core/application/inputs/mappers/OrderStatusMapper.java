@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.order.core.application.inputs.OrderStatusInput;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 
 /**
  * Classe utilitária responsável por mapear objetos entre {@link OrderStatusRequest} e {@link OrderStatusInput}.
@@ -14,6 +15,6 @@ public class OrderStatusMapper {
      * @return Um objeto {@link OrderStatusInput} contendo o novo status.
      */
     public static OrderStatusInput toInput(OrderStatusRequest request) {
-        return new OrderStatusInput(request.getOrderStatus());
+        return new OrderStatusInput(request.getStatus());
     }
 }

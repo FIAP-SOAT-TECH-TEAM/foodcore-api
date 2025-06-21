@@ -7,7 +7,7 @@ import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.presenter.web.api.OrderPresenter;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
-import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.UpdateOrderStatusRequest;
+import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
@@ -27,7 +27,7 @@ public class UpdateOrderStatusController {
 
 
      * @param id ID do pedido
-     * @param updateOrderStatusRequest Status do pedido a ser atualizado
+     * @param orderStatusRequest Status do pedido a ser atualizado
      * @param orderDataSource Origem de dados para o gateway de pedido
      * @param paymentDataSource Origem de dados para o gateway de pagamento
      * @param eventPublisherSource  Origem de publicação de eventos
@@ -35,7 +35,7 @@ public class UpdateOrderStatusController {
      */
     public static OrderStatusResponse updateOrderStatus(
             Long id,
-            UpdateOrderStatusRequest updateOrderStatusRequest,
+            OrderStatusRequest orderStatusRequest,
             OrderDataSource orderDataSource,
             PaymentDataSource paymentDataSource,
             EventPublisherSource eventPublisherSource) {
@@ -46,9 +46,9 @@ public class UpdateOrderStatusController {
 
         EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, paymentGateway, orderGateway);
 
-        log.info("Atualizando status do pedido {} para {}", id, updateOrderStatusRequest.getStatus());
+        log.info("Atualizando status do pedido {} para {}", id, orderStatusRequest.getStatus());
 
-        var order = UpdateOrderStatusUseCase.updateOrderStatus(id, updateOrderStatusRequest.getStatus(), orderGateway);
+        var order = UpdateOrderStatusUseCase.updateOrderStatus(id, orderStatusRequest.getStatus(), orderGateway);
         var updatedOrder = orderGateway.save(order);
 
         log.info("Status do pedido {} atualizado para {}", id, updatedOrder);
