@@ -16,7 +16,7 @@ import org.springframework.modulith.Modulith;
 	info = @Info(
 		title = "Food Core API",
 		version = "1.0.0",
-		description = "API para sistema de pedidos de fast food, seguindo arquitetura hexagonal, DDD e design modular",
+		description = "API para sistema de pedidos de fast food, seguindo arquitetura limpa, DDD e design modular",
 		contact = @Contact(
 			name = "Equipe FIAP/SOAT",
 			email = "suporte@foodcoreapi.com",
