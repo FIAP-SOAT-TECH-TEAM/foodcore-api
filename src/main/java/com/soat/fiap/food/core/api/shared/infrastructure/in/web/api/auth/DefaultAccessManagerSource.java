@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * Implementação concreta: DataSource para validação de acesso com base no ID e papel do usuário autenticado.
  */
 @Component
-public class AccessManagerSourceImpl implements AccessManagerSource {
+public class DefaultAccessManagerSource implements AccessManagerSource {
 
     private final AuthenticatedUserSource userProvider;
 
@@ -19,7 +19,7 @@ public class AccessManagerSourceImpl implements AccessManagerSource {
      *
      * @param userProvider Provedor de dados do usuário autenticado.
      */
-    public AccessManagerSourceImpl(AuthenticatedUserSource userProvider) {
+    public DefaultAccessManagerSource(AuthenticatedUserSource userProvider) {
         this.userProvider = userProvider;
     }
 

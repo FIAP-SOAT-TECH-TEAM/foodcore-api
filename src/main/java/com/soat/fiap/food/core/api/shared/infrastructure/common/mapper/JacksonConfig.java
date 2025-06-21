@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.shared.infrastructure.common.mapper;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

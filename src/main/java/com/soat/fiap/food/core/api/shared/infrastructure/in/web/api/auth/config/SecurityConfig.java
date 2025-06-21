@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config.security;
+package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.config;
 
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Qualifier;

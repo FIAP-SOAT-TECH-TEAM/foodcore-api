@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config.security;
+package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

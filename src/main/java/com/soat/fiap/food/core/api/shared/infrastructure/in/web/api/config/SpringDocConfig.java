@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.api.config;
+package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

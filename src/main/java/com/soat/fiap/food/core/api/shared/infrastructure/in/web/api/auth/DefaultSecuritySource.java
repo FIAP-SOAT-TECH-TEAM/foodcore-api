@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class SecuritySourceImpl implements SecuritySource {
+public class DefaultSecuritySource implements SecuritySource {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
