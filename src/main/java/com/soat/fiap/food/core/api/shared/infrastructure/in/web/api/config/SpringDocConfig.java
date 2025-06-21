@@ -34,7 +34,7 @@ public class SpringDocConfig {
                                         .bearerFormat("JWT")))
                 .info(new Info()
                         .title("Food Core API")
-                        .description("API para sistema de pedidos de fast food com arquitetura hexagonal")
+                        .description("API para sistema de pedidos de fast food com arquitetura limpa")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Equipe FIAP/SOAT")
