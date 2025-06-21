@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.Securi
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.TokenGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
+import com.soat.fiap.food.core.api.user.core.application.usecases.GenerateTokenUseCase;
 import com.soat.fiap.food.core.api.user.core.application.usecases.LoginUseCase;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.presenter.web.api.UserPresenter;
@@ -34,8 +35,9 @@ public class LoginController {
         var tokenGateway = new TokenGateway(tokenSource);
         var securityGateway = new SecurityGateway(securitySource);
 
-        var user = LoginUseCase.login(email, rawPassword, userGateway, securityGateway, tokenGateway);
+        var user = LoginUseCase.login(email, rawPassword, userGateway, securityGateway);
+        var userWithToken = GenerateTokenUseCase.generateToken(user, tokenGateway);
 
-        return UserPresenter.toUserResponse(user);
+        return UserPresenter.toUserResponse(userWithToken);
     }
 }

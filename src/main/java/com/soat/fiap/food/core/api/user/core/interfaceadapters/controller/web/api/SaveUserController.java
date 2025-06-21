@@ -6,6 +6,7 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecurityS
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
 import com.soat.fiap.food.core.api.user.core.application.inputs.mappers.UserMapper;
 import com.soat.fiap.food.core.api.user.core.application.usecases.CreateUserUseCase;
+import com.soat.fiap.food.core.api.user.core.application.usecases.GenerateTokenUseCase;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.presenter.web.api.UserPresenter;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
@@ -40,8 +41,10 @@ public class SaveUserController {
 
         var savedUser = userGateway.save(user);
 
+        var userWithToken = GenerateTokenUseCase.generateToken(savedUser, tokenGateway);
+
         log.debug("Usuário criado com sucesso. ID: {}", savedUser.getId());
 
-        return UserPresenter.toUserResponse(user);
+        return UserPresenter.toUserResponse(userWithToken);
     }
 }

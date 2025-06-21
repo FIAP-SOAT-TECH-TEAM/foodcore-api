@@ -54,9 +54,6 @@ public class CreateUserUseCase {
             user.setPassword(securePassword);
         }
 
-        var token = tokenGateway.generateToken(user);
-        user.setToken(token);
-
         return user;
     }
 }

@@ -22,12 +22,11 @@ public class LoginUseCase {
      * @param rawPassword Senha em texto puro
      * @param userGateway Gateway para consulta de usuários
      * @param securityGateway Gateway para verificação de senha
-     * @param tokenGateway Gateway para geração de token
      * @return Usuário autenticado
      * @throws UserNotFoundException Caso o usuário não seja encontrado
      * @throws UserIncorrectPasswordException Caso a senha seja inválida
      */
-    public static User login(String email, String rawPassword, UserGateway userGateway, SecurityGateway securityGateway, TokenGateway tokenGateway) {
+    public static User login(String email, String rawPassword, UserGateway userGateway, SecurityGateway securityGateway) {
         var optionalUser = userGateway.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
@@ -41,9 +40,6 @@ public class LoginUseCase {
             log.warn("Senha incorreta para o email: {}", email);
             throw new UserIncorrectPasswordException("Email ou senha inválidos");
         }
-
-        String token = tokenGateway.generateToken(user);
-        user.setToken(token);
 
         log.debug("Usuário autenticado com sucesso. ID: {}", user.getId());
         return user;
