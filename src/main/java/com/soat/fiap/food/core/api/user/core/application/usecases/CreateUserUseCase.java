@@ -38,18 +38,18 @@ public class CreateUserUseCase {
             var existingByDocument = userGateway.findByDocument(user.getDocument());
 
             if (existingByDocument.isPresent()) {
-                return existingByDocument.get();
+                user = existingByDocument.get();
             }
         }
         if (user.hasEmail()) {
             var existingByEmail = userGateway.findByEmail(user.getEmail());
 
             if (existingByEmail.isPresent()) {
-                return existingByEmail.get();
+                user = existingByEmail.get();
             }
         }
 
-        if (user.hasPassword()) {
+        if (user.hasPassword() && user.getId() == null) {
             var securePassword = securityGateway.encodePassword(user.getPassword());
             user.setPassword(securePassword);
         }

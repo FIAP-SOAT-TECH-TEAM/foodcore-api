@@ -20,7 +20,7 @@ public class GetAllCatalogsController {
      * Obtém todos os catálogos.
 
      * @param catalogDataSource Origem de dados para o gateway
-     * @return o catálogo
+     * @return os catálogos
      */
     public static List<CatalogResponse> getAllCatalogs(CatalogDataSource catalogDataSource) {
         log.debug("Buscando todos os catálogos");

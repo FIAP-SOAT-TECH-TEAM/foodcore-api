@@ -1,21 +1,31 @@
 package com.soat.fiap.food.core.api.user.core.application.usecases;
 
-import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
-import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserNotFoundException;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
+/**
+ * Caso de uso: Remover usuário pelo seu identificador.
+ *
+ */
+@Slf4j
 public class DeleteUserUseCase {
-    public void deleteUser(Long id) {
-        logger.debug("Excluindo usuário com ID: {}", id);
+    /**
+     * Remove um usuário pelo seu ID.
+     *
+     * @param id Identificador do usuário a ser removido
+     * @param userGateway Gateway para comunicação com o mundo exterior
+     */
+    public static void deleteUser(Long id, UserGateway userGateway) {
+        log.debug("Excluindo usuário com ID: {}", id);
 
-        Optional<User> user = userRepository.findById(id);
+        var user = userGateway.findById(id);
         if (user.isEmpty()) {
-            logger.warn("Tentativa de excluir usuário inexistente. ID: {}", id);
-            throw new ResourceNotFoundException("Usuário", "id", id);
+            log.warn("Tentativa de excluir usuário inexistente. ID: {}", id);
+            throw new UserNotFoundException("Usuário", id);
         }
 
-        userRepository.delete(id);
-        logger.debug("Usuário excluído com sucesso. ID: {}", id);
+        userGateway.delete(id);
+        log.debug("Usuário excluído com sucesso. ID: {}", id);
     }
 }

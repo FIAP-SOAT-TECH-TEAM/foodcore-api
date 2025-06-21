@@ -2,9 +2,7 @@ package com.soat.fiap.food.core.api.user.infrastructure.in.web.api.controller;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
-import com.soat.fiap.food.core.api.user.core.domain.model.User;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.LoginController;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.SaveUserController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.*;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.LoginRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;
@@ -54,8 +52,8 @@ public class UserController {
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<User> users = userUseCase.getAllUsers();
-        return ResponseEntity.ok(userDtoMapper.toResponseList(users));
+        var users = GetAllUsersController.getAllUsers(userDataSource);
+        return ResponseEntity.ok(users);
     }
 
     /**
@@ -75,9 +73,9 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
-        return userUseCase.getUserById(id)
-                .map(user -> ResponseEntity.ok(userDtoMapper.toResponse(user)))
-                .orElse(ResponseEntity.notFound().build());
+
+        var response = GetUserByIdController.getUserById(id, userDataSource);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -97,9 +95,8 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserByDocument(
             @Parameter(description = "DOCUMENT do usuário", example = "123.456.789-00", required = true)
             @PathVariable String document) {
-        return userUseCase.getUserByDocument(document)
-                .map(user -> ResponseEntity.ok(userDtoMapper.toResponse(user)))
-                .orElse(ResponseEntity.notFound().build());
+        var response = GetUserByDocumentController.getUserByDocument(document, userDataSource);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -162,14 +159,8 @@ public class UserController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados atualizados do usuário", required = true,
                     content = @Content(schema = @Schema(implementation = UserRequest.class)))
             @Valid @RequestBody UserRequest request) {
-        
-        return userUseCase.getUserById(id)
-                .map(existingUser -> {
-                    userDtoMapper.updateDomainFromRequest(request, existingUser);
-                    User updatedUser = userUseCase.updateUser(id, existingUser);
-                    return ResponseEntity.ok(userDtoMapper.toResponse(updatedUser));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        var response = UpdateUserController.updateUser(id, request, userDataSource, securitySource);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -188,11 +179,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(
             @Parameter(description = "ID do usuário", example = "1", required = true)
             @PathVariable Long id) {
-        return userUseCase.getUserById(id)
-                .map(user -> {
-                    userUseCase.deleteUser(id);
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        DeleteUserController.deleteUser(id, userDataSource);
+        return ResponseEntity.noContent().build();
     }
 } 
