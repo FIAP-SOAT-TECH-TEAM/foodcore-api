@@ -27,10 +27,12 @@ public class PublishOrderCanceledEventUseCase {
         var orderCanceledEvent = new OrderCanceledEvent();
 
         BeanUtils.copyProperties(order, orderCanceledEvent);
+        orderCanceledEvent.setStatus(order.getOrderStatus());
         List<OrderItemCanceledEvent> itemEvents = order.getOrderItems().stream()
                 .map(itemResponse -> {
                     var itemEvent = new OrderItemCanceledEvent();
                     BeanUtils.copyProperties(itemResponse, itemEvent);
+                    itemEvent.setSubtotal(itemResponse.getSubTotal());
                     return itemEvent;
                 })
                 .toList();

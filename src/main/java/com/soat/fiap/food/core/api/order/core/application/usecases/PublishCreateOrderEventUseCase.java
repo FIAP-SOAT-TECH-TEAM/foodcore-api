@@ -24,11 +24,13 @@ public class PublishCreateOrderEventUseCase {
         var orderCreatedEvent = new OrderCreatedEvent();
 
         BeanUtils.copyProperties(order, orderCreatedEvent);
+        orderCreatedEvent.setTotalAmount(order.getAmount());
 
         List<OrderItemCreatedEvent> itemEvents = order.getOrderItems().stream()
                 .map(itemResponse -> {
                     OrderItemCreatedEvent itemEvent = new OrderItemCreatedEvent();
                     BeanUtils.copyProperties(itemResponse, itemEvent);
+                    itemEvent.setSubtotal(itemResponse.getSubTotal());
                     return itemEvent;
                 })
                 .toList();
