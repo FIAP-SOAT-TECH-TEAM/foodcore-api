@@ -6,7 +6,6 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoun
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 
 /**
  * Caso de uso: Atualizar catálogo.
@@ -38,7 +37,7 @@ public class UpdateCatalogUseCase {
             throw new CatalogConflictException("Catalogo", "Nome", catalogInput.name());
         }
 
-        BeanUtils.copyProperties(catalogInput, existingCatalog.get());
+        existingCatalog.get().setName(catalogInput.name());
 
         existingCatalog.get().markUpdatedNow();
 

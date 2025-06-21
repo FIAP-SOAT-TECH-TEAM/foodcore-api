@@ -1,16 +1,16 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
+import com.soat.fiap.food.core.api.order.core.application.inputs.mappers.OrderCreatedEventMapper;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
-import org.springframework.beans.BeanUtils;
-
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Caso de uso: publicar o evento {@link OrderCreatedEvent}
  */
+@Slf4j
 public class PublishCreateOrderEventUseCase {
 
     /**
@@ -21,22 +21,10 @@ public class PublishCreateOrderEventUseCase {
      * @param gateway O gateway responsável por publicar o evento.
      */
     public static void publishCreateOrderEvent(Order order, EventPublisherGateway gateway) {
-        var orderCreatedEvent = new OrderCreatedEvent();
+        var event = OrderCreatedEventMapper.toEvent(order);
 
-        BeanUtils.copyProperties(order, orderCreatedEvent);
-        orderCreatedEvent.setTotalAmount(order.getAmount());
+        log.info("Publicando evento de pedido criado {}", order.getId());
 
-        List<OrderItemCreatedEvent> itemEvents = order.getOrderItems().stream()
-                .map(itemResponse -> {
-                    OrderItemCreatedEvent itemEvent = new OrderItemCreatedEvent();
-                    BeanUtils.copyProperties(itemResponse, itemEvent);
-                    itemEvent.setSubtotal(itemResponse.getSubTotal());
-                    return itemEvent;
-                })
-                .toList();
-
-        orderCreatedEvent.setItems(itemEvents);
-
-        gateway.publishEvent(orderCreatedEvent);
+        gateway.publishEvent(event);
     }
 }

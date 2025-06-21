@@ -1,13 +1,11 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
+import com.soat.fiap.food.core.api.order.core.application.inputs.mappers.OrderCanceledEventMapper;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-
-import java.util.List;
 
 /**
  * Caso de uso: publicar o evento {@link OrderCanceledEvent}
@@ -24,23 +22,10 @@ public class PublishOrderCanceledEventUseCase {
      * @param gateway O gateway responsável por publicar o evento.
      */
     public static void publishOrderCanceledEvent(Order order, EventPublisherGateway gateway) {
-        var orderCanceledEvent = new OrderCanceledEvent();
+        var event = OrderCanceledEventMapper.toEvent(order);
 
-        BeanUtils.copyProperties(order, orderCanceledEvent);
-        orderCanceledEvent.setStatus(order.getOrderStatus());
-        List<OrderItemCanceledEvent> itemEvents = order.getOrderItems().stream()
-                .map(itemResponse -> {
-                    var itemEvent = new OrderItemCanceledEvent();
-                    BeanUtils.copyProperties(itemResponse, itemEvent);
-                    itemEvent.setSubtotal(itemResponse.getSubTotal());
-                    return itemEvent;
-                })
-                .toList();
+        log.info("Publicando evento de pedido cancelado {}", order.getId());
 
-        orderCanceledEvent.setItems(itemEvents);
-
-        log.info("Publicando evento de ordem cancelada {}", order.getId());
-
-        gateway.publishEvent(orderCanceledEvent);
+        gateway.publishEvent(event);
     }
 }
