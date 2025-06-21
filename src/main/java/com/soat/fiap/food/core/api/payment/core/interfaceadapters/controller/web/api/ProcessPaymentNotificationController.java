@@ -44,10 +44,10 @@ public class ProcessPaymentNotificationController {
                 paymentGateway
         );
 
-        paymentGateway.save(payment);
+        var savedPayment = paymentGateway.save(payment);
 
         if (payment.getStatus() == PaymentStatus.APPROVED) {
-            PublishPaymentApprovedEventUseCase.publishPaymentApprovedEvent(payment, eventPublisherGateway);
+            PublishPaymentApprovedEventUseCase.publishPaymentApprovedEvent(savedPayment, eventPublisherGateway);
             log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.getId(), payment.getOrderId());
         }
     }

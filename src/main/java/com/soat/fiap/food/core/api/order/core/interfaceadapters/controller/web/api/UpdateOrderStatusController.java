@@ -54,7 +54,7 @@ public class UpdateOrderStatusController {
         log.info("Status do pedido {} atualizado para {}", id, updatedOrder);
 
         if (updatedOrder.getOrderStatus() == OrderStatus.CANCELLED) {
-            PublishOrderCanceledEventUseCase.publishOrderCanceledEvent(order, eventPublisherGateway);
+            PublishOrderCanceledEventUseCase.publishOrderCanceledEvent(updatedOrder, eventPublisherGateway);
 
         }
 
