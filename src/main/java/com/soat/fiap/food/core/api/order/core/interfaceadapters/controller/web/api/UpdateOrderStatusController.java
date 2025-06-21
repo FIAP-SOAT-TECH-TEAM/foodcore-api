@@ -1,8 +1,10 @@
 package com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api;
 
 import com.soat.fiap.food.core.api.order.core.application.usecases.EnsureOrderPaymentIsValidUseCase;
+import com.soat.fiap.food.core.api.order.core.application.usecases.GetOrderByIdUseCase;
 import com.soat.fiap.food.core.api.order.core.application.usecases.PublishOrderCanceledEventUseCase;
 import com.soat.fiap.food.core.api.order.core.application.usecases.UpdateOrderStatusUseCase;
+import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderAlreadyHasStatusException;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.presenter.web.api.OrderPresenter;
@@ -44,20 +46,25 @@ public class UpdateOrderStatusController {
         var paymentGateway = new PaymentGateway(paymentDataSource);
         var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 
-        EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, paymentGateway, orderGateway);
+        try{
+            EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, paymentGateway, orderGateway);
 
-        log.info("Atualizando status do pedido {} para {}", id, orderStatusRequest.getStatus());
+            log.info("Atualizando status do pedido {} para {}", id, orderStatusRequest.getStatus());
 
-        var order = UpdateOrderStatusUseCase.updateOrderStatus(id, orderStatusRequest.getStatus(), orderGateway);
-        var updatedOrder = orderGateway.save(order);
+            var order = UpdateOrderStatusUseCase.updateOrderStatus(id, orderStatusRequest.getStatus(), orderGateway);
+            var updatedOrder = orderGateway.save(order);
 
-        log.info("Status do pedido {} atualizado para {}", id, updatedOrder);
+            log.info("Status do pedido {} atualizado para {}", id, updatedOrder);
 
-        if (updatedOrder.getOrderStatus() == OrderStatus.CANCELLED) {
-            PublishOrderCanceledEventUseCase.publishOrderCanceledEvent(updatedOrder, eventPublisherGateway);
+            if (updatedOrder.getOrderStatus() == OrderStatus.CANCELLED) {
+                PublishOrderCanceledEventUseCase.publishOrderCanceledEvent(updatedOrder, eventPublisherGateway);
+            }
 
+            return OrderPresenter.toOrderStatusResponse(updatedOrder);
         }
-
-        return OrderPresenter.toOrderStatusResponse(updatedOrder);
+        catch (OrderAlreadyHasStatusException ex) {
+            var existingOrder = GetOrderByIdUseCase.getOrderById(id, orderGateway);
+            return OrderPresenter.toOrderStatusResponse(existingOrder);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
+import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderAlreadyHasStatusException;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
@@ -18,6 +19,7 @@ public class UpdateOrderStatusUseCase {
      * @param orderId ID do pedido
      * @param orderStatus novo status do pedido
      * @param gateway Gateway para comunicação com o mundo exterior
+     * @throws OrderAlreadyHasStatusException Se o pedido já possuir o status informado para atualização
      * @return Pedido atualizado
      */
     public static Order updateOrderStatus(
@@ -31,7 +33,7 @@ public class UpdateOrderStatusUseCase {
             throw new OrderNotFoundException("Pedido", orderId);
         }
         else if (order.get().getOrderStatus() == orderStatus) {
-            return order.get();
+            throw new OrderAlreadyHasStatusException("O pedido já possui o status informado para atualização");
         }
 
         order.get().setOrderStatus(orderStatus);
