@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,6 +73,7 @@ public class OrderController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cliente ou produto não encontrado", content = @Content)
     })
+    @Transactional
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
         log.debug("Requisição para criar novo pedido recebida");
         OrderResponse orderResponse = SaveOrderController.saveOrder(
@@ -97,6 +99,7 @@ public class OrderController {
                             schema = @Schema(implementation = OrderResponse.class))
             )
     })
+    @Transactional(readOnly = true)
     public ResponseEntity<List<OrderResponse>> getActiveOrders() {
         log.debug("Requisição para listar pedidos ativos recebida");
 
@@ -121,6 +124,7 @@ public class OrderController {
             @ApiResponse(responseCode = "400", description = "Status inválido ou dados malformados", content = @Content),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
     })
+    @Transactional
     public ResponseEntity<OrderStatusResponse> updateOrderStatus(
             @PathVariable Long orderId,
             @Valid @RequestBody OrderStatusRequest orderStatusRequest) {

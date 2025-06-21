@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class CatalogController {
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = CatalogResponse.class))))
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<CatalogResponse>> getAllCatalogs() {
         log.debug("Requisição para listar todos os catálogos");
         return ResponseEntity.ok(GetAllCatalogsController.getAllCatalogs(catalogDataSource));
@@ -63,6 +65,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
     })
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<CatalogResponse> getCatalogById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {
@@ -85,6 +88,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
+    @Transactional
     public ResponseEntity<CatalogResponse> createCatalog(
             @Valid @RequestBody CatalogRequest request) {
         log.debug("Requisição para criar novo catálogo");
@@ -110,6 +114,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "409", description = "Catálogo com nome já existente", content = @Content),
     })
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
+    @Transactional
     public ResponseEntity<CatalogResponse> updateCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id,
@@ -132,6 +137,7 @@ public class CatalogController {
             @ApiResponse(responseCode = "409", description = "Catálogo possui categorias associadas", content = @Content)
     })
     @Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
+    @Transactional
     public ResponseEntity<Void> deleteCatalog(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long id) {

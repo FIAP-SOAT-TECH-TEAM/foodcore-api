@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +57,7 @@ public class ProductController {
             @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional
     public ResponseEntity<ProductResponse> createProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -79,6 +81,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Catálogo ou categoria não encontrada", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<ProductResponse>> getAllProductsByCategory(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -104,6 +107,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<ProductResponse> getProductById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -132,6 +136,7 @@ public class ProductController {
             @ApiResponse(responseCode = "409", description = "Produto com nome já existente na categoria", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional
     public ResponseEntity<ProductResponse> updateProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -157,6 +162,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional
     public ResponseEntity<Void> deleteProduct(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -183,6 +189,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
     })
     @Tag(name = "Produtos", description = "Operações para gerenciamento de produtos")
+    @Transactional
     public ResponseEntity<Void> updateProductImage(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,

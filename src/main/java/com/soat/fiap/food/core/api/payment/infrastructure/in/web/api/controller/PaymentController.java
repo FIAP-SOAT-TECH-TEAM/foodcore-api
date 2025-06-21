@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -73,6 +74,7 @@ public class PaymentController {
     })
     @PostMapping(value = "/webhook", params = {"topic", "id"})
     @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    @Transactional
     public ResponseEntity<Void> acquirerTopicWebhook(
             @RequestParam String topic,
             @RequestParam String id,
@@ -94,6 +96,7 @@ public class PaymentController {
     })
     @PostMapping(value = "/webhook", params = "!topic")
     @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    @Transactional
     public ResponseEntity<Void> acquirerWebhook(@Valid @RequestBody AcquirerNotificationRequest notification) {
         log.info("Recebida notificação do adquirente (completa): ação={}, id interno={}, id externo={}",
                 notification.getAction(),
@@ -114,6 +117,7 @@ public class PaymentController {
     })
     @GetMapping("/merchant_orders/{merchantOrderId}")
     @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
+    @Transactional(readOnly = true)
     public ResponseEntity<AcquirerOrderResponse> getAcquirerOrder(@PathVariable Long merchantOrderId) {
         log.info("Recebida requisição para obter dados do pedido no adquirente. merchantOrderId={}", merchantOrderId);
         var response = GetAcquirerOrderController.getAcquirerOrder(merchantOrderId, acquirerSource);
@@ -130,6 +134,7 @@ public class PaymentController {
     })
     @GetMapping("/{orderId}/status")
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
+    @Transactional(readOnly = true)
     public ResponseEntity<PaymentStatusResponse> getOrderPaymentStatus(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
         var response = GetOrderPaymentStatusController.getOrderPaymentStatus(orderId, paymentDataSource, accessManagerSource);
@@ -144,6 +149,7 @@ public class PaymentController {
     })
     @GetMapping("/{orderId}/qrCode")
     @Tag(name = "Pagamentos", description = "Operações para gerenciamento de pagamentos")
+    @Transactional(readOnly = true)
     public ResponseEntity<QrCodeResponse> getOrderPaymentQrCode(@PathVariable Long orderId) {
         log.info("Recebida requisição para obter qr de pagamento para orderId {}", orderId);
         var response = GetOrderPaymentQrCodeController.getOrderPaymentQrCode(orderId, paymentDataSource, accessManagerSource);

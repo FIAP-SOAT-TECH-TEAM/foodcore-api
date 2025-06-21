@@ -8,6 +8,8 @@ import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Ouvinte de eventos de pedido no módulo de catalogo
@@ -28,6 +30,7 @@ public class CatalogOrderEventListener {
      * @param event Evento de pedido criado
      */
     @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleOrderCreatedEvent(OrderCreatedEvent event) {
         log.info("Módulo Catalogo: Notificado de criação de pedido: {}),",
                 event.getId());
@@ -43,6 +46,7 @@ public class CatalogOrderEventListener {
      * @param event Evento de pedido cancelado
      */
     @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleOrderCanceledEvent(OrderCanceledEvent event) {
         log.info("Módulo Catalogo: Notificado de cancelamento de pedido: {}),",
                 event.getId());

@@ -4,6 +4,8 @@ import com.soat.fiap.food.core.api.catalog.core.domain.events.ProductCreatedEven
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Ouvinte de eventos de catalogo no módulo de pedidos
@@ -18,6 +20,7 @@ public class OrderProductEventListener {
      * @param event Evento de produto criado
      */
     @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleProductCreatedEvent(ProductCreatedEvent event) {
         log.info("Módulo Order: Notificado da criação do produto: {} (ID: {}), com preço: {}",
                 event.getProductName(), event.getProductId(), event.getPrice());

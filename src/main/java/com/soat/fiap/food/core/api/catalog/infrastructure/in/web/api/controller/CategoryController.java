@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +54,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request) {
         log.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
@@ -74,6 +76,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<CategoryResponse>> getAllCategories(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId) {
@@ -95,6 +98,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Categoria ou catálogo não encontrado", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional(readOnly = true)
     public ResponseEntity<CategoryResponse> getCategoryById(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -121,6 +125,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional
     public ResponseEntity<CategoryResponse> updateCategory(
             @Parameter(description = "ID atual do catálogo da categoria", example = "2", required = true)
             @PathVariable Long catalogId,
@@ -145,6 +150,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "409", description = "Categoria possui produtos associados", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional
     public ResponseEntity<Void> deleteCategory(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
@@ -169,6 +175,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)
     })
     @Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos")
+    @Transactional
     public ResponseEntity<Void> updateCategoryImage(
             @Parameter(description = "ID do catálogo", example = "1", required = true)
             @PathVariable Long catalogId,
