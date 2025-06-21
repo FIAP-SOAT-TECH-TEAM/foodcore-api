@@ -5,7 +5,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entit
  */
 public enum MercadoPagoOrderNotificationStatus {
     OPENED("Aberta"),
-    CLOSE("Fechada");
+    CLOSED("Fechada");
 
     private final String description;
 

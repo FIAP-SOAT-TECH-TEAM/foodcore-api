@@ -8,7 +8,6 @@ import com.soat.fiap.food.core.api.payment.infrastructure.common.source.Acquirer
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerTopicNotificationRequest;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
@@ -111,14 +110,13 @@ public class PaymentController {
     @Operation(summary = "Buscar pedido no adquirente por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido retornado com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AcquirerOrderResponse.class))),
+                    content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
     })
     @GetMapping("/merchant_orders/{merchantOrderId}")
     @Tag(name = "Mercado Pago", description = "Endpoints de integração com o adquirente")
     @Transactional(readOnly = true)
-    public ResponseEntity<AcquirerOrderResponse> getAcquirerOrder(@PathVariable Long merchantOrderId) {
+    public ResponseEntity<Object> getAcquirerOrder(@PathVariable Long merchantOrderId) {
         log.info("Recebida requisição para obter dados do pedido no adquirente. merchantOrderId={}", merchantOrderId);
         var response = GetAcquirerOrderController.getAcquirerOrder(merchantOrderId, acquirerSource);
         return ResponseEntity.ok(response);

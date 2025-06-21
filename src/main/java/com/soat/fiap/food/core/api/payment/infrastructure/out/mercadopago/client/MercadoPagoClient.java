@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.client;
 
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoGenerateQrCodeEntity;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoPaymentEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoQrCodeEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderEntity;

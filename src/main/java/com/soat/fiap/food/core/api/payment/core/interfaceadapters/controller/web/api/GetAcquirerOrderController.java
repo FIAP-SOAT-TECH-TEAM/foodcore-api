@@ -2,9 +2,7 @@ package com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.we
 
 import com.soat.fiap.food.core.api.payment.core.application.usecases.GetAcquirerOrderUseCase;
 import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.AcquirerGateway;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.presenter.web.api.PaymentPresenter;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderResponse;
 
 /**
  * Controller: Obter os detalhes de um pedido no adquirente.
@@ -16,15 +14,14 @@ public class GetAcquirerOrderController {
      *
      * @param orderId         ID do pedido no adquirente.
      * @param acquirerSource gateway para comunicação com o adquirente
-     * @return Objeto {@link AcquirerOrderResponse} contendo os detalhes do pedido.
+     * @return Objeto {@link Object} bruto com os dados do pedido. Obs: não utiliza um presenter pois o objetivo deste endpoint é retornar ipsis litteris a resposta do adquirente
      */
-    public static AcquirerOrderResponse getAcquirerOrder(
+    public static Object getAcquirerOrder(
             Long orderId,
             AcquirerSource acquirerSource) {
 
         var acquirerGateway = new AcquirerGateway(acquirerSource);
-        var order = GetAcquirerOrderUseCase.getAcquirerOrder(orderId, acquirerGateway);
 
-        return PaymentPresenter.toAcquirerOrderResponse(order);
+        return GetAcquirerOrderUseCase.getAcquirerOrder(orderId, acquirerGateway);
     }
 }

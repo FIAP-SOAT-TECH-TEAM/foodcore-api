@@ -3,16 +3,16 @@ package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.deser
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderStatus;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderStatus;
 
 import java.io.IOException;
 
 /**
  * TypeAdapter customizado para MercadoPagoOrderStatus (enum) para uso com GSON.
  */
-public class MercadoPagoOrderStatusTypeAdapter extends TypeAdapter<AcquirerOrderStatus> {
+public class MercadoPagoOrderStatusTypeAdapter extends TypeAdapter<MercadoPagoOrderStatus> {
     @Override
-    public void write(JsonWriter out, AcquirerOrderStatus value) throws IOException {
+    public void write(JsonWriter out, MercadoPagoOrderStatus value) throws IOException {
         if (value == null) {
             out.nullValue();
         } else {
@@ -21,8 +21,8 @@ public class MercadoPagoOrderStatusTypeAdapter extends TypeAdapter<AcquirerOrder
     }
 
     @Override
-    public AcquirerOrderStatus read(JsonReader in) throws IOException {
+    public MercadoPagoOrderStatus read(JsonReader in) throws IOException {
         String value = in.nextString();
-        return AcquirerOrderStatus.fromValue(value);
+        return MercadoPagoOrderStatus.fromValue(value);
     }
 }

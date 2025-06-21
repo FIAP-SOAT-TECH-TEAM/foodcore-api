@@ -2,12 +2,12 @@ package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.confi
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderNotificationStatus;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.AcquirerOrderStatus;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.client.MercadoPagoClient;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.deserializers.*;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderNotificationStatus;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderStatus;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.springframework.context.annotation.Bean;
@@ -28,8 +28,8 @@ public class MercadoPagoRetrofitConfig {
                 .registerTypeAdapter(PaymentStatus.class, new PaymentStatusTypeAdapter())
                 .registerTypeAdapter(PaymentMethod.class, new PaymentMethodTypeAdapter())
                 .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter())
-                .registerTypeAdapter(AcquirerOrderStatus.class, new MercadoPagoOrderStatusTypeAdapter())
-                .registerTypeAdapter(AcquirerOrderNotificationStatus.class, new MercadoPagoOrderNotificationStatusTypeAdapter())
+                .registerTypeAdapter(MercadoPagoOrderStatus.class, new MercadoPagoOrderStatusTypeAdapter())
+                .registerTypeAdapter(MercadoPagoOrderNotificationStatus.class, new MercadoPagoOrderNotificationStatusTypeAdapter())
                 .create();
     }
 
