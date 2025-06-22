@@ -26,6 +26,12 @@ show_help() {
   echo "  db:reset         Reseta o banco de dados (cuidado!)"
   echo "  run:action       Executa GitHub Actions localmente usando Act"
   echo "  run:workflow     Executa um workflow específico do GitHub Actions"
+  echo "  test:unit        Executa apenas testes unitários (sem integração)"
+  echo "  test:all         Executa todos os testes (unitários + integração)"
+  echo "  test:coverage    Executa testes e gera relatório de cobertura"
+  echo "  test:report      Abre o relatório de cobertura no navegador"
+  echo "  sonar:analyze    Executa análise do SonarQube (requer token)"
+  echo "  sonar:cloud      Executa análise para o SonarCloud"
   echo "  logs             Exibe logs dos containers"
   echo "  logs:app         Exibe logs apenas da aplicação"
   echo "  logs:db          Exibe logs apenas do banco de dados"
@@ -41,6 +47,10 @@ show_help() {
   echo "  ./food start:all --build    Inicia tudo reconstruindo as imagens"
   echo "  ./food stop:all             Para todos os serviços"
   echo "  ./food db:up                Aplica migrações do banco"
+  echo "  ./food test:unit            Executa apenas testes unitários"
+  echo "  ./food test:all             Executa todos os testes"
+  echo "  ./food test:coverage        Executa testes e gera relatório de cobertura"
+  echo "  ./food sonar:analyze        Executa análise do SonarQube local"
   echo "  ./food run:action           Executa todos os GitHub Actions localmente"
   echo "  ./food run:workflow .github/workflows/ci-cd.yml  Executa um workflow específico"
 }
@@ -184,7 +194,74 @@ case "$COMMAND" in
       echo "Arquivo de secrets não encontrado. Usando configuração padrão."
       echo "Para configurar secrets, crie um arquivo em $ACT_DIR/secrets.env"
       act workflow_dispatch -W "$1" "${@:2}"
+          fi
+      ;;
+  test:unit)
+    echo "Executando apenas testes unitários (sem integração)..."
+    ./gradlew clean test --tests "*.unit.*" -Dspring.profiles.active=test
+    ;;
+  test:all)
+    echo "Executando todos os testes (unitários + integração)..."
+    ./gradlew clean test -Dspring.profiles.active=test
+    ;;
+  test:coverage)
+    echo "Executando testes e gerando relatório de cobertura..."
+    ./gradlew clean test jacocoTestReport -Dspring.profiles.active=test
+    echo ""
+    echo "✅ Relatório de cobertura gerado!"
+    echo "📊 Abra o arquivo: build/reports/jacoco/test/html/index.html"
+    echo "📈 Ou execute: ./food test:report"
+    ;;
+  test:report)
+    echo "Abrindo relatório de cobertura no navegador..."
+    if [ -f "build/reports/jacoco/test/html/index.html" ]; then
+      if command -v open &> /dev/null; then
+        # macOS
+        open build/reports/jacoco/test/html/index.html
+      elif command -v xdg-open &> /dev/null; then
+        # Linux
+        xdg-open build/reports/jacoco/test/html/index.html
+      elif command -v start &> /dev/null; then
+        # Windows
+        start build/reports/jacoco/test/html/index.html
+      else
+        echo "Não foi possível abrir automaticamente. Abra manualmente:"
+        echo "build/reports/jacoco/test/html/index.html"
+      fi
+    else
+      echo "❌ Relatório de cobertura não encontrado!"
+      echo "Execute primeiro: ./food test:coverage"
     fi
+    ;;
+  sonar:analyze)
+    echo "Executando análise do SonarQube..."
+    if [ -z "$SONAR_TOKEN" ]; then
+      echo "⚠️  Variável SONAR_TOKEN não definida."
+      echo "💡 Para usar SonarQube local:"
+      echo "   1. Inicie o SonarQube: docker run -d --name sonarqube -p 9000:9000 sonarqube:lts"
+      echo "   2. Acesse http://localhost:9000 (admin/admin)"
+      echo "   3. Crie um token e defina: export SONAR_TOKEN=seu-token"
+      echo ""
+      echo "🚀 Executando sem token (pode falhar se SonarQube exigir autenticação)..."
+    fi
+    ./gradlew clean test jacocoTestReport sonar -Dspring.profiles.active=test
+    ;;
+  sonar:cloud)
+    echo "Executando análise para o SonarCloud..."
+    if [ -z "$SONAR_TOKEN" ]; then
+      echo "❌ Variável SONAR_TOKEN é obrigatória para SonarCloud!"
+      echo "💡 Configure o token:"
+      echo "   1. Acesse https://sonarcloud.io/account/security/"
+      echo "   2. Gere um token"
+      echo "   3. Defina: export SONAR_TOKEN=seu-token"
+      echo "   4. Configure a organização no build.gradle"
+      exit 1
+    fi
+    echo "🔍 Analisando código para o SonarCloud..."
+    ./gradlew clean test jacocoTestReport sonar \
+      -Dspring.profiles.active=test \
+      -Dsonar.host.url=https://sonarcloud.io \
+      -Dsonar.organization=${SONAR_ORGANIZATION:-"your-org"}
     ;;
   logs)
     echo "Exibindo logs de todos os containers..."
