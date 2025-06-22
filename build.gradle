@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.liquibase.gradle' version '2.2.0'
 	id 'jacoco'
+	id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = 'com.soat.fiap'
@@ -87,6 +88,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testRuntimeOnly 'com.h2database:h2'
 	
 	// Liquibase runtime dependencies
 	liquibaseRuntime 'org.liquibase:liquibase-core'
@@ -121,6 +123,60 @@ jacocoTestReport {
 		xml.required = true
 		html.required = true
 	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+				// Application main class
+				'**/FoodCoreApiApplication.class',
+				
+				// Configuration classes
+				'**/config/**',
+				'**/*Config.class',
+				'**/*Configuration.class',
+				'**/*Properties.class',
+				
+				// DTOs and Request/Response classes
+				'**/dto/**',
+				'**/request/**',
+				'**/response/**',
+				
+				// MapStruct generated mappers
+				'**/mapper/**/*Impl.class',
+				'**/mapper/**/*MapperImpl*.class',
+				
+				// Infrastructure adapters (controllers, repositories, etc.)
+				'**/infrastructure/in/web/api/controller/**',
+				'**/infrastructure/in/web/api/auth/**',
+				'**/infrastructure/in/web/api/exceptions/**',
+				'**/infrastructure/in/event/listener/**',
+				'**/infrastructure/in/schedulers/**',
+				'**/infrastructure/out/persistence/**/*Repository*.class',
+				'**/infrastructure/out/persistence/**/*DataSource*.class',
+				'**/infrastructure/out/persistence/**/*Entity*.class',
+				'**/infrastructure/out/persistence/**/*Converter*.class',
+				'**/infrastructure/out/mercadopago/client/**',
+				'**/infrastructure/out/mercadopago/entity/**',
+				'**/infrastructure/out/mercadopago/config/**',
+				'**/infrastructure/out/mercadopago/deserializers/**',
+				'**/infrastructure/out/mercadopago/exceptions/**',
+				'**/infrastructure/out/mercadopago/mapper/**',
+				'**/infrastructure/out/event/publisher/**',
+				'**/infrastructure/out/persistence/azureblobstorage/**',
+				
+				// Interface adapters (controllers, presenters, gateways)
+				'**/interfaceadapters/controller/web/api/**',
+				'**/interfaceadapters/presenter/web/api/**',
+				'**/interfaceadapters/gateways/**',
+				
+				// Common infrastructure
+				'**/infrastructure/common/source/**',
+				'**/infrastructure/common/mapper/**',
+				
+				// Package info files
+				'**/package-info.class'
+			])
+		}))
+	}
 }
 
 // Configuração do Liquibase para usar o arquivo de changelog
@@ -147,4 +203,73 @@ task extractDependencies(type: Copy) {
 // Adicionar a extração de dependências ao build
 tasks.named('build') {
 	dependsOn extractDependencies
+}
+
+// Configuração do SonarQube
+sonar {
+	properties {
+		property 'sonar.projectKey', 'com.soat.fiap.food-core-api'
+		property 'sonar.projectName', 'Food Core API'
+		property 'sonar.sources', 'src/main/java'
+		property 'sonar.tests', 'src/test/java'
+		property 'sonar.java.binaries', 'build/classes/java/main'
+		property 'sonar.java.test.binaries', 'build/classes/java/test'
+		property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+		property 'sonar.exclusions', [
+			// Application main class
+			'**/FoodCoreApiApplication.java',
+			
+			// Configuration classes
+			'**/config/**',
+			'**/*Config.java',
+			'**/*Configuration.java',
+			'**/*Properties.java',
+			
+			// DTOs and Request/Response classes
+			'**/dto/**',
+			'**/request/**',
+			'**/response/**',
+			
+			// MapStruct generated mappers
+			'**/mapper/**/*Impl.java',
+			'**/mapper/**/*MapperImpl*.java',
+			
+			// Infrastructure adapters (controllers, repositories, etc.)
+			'**/infrastructure/in/web/api/controller/**',
+			'**/infrastructure/in/web/api/auth/**',
+			'**/infrastructure/in/web/api/exceptions/**',
+			'**/infrastructure/in/event/listener/**',
+			'**/infrastructure/in/schedulers/**',
+			'**/infrastructure/out/persistence/**/*Repository*.java',
+			'**/infrastructure/out/persistence/**/*DataSource*.java',
+			'**/infrastructure/out/persistence/**/*Entity*.java',
+			'**/infrastructure/out/persistence/**/*Converter*.java',
+			'**/infrastructure/out/mercadopago/client/**',
+			'**/infrastructure/out/mercadopago/entity/**',
+			'**/infrastructure/out/mercadopago/config/**',
+			'**/infrastructure/out/mercadopago/deserializers/**',
+			'**/infrastructure/out/mercadopago/exceptions/**',
+			'**/infrastructure/out/mercadopago/mapper/**',
+			'**/infrastructure/out/event/publisher/**',
+			'**/infrastructure/out/persistence/azureblobstorage/**',
+			
+			// Interface adapters (controllers, presenters, gateways)
+			'**/interfaceadapters/controller/web/api/**',
+			'**/interfaceadapters/presenter/web/api/**',
+			'**/interfaceadapters/gateways/**',
+			
+			// Common infrastructure
+			'**/infrastructure/common/source/**',
+			'**/infrastructure/common/mapper/**',
+			
+			// Package info files
+			'**/package-info.java'
+		].join(',')
+		property 'sonar.test.exclusions', '**/fixtures/**'
+		// Configurações para SonarCloud
+		// property 'sonar.organization', 'your-org'
+		// property 'sonar.host.url', 'https://sonarcloud.io'
+		// Para SonarQube local descomente a linha abaixo:
+		// property 'sonar.host.url', 'http://localhost:9000'
+	}
 }
