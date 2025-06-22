@@ -8,6 +8,7 @@ import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -201,7 +202,7 @@ public class Order {
             throw new OrderException("O percentual de desconto deve estar entre 1 e 95");
         }
 
-        BigDecimal percentage = BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(95));
+        BigDecimal percentage = BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal discount = this.amount.multiply(percentage);
         this.amount = this.amount.subtract(discount);
     }

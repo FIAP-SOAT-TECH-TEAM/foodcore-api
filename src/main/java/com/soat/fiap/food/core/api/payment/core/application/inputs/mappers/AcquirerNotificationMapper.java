@@ -25,7 +25,7 @@ public class AcquirerNotificationMapper {
                 request.getUserId(),
                 request.getApiVersion(),
                 request.getAction(),
-                request.getDataId()
+                request.getData() != null ? request.getDataId() : null
         );
     }
 }
