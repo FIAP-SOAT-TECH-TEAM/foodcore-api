@@ -117,6 +117,15 @@ tasks.named('test') {
 	finalizedBy jacocoTestReport
 }
 
+// Integrar Spotless no build process - funciona automaticamente para todos
+tasks.named('compileJava') {
+	dependsOn 'spotlessCheck'
+}
+
+tasks.named('build') {
+	dependsOn 'spotlessCheck'
+}
+
 jacocoTestReport {
 	dependsOn test
 	reports {
