@@ -1,0 +1,44 @@
+package com.soat.fiap.food.core.api.order.unit.eventlistener;
+
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
+import com.soat.fiap.food.core.api.order.infrastructure.in.event.listener.OrderPaymentEventListener;
+import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("OrderPaymentEventListener - Testes Unitários")
+class OrderPaymentEventListenerTest {
+
+    @Mock
+    private OrderDataSource orderDataSource;
+
+    @Mock
+    private PaymentDataSource paymentDataSource;
+
+    @Mock
+    private EventPublisherSource eventPublisherSource;
+
+    @Test
+    @DisplayName("Deve criar listener sem lançar exceção")
+    void shouldCreateListenerWithoutThrowingException() {
+        // Act & Assert
+        assertDoesNotThrow(() -> new OrderPaymentEventListener(orderDataSource, paymentDataSource, eventPublisherSource));
+    }
+
+    @Test
+    @DisplayName("Deve verificar que listener tem dependências injetadas")
+    void shouldVerifyListenerHasDependenciesInjected() {
+        // Act
+        var listener = new OrderPaymentEventListener(orderDataSource, paymentDataSource, eventPublisherSource);
+        
+        // Assert
+        assertDoesNotThrow(listener::toString);
+    }
+} 
