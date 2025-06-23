@@ -1,47 +1,45 @@
 package com.soat.fiap.food.core.api.user.unit.controller;
 
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.SaveUserController;
-import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
-import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.SaveUserController;
+import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
+import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("SaveUserController - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("SaveUserController - Testes Unitários")
 class SaveUserControllerTest {
 
-    @Mock
-    private UserDataSource userDataSource;
+	@Mock
+	private UserDataSource userDataSource;
 
-    @Mock
-    private TokenSource tokenSource;
+	@Mock
+	private TokenSource tokenSource;
 
-    @Mock
-    private SecuritySource securitySource;
+	@Mock
+	private SecuritySource securitySource;
 
-    @Test
-    @DisplayName("Deve verificar que SaveUserController existe")
-    void shouldVerifyThatSaveUserControllerExists() {
-        // Act & Assert
-        assertDoesNotThrow(() -> {
-            SaveUserController.class.getName();
-        });
-    }
+	@Test @DisplayName("Deve verificar que SaveUserController existe")
+	void shouldVerifyThatSaveUserControllerExists() {
+		// Act & Assert
+		assertDoesNotThrow(() -> {
+			SaveUserController.class.getName();
+		});
+	}
 
-    @Test
-    @DisplayName("Deve verificar que UserRequest pode ser criado")
-    void shouldVerifyThatUserRequestCanBeCreated() {
-        // Act & Assert
-        assertDoesNotThrow(() -> {
-            var userRequest = new UserRequest();
-            userRequest.setName("Test");
-        });
-    }
-} 
+	@Test @DisplayName("Deve verificar que UserRequest pode ser criado")
+	void shouldVerifyThatUserRequestCanBeCreated() {
+		// Act & Assert
+		assertDoesNotThrow(() -> {
+			var userRequest = new UserRequest();
+			userRequest.setName("Test");
+		});
+	}
+}

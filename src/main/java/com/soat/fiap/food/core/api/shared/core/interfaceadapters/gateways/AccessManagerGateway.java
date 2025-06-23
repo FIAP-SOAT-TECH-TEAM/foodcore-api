@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -9,20 +10,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AccessManagerGateway {
 
-    private final AccessManagerSource accessManagerSource;
+	private final AccessManagerSource accessManagerSource;
 
-    public AccessManagerGateway(AccessManagerSource accessManagerSource) {
-        this.accessManagerSource = accessManagerSource;
-    }
+	public AccessManagerGateway(AccessManagerSource accessManagerSource) {
+		this.accessManagerSource = accessManagerSource;
+	}
 
-    /**
-     * Verifica se o usuário autenticado tem permissão para acessar os dados do usuário informado.
-     *
-     * @param userId ID do usuário que está sendo acessado.
-     * @throws org.springframework.security.access.AccessDeniedException se o usuário não tiver permissão.
-     */
-    public void validateAccess(Long userId) {
-        log.debug("Validando acesso para o usuário com ID: {}", userId);
-        accessManagerSource.validateAccess(userId);
-    }
+	/**
+	 * Verifica se o usuário autenticado tem permissão para acessar os dados do
+	 * usuário informado.
+	 *
+	 * @param userId
+	 *            ID do usuário que está sendo acessado.
+	 * @throws org.springframework.security.access.AccessDeniedException
+	 *             se o usuário não tiver permissão.
+	 */
+	public void validateAccess(Long userId) {
+		log.debug("Validando acesso para o usuário com ID: {}", userId);
+		accessManagerSource.validateAccess(userId);
+	}
 }

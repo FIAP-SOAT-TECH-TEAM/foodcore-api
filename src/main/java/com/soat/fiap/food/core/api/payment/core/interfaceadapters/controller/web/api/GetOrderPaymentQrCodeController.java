@@ -13,23 +13,26 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessMan
  */
 public class GetOrderPaymentQrCodeController {
 
-    /**
-     * Obtém o QR Code de pagamento do pedido pelo ID do pedido.
-     *
-     * @param orderId           ID do pedido.
-     * @param paymentDataSource Origem de dados para o gateway de pagamento.
-     * @param accessManagerSource Origem de dados para o gateway de autenticação e autorização.
-     * @return Objeto {@link QrCodeResponse} com o QR Code e dados relacionados ao pagamento.
-     */
-    public static QrCodeResponse getOrderPaymentQrCode(
-            Long orderId,
-            PaymentDataSource paymentDataSource,
-            AccessManagerSource accessManagerSource) {
+	/**
+	 * Obtém o QR Code de pagamento do pedido pelo ID do pedido.
+	 *
+	 * @param orderId
+	 *            ID do pedido.
+	 * @param paymentDataSource
+	 *            Origem de dados para o gateway de pagamento.
+	 * @param accessManagerSource
+	 *            Origem de dados para o gateway de autenticação e autorização.
+	 * @return Objeto {@link QrCodeResponse} com o QR Code e dados relacionados ao
+	 *         pagamento.
+	 */
+	public static QrCodeResponse getOrderPaymentQrCode(Long orderId, PaymentDataSource paymentDataSource,
+			AccessManagerSource accessManagerSource) {
 
-        var paymentGateway = new PaymentGateway(paymentDataSource);
-        var accessManagerGateway = new AccessManagerGateway(accessManagerSource);
-        var payment = GetLatestPaymentByOrderIdUseCase.getLatestPaymentByOrderId(orderId, paymentGateway, accessManagerGateway);
+		var paymentGateway = new PaymentGateway(paymentDataSource);
+		var accessManagerGateway = new AccessManagerGateway(accessManagerSource);
+		var payment = GetLatestPaymentByOrderIdUseCase.getLatestPaymentByOrderId(orderId, paymentGateway,
+				accessManagerGateway);
 
-        return PaymentPresenter.toQrCodeResponse(payment);
-    }
+		return PaymentPresenter.toQrCodeResponse(payment);
+	}
 }

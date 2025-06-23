@@ -1,33 +1,37 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.common.source;
 
+import java.time.LocalDateTime;
+
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 
-import java.time.LocalDateTime;
-
 /**
- *  DataSource para comunicação com o adquirente
+ * DataSource para comunicação com o adquirente
  */
 public interface AcquirerSource {
-    /**
-     * Gera um QR Code para pagamento com base na requisição fornecida.
-     *
-     * @param input Objeto contendo os dados necessários para gerar o QR Code.
-     * @param expireIn Data de expiração do qrCode.
-     */
-    String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn);
+	/**
+	 * Gera um QR Code para pagamento com base na requisição fornecida.
+	 *
+	 * @param input
+	 *            Objeto contendo os dados necessários para gerar o QR Code.
+	 * @param expireIn
+	 *            Data de expiração do qrCode.
+	 */
+	String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn);
 
-    /**
-     * Consulta os pagamentos do adquirente pelo ID informado.
-     *
-     * @param id Identificador do pagamento.
-     */
-    AcquirerPaymentOutput getAcquirerPayments(String id);
+	/**
+	 * Consulta os pagamentos do adquirente pelo ID informado.
+	 *
+	 * @param id
+	 *            Identificador do pagamento.
+	 */
+	AcquirerPaymentOutput getAcquirerPayments(String id);
 
-    /**
-     * Consulta um pedido (order) do adquirente pelo seu ID.
-     *
-     * @param orderId Identificador do pedido.
-     */
-    Object getAcquirerOrder(Long orderId);
+	/**
+	 * Consulta um pedido (order) do adquirente pelo seu ID.
+	 *
+	 * @param orderId
+	 *            Identificador do pedido.
+	 */
+	Object getAcquirerOrder(Long orderId);
 }

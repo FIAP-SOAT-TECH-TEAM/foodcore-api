@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceConflic
  */
 public class UserConflictException extends ResourceConflictException {
 
-    public UserConflictException(String message) {
-        super(message);
-    }
-    public UserConflictException(String resourceName, String fieldName, Object fieldValue) {
-        super(resourceName, fieldName, fieldValue);
-    }
+	public UserConflictException(String message) {
+		super(message);
+	}
+
+	public UserConflictException(String resourceName, String fieldName, Object fieldValue) {
+		super(resourceName, fieldName, fieldValue);
+	}
 }

@@ -9,6 +9,7 @@ import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.Payme
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,45 +18,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProcessExpiredPaymentsController {
 
-    /**
-     * Processa pagamentos que expiraram e ainda estão com status pendente.
-     * <p>
-     * Para cada pagamento expirado:
-     * <ul>
-     *     <li>Atualiza o status para {@code CANCELLED}</li>
-     *     <li>Salva a atualização</li>
-     *     <li>Publica um evento {@link com.soat.fiap.food.core.api.payment.core.domain.events.PaymentExpiredEvent}</li>
-     * </ul>
-     *
-     * @param paymentDataSource Origem de dados dos pagamentos
-     * @param eventPublisherSource Origem de publicação de eventos
-     */
-    public static void processExpiredPayments(
-            PaymentDataSource paymentDataSource,
-            EventPublisherSource eventPublisherSource) {
+	/**
+	 * Processa pagamentos que expiraram e ainda estão com status pendente.
+	 * <p>
+	 * Para cada pagamento expirado:
+	 * <ul>
+	 * <li>Atualiza o status para {@code CANCELLED}</li>
+	 * <li>Salva a atualização</li>
+	 * <li>Publica um evento
+	 * {@link com.soat.fiap.food.core.api.payment.core.domain.events.PaymentExpiredEvent}</li>
+	 * </ul>
+	 *
+	 * @param paymentDataSource
+	 *            Origem de dados dos pagamentos
+	 * @param eventPublisherSource
+	 *            Origem de publicação de eventos
+	 */
+	public static void processExpiredPayments(PaymentDataSource paymentDataSource,
+			EventPublisherSource eventPublisherSource) {
 
-        var paymentGateway = new PaymentGateway(paymentDataSource);
-        var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
-        var expiredPayments = GetExpiredPaymentsUseCase.getExpiredPayments(paymentGateway);
+		var paymentGateway = new PaymentGateway(paymentDataSource);
+		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
+		var expiredPayments = GetExpiredPaymentsUseCase.getExpiredPayments(paymentGateway);
 
-        if (expiredPayments.isEmpty()) {
-            log.info("Nenhum pagamento pendente expirado encontrado!");
-            return;
-        }
+		if (expiredPayments.isEmpty()) {
+			log.info("Nenhum pagamento pendente expirado encontrado!");
+			return;
+		}
 
-        for (Payment expiredPayment : expiredPayments) {
-            log.info("Iniciando processamento expirado: {}, pedido: {}, expirado em: {}",
-                    expiredPayment.getId(),
-                    expiredPayment.getOrderId(),
-                    expiredPayment.getExpiresIn().toString()
-            );
+		for (Payment expiredPayment : expiredPayments) {
+			log.info("Iniciando processamento expirado: {}, pedido: {}, expirado em: {}", expiredPayment.getId(),
+					expiredPayment.getOrderId(), expiredPayment.getExpiresIn().toString());
 
-            var updatedPayment = UpdatePaymentStatusUseCase.updatePaymentStatus(expiredPayment, PaymentStatus.CANCELLED);
-            paymentGateway.save(updatedPayment);
+			var updatedPayment = UpdatePaymentStatusUseCase.updatePaymentStatus(expiredPayment,
+					PaymentStatus.CANCELLED);
+			paymentGateway.save(updatedPayment);
 
-            log.info("Pagamento expirado cancelado: {}", expiredPayment.getId());
+			log.info("Pagamento expirado cancelado: {}", expiredPayment.getId());
 
-            PublishPaymentExpiredEventUseCase.publishPaymentExpiredEvent(updatedPayment, eventPublisherGateway);
-        }
-    }
+			PublishPaymentExpiredEventUseCase.publishPaymentExpiredEvent(updatedPayment, eventPublisherGateway);
+		}
+	}
 }

@@ -1,41 +1,52 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.category;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryImageInCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller: Atualizar imagem da categoria.
- *
  */
 @Slf4j
 public class UpdateCategoryImageController {
-    /**
-     * Atualiza apenas a imagem de uma categoria existente.
-     *
-     * @param catalogId ID do catálogo
-     * @param categoryId ID da categoria do categoria
-     * @param imageFile Arquivo da nova imagem
-     * @param catalogDataSource Origem de dados para o gateway
-     * @param imageDataSource Origem de dados de imagem para o gateway
-     * @throws CatalogNotFoundException se o catálogo não for encontrado
-     * @throws IllegalArgumentException se o arquivo de imagem for nulo ou vazio
-     * @throws RuntimeException se ocorrer um erro durante o upload da imagem
-     */
-    public static void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile, CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
-        log.debug("Atualizando imagem do categoria ID: {}", categoryId);
+	/**
+	 * Atualiza apenas a imagem de uma categoria existente.
+	 *
+	 * @param catalogId
+	 *            ID do catálogo
+	 * @param categoryId
+	 *            ID da categoria do categoria
+	 * @param imageFile
+	 *            Arquivo da nova imagem
+	 * @param catalogDataSource
+	 *            Origem de dados para o gateway
+	 * @param imageDataSource
+	 *            Origem de dados de imagem para o gateway
+	 * @throws CatalogNotFoundException
+	 *             se o catálogo não for encontrado
+	 * @throws IllegalArgumentException
+	 *             se o arquivo de imagem for nulo ou vazio
+	 * @throws RuntimeException
+	 *             se ocorrer um erro durante o upload da imagem
+	 */
+	public static void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile,
+			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+		log.debug("Atualizando imagem do categoria ID: {}", categoryId);
 
-        var catalogGateway = new CatalogGateway(catalogDataSource);
+		var catalogGateway = new CatalogGateway(catalogDataSource);
 
-        var imageStorageGateway = new ImageStorageGateway(imageDataSource);
+		var imageStorageGateway = new ImageStorageGateway(imageDataSource);
 
-        var catalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile, catalogGateway, imageStorageGateway);
+		var catalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
+				catalogGateway, imageStorageGateway);
 
-        catalogGateway.save(catalog);
-    }
+		catalogGateway.save(catalog);
+	}
 }

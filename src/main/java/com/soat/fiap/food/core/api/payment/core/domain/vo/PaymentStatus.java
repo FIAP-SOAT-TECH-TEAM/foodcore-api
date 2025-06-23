@@ -7,24 +7,21 @@ import lombok.Getter;
  */
 @Getter
 public enum PaymentStatus {
-    PENDING("Pendente"),
-    APPROVED("Aprovado"),
-    REJECTED("Rejeitado"),
-    CANCELLED("Cancelado");
-    
-    private final String description;
-    
-    PaymentStatus(String description) {
-        this.description = description;
-    }
+	PENDING("Pendente"), APPROVED("Aprovado"), REJECTED("Rejeitado"), CANCELLED("Cancelado");
 
-    public static PaymentStatus fromValue(String value) {
-        for (PaymentStatus status : values()) {
-            if (status.name().equalsIgnoreCase(value)) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("Status desconhecido: " + value);
-    }
+	private final String description;
 
-} 
+	PaymentStatus(String description) {
+		this.description = description;
+	}
+
+	public static PaymentStatus fromValue(String value) {
+		for (PaymentStatus status : values()) {
+			if (status.name().equalsIgnoreCase(value)) {
+				return status;
+			}
+		}
+		throw new IllegalArgumentException("Status desconhecido: " + value);
+	}
+
+}

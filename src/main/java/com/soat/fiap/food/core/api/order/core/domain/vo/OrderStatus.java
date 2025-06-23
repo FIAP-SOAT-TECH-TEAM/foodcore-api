@@ -7,16 +7,12 @@ import lombok.Getter;
  */
 @Getter
 public enum OrderStatus {
-    RECEIVED("Recebido"),
-    PREPARING("Em Preparação"),
-    READY("Pronto"),
-    COMPLETED("Finalizado"),
-    CANCELLED("Cancelado");
-    
-    private final String description;
-    
-    OrderStatus(String description) {
-        this.description = description;
-    }
+	RECEIVED("Recebido"), PREPARING("Em Preparação"), READY("Pronto"), COMPLETED("Finalizado"), CANCELLED("Cancelado");
+
+	private final String description;
+
+	OrderStatus(String description) {
+		this.description = description;
+	}
 
 }

@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoun
  */
 public class ProductNotFoundException extends ResourceNotFoundException {
 
-    public ProductNotFoundException(String message) {
-        super(message);
-    }
-    public ProductNotFoundException(String message, Long id) {
-        super(message, id);
-    }
+	public ProductNotFoundException(String message) {
+		super(message);
+	}
+
+	public ProductNotFoundException(String message, Long id) {
+		super(message, id);
+	}
 }

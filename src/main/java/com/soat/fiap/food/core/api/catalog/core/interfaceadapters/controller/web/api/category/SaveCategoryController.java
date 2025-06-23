@@ -7,36 +7,38 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller: Salvar categoria.
- *
  */
 @Slf4j
 public class SaveCategoryController {
 
-    /**
-     * Salva uma categoria.
-     *
-     * @param categoryRequest Categoria a ser salva
-     * @param catalogDataSource Origem de dados para o gateway
-     * @return Categoria salva com identificadores atualizados
-     */
-    public static CategoryResponse saveCategory(CategoryRequest categoryRequest, CatalogDataSource catalogDataSource) {
+	/**
+	 * Salva uma categoria.
+	 *
+	 * @param categoryRequest
+	 *            Categoria a ser salva
+	 * @param catalogDataSource
+	 *            Origem de dados para o gateway
+	 * @return Categoria salva com identificadores atualizados
+	 */
+	public static CategoryResponse saveCategory(CategoryRequest categoryRequest, CatalogDataSource catalogDataSource) {
 
-        var gateway = new CatalogGateway(catalogDataSource);
+		var gateway = new CatalogGateway(catalogDataSource);
 
-        var categoryInput = CategoryMapper.toInput(categoryRequest);
+		var categoryInput = CategoryMapper.toInput(categoryRequest);
 
-        var catalog = AddCategoryToCatalogUseCase.addCategoryToCatalog(categoryInput, gateway);
+		var catalog = AddCategoryToCatalogUseCase.addCategoryToCatalog(categoryInput, gateway);
 
-        var savedCatalog = gateway.save(catalog);
+		var savedCatalog = gateway.save(catalog);
 
-        var savedCategory = savedCatalog.getCategories().getLast();
+		var savedCategory = savedCatalog.getCategories().getLast();
 
-        log.debug("Categoria criada com sucesso: {}", savedCategory.getId());
+		log.debug("Categoria criada com sucesso: {}", savedCategory.getId());
 
-        return CategoryPresenter.toCategoryResponse(savedCategory);
-    }
+		return CategoryPresenter.toCategoryResponse(savedCategory);
+	}
 }

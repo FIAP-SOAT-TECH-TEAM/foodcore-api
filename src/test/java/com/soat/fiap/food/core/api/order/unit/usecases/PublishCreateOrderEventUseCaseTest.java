@@ -1,9 +1,10 @@
 package com.soat.fiap.food.core.api.order.unit.usecases;
 
-import com.soat.fiap.food.core.api.order.core.application.usecases.PublishCreateOrderEventUseCase;
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
-import com.soat.fiap.food.core.api.shared.fixtures.OrderFixture;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,125 +12,112 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import com.soat.fiap.food.core.api.order.core.application.usecases.PublishCreateOrderEventUseCase;
+import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.api.shared.fixtures.OrderFixture;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("PublishCreateOrderEventUseCase - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("PublishCreateOrderEventUseCase - Testes Unitários")
 class PublishCreateOrderEventUseCaseTest {
 
-    @Mock
-    private EventPublisherGateway eventPublisherGateway;
+	@Mock
+	private EventPublisherGateway eventPublisherGateway;
 
-    @Test
-    @DisplayName("Deve publicar evento criação pedido com sucesso")
-    void shouldPublishCreateOrderEventSuccessfully() {
-        // Arrange
-        var order = OrderFixture.createValidOrder();
-        order.setId(1L);
-        
-        var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
+	@Test @DisplayName("Deve publicar evento criação pedido com sucesso")
+	void shouldPublishCreateOrderEventSuccessfully() {
+		// Arrange
+		var order = OrderFixture.createValidOrder();
+		order.setId(1L);
 
-        // Act
-        PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
+		var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
 
-        // Assert
-        verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
-        
-        var publishedEvent = eventCaptor.getValue();
-        assertThat(publishedEvent).isNotNull();
-        assertThat(publishedEvent.getId()).isEqualTo(1L);
-        assertThat(publishedEvent.getUserId()).isEqualTo(order.getUserId());
-        assertThat(publishedEvent.getStatus()).isEqualTo(order.getOrderStatus());
-    }
+		// Act
+		PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
 
-    @Test
-    @DisplayName("Deve publicar evento com itens do pedido")
-    void shouldPublishEventWithOrderItems() {
-        // Arrange
-        var order = OrderFixture.createOrderWithMultipleItems();
-        order.setId(2L);
-        
-        var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
+		// Assert
+		verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
 
-        // Act
-        PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
+		var publishedEvent = eventCaptor.getValue();
+		assertThat(publishedEvent).isNotNull();
+		assertThat(publishedEvent.getId()).isEqualTo(1L);
+		assertThat(publishedEvent.getUserId()).isEqualTo(order.getUserId());
+		assertThat(publishedEvent.getStatus()).isEqualTo(order.getOrderStatus());
+	}
 
-        // Assert
-        verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
-        
-        var publishedEvent = eventCaptor.getValue();
-        assertThat(publishedEvent).isNotNull();
-        assertThat(publishedEvent.getId()).isEqualTo(2L);
-        assertThat(publishedEvent.getItems()).isNotEmpty();
-        assertThat(publishedEvent.getItems()).hasSize(order.getOrderItems().size());
-    }
+	@Test @DisplayName("Deve publicar evento com itens do pedido")
+	void shouldPublishEventWithOrderItems() {
+		// Arrange
+		var order = OrderFixture.createOrderWithMultipleItems();
+		order.setId(2L);
 
-    @Test
-    @DisplayName("Deve publicar evento com dados completos do pedido")
-    void shouldPublishEventWithCompleteOrderData() {
-        // Arrange
-        var order = OrderFixture.createValidOrder();
-        order.setId(3L);
-        
-        var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
+		var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
 
-        // Act
-        PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
+		// Act
+		PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
 
-        // Assert
-        verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
-        
-        var publishedEvent = eventCaptor.getValue();
-        assertThat(publishedEvent).isNotNull();
-        assertThat(publishedEvent.getId()).isEqualTo(3L);
-        assertThat(publishedEvent.getTotalAmount()).isEqualTo(order.getAmount());
-        assertThat(publishedEvent.getOrderNumber()).isEqualTo(order.getOrderNumber());
-    }
+		// Assert
+		verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
 
-    @Test
-    @DisplayName("Deve publicar evento de criação de pedido com sucesso")
-    void shouldPublishOrderCreationEventSuccessfully() {
-        // Arrange
-        var order = OrderFixture.createValidOrder();
+		var publishedEvent = eventCaptor.getValue();
+		assertThat(publishedEvent).isNotNull();
+		assertThat(publishedEvent.getId()).isEqualTo(2L);
+		assertThat(publishedEvent.getItems()).isNotEmpty();
+		assertThat(publishedEvent.getItems()).hasSize(order.getOrderItems().size());
+	}
 
-        // Act
-        assertDoesNotThrow(() -> 
-            PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway)
-        );
+	@Test @DisplayName("Deve publicar evento com dados completos do pedido")
+	void shouldPublishEventWithCompleteOrderData() {
+		// Arrange
+		var order = OrderFixture.createValidOrder();
+		order.setId(3L);
 
-        // Assert
-        verify(eventPublisherGateway).publishEvent(any());
-    }
+		var eventCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
 
-    @Test
-    @DisplayName("Deve executar publicação sem lançar exceção")
-    void shouldExecutePublicationWithoutThrowingException() {
-        // Arrange
-        var order = OrderFixture.createOrderWithMultipleItems();
+		// Act
+		PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway);
 
-        // Act & Assert
-        assertDoesNotThrow(() -> 
-            PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway)
-        );
-        
-        verify(eventPublisherGateway).publishEvent(any());
-    }
+		// Assert
+		verify(eventPublisherGateway).publishEvent(eventCaptor.capture());
 
-    @Test
-    @DisplayName("Deve publicar evento para pedido sem usuário")
-    void shouldPublishEventForOrderWithoutUser() {
-        // Arrange
-        var order = OrderFixture.createOrderWithoutUser();
+		var publishedEvent = eventCaptor.getValue();
+		assertThat(publishedEvent).isNotNull();
+		assertThat(publishedEvent.getId()).isEqualTo(3L);
+		assertThat(publishedEvent.getTotalAmount()).isEqualTo(order.getAmount());
+		assertThat(publishedEvent.getOrderNumber()).isEqualTo(order.getOrderNumber());
+	}
 
-        // Act
-        assertDoesNotThrow(() -> 
-            PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway)
-        );
+	@Test @DisplayName("Deve publicar evento de criação de pedido com sucesso")
+	void shouldPublishOrderCreationEventSuccessfully() {
+		// Arrange
+		var order = OrderFixture.createValidOrder();
 
-        // Assert
-        verify(eventPublisherGateway).publishEvent(any());
-    }
-} 
+		// Act
+		assertDoesNotThrow(() -> PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway));
+
+		// Assert
+		verify(eventPublisherGateway).publishEvent(any());
+	}
+
+	@Test @DisplayName("Deve executar publicação sem lançar exceção")
+	void shouldExecutePublicationWithoutThrowingException() {
+		// Arrange
+		var order = OrderFixture.createOrderWithMultipleItems();
+
+		// Act & Assert
+		assertDoesNotThrow(() -> PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway));
+
+		verify(eventPublisherGateway).publishEvent(any());
+	}
+
+	@Test @DisplayName("Deve publicar evento para pedido sem usuário")
+	void shouldPublishEventForOrderWithoutUser() {
+		// Arrange
+		var order = OrderFixture.createOrderWithoutUser();
+
+		// Act
+		assertDoesNotThrow(() -> PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway));
+
+		// Assert
+		verify(eventPublisherGateway).publishEvent(any());
+	}
+}

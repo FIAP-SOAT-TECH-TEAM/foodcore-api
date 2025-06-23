@@ -2,36 +2,32 @@ package com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgre
 
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "order_items")
-@Getter
-@Setter
+@Entity @Table(name = "order_items") @Getter @Setter
 public class OrderItemEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private OrderEntity order;
+	@ManyToOne @JoinColumn(name = "order_id", nullable = false)
+	private OrderEntity order;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+	@Column(name = "product_id", nullable = false)
+	private Integer productId;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    @Embedded
-    private OrderItemPrice orderItemPrice;
+	@Embedded
+	private OrderItemPrice orderItemPrice;
 
-    @Column(columnDefinition = "TEXT")
-    private String observations = "";
+	@Column(columnDefinition = "TEXT")
+	private String observations = "";
 
-    @Embedded
-    private AuditInfo auditInfo = new AuditInfo();
+	@Embedded
+	private AuditInfo auditInfo = new AuditInfo();
 }

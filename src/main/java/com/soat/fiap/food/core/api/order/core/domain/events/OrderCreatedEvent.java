@@ -1,10 +1,11 @@
 package com.soat.fiap.food.core.api.order.core.domain.events;
 
-import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+
+import lombok.Data;
 
 /**
  * Evento de domínio emitido quando um pedido é criado
@@ -12,18 +13,18 @@ import java.util.List;
 @Data
 public class OrderCreatedEvent {
 
-    private Long id;
+	private Long id;
 
-    private String orderNumber;
+	private String orderNumber;
 
-    private OrderStatus status;
+	private OrderStatus status;
 
-    private String statusDescription;
+	private String statusDescription;
 
-    private Long userId;
+	private Long userId;
 
-    private BigDecimal totalAmount;
+	private BigDecimal totalAmount;
 
-    private List<OrderItemCreatedEvent> items;
+	private List<OrderItemCreatedEvent> items;
 
-} 
+}

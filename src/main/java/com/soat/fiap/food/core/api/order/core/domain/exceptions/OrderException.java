@@ -7,11 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessExcepti
  */
 public class OrderException extends BusinessException {
 
-    public OrderException(String message) {
-        super(message);
-    }
+	public OrderException(String message) {
+		super(message);
+	}
 
-    public OrderException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public OrderException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

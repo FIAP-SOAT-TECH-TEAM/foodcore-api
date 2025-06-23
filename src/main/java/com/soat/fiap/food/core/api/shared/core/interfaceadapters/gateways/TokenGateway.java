@@ -8,19 +8,20 @@ import com.soat.fiap.food.core.api.user.core.domain.model.User;
  */
 public class TokenGateway {
 
-    private final TokenSource tokenSource;
+	private final TokenSource tokenSource;
 
-    public TokenGateway(TokenSource tokenSource) {
-        this.tokenSource = tokenSource;
-    }
+	public TokenGateway(TokenSource tokenSource) {
+		this.tokenSource = tokenSource;
+	}
 
-    /**
-     * Gera um token para o usuário informado.
-     *
-     * @param user Usuário para o qual o token será gerado.
-     * @return Token como {@code String}.
-     */
-    public String generateToken(User user) {
-        return tokenSource.generateToken(user);
-    }
+	/**
+	 * Gera um token para o usuário informado.
+	 *
+	 * @param user
+	 *            Usuário para o qual o token será gerado.
+	 * @return Token como {@code String}.
+	 */
+	public String generateToken(User user) {
+		return tokenSource.generateToken(user);
+	}
 }
