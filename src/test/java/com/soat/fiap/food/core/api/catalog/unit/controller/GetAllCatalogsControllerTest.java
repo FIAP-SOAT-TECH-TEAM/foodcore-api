@@ -1,0 +1,76 @@
+package com.soat.fiap.food.core.api.catalog.unit.controller;
+
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog.GetAllCatalogsController;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("GetAllCatalogsController - Testes Unitários")
+class GetAllCatalogsControllerTest {
+
+    @Mock
+    private CatalogDataSource catalogDataSource;
+
+    @Test
+    @DisplayName("Deve retornar lista de catálogos com sucesso")
+    void shouldReturnCatalogListSuccessfully() {
+        // Arrange
+        var catalogs = List.of(
+            CatalogFixture.createValidCatalog(),
+            CatalogFixture.createEmptyCatalog()
+        );
+        when(catalogDataSource.findAll()).thenReturn(catalogs);
+
+        // Act
+        var response = assertDoesNotThrow(() -> 
+            GetAllCatalogsController.getAllCatalogs(catalogDataSource)
+        );
+
+        // Assert
+        assertThat(response).isNotNull();
+        assertThat(response).hasSize(2);
+        verify(catalogDataSource).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve retornar lista vazia quando não há catálogos")
+    void shouldReturnEmptyListWhenNoCatalogsExist() {
+        // Arrange
+        when(catalogDataSource.findAll()).thenReturn(List.of());
+
+        // Act
+        var response = GetAllCatalogsController.getAllCatalogs(catalogDataSource);
+
+        // Assert
+        assertThat(response).isNotNull();
+        assertThat(response).isEmpty();
+        verify(catalogDataSource).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve executar busca sem lançar exceção")
+    void shouldExecuteSearchWithoutThrowingException() {
+        // Arrange
+        var catalogs = List.of(CatalogFixture.createCatalogWithCategories());
+        when(catalogDataSource.findAll()).thenReturn(catalogs);
+
+        // Act & Assert
+        assertDoesNotThrow(() -> 
+            GetAllCatalogsController.getAllCatalogs(catalogDataSource)
+        );
+        
+        verify(catalogDataSource).findAll();
+    }
+} 
