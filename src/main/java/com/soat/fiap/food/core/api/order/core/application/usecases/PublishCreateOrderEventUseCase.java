@@ -5,6 +5,7 @@ import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,18 +14,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PublishCreateOrderEventUseCase {
 
-    /**
-     * Publica o evento {@link OrderCreatedEvent}, incluindo os itens do pedido
-     * como {@link OrderItemCreatedEvent}.
-     *
-     * @param order O pedido criado que será convertido em evento.
-     * @param gateway O gateway responsável por publicar o evento.
-     */
-    public static void publishCreateOrderEvent(Order order, EventPublisherGateway gateway) {
-        var event = OrderCreatedEventMapper.toEvent(order);
+	/**
+	 * Publica o evento {@link OrderCreatedEvent}, incluindo os itens do pedido como
+	 * {@link OrderItemCreatedEvent}.
+	 *
+	 * @param order
+	 *            O pedido criado que será convertido em evento.
+	 * @param gateway
+	 *            O gateway responsável por publicar o evento.
+	 */
+	public static void publishCreateOrderEvent(Order order, EventPublisherGateway gateway) {
+		var event = OrderCreatedEventMapper.toEvent(order);
 
-        log.info("Publicando evento de pedido criado {}", order.getId());
+		log.info("Publicando evento de pedido criado {}", order.getId());
 
-        gateway.publishEvent(event);
-    }
+		gateway.publishEvent(event);
+	}
 }

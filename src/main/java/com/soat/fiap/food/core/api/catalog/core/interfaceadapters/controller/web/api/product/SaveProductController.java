@@ -10,6 +10,7 @@ import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.request
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,32 +19,37 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SaveProductController {
 
-    /**
-     * Salva um produto em uma categoria específica de um catálogo.
-     *
-     * @param catalogId ID do catálogo
-     * @param productRequest  Produto a ser salvo
-     * @param catalogDataSource      Origem de dados
-     * @param eventPublisherSource  Origem de publicação de eventos
-     * @return Produto salvo com identificadores atualizados
-     */
-    public static ProductResponse saveProduct(Long catalogId, ProductRequest productRequest, CatalogDataSource catalogDataSource, EventPublisherSource eventPublisherSource) {
+	/**
+	 * Salva um produto em uma categoria específica de um catálogo.
+	 *
+	 * @param catalogId
+	 *            ID do catálogo
+	 * @param productRequest
+	 *            Produto a ser salvo
+	 * @param catalogDataSource
+	 *            Origem de dados
+	 * @param eventPublisherSource
+	 *            Origem de publicação de eventos
+	 * @return Produto salvo com identificadores atualizados
+	 */
+	public static ProductResponse saveProduct(Long catalogId, ProductRequest productRequest,
+			CatalogDataSource catalogDataSource, EventPublisherSource eventPublisherSource) {
 
-        var gateway = new CatalogGateway(catalogDataSource);
-        var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
+		var gateway = new CatalogGateway(catalogDataSource);
+		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 
-        var productInput = ProductMapper.toInput(productRequest);
+		var productInput = ProductMapper.toInput(productRequest);
 
-        var catalog = AddProductToCategoryUseCase.addProductToCategory(catalogId, productInput, gateway);
+		var catalog = AddProductToCategoryUseCase.addProductToCategory(catalogId, productInput, gateway);
 
-        var savedCatalog = gateway.save(catalog);
+		var savedCatalog = gateway.save(catalog);
 
-        var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
+		var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 
-        PublishProductCreatedEventUseCase.publishProductCreatedEvent(savedProduct, eventPublisherGateway);
+		PublishProductCreatedEventUseCase.publishProductCreatedEvent(savedProduct, eventPublisherGateway);
 
-        log.debug("Produto criado com sucesso: {}", savedProduct.getId());
+		log.debug("Produto criado com sucesso: {}", savedProduct.getId());
 
-        return ProductPresenter.toProductResponse(savedProduct);
-    }
+		return ProductPresenter.toProductResponse(savedProduct);
+	}
 }

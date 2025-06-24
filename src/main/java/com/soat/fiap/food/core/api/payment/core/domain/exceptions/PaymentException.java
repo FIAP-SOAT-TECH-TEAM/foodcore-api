@@ -7,11 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessExcepti
  */
 public class PaymentException extends BusinessException {
 
-    public PaymentException(String message) {
-        super(message);
-    }
+	public PaymentException(String message) {
+		super(message);
+	}
 
-    public PaymentException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public PaymentException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

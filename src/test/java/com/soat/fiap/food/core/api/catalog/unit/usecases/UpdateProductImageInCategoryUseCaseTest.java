@@ -1,10 +1,13 @@
 package com.soat.fiap.food.core.api.catalog.unit.usecases;
 
-import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
-import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
-import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,161 +15,149 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
+import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
+import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
+import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
-@DisplayName("UpdateProductImageInCategoryUseCase - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("UpdateProductImageInCategoryUseCase - Testes Unitários")
 class UpdateProductImageInCategoryUseCaseTest {
 
-    @Mock
-    private CatalogGateway catalogGateway;
+	@Mock
+	private CatalogGateway catalogGateway;
 
-    @Mock
-    private ImageStorageGateway imageStorageGateway;
+	@Mock
+	private ImageStorageGateway imageStorageGateway;
 
-    @Mock
-    private MultipartFile imageFile;
+	@Mock
+	private MultipartFile imageFile;
 
-    @Test
-    @DisplayName("Deve atualizar imagem do produto com sucesso")
-    void shouldUpdateProductImageSuccessfully() {
-        // Arrange
-        var catalog = CatalogFixture.createCatalogWithProducts();
-        var catalogId = 1L;
-        var categoryId = 1L;
-        var productId = 1L;
-        var newImagePath = "products/1/new-image.jpg";
+	@Test @DisplayName("Deve atualizar imagem do produto com sucesso")
+	void shouldUpdateProductImageSuccessfully() {
+		// Arrange
+		var catalog = CatalogFixture.createCatalogWithProducts();
+		var catalogId = 1L;
+		var categoryId = 1L;
+		var productId = 1L;
+		var newImagePath = "products/1/new-image.jpg";
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-        when(imageFile.isEmpty()).thenReturn(false);
-        when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
+		when(imageFile.isEmpty()).thenReturn(false);
+		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
 
-        // Act
-        var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, imageFile, catalogGateway, imageStorageGateway);
+		// Act
+		var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
+				imageFile, catalogGateway, imageStorageGateway);
 
-        // Assert
-        assertThat(result).isNotNull();
-        verify(catalogGateway).findById(catalogId);
-        verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
-    }
+		// Assert
+		assertThat(result).isNotNull();
+		verify(catalogGateway).findById(catalogId);
+		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+	}
 
-    @Test
-    @DisplayName("Deve excluir imagem anterior quando produto já possui imagem")
-    void shouldDeletePreviousImageWhenProductAlreadyHasImage() {
-        // Arrange
-        var catalog = CatalogFixture.createCatalogWithProducts();
-        var product = catalog.getProductFromCategoryById(1L, 1L);
-        product.setImageUrlValue("products/1/old-image.jpg");
-        
-        var catalogId = 1L;
-        var categoryId = 1L;
-        var productId = 1L;
-        var newImagePath = "products/1/new-image.jpg";
+	@Test @DisplayName("Deve excluir imagem anterior quando produto já possui imagem")
+	void shouldDeletePreviousImageWhenProductAlreadyHasImage() {
+		// Arrange
+		var catalog = CatalogFixture.createCatalogWithProducts();
+		var product = catalog.getProductFromCategoryById(1L, 1L);
+		product.setImageUrlValue("products/1/old-image.jpg");
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-        when(imageFile.isEmpty()).thenReturn(false);
-        when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+		var catalogId = 1L;
+		var categoryId = 1L;
+		var productId = 1L;
+		var newImagePath = "products/1/new-image.jpg";
 
-        // Act
-        var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, imageFile, catalogGateway, imageStorageGateway);
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
+		when(imageFile.isEmpty()).thenReturn(false);
+		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
 
-        // Assert
-        assertThat(result).isNotNull();
-        verify(imageStorageGateway).deleteImage("products/1/old-image.jpg");
-        verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
-    }
+		// Act
+		var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
+				imageFile, catalogGateway, imageStorageGateway);
 
-    @Test
-    @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
-    void shouldThrowExceptionWhenCatalogNotFound() {
-        // Arrange
-        var catalogId = 999L;
-        var categoryId = 1L;
-        var productId = 1L;
+		// Assert
+		assertThat(result).isNotNull();
+		verify(imageStorageGateway).deleteImage("products/1/old-image.jpg");
+		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+	}
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.empty());
+	@Test @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
+	void shouldThrowExceptionWhenCatalogNotFound() {
+		// Arrange
+		var catalogId = 999L;
+		var categoryId = 1L;
+		var productId = 1L;
 
-        // Act & Assert
-        assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, imageFile, catalogGateway, imageStorageGateway))
-                .isInstanceOf(CatalogNotFoundException.class);
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.empty());
 
-        verify(catalogGateway).findById(catalogId);
-        verifyNoInteractions(imageStorageGateway);
-    }
+		// Act & Assert
+		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
+				productId, imageFile, catalogGateway, imageStorageGateway))
+				.isInstanceOf(CatalogNotFoundException.class);
 
-    @Test
-    @DisplayName("Deve lançar exceção quando arquivo de imagem for nulo")
-    void shouldThrowExceptionWhenImageFileIsNull() {
-        // Arrange
-        var catalog = CatalogFixture.createCatalogWithProducts();
-        var catalogId = 1L;
-        var categoryId = 1L;
-        var productId = 1L;
+		verify(catalogGateway).findById(catalogId);
+		verifyNoInteractions(imageStorageGateway);
+	}
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
+	@Test @DisplayName("Deve lançar exceção quando arquivo de imagem for nulo")
+	void shouldThrowExceptionWhenImageFileIsNull() {
+		// Arrange
+		var catalog = CatalogFixture.createCatalogWithProducts();
+		var catalogId = 1L;
+		var categoryId = 1L;
+		var productId = 1L;
 
-        // Act & Assert
-        assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, null, catalogGateway, imageStorageGateway))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("O arquivo de imagem não pode ser vazio");
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 
-        verify(catalogGateway).findById(catalogId);
-        verifyNoInteractions(imageStorageGateway);
-    }
+		// Act & Assert
+		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
+				productId, null, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("O arquivo de imagem não pode ser vazio");
 
-    @Test
-    @DisplayName("Deve lançar exceção quando arquivo de imagem for vazio")
-    void shouldThrowExceptionWhenImageFileIsEmpty() {
-        // Arrange
-        var catalog = CatalogFixture.createCatalogWithProducts();
-        var catalogId = 1L;
-        var categoryId = 1L;
-        var productId = 1L;
+		verify(catalogGateway).findById(catalogId);
+		verifyNoInteractions(imageStorageGateway);
+	}
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-        when(imageFile.isEmpty()).thenReturn(true);
+	@Test @DisplayName("Deve lançar exceção quando arquivo de imagem for vazio")
+	void shouldThrowExceptionWhenImageFileIsEmpty() {
+		// Arrange
+		var catalog = CatalogFixture.createCatalogWithProducts();
+		var catalogId = 1L;
+		var categoryId = 1L;
+		var productId = 1L;
 
-        // Act & Assert
-        assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, imageFile, catalogGateway, imageStorageGateway))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("O arquivo de imagem não pode ser vazio");
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
+		when(imageFile.isEmpty()).thenReturn(true);
 
-        verify(catalogGateway).findById(catalogId);
-        verifyNoInteractions(imageStorageGateway);
-    }
+		// Act & Assert
+		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
+				productId, imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("O arquivo de imagem não pode ser vazio");
 
-    @Test
-    @DisplayName("Deve lançar RuntimeException quando ocorrer erro no upload")
-    void shouldThrowRuntimeExceptionWhenUploadErrorOccurs() {
-        // Arrange
-        var catalog = CatalogFixture.createCatalogWithProducts();
-        var catalogId = 1L;
-        var categoryId = 1L;
-        var productId = 1L;
+		verify(catalogGateway).findById(catalogId);
+		verifyNoInteractions(imageStorageGateway);
+	}
 
-        when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-        when(imageFile.isEmpty()).thenReturn(false);
-        when(imageStorageGateway.uploadImage(anyString(), eq(imageFile)))
-                .thenThrow(new RuntimeException("Erro no upload"));
+	@Test @DisplayName("Deve lançar RuntimeException quando ocorrer erro no upload")
+	void shouldThrowRuntimeExceptionWhenUploadErrorOccurs() {
+		// Arrange
+		var catalog = CatalogFixture.createCatalogWithProducts();
+		var catalogId = 1L;
+		var categoryId = 1L;
+		var productId = 1L;
 
-        // Act & Assert
-        assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(
-                catalogId, categoryId, productId, imageFile, catalogGateway, imageStorageGateway))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Falha ao processar imagem");
+		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
+		when(imageFile.isEmpty()).thenReturn(false);
+		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile)))
+				.thenThrow(new RuntimeException("Erro no upload"));
 
-        verify(catalogGateway).findById(catalogId);
-        verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
-    }
-} 
+		// Act & Assert
+		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
+				productId, imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
+				.hasMessageContaining("Falha ao processar imagem");
+
+		verify(catalogGateway).findById(catalogId);
+		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+	}
+}

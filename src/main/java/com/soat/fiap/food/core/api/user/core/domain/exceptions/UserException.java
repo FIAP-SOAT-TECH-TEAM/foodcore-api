@@ -7,11 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessExcepti
  */
 public class UserException extends BusinessException {
 
-    public UserException(String message) {
-        super(message);
-    }
+	public UserException(String message) {
+		super(message);
+	}
 
-    public UserException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UserException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

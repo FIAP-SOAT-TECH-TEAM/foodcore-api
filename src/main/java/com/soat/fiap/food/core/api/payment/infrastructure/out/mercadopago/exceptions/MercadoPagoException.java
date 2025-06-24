@@ -7,11 +7,11 @@ import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIExcep
  */
 public class MercadoPagoException extends APIException {
 
-    public MercadoPagoException(String message, int statusCode) {
-        super(message, statusCode);
-    }
+	public MercadoPagoException(String message, int statusCode) {
+		super(message, statusCode);
+	}
 
-    public MercadoPagoException(String message, Throwable cause, int statusCode) {
-        super(message, cause, statusCode);
-    }
+	public MercadoPagoException(String message, Throwable cause, int statusCode) {
+		super(message, cause, statusCode);
+	}
 }

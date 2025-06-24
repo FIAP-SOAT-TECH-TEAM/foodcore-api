@@ -10,10 +10,11 @@ import lombok.Getter;
  */
 @Getter
 public class ValidationErrorResponse extends ErrorResponse {
-    private final Map<String, String> errors;
+	private final Map<String, String> errors;
 
-    public ValidationErrorResponse(LocalDateTime timestamp, int status, String message, String path, Map<String, String> errors) {
-        super(timestamp, status, message, path);
-        this.errors = errors;
-    }
-} 
+	public ValidationErrorResponse(LocalDateTime timestamp, int status, String message, String path,
+			Map<String, String> errors) {
+		super(timestamp, status, message, path);
+		this.errors = errors;
+	}
+}

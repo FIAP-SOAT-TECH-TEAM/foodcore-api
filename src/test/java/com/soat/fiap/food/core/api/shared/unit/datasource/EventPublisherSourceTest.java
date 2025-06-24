@@ -1,7 +1,8 @@
 package com.soat.fiap.food.core.api.shared.unit.datasource;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.DefaultEventPublisher;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.mockito.Mockito.verify;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,74 +10,65 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.mockito.Mockito.verify;
+import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.DefaultEventPublisher;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("EventPublisherSource - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("EventPublisherSource - Testes Unitários")
 class EventPublisherSourceTest {
 
-    @Mock
-    private ApplicationEventPublisher applicationEventPublisher;
+	@Mock
+	private ApplicationEventPublisher applicationEventPublisher;
 
-    @Test
-    @DisplayName("Deve publicar evento com sucesso")
-    void shouldPublishEventSuccessfully() {
-        // Arrange
-        var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
-        var event = new TestEvent("Test Event");
+	@Test @DisplayName("Deve publicar evento com sucesso")
+	void shouldPublishEventSuccessfully() {
+		// Arrange
+		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var event = new TestEvent("Test Event");
 
-        // Act & Assert
-        assertThatNoException().isThrownBy(() -> 
-            eventPublisher.publishEvent(event)
-        );
-        
-        verify(applicationEventPublisher).publishEvent(event);
-    }
+		// Act & Assert
+		assertThatNoException().isThrownBy(() -> eventPublisher.publishEvent(event));
 
-    @Test
-    @DisplayName("Deve publicar evento string com sucesso")
-    void shouldPublishStringEventSuccessfully() {
-        // Arrange
-        var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
-        var event = "String Event";
+		verify(applicationEventPublisher).publishEvent(event);
+	}
 
-        // Act & Assert
-        assertThatNoException().isThrownBy(() -> 
-            eventPublisher.publishEvent(event)
-        );
-        
-        verify(applicationEventPublisher).publishEvent(event);
-    }
+	@Test @DisplayName("Deve publicar evento string com sucesso")
+	void shouldPublishStringEventSuccessfully() {
+		// Arrange
+		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var event = "String Event";
 
-    @Test
-    @DisplayName("Deve publicar múltiplos eventos com sucesso")
-    void shouldPublishMultipleEventsSuccessfully() {
-        // Arrange
-        var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
-        var event1 = new TestEvent("Event 1");
-        var event2 = new TestEvent("Event 2");
+		// Act & Assert
+		assertThatNoException().isThrownBy(() -> eventPublisher.publishEvent(event));
 
-        // Act & Assert
-        assertThatNoException().isThrownBy(() -> {
-            eventPublisher.publishEvent(event1);
-            eventPublisher.publishEvent(event2);
-        });
-        
-        verify(applicationEventPublisher).publishEvent(event1);
-        verify(applicationEventPublisher).publishEvent(event2);
-    }
+		verify(applicationEventPublisher).publishEvent(event);
+	}
 
-    // Classe auxiliar para testes
-    private static class TestEvent {
-        private final String message;
-        
-        public TestEvent(String message) {
-            this.message = message;
-        }
-        
-        public String getMessage() {
-            return message;
-        }
-    }
-} 
+	@Test @DisplayName("Deve publicar múltiplos eventos com sucesso")
+	void shouldPublishMultipleEventsSuccessfully() {
+		// Arrange
+		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var event1 = new TestEvent("Event 1");
+		var event2 = new TestEvent("Event 2");
+
+		// Act & Assert
+		assertThatNoException().isThrownBy(() -> {
+			eventPublisher.publishEvent(event1);
+			eventPublisher.publishEvent(event2);
+		});
+
+		verify(applicationEventPublisher).publishEvent(event1);
+		verify(applicationEventPublisher).publishEvent(event2);
+	}
+
+	// Classe auxiliar para testes
+	private static class TestEvent {
+		private final String message;
+
+		public TestEvent(String message) {
+			this.message = message;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+	}
+}

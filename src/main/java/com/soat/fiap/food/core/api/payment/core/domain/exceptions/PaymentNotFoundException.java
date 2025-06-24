@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoun
  */
 public class PaymentNotFoundException extends ResourceNotFoundException {
 
-    public PaymentNotFoundException(String message) {
-        super(message);
-    }
-    public PaymentNotFoundException(String message, Long id) {
-        super(message, id);
-    }
+	public PaymentNotFoundException(String message) {
+		super(message);
+	}
+
+	public PaymentNotFoundException(String message, Long id) {
+		super(message, id);
+	}
 }

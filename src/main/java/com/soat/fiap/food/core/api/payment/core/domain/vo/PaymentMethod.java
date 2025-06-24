@@ -7,28 +7,25 @@ import lombok.Getter;
  */
 @Getter
 public enum PaymentMethod {
-    CREDIT_CARD("Cartão de Crédito"),
-    DEBIT_CARD("Cartão de Débito"),
-    PIX("PIX"),
-    ACCOUNT_MONEY("Dinheiro");
-    
-    private final String description;
-    
-    PaymentMethod(String description) {
-        this.description = description;
-    }
+	CREDIT_CARD("Cartão de Crédito"), DEBIT_CARD("Cartão de Débito"), PIX("PIX"), ACCOUNT_MONEY("Dinheiro");
 
-    public static PaymentMethod fromValue(String value) {
+	private final String description;
 
-        String normalized = value.trim().toUpperCase().replace("-", "_").replace(" ", "_");
+	PaymentMethod(String description) {
+		this.description = description;
+	}
 
-        for (PaymentMethod method : values()) {
-            if (method.name().equalsIgnoreCase(normalized)) {
-                return method;
-            }
-        }
+	public static PaymentMethod fromValue(String value) {
 
-        throw new IllegalArgumentException("PaymentMethod desconhecido: " + value);
-    }
+		String normalized = value.trim().toUpperCase().replace("-", "_").replace(" ", "_");
 
-} 
+		for (PaymentMethod method : values()) {
+			if (method.name().equalsIgnoreCase(normalized)) {
+				return method;
+			}
+		}
+
+		throw new IllegalArgumentException("PaymentMethod desconhecido: " + value);
+	}
+
+}

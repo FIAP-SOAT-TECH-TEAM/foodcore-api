@@ -7,34 +7,36 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller: Salvar catálogo.
- *
  */
 @Slf4j
 public class SaveCatalogController {
 
-    /**
-     * Salva um catálogo.
-     *
-     * @param catalogRequest Catálogo a ser salvo
-     * @param catalogDataSource Origem de dados para o gateway
-     * @return Catálogo salvo com identificadores atualizados
-     */
-    public static CatalogResponse saveCatalog(CatalogRequest catalogRequest, CatalogDataSource catalogDataSource) {
+	/**
+	 * Salva um catálogo.
+	 *
+	 * @param catalogRequest
+	 *            Catálogo a ser salvo
+	 * @param catalogDataSource
+	 *            Origem de dados para o gateway
+	 * @return Catálogo salvo com identificadores atualizados
+	 */
+	public static CatalogResponse saveCatalog(CatalogRequest catalogRequest, CatalogDataSource catalogDataSource) {
 
-        var gateway = new CatalogGateway(catalogDataSource);
+		var gateway = new CatalogGateway(catalogDataSource);
 
-        var catalogInput = CatalogMapper.toInput(catalogRequest);
+		var catalogInput = CatalogMapper.toInput(catalogRequest);
 
-        var catalog = CreateCatalogUseCase.createCatalog(catalogInput, gateway);
+		var catalog = CreateCatalogUseCase.createCatalog(catalogInput, gateway);
 
-        var savedCatalog = gateway.save(catalog);
+		var savedCatalog = gateway.save(catalog);
 
-        log.debug("Catalogo criado com sucesso: {}", savedCatalog.getId());
+		log.debug("Catalogo criado com sucesso: {}", savedCatalog.getId());
 
-        return CatalogPresenter.toCatalogResponse(catalog);
-    }
+		return CatalogPresenter.toCatalogResponse(catalog);
+	}
 }

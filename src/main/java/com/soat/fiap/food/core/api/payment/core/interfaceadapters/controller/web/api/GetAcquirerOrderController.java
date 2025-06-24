@@ -9,19 +9,21 @@ import com.soat.fiap.food.core.api.payment.infrastructure.common.source.Acquirer
  */
 public class GetAcquirerOrderController {
 
-    /**
-     * Recupera os detalhes de um pedido com base no ID do pedido do adquirente.
-     *
-     * @param orderId         ID do pedido no adquirente.
-     * @param acquirerSource gateway para comunicação com o adquirente
-     * @return Objeto {@link Object} bruto com os dados do pedido. Obs: não utiliza um presenter pois o objetivo é retornar ipsis litteris a resposta do adquirente
-     */
-    public static Object getAcquirerOrder(
-            Long orderId,
-            AcquirerSource acquirerSource) {
+	/**
+	 * Recupera os detalhes de um pedido com base no ID do pedido do adquirente.
+	 *
+	 * @param orderId
+	 *            ID do pedido no adquirente.
+	 * @param acquirerSource
+	 *            gateway para comunicação com o adquirente
+	 * @return Objeto {@link Object} bruto com os dados do pedido. Obs: não utiliza
+	 *         um presenter pois o objetivo é retornar ipsis litteris a resposta do
+	 *         adquirente
+	 */
+	public static Object getAcquirerOrder(Long orderId, AcquirerSource acquirerSource) {
 
-        var acquirerGateway = new AcquirerGateway(acquirerSource);
+		var acquirerGateway = new AcquirerGateway(acquirerSource);
 
-        return GetAcquirerOrderUseCase.getAcquirerOrder(orderId, acquirerGateway);
-    }
+		return GetAcquirerOrderUseCase.getAcquirerOrder(orderId, acquirerGateway);
+	}
 }

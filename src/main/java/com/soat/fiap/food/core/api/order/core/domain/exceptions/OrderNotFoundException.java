@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoun
  */
 public class OrderNotFoundException extends ResourceNotFoundException {
 
-    public OrderNotFoundException(String message) {
-        super(message);
-    }
-    public OrderNotFoundException(String message, Long id) {
-        super(message, id);
-    }
+	public OrderNotFoundException(String message) {
+		super(message);
+	}
+
+	public OrderNotFoundException(String message, Long id) {
+		super(message, id);
+	}
 }

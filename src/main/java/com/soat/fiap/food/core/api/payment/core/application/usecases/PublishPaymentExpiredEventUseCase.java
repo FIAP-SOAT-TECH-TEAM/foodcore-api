@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.payment.core.application.usecases;
 import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentExpiredEvent;
 import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,19 +12,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PublishPaymentExpiredEventUseCase {
 
-    /**
-     * Publica o evento {@link PaymentExpiredEvent} para o pagamento expirado fornecido.
-     *
-     * @param expiredPayment Pagamento que foi identificado como expirado
-     * @param gateway Gateway responsável por publicar o evento
-     */
-    public static void publishPaymentExpiredEvent(Payment expiredPayment, EventPublisherGateway gateway) {
-        var expiredEvent = new PaymentExpiredEvent(
-                expiredPayment.getId(),
-                expiredPayment.getOrderId(),
-                expiredPayment.getExpiresIn()
-        );
-        gateway.publishEvent(expiredEvent);
-        log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
-    }
+	/**
+	 * Publica o evento {@link PaymentExpiredEvent} para o pagamento expirado
+	 * fornecido.
+	 *
+	 * @param expiredPayment
+	 *            Pagamento que foi identificado como expirado
+	 * @param gateway
+	 *            Gateway responsável por publicar o evento
+	 */
+	public static void publishPaymentExpiredEvent(Payment expiredPayment, EventPublisherGateway gateway) {
+		var expiredEvent = new PaymentExpiredEvent(expiredPayment.getId(), expiredPayment.getOrderId(),
+				expiredPayment.getExpiresIn());
+		gateway.publishEvent(expiredEvent);
+		log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
+	}
 }

@@ -9,19 +9,17 @@ import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventP
  */
 public class PublishProductCreatedEventUseCase {
 
-    /**
-     * Publica o evento {@link ProductCreatedEvent}
-     *
-     * @param product O produto criado que será convertido em evento.
-     * @param gateway O gateway responsável por publicar o evento.
-     */
-    public static void publishProductCreatedEvent(Product product, EventPublisherGateway gateway) {
-        var event = ProductCreatedEvent.of(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getCategoryId()
-        );
-        gateway.publishEvent(event);
-    }
+	/**
+	 * Publica o evento {@link ProductCreatedEvent}
+	 *
+	 * @param product
+	 *            O produto criado que será convertido em evento.
+	 * @param gateway
+	 *            O gateway responsável por publicar o evento.
+	 */
+	public static void publishProductCreatedEvent(Product product, EventPublisherGateway gateway) {
+		var event = ProductCreatedEvent.of(product.getId(), product.getName(), product.getPrice(),
+				product.getCategoryId());
+		gateway.publishEvent(event);
+	}
 }

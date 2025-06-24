@@ -7,17 +7,19 @@ import java.util.Objects;
  */
 public record QrCode(String value) {
 
-    /**
-     * Construtor que cria uma nova instância de QrCode com os dados fornecidos.
-     *
-     * @throws NullPointerException se o conteúdo do QrCode for nulo
-     * @throws IllegalArgumentException se a data do QrCode ultrapassar o tamanho permitido
-     */
-    public QrCode {
-        Objects.requireNonNull(value, "QrCode não pode ser nulo");
+	/**
+	 * Construtor que cria uma nova instância de QrCode com os dados fornecidos.
+	 *
+	 * @throws NullPointerException
+	 *             se o conteúdo do QrCode for nulo
+	 * @throws IllegalArgumentException
+	 *             se a data do QrCode ultrapassar o tamanho permitido
+	 */
+	public QrCode {
+		Objects.requireNonNull(value, "QrCode não pode ser nulo");
 
-        if (value.length() > 255) {
-            throw new IllegalArgumentException("O conteúdo do QrCode não pode ultrapassar 255 caracteres");
-        }
-    }
+		if (value.length() > 255) {
+			throw new IllegalArgumentException("O conteúdo do QrCode não pode ultrapassar 255 caracteres");
+		}
+	}
 }

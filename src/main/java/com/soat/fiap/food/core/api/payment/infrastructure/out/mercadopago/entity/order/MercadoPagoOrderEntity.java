@@ -1,11 +1,12 @@
 package com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.order;
 
-import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
-import lombok.Data;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+
+import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
+
+import lombok.Data;
 
 /**
  * Representa a entidade de pedido na API do mercado pago
@@ -13,332 +14,256 @@ import java.util.Map;
 @Data
 public class MercadoPagoOrderEntity {
 
-    private long id;
+	private long id;
 
-    private MercadoPagoOrderNotificationStatus status;
+	private MercadoPagoOrderNotificationStatus status;
 
-    private String external_reference;
+	private String external_reference;
 
-    private String preference_id;
+	private String preference_id;
 
+	private List<Payment> payments;
 
-    private List<Payment> payments;
+	private List<Shipment> shipments;
 
+	private Map<String, Object> payouts;
 
-    private List<Shipment> shipments;
+	private Collector collector;
 
+	private String marketplace;
 
-    private Map<String, Object> payouts;
+	private OffsetDateTime date_created;
 
+	private OffsetDateTime last_updated;
 
-    private Collector collector;
+	private double shipping_cost;
 
+	private double total_amount;
 
-    private String marketplace;
+	private String site_id;
 
+	private double paid_amount;
 
-    private OffsetDateTime date_created;
+	private double refunded_amount;
 
+	private Payer payer;
 
-    private OffsetDateTime last_updated;
+	private List<Item> items;
 
+	private boolean cancelled;
 
-    private double shipping_cost;
+	private String additional_info;
 
+	private String application_id;
 
-    private double total_amount;
+	private MercadoPagoOrderStatus order_status;
 
+	@Data
+	public static class Payment {
 
-    private String site_id;
+		private long id;
 
+		private double transaction_amount;
 
-    private double paid_amount;
+		private double total_paid_amount;
 
+		private double shipping_cost;
 
-    private double refunded_amount;
+		private String currency_id;
 
+		private PaymentStatus status;
 
-    private Payer payer;
+		private String status_detail;
 
+		private OffsetDateTime date_approved;
 
-    private List<Item> items;
+		private OffsetDateTime date_created;
 
+		private OffsetDateTime last_modified;
 
-    private boolean cancelled;
+		private double amount_refunded;
+	}
 
+	@Data
+	public static class Shipment {
 
-    private String additional_info;
+		private long id;
 
+		private String shipment_type;
 
-    private String application_id;
+		private String shipping_mode;
 
+		private String status;
 
-    private MercadoPagoOrderStatus order_status;
+		private List<ShipmentItem> items;
 
-    @Data
-    public static class Payment {
+		private OffsetDateTime date_created;
 
-        private long id;
+		private OffsetDateTime last_modified;
 
+		private OffsetDateTime date_first_printed;
 
-        private double transaction_amount;
+		private int service_id;
 
+		private long sender_id;
 
-        private double total_paid_amount;
+		private long receiver_id;
 
+		private ReceiverAddress receiver_address;
 
-        private double shipping_cost;
+		private ShippingOption shipping_option;
 
+		@Data
 
-        private String currency_id;
+		public static class ShipmentItem {
 
+			private String id;
 
-        private PaymentStatus status;
+			private String description;
 
+			private int quantity;
 
-        private String status_detail;
+			private String dimensions;
+		}
 
+		@Data
 
-        private OffsetDateTime date_approved;
+		public static class ReceiverAddress {
 
+			private long id;
 
-        private OffsetDateTime date_created;
+			private String address_line;
 
+			private City city;
 
-        private OffsetDateTime last_modified;
+			private State state;
 
+			private Country country;
 
-        private double amount_refunded;
-    }
+			private double latitude;
 
-    @Data
-    public static class Shipment {
+			private double longitude;
 
-        private long id;
+			private String comment;
 
+			private String contact;
 
-        private String shipment_type;
+			private long phone;
 
+			private int zip_code;
 
-        private String shipping_mode;
+			private StreetName street_name;
 
+			private int street_number;
 
-        private String status;
+			@Data
 
+			public static class City {
 
-        private List<ShipmentItem> items;
+				private String name;
+			}
 
+			@Data
 
-        private OffsetDateTime date_created;
+			public static class State {
 
+				private String id;
 
-        private OffsetDateTime last_modified;
+				private String name;
+			}
 
+			@Data
 
-        private OffsetDateTime date_first_printed;
+			public static class Country {
 
+				private String id;
 
-        private int service_id;
+				private String name;
+			}
 
+			@Data
 
-        private long sender_id;
+			public static class StreetName {
 
+				private String en;
 
-        private long receiver_id;
+				private String pt;
 
+				private String es;
+			}
+		}
 
-        private ReceiverAddress receiver_address;
+		@Data
 
+		public static class ShippingOption {
 
-        private ShippingOption shipping_option;
+			private long id;
 
-        @Data
+			private double cost;
 
-        public static class ShipmentItem {
+			private String currency_id;
 
-            private String id;
+			private long shipping_method_id;
 
+			private EstimatedDelivery estimated_delivery;
 
-            private String description;
+			private String name;
 
+			private double list_cost;
 
-            private int quantity;
+			private Speed speed;
 
+			@Data
 
-            private String dimensions;
-        }
+			public static class EstimatedDelivery {
 
-        @Data
+				private OffsetDateTime date;
+			}
 
-        public static class ReceiverAddress {
+			@Data
 
-            private long id;
+			public static class Speed {
 
+				private int handling;
 
-            private String address_line;
+				private int shipping;
+			}
+		}
+	}
 
+	@Data
+	public static class Collector {
 
-            private City city;
+		private long id;
 
+		private String email;
 
-            private State state;
+		private String nickname;
+	}
 
+	@Data
+	public static class Payer {
 
-            private Country country;
+		private long id;
+	}
 
+	@Data
+	public static class Item {
 
-            private double latitude;
+		private String id;
 
+		private String category_id;
 
-            private double longitude;
+		private String currency_id;
 
+		private String description;
 
-            private String comment;
+		private String picture_url;
 
+		private String title;
 
-            private String contact;
+		private int quantity;
 
-
-            private long phone;
-
-
-            private int zip_code;
-
-
-            private StreetName street_name;
-
-
-            private int street_number;
-
-            @Data
-
-            public static class City {
-
-                private String name;
-            }
-
-            @Data
-
-            public static class State {
-
-                private String id;
-
-
-                private String name;
-            }
-
-            @Data
-
-            public static class Country {
-
-                private String id;
-
-
-                private String name;
-            }
-
-            @Data
-
-            public static class StreetName {
-
-                private String en;
-
-
-                private String pt;
-
-
-                private String es;
-            }
-        }
-
-        @Data
-
-        public static class ShippingOption {
-
-            private long id;
-
-
-            private double cost;
-
-
-            private String currency_id;
-
-
-            private long shipping_method_id;
-
-
-            private EstimatedDelivery estimated_delivery;
-
-
-            private String name;
-
-
-            private double list_cost;
-
-
-            private Speed speed;
-
-            @Data
-
-            public static class EstimatedDelivery {
-
-                private OffsetDateTime date;
-            }
-
-            @Data
-
-            public static class Speed {
-
-                private int handling;
-
-
-                private int shipping;
-            }
-        }
-    }
-
-    @Data
-    public static class Collector {
-
-        private long id;
-
-
-        private String email;
-
-
-        private String nickname;
-    }
-
-    @Data
-    public static class Payer {
-
-        private long id;
-    }
-
-    @Data
-    public static class Item {
-
-        private String id;
-
-
-        private String category_id;
-
-
-        private String currency_id;
-
-
-        private String description;
-
-
-        private String picture_url;
-
-
-        private String title;
-
-
-        private int quantity;
-
-
-        private double unit_price;
-    }
+		private double unit_price;
+	}
 }

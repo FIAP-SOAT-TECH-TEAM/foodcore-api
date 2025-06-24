@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoun
  */
 public class CatalogNotFoundException extends ResourceNotFoundException {
 
-    public CatalogNotFoundException(String message) {
-        super(message);
-    }
-    public CatalogNotFoundException(String message, Long id) {
-        super(message, id);
-    }
+	public CatalogNotFoundException(String message) {
+		super(message);
+	}
+
+	public CatalogNotFoundException(String message, Long id) {
+		super(message, id);
+	}
 }

@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceConflic
  */
 public class CatalogConflictException extends ResourceConflictException {
 
-    public CatalogConflictException(String message) {
-        super(message);
-    }
-    public CatalogConflictException(String resourceName, String fieldName, Object fieldValue) {
-        super(resourceName, fieldName, fieldValue);
-    }
+	public CatalogConflictException(String message) {
+		super(message);
+	}
+
+	public CatalogConflictException(String resourceName, String fieldName, Object fieldValue) {
+		super(resourceName, fieldName, fieldValue);
+	}
 }

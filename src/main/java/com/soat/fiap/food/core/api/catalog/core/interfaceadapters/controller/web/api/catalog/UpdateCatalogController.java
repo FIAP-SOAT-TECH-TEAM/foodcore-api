@@ -7,34 +7,37 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller: Atualizar catálogo.
- *
  */
 @Slf4j
 public class UpdateCatalogController {
 
-    /**
-     * Atualiza um catálogo.
-     *
-     * @param catalogRequest Catálogo a ser atualizado
-     * @param catalogDataSource Origem de dados para o gateway
-     * @return Catálogo atualizado com identificadores atualizados
-     */
-    public static CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest, CatalogDataSource catalogDataSource) {
+	/**
+	 * Atualiza um catálogo.
+	 *
+	 * @param catalogRequest
+	 *            Catálogo a ser atualizado
+	 * @param catalogDataSource
+	 *            Origem de dados para o gateway
+	 * @return Catálogo atualizado com identificadores atualizados
+	 */
+	public static CatalogResponse updateCatalog(Long id, CatalogRequest catalogRequest,
+			CatalogDataSource catalogDataSource) {
 
-        var gateway = new CatalogGateway(catalogDataSource);
+		var gateway = new CatalogGateway(catalogDataSource);
 
-        var catalogInput = CatalogMapper.toInput(catalogRequest);
+		var catalogInput = CatalogMapper.toInput(catalogRequest);
 
-        var catalog = UpdateCatalogUseCase.updateCatalog(id, catalogInput, gateway);
+		var catalog = UpdateCatalogUseCase.updateCatalog(id, catalogInput, gateway);
 
-        var updatedCatalog = gateway.save(catalog);
+		var updatedCatalog = gateway.save(catalog);
 
-        log.debug("Catalogo atualizado com sucesso: {}", id);
+		log.debug("Catalogo atualizado com sucesso: {}", id);
 
-        return CatalogPresenter.toCatalogResponse(updatedCatalog);
-    }
+		return CatalogPresenter.toCatalogResponse(updatedCatalog);
+	}
 }

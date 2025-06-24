@@ -6,4 +6,5 @@ import org.springframework.context.annotation.Configuration;
  * Configuração específica do módulo de produto
  */
 @Configuration
-public class ProductModuleConfig {}
+public class ProductModuleConfig {
+}

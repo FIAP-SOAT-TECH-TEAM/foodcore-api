@@ -11,7 +11,8 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_food-core-api&metric=sqale_rating&token=19e960f56f10089f0c8d262863b33c62a92dbc46)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_food-core-api)
 </div>
 
-API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como parte do curso de Arquitetura de Software da FIAP (Tech Challenge).
+API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como parte do curso de Arquitetura de Software
+da FIAP (Tech Challenge).
 
 <div align="center">
   <a href="#visao-geral">Visão Geral</a> •
@@ -31,7 +32,9 @@ API de gerenciamento de pedidos para restaurantes fast-food, desenvolvida como p
 
 <h2 id="visao-geral">📋 Visão Geral</h2>
 
-O sistema implementa um serviço de auto-atendimento para uma lanchonete de fast-food, permitindo que os clientes façam pedidos e acompanhem o status do seu pedido sem a necessidade de interação com um atendente. A aplicação também inclui um painel administrativo para gerenciamento de produtos, clientes e acompanhamento de pedidos.
+O sistema implementa um serviço de auto-atendimento para uma lanchonete de fast-food, permitindo que os clientes façam
+pedidos e acompanhem o status do seu pedido sem a necessidade de interação com um atendente. A aplicação também inclui
+um painel administrativo para gerenciamento de produtos, clientes e acompanhamento de pedidos.
 
 ### Principais recursos
 
@@ -46,7 +49,8 @@ O sistema implementa um serviço de auto-atendimento para uma lanchonete de fast
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-O projeto segue uma arquitetura modular baseada em **Domain-Driven Design (DDD)** com **Spring Modulith** e **Arquitetura Hexagonal**, facilitando a manutenção e promovendo desacoplamento.
+O projeto segue uma arquitetura modular baseada em **Domain-Driven Design (DDD)** com **Spring Modulith** e *
+*Arquitetura Hexagonal**, facilitando a manutenção e promovendo desacoplamento.
 
 ### Arquitetura Hexagonal (Ports & Adapters)
 
@@ -86,7 +90,8 @@ graph TD
 
 ### Monolito Modular (Spring Modulith)
 
-A aplicação é estruturada como um monolito modular usando Spring Modulith, com contextos limitados (bounded contexts) bem definidos para cada domínio de negócio:
+A aplicação é estruturada como um monolito modular usando Spring Modulith, com contextos limitados (bounded contexts)
+bem definidos para cada domínio de negócio:
 
 ```mermaid
 graph TD
@@ -499,8 +504,9 @@ flowchart TD
 <summary>Expandir para mais detalhes</summary>
 
 ### Event Storming Miro
+
 - https://miro.com/app/board/uXjVIAFD_zg=/?share_link_id=933422566141
-  
+
 ![image](https://github.com/user-attachments/assets/1c5261a3-60ab-45de-ae4c-86b3afe28db9)
 ![image](https://github.com/user-attachments/assets/29611638-e684-4244-b3b6-6ae19e725bc4)
 </details>
@@ -511,6 +517,7 @@ flowchart TD
 <summary>Expandir para mais detalhes</summary>
 
 ### Board de tarefas Linear App
+
 ![image](https://github.com/user-attachments/assets/0c1a5e19-aae3-4270-84ad-64c67daf64b9)
 </details>
 
@@ -524,13 +531,15 @@ flowchart TD
   Usuário com privilégios elevados, responsável pela gestão de usuários, permissões e configurações do sistema.
 
 - **Adquirente**
-  Instituição financeira responsável por processar transações de pagamento do sistema. No nosso caso, a adquirente é representada pela integração com o [Mercado Pago](https://www.mercadopago.com.br).
+  Instituição financeira responsável por processar transações de pagamento do sistema. No nosso caso, a adquirente é
+  representada pela integração com o [Mercado Pago](https://www.mercadopago.com.br).
 
 - **Authentication (Autenticação)**
   Processo de validação da identidade de um usuário por meio de login.
 
 - **Authorization (Autorização)**
-  Controle de acesso baseado em permissões e papéis (roles). Exemplo: apenas administradores podem listar todos os usuários.
+  Controle de acesso baseado em permissões e papéis (roles). Exemplo: apenas administradores podem listar todos os
+  usuários.
 
 - **Catalog (Catálogo de Produtos)**
   Conjunto organizado dos produtos disponíveis para seleção e montagem de pedidos.
@@ -542,7 +551,8 @@ flowchart TD
   Conjunto personalizado por um cliente, composto por: lanche, acompanhamento, bebida e sobremesa.
 
 - **Customer (Cliente)**
-  Pessoa que realiza um pedido no sistema. Pode se identificar com CPF, cadastrar nome/e-mail ou seguir como convidado (guest).
+  Pessoa que realiza um pedido no sistema. Pode se identificar com CPF, cadastrar nome/e-mail ou seguir como convidado (
+  guest).
 
 - **Guest (Convidado)**
   Cliente que realiza um pedido sem se identificar ou criar conta. Atua como usuário temporário.
@@ -557,10 +567,12 @@ flowchart TD
   Produto específico dentro de um pedido. Pode ser parte de um combo ou avulso.
 
 - **Payment (Pagamento)**
-  Etapa posterior à finalização do pedido. Utiliza integração com o Mercado Pago para processar as transações financeiras.
+  Etapa posterior à finalização do pedido. Utiliza integração com o Mercado Pago para processar as transações
+  financeiras.
 
 - **Expiração (Pagamento)**
-  Tempo de expiração para pagamento de QrCode gerado pelo adquirente. Por padrão, 30 minutos, após esgotar o tempo o pedido relacionado é cancelado.
+  Tempo de expiração para pagamento de QrCode gerado pelo adquirente. Por padrão, 30 minutos, após esgotar o tempo o
+  pedido relacionado é cancelado.
 
 - **Product (Produto)**
   Qualquer item disponível para venda, como lanches, bebidas, sobremesas ou acompanhamentos.
@@ -603,24 +615,24 @@ O projeto utiliza um script centralizador `food` para gerenciar todas as operaç
 
 #### Comandos Principais
 
-| Comando | Descrição |
-|---------|-----------|
-| `start:all` | Inicia toda a infraestrutura e a aplicação |
-| `start:infra` | Inicia apenas a infraestrutura (banco) |
-| `start:app` | Inicia apenas a aplicação |
-| `stop:all` | Para todos os serviços |
-| `stop:infra` | Para apenas a infraestrutura |
-| `stop:app` | Para apenas a aplicação |
-| `restart:all` | Reinicia todos os serviços |
-| `restart:app` | Reinicia apenas a aplicação |
-| `db:up` | Aplica migrações do banco de dados |
-| `db:reset` | Reseta o banco de dados |
-| `logs` | Exibe logs dos containers |
-| `logs:app` | Exibe logs apenas da aplicação |
-| `logs:db` | Exibe logs apenas do banco de dados |
-| `status` | Exibe status dos containers |
-| `clean` | Remove containers, imagens e volumes não utilizados |
-| `help` | Exibe a mensagem de ajuda |
+| Comando       | Descrição                                           |
+|---------------|-----------------------------------------------------|
+| `start:all`   | Inicia toda a infraestrutura e a aplicação          |
+| `start:infra` | Inicia apenas a infraestrutura (banco)              |
+| `start:app`   | Inicia apenas a aplicação                           |
+| `stop:all`    | Para todos os serviços                              |
+| `stop:infra`  | Para apenas a infraestrutura                        |
+| `stop:app`    | Para apenas a aplicação                             |
+| `restart:all` | Reinicia todos os serviços                          |
+| `restart:app` | Reinicia apenas a aplicação                         |
+| `db:up`       | Aplica migrações do banco de dados                  |
+| `db:reset`    | Reseta o banco de dados                             |
+| `logs`        | Exibe logs dos containers                           |
+| `logs:app`    | Exibe logs apenas da aplicação                      |
+| `logs:db`     | Exibe logs apenas do banco de dados                 |
+| `status`      | Exibe status dos containers                         |
+| `clean`       | Remove containers, imagens e volumes não utilizados |
+| `help`        | Exibe a mensagem de ajuda                           |
 
 #### Opções
 
@@ -655,11 +667,11 @@ chmod +x food
 - **API**: <http://localhost/api>
 - **Swagger/OpenAPI**: <http://localhost/api/swagger-ui.html>
 - **Adminer (gerenciador de banco de dados)**: <http://localhost:8081>
-  - Sistema: PostgreSQL
-  - Servidor: db
-  - Usuário: postgres
-  - Senha: postgres
-  - Banco: fastfood
+    - Sistema: PostgreSQL
+    - Servidor: db
+    - Usuário: postgres
+    - Senha: postgres
+    - Banco: fastfood
 
 ### Ambientes e Dados de Seed
 
@@ -964,7 +976,8 @@ src/main/resources/db/changelog/
     └── 00-init-schema.sql
 ```
 
-As migrações são aplicadas automaticamente durante a inicialização da aplicação, mas também podem ser executadas manualmente:
+As migrações são aplicadas automaticamente durante a inicialização da aplicação, mas também podem ser executadas
+manualmente:
 
 ```bash
 ./food db:up     # Aplicar migrações
@@ -1086,13 +1099,13 @@ Para contribuir com o projeto, siga estas etapas:
 
 - A branch principal de desenvolvimento é a `main`
 - Para novas funcionalidades, crie uma branch a partir da `main` seguindo o padrão:
-  - `feature/nome-da-funcionalidade`
+    - `feature/nome-da-funcionalidade`
 - Para correções de bugs, use o padrão:
-  - `fix/descricao-do-bug`
+    - `fix/descricao-do-bug`
 - Para documentação:
-  - `docs/descricao-da-documentacao`
+    - `docs/descricao-da-documentacao`
 - Para melhorias de performance ou refatoração:
-  - `refactor/descricao-da-mudanca`
+    - `refactor/descricao-da-mudanca`
 
 #### Commits
 

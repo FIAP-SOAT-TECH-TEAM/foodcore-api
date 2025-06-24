@@ -7,20 +7,19 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPubl
  */
 public class EventPublisherGateway {
 
-    private final EventPublisherSource eventPublisherSource;
+	private final EventPublisherSource eventPublisherSource;
 
-    public EventPublisherGateway(
-            EventPublisherSource eventPublisherSource
-    ) {
-        this.eventPublisherSource = eventPublisherSource;
-    }
+	public EventPublisherGateway(EventPublisherSource eventPublisherSource) {
+		this.eventPublisherSource = eventPublisherSource;
+	}
 
-    /**
-     * Publica um evento de domínio.
-     *
-     * @param event Evento de domínio que será publicado
-     */
-    public void publishEvent(Object event) {
-        eventPublisherSource.publishEvent(event);
-    }
+	/**
+	 * Publica um evento de domínio.
+	 *
+	 * @param event
+	 *            Evento de domínio que será publicado
+	 */
+	public void publishEvent(Object event) {
+		eventPublisherSource.publishEvent(event);
+	}
 }

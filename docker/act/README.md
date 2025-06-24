@@ -4,7 +4,8 @@ Este diretório contém a configuração para o Act, uma ferramenta que permite 
 
 ## O que é o Act?
 
-O Act (<https://github.com/nektos/act>) é uma ferramenta de linha de comando que permite executar seus GitHub Actions localmente sem precisar fazer commit e push para o GitHub.
+O Act (<https://github.com/nektos/act>) é uma ferramenta de linha de comando que permite executar seus GitHub Actions
+localmente sem precisar fazer commit e push para o GitHub.
 
 ## Pré-requisitos
 

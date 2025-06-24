@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessExcepti
  */
 public class UserIncorrectPasswordException extends BusinessException {
 
-    public UserIncorrectPasswordException(String message) {
-        super(message);
-    }
-    public UserIncorrectPasswordException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UserIncorrectPasswordException(String message) {
+		super(message);
+	}
+
+	public UserIncorrectPasswordException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

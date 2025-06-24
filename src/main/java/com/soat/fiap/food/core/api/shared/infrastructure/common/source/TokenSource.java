@@ -7,12 +7,13 @@ import com.soat.fiap.food.core.api.user.core.domain.model.User;
  */
 public interface TokenSource {
 
-    /**
-     * Gera um token para o usuário informado.
-     *
-     * @param user Usuário para geração do token.
-     * @return Token como String.
-     */
-    String generateToken(User user);
+	/**
+	 * Gera um token para o usuário informado.
+	 *
+	 * @param user
+	 *            Usuário para geração do token.
+	 * @return Token como String.
+	 */
+	String generateToken(User user);
 
 }

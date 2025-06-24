@@ -7,10 +7,11 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoun
  */
 public class CategoryNotFoundException extends ResourceNotFoundException {
 
-    public CategoryNotFoundException(String message) {
-        super(message);
-    }
-    public CategoryNotFoundException(String message, Long id) {
-        super(message, id);
-    }
+	public CategoryNotFoundException(String message) {
+		super(message);
+	}
+
+	public CategoryNotFoundException(String message, Long id) {
+		super(message, id);
+	}
 }

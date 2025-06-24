@@ -1,9 +1,10 @@
 package com.soat.fiap.food.core.api.order.core.domain.events;
 
-import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
-import lombok.Data;
-
 import java.util.List;
+
+import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+
+import lombok.Data;
 
 /**
  * Evento de domínio emitido quando um pedido é cancelado
@@ -11,10 +12,10 @@ import java.util.List;
 @Data
 public class OrderCanceledEvent {
 
-    private Long id;
+	private Long id;
 
-    private OrderStatus status;
+	private OrderStatus status;
 
-    private List<OrderItemCanceledEvent> items;
+	private List<OrderItemCanceledEvent> items;
 
-} 
+}
