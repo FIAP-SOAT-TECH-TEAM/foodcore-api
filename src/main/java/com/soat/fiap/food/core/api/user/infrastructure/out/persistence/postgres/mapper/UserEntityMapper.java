@@ -3,9 +3,12 @@ package com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
+import com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.entity.RoleEntity;
 import com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.entity.UserEntity;
 
 /**
@@ -36,9 +39,44 @@ public interface UserEntityMapper {
 	/**
 	 * Converte uma entidade de domínio para uma entidade JPA
 	 *
-	 * @param domain
+	 * @param dto
 	 *            Entidade de domínio
 	 * @return Entidade JPA
 	 */
-	UserEntity toEntity(User domain);
+	@Mapping(source = "roleId", target = "role")
+	UserEntity toEntity(UserDTO dto);
+
+	/**
+	 * Converte uma entidade de para um DTO
+	 *
+	 * @param entity
+	 *            Entidade de domínio
+	 * @return UserDTO
+	 */
+	@Mapping(source = "role", target = "roleId")
+	UserDTO toDTO(UserEntity entity);
+
+	/**
+	 * Converte uma lista de entidades JPA para uma lista de DTOs
+	 *
+	 * @param entities
+	 *            Lista de entidades JPA
+	 * @return Lista de DTOs
+	 */
+	List<UserDTO> toDTOList(List<UserEntity> entities);
+
+	// Conversão auxiliar de Long para RoleEntity
+	default RoleEntity map(Long roleId) {
+		if (roleId == null) {
+			return null;
+		}
+		RoleEntity role = new RoleEntity();
+		role.setId(roleId.intValue());
+		return role;
+	}
+
+	// Conversão auxiliar de RoleEntity para Long
+	default Long map(RoleEntity role) {
+		return role != null ? role.getId().longValue() : null;
+	}
 }

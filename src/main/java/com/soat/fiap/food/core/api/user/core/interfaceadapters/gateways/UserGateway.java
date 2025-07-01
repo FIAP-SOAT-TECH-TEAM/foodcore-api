@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 
 /**
@@ -25,7 +27,9 @@ public class UserGateway {
 	 * @return Usuário salvo com identificador atualizado
 	 */
 	public User save(User user) {
-		return userDataSource.save(user);
+		UserDTO dto = UserDTOMapper.toDTO(user);
+		UserDTO savedDTO = userDataSource.save(dto);
+		return UserDTOMapper.toDomain(savedDTO);
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 /**
  * DataSource para persistência de usuários
@@ -13,11 +14,11 @@ public interface UserDataSource {
 	/**
 	 * Salva um usuário
 	 *
-	 * @param user
-	 *            Usuário a ser salvo
+	 * @param userDTO
+	 *            Dados do usuário a ser salvo
 	 * @return Usuário salvo com ID gerado
 	 */
-	User save(User user);
+	UserDTO save(UserDTO userDTO);
 
 	/**
 	 * Busca um usuário por ID

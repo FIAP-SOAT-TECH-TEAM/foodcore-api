@@ -1,9 +1,12 @@
 package com.soat.fiap.food.core.api.user.core.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserException;
+import com.soat.fiap.food.core.api.user.core.domain.vo.RoleType;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 import lombok.Data;
 
@@ -30,6 +33,12 @@ public class User {
 	private transient String token;
 	private AuditInfo auditInfo = new AuditInfo();
 
+	/**
+	 * Construtor padrão para o usuário
+	 */
+	public User() {
+	}
+
 	public User(boolean guest, String name, String username, String email, String password, String document) {
 		validateInternalState();
 
@@ -39,6 +48,29 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.document = document;
+	}
+
+	/**
+	 * Construtor para criar um usuário a partir de um UserDTO
+	 *
+	 * @param dto
+	 *            UserDTO com os dados do usuário
+	 */
+	public static User fromDTO(UserDTO dto) {
+		User user = new User();
+		user.setId(dto.id());
+		user.setUsername(dto.username());
+		user.setEmail(dto.email());
+		user.setDocument(dto.document());
+		user.setGuest(dto.guest());
+		user.setActive(dto.active());
+
+		Role role = new Role();
+		role.setId((Long) Objects.requireNonNullElse(dto.roleId(), RoleType.GUEST.getId()));
+		user.setRole(role);
+		user.validateInternalState();
+
+		return user;
 	}
 
 	/**

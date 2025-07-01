@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.mapper.UserEntityMapper;
 
@@ -26,10 +27,10 @@ public class PostgresUserDataSource implements UserDataSource {
 	}
 
 	@Transactional
-	public User save(User user) {
-		var userEntity = userEntityMapper.toEntity(user);
-		var savedEntity = springDataUserRepository.save(userEntity);
-		return userEntityMapper.toDomain(savedEntity);
+	public UserDTO save(UserDTO userDTO) {
+		var entity = userEntityMapper.toEntity(userDTO);
+		var savedEntity = springDataUserRepository.save(entity);
+		return userEntityMapper.toDTO(savedEntity);
 	}
 
 	@Transactional(readOnly = true)
