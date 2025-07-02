@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
@@ -40,7 +41,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 	public Optional<User> findById(Long id) {
-		return userDataSource.findById(id);
+		return userDataSource.findById(id).map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 	public Optional<User> findByDocument(String document) {
-		return userDataSource.findByDocument(document);
+		return userDataSource.findByDocument(document).map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 	public Optional<User> findByEmail(String email) {
-		return userDataSource.findByEmail(email);
+		return userDataSource.findByEmail(email).map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 	public Optional<User> findByUsername(String username) {
-		return userDataSource.findByUsername(username);
+		return userDataSource.findByUsername(username).map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 	public Optional<User> findByRoleId(Long roleId) {
-		return userDataSource.findByRoleId(roleId);
+		return userDataSource.findByRoleId(roleId).map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class UserGateway {
 	 * @return Optional contendo o usuário convidado ou vazio se não encontrado
 	 */
 	public Optional<User> findFirstByGuestTrue() {
-		return userDataSource.findFirstByGuestTrue();
+		return userDataSource.findFirstByGuestTrue().map(UserDTOMapper::toDomain);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class UserGateway {
 	 * @return Lista de usuários
 	 */
 	public List<User> findAll() {
-		return userDataSource.findAll();
+		return userDataSource.findAll().stream().map(UserDTOMapper::toDomain).collect(Collectors.toList());
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class UserGateway {
 	 * @return Lista de usuários ativos
 	 */
 	public List<User> findAllActive() {
-		return userDataSource.findAllActive();
+		return userDataSource.findAllActive().stream().map(UserDTOMapper::toDomain).collect(Collectors.toList());
 	}
 
 	/**

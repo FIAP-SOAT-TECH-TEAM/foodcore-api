@@ -41,7 +41,7 @@ public class LoginUseCase {
 		}
 
 		var user = optionalUser.get();
-
+		user.validateInternalState();
 		if (!securityGateway.matches(rawPassword, user.getPassword())) {
 			log.warn("Senha incorreta para o email: {}", email);
 			throw new UserIncorrectPasswordException("Email ou senha inválidos");

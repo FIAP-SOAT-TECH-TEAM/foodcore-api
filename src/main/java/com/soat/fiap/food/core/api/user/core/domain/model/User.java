@@ -68,7 +68,6 @@ public class User {
 		Role role = new Role();
 		role.setId((Long) Objects.requireNonNullElse(dto.roleId(), RoleType.GUEST.getId()));
 		user.setRole(role);
-		user.validateInternalState();
 
 		return user;
 	}
@@ -110,6 +109,15 @@ public class User {
 		String numericDocument = document.replaceAll("\\D", "");
 
 		return numericDocument.length() == 11;
+	}
+
+	/**
+	 * Verifica se o usuário tem um username
+	 *
+	 * @return true se tiver, false caso contrário
+	 */
+	public boolean hasName() {
+		return this.name != null && !this.name.isBlank();
 	}
 
 	/**
@@ -163,7 +171,7 @@ public class User {
 			if (!this.email.contains("@")) {
 				throw new UserException("Email inválido");
 			}
-			if (this.name == null || this.name.isBlank()) {
+			if (hasName()) {
 				throw new UserException("Nome é obrigatório");
 			}
 		}

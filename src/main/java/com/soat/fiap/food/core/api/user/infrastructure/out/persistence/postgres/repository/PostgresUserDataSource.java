@@ -2,11 +2,11 @@ package com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.out.persistence.postgres.mapper.UserEntityMapper;
@@ -34,46 +34,46 @@ public class PostgresUserDataSource implements UserDataSource {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findById(Long id) {
-		return springDataUserRepository.findById(id).map(userEntityMapper::toDomain);
+	public Optional<UserDTO> findById(Long id) {
+		return springDataUserRepository.findById(id).map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findByDocument(String document) {
-		return springDataUserRepository.findByDocument(document).map(userEntityMapper::toDomain);
+	public Optional<UserDTO> findByDocument(String document) {
+		return springDataUserRepository.findByDocument(document).map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findByEmail(String email) {
-		return springDataUserRepository.findByEmail(email).map(userEntityMapper::toDomain);
+	public Optional<UserDTO> findByEmail(String email) {
+		return springDataUserRepository.findByEmail(email).map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findByUsername(String username) {
-		return springDataUserRepository.findByUsername(username).map(userEntityMapper::toDomain);
+	public Optional<UserDTO> findByUsername(String username) {
+		return springDataUserRepository.findByUsername(username).map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findByRoleId(Long roleId) {
-		return springDataUserRepository.findByRoleId(roleId).map(userEntityMapper::toDomain); // converte de entidade
-																								// para domínio
+	public Optional<UserDTO> findByRoleId(Long roleId) {
+		return springDataUserRepository.findByRoleId(roleId).map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<User> findFirstByGuestTrue() {
-		return springDataUserRepository.findFirstByGuestTrue().map(userEntityMapper::toDomain);
+	public Optional<UserDTO> findFirstByGuestTrue() {
+		return springDataUserRepository.findFirstByGuestTrue().map(userEntityMapper::toDTO);
 	}
 
 	@Transactional(readOnly = true)
-	public List<User> findAll() {
-		var userEntities = springDataUserRepository.findAll();
-		return userEntityMapper.toDomainList(userEntities);
+	public List<UserDTO> findAll() {
+		return springDataUserRepository.findAll().stream().map(userEntityMapper::toDTO).collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public List<User> findAllActive() {
-		var userEntities = springDataUserRepository.findByActiveTrue();
-		return userEntityMapper.toDomainList(userEntities);
+	public List<UserDTO> findAllActive() {
+		return springDataUserRepository.findByActiveTrue()
+				.stream()
+				.map(userEntityMapper::toDTO)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional

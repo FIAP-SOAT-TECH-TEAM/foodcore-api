@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.user.infrastructure.common.source;
 import java.util.List;
 import java.util.Optional;
 
-import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 /**
@@ -27,7 +26,7 @@ public interface UserDataSource {
 	 *            ID do usuário
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
-	Optional<User> findById(Long id);
+	Optional<UserDTO> findById(Long id);
 
 	/**
 	 * Busca um usuário por DOCUMENT
@@ -36,7 +35,7 @@ public interface UserDataSource {
 	 *            DOCUMENT do usuário
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
-	Optional<User> findByDocument(String document);
+	Optional<UserDTO> findByDocument(String document);
 
 	/**
 	 * Busca um usuário pelo seu email
@@ -45,7 +44,7 @@ public interface UserDataSource {
 	 *            EMAIL do usuário
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
-	Optional<User> findByEmail(String email);
+	Optional<UserDTO> findByEmail(String email);
 
 	/**
 	 * Busca um usuário por seu username
@@ -54,7 +53,7 @@ public interface UserDataSource {
 	 *            USERNAME do usuário
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
-	Optional<User> findByUsername(String username);
+	Optional<UserDTO> findByUsername(String username);
 
 	/**
 	 * Busca um usuário por sua role
@@ -64,7 +63,7 @@ public interface UserDataSource {
 	 * @return Optional contendo o usuário ou vazio se não encontrado
 	 */
 
-	Optional<User> findByRoleId(Long roleId);
+	Optional<UserDTO> findByRoleId(Long roleId);
 
 	/**
 	 * Busca o primeiro usuário com o campo guest igual a true.
@@ -72,21 +71,21 @@ public interface UserDataSource {
 	 * @return um {@link Optional} contendo o usuário encontrado ou vazio se não
 	 *         houver nenhum.
 	 */
-	Optional<User> findFirstByGuestTrue();
+	Optional<UserDTO> findFirstByGuestTrue();
 
 	/**
 	 * Lista todos os usuário
 	 *
 	 * @return Lista de usuário
 	 */
-	List<User> findAll();
+	List<UserDTO> findAll();
 
 	/**
 	 * Lista apenas usuário ativos
 	 *
 	 * @return Lista de usuário ativos
 	 */
-	List<User> findAllActive();
+	List<UserDTO> findAllActive();
 
 	/**
 	 * Remove um usuário
