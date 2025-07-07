@@ -14,23 +14,13 @@ public class OrderDTOMapper {
 	}
 
 	public static OrderDTO toDTO(Order order) {
-		List<OrderItemDTO> itemDTOs = order.getOrderItems().stream()
-				.map(item -> new OrderItemDTO(
-						item.getProductId(),
-						item.getName(),
-						item.getQuantity(),
-						item.getOrderItemPrice(),
-						item.getObservations()
-				))
+		List<OrderItemDTO> itemDTOs = order.getOrderItems()
+				.stream()
+				.map(item -> new OrderItemDTO(item.getProductId(), item.getName(), item.getOrderItemPrice().quantity(),
+						item.getOrderItemPrice().unitPrice(), item.getObservations()))
 				.collect(Collectors.toList());
 
-		return new OrderDTO(
-				order.getId(),
-				order.getUserId(),
-				order.getOrderStatus(),
-				itemDTOs,
-				order.getAuditInfo().getCreatedAt(),
-				order.getAuditInfo().getUpdatedAt()
-		);
+		return new OrderDTO(order.getId(), order.getUserId(), order.getOrderStatus(), itemDTOs, order.getCreatedAt(),
+				order.getUpdatedAt());
 	}
 }

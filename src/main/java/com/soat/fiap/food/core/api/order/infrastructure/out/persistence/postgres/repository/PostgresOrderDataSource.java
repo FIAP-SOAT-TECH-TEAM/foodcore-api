@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.OrderEntityMapper;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 
 /**
  * Implementação concreta: DataSource para persistência do agregado Pedido.
@@ -29,32 +30,37 @@ public class PostgresOrderDataSource implements OrderDataSource {
 
 	@Override @Transactional
 	public OrderDTO save(OrderDTO orderDTO) {
-		OrderEntity orderEntity = orderEntityMapper.toEntity(orderDTO);
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
+		OrderEntity orderEntity = orderEntityMapper.toEntity(orderDTO, context);
 		OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
-		return orderEntityMapper.toDTO(savedEntity);
+		return orderEntityMapper.toDTO(savedEntity, context);
 	}
 
 	@Override @Transactional(readOnly = true)
 	public Optional<OrderDTO> findById(Long id) {
-		return springDataOrderRepository.findById(id).map(orderEntityMapper::toDTO);
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
+		return springDataOrderRepository.findById(id).map(entity -> orderEntityMapper.toDTO(entity, context));
 	}
 
 	@Override @Transactional(readOnly = true)
 	public List<OrderDTO> findByOrderStatus(OrderStatus status) {
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
 		List<OrderEntity> orderEntities = springDataOrderRepository.findByOrderStatus(status);
-		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
+		return orderEntities.stream().map(entity -> orderEntityMapper.toDTO(entity, context)).toList();
 	}
 
 	@Override @Transactional(readOnly = true)
 	public List<OrderDTO> findByUserId(Long userId) {
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
 		List<OrderEntity> orderEntities = springDataOrderRepository.findByUserId(userId);
-		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
+		return orderEntities.stream().map(entity -> orderEntityMapper.toDTO(entity, context)).toList();
 	}
 
 	@Override @Transactional(readOnly = true)
 	public List<OrderDTO> findAll() {
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
 		List<OrderEntity> orderEntities = springDataOrderRepository.findAll();
-		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
+		return orderEntities.stream().map(entity -> orderEntityMapper.toDTO(entity, context)).toList();
 	}
 
 	@Override @Transactional
@@ -64,7 +70,8 @@ public class PostgresOrderDataSource implements OrderDataSource {
 
 	@Override @Transactional(readOnly = true)
 	public List<OrderDTO> findActiveOrdersSorted() {
+		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
 		List<OrderEntity> orderEntities = springDataOrderRepository.findActiveOrdersSorted();
-		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
+		return orderEntities.stream().map(entity -> orderEntityMapper.toDTO(entity, context)).toList();
 	}
 }

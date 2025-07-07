@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
@@ -17,6 +18,7 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
  * Mapper que converte entre a entidade de domínio Order e a entidade JPA
  * OrderEntity
  */
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {OrderItemEntityMapper.class,
 		OrderNumberMapper.class})
 public interface OrderEntityMapper {
@@ -25,9 +27,11 @@ public interface OrderEntityMapper {
 
 	List<Order> toDomainList(List<OrderEntity> entities, @Context CycleAvoidingMappingContext context);
 
+	@Mapping(target = "orderItems", source = "items")
 	OrderEntity toEntity(OrderDTO dto, @Context CycleAvoidingMappingContext context);
 
-	OrderDTO toDTO(OrderEntity entity);
+	@Mapping(target = "items", source = "orderItems")
+	OrderDTO toDTO(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
 	@DoIgnore
 	default Order toDomain(OrderEntity entity) {
@@ -37,11 +41,6 @@ public interface OrderEntityMapper {
 	@DoIgnore
 	default List<Order> toDomainList(List<OrderEntity> entities) {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
-	}
-
-	@DoIgnore
-	default OrderEntity toEntity(OrderDTO dto) {
-		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
 
 }

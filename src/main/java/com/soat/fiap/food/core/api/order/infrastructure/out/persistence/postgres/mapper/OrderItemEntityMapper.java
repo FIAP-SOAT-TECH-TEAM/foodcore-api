@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.shared.OrderNumberMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
@@ -25,7 +26,12 @@ public interface OrderItemEntityMapper {
 
 	List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);
 
-	OrderItemEntity toEntity(OrderItem domain, @Context CycleAvoidingMappingContext context);
+	@Mapping(target = "order", ignore = true)
+	OrderItemEntity toEntity(OrderItemDTO dto, @Context CycleAvoidingMappingContext context);
+
+	List<OrderItemEntity> toEntityList(List<OrderItemDTO> dto, @Context CycleAvoidingMappingContext context);
+
+	OrderItemDTO toDTO(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
 
 	@DoIgnore
 	default OrderItem toDomain(OrderItemEntity entity) {
@@ -37,8 +43,9 @@ public interface OrderItemEntityMapper {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore
-	default OrderItemEntity toEntity(OrderItem domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
-	}
+	// @DoIgnore
+	// @Mapping(target = "order", ignore = true)
+	// default OrderItemEntity toEntity(OrderItemDTO dto) {
+	// return toEntity(dto, new CycleAvoidingMappingContext());
+	// }
 }
