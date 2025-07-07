@@ -10,8 +10,18 @@ import lombok.Data;
  */
 @Data
 public class Role {
-	private Long id = (long) RoleType.USER.getId();
-	private String name = RoleType.USER.name();
+	private Long id;
+	private String name;
 	private String description;
 	private AuditInfo auditInfo = new AuditInfo();
+
+	/**
+	 * Cria uma instância padrão de Role com o tipo USER.
+	 */
+	public static Role defaultRole() {
+		Role role = new Role();
+		role.setId((long) RoleType.USER.getId());
+		role.setName(RoleType.USER.name());
+		return role;
+	}
 }

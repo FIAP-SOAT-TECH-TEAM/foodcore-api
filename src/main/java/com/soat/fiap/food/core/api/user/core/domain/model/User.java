@@ -61,12 +61,18 @@ public class User {
 		user.setId(dto.id());
 		user.setUsername(dto.username());
 		user.setEmail(dto.email());
+		user.setPassword(dto.password());
 		user.setDocument(dto.document());
 		user.setGuest(dto.guest());
 		user.setActive(dto.active());
 
+		Long id = Objects.requireNonNullElse(dto.roleId(), (long) RoleType.GUEST.getId());
+		RoleType roleType = RoleType.fromId(id.intValue());
+
 		Role role = new Role();
-		role.setId((Long) Objects.requireNonNullElse(dto.roleId(), RoleType.GUEST.getId()));
+		role.setId(id);
+		role.setName(roleType.getName());
+
 		user.setRole(role);
 
 		return user;

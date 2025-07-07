@@ -4,12 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum RoleType {
-	ADMIN(1), USER(2), GUEST(3);
+	ADMIN(1, "ADMIN"), USER(2, "USER"), GUEST(3, "GUEST");
 
 	private final int id;
+	private final String name;
 
-	RoleType(int id) {
+	RoleType(int id, String name) {
 		this.id = id;
+		this.name = name;
 	}
 
 	public static RoleType fromId(int id) {
