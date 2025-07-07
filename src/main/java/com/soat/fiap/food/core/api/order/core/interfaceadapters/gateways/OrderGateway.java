@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.mappers.OrderDTOMapper;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 
 /**
@@ -26,7 +28,9 @@ public class OrderGateway {
 	 * @return Pedido salvo com identificadores atualizados
 	 */
 	public Order save(Order order) {
-		return orderDataSource.save(order);
+		OrderDTO dto = OrderDTOMapper.toDTO(order);
+		OrderDTO savedDTO = orderDataSource.save(dto);
+		return OrderDTOMapper.toDomain(savedDTO);
 	}
 
 	/**
@@ -37,16 +41,15 @@ public class OrderGateway {
 	 * @return Optional contendo o pedido ou vazio se não encontrado
 	 */
 	public Optional<Order> findById(Long id) {
-		return orderDataSource.findById(id);
+		return orderDataSource.findById(id).map(OrderDTOMapper::toDomain);
 	}
-
 	/**
 	 * Lista todos os pedidos persistidos.
 	 *
 	 * @return Lista de pedidos
 	 */
 	public List<Order> findAll() {
-		return orderDataSource.findAll();
+		return orderDataSource.findAll().stream().map(OrderDTOMapper::toDomain).toList();
 	}
 
 	/**
@@ -67,7 +70,7 @@ public class OrderGateway {
 	 * @return Lista de pedidos com o status informado
 	 */
 	public List<Order> findByOrderStatus(OrderStatus status) {
-		return orderDataSource.findByOrderStatus(status);
+		return orderDataSource.findByOrderStatus(status).stream().map(OrderDTOMapper::toDomain).toList();
 	}
 
 	/**
@@ -78,7 +81,7 @@ public class OrderGateway {
 	 * @return Lista de pedidos do cliente
 	 */
 	public List<Order> findByUserId(Long userId) {
-		return orderDataSource.findByUserId(userId);
+		return orderDataSource.findByUserId(userId).stream().map(OrderDTOMapper::toDomain).toList();
 	}
 
 	/**
@@ -90,6 +93,6 @@ public class OrderGateway {
 	 * @return Lista de pedidos ativos ordenados
 	 */
 	public List<Order> findActiveOrdersSorted() {
-		return orderDataSource.findActiveOrdersSorted();
+		return orderDataSource.findActiveOrdersSorted().stream().map(OrderDTOMapper::toDomain).toList();
 	}
 }

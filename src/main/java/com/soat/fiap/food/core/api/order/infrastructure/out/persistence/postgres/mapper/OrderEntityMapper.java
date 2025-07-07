@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.shared.OrderNumberMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
@@ -24,7 +25,9 @@ public interface OrderEntityMapper {
 
 	List<Order> toDomainList(List<OrderEntity> entities, @Context CycleAvoidingMappingContext context);
 
-	OrderEntity toEntity(Order domain, @Context CycleAvoidingMappingContext context);
+	OrderEntity toEntity(OrderDTO dto, @Context CycleAvoidingMappingContext context);
+
+	OrderDTO toDTO(OrderEntity entity);
 
 	@DoIgnore
 	default Order toDomain(OrderEntity entity) {
@@ -37,7 +40,8 @@ public interface OrderEntityMapper {
 	}
 
 	@DoIgnore
-	default OrderEntity toEntity(Order domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
+	default OrderEntity toEntity(OrderDTO dto) {
+		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
+
 }

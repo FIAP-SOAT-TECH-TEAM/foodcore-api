@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
+import com.soat.fiap.food.core.api.order.core.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -57,6 +60,39 @@ public class Order {
 		for (OrderItem orderItem : orderItems) {
 			addItem(orderItem);
 		}
+	}
+
+	/**
+	 * Construtor que cria uma nova instância de pedido com os dados fornecidos.
+	 *
+	 * @param dto
+	 *            DTO contendo os dados do pedido
+	 *
+	 * @throws NullPointerException
+	 *             se userId, orderNumber, orderStatus ou amount forem nulos
+	 * @throws OrderException
+	 *             se orderItems for vazio ou se o valor calculado do pedido for
+	 *             menor ou igual a zero
+	 */
+	public static Order fromDTO(OrderDTO dto) {
+		List<OrderItem> items = dto.items().stream().map(itemDTO -> {
+			OrderItemPrice orderItemPrice = new OrderItemPrice(itemDTO.quantity(), itemDTO.price());
+			return new OrderItem(itemDTO.productId(), itemDTO.name(), orderItemPrice, itemDTO.observations());
+		}).collect(Collectors.toList());
+
+		Order order = new Order(dto.userId(), items);
+
+		order.setId(dto.id());
+
+		if (dto.status() != null && dto.status() != OrderStatus.RECEIVED) {
+			order.setOrderStatus(dto.status());
+		}
+
+		if (dto.updatedAt() != null) {
+			order.getAuditInfo().setUpdatedAt(dto.updatedAt());
+		}
+
+		return order;
 	}
 
 	/**

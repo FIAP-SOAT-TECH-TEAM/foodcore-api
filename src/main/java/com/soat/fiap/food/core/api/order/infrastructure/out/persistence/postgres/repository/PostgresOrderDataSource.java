@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.OrderEntityMapper;
@@ -28,33 +28,33 @@ public class PostgresOrderDataSource implements OrderDataSource {
 	}
 
 	@Override @Transactional
-	public Order save(Order order) {
-		OrderEntity orderEntity = orderEntityMapper.toEntity(order);
-		OrderEntity saved = springDataOrderRepository.save(orderEntity);
-		return orderEntityMapper.toDomain(saved);
+	public OrderDTO save(OrderDTO orderDTO) {
+		OrderEntity orderEntity = orderEntityMapper.toEntity(orderDTO);
+		OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
+		return orderEntityMapper.toDTO(savedEntity);
 	}
 
 	@Override @Transactional(readOnly = true)
-	public Optional<Order> findById(Long id) {
-		return springDataOrderRepository.findById(id).map(orderEntityMapper::toDomain);
+	public Optional<OrderDTO> findById(Long id) {
+		return springDataOrderRepository.findById(id).map(orderEntityMapper::toDTO);
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<Order> findByOrderStatus(OrderStatus status) {
+	public List<OrderDTO> findByOrderStatus(OrderStatus status) {
 		List<OrderEntity> orderEntities = springDataOrderRepository.findByOrderStatus(status);
-		return orderEntityMapper.toDomainList(orderEntities);
+		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<Order> findByUserId(Long customerId) {
-		List<OrderEntity> orderEntities = springDataOrderRepository.findByUserId(customerId);
-		return orderEntityMapper.toDomainList(orderEntities);
+	public List<OrderDTO> findByUserId(Long userId) {
+		List<OrderEntity> orderEntities = springDataOrderRepository.findByUserId(userId);
+		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<Order> findAll() {
+	public List<OrderDTO> findAll() {
 		List<OrderEntity> orderEntities = springDataOrderRepository.findAll();
-		return orderEntityMapper.toDomainList(orderEntities);
+		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
 	}
 
 	@Override @Transactional
@@ -63,8 +63,8 @@ public class PostgresOrderDataSource implements OrderDataSource {
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<Order> findActiveOrdersSorted() {
+	public List<OrderDTO> findActiveOrdersSorted() {
 		List<OrderEntity> orderEntities = springDataOrderRepository.findActiveOrdersSorted();
-		return orderEntityMapper.toDomainList(orderEntities);
+		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
 	}
 }

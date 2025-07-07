@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.order.infrastructure.common.source;
 import java.util.List;
 import java.util.Optional;
 
-import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 
 /**
  * DataSource para persistência de pedidos
@@ -14,11 +14,11 @@ public interface OrderDataSource {
 	/**
 	 * Salva um pedido
 	 *
-	 * @param order
+	 * @param orderDTO
 	 *            Pedido a ser salvo
 	 * @return Pedido salvo com ID gerado
 	 */
-	Order save(Order order);
+	OrderDTO save(OrderDTO orderDTO);
 
 	/**
 	 * Busca um pedido por ID
@@ -27,7 +27,7 @@ public interface OrderDataSource {
 	 *            ID do pedido
 	 * @return Optional contendo o pedido ou vazio se não encontrado
 	 */
-	Optional<Order> findById(Long id);
+	Optional<OrderDTO> findById(Long id);
 
 	/**
 	 * Busca pedidos por status
@@ -36,7 +36,7 @@ public interface OrderDataSource {
 	 *            Status dos pedidos
 	 * @return Lista de pedidos com o status informado
 	 */
-	List<Order> findByOrderStatus(OrderStatus status);
+	List<OrderDTO> findByOrderStatus(OrderStatus status);
 
 	/**
 	 * Busca pedidos de um cliente específico
@@ -45,14 +45,14 @@ public interface OrderDataSource {
 	 *            ID do cliente
 	 * @return Lista de pedidos do cliente
 	 */
-	List<Order> findByUserId(Long userId);
+	List<OrderDTO> findByUserId(Long userId);
 
 	/**
 	 * Lista todos os pedidos
 	 *
 	 * @return Lista de pedidos
 	 */
-	List<Order> findAll();
+	List<OrderDTO> findAll();
 
 	/**
 	 * Remove um pedido
@@ -70,6 +70,6 @@ public interface OrderDataSource {
 	 * @return Lista de pedidos ativos ordenados por prioridade de status e data de
 	 *         criação (mais antigos primeiro)
 	 */
-	List<Order> findActiveOrdersSorted();
+	List<OrderDTO> findActiveOrdersSorted();
 
 }
