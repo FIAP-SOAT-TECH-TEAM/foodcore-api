@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.user.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.user.core.application.inputs.UserInput;
+import com.soat.fiap.food.core.api.user.core.domain.model.Role;
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;
 
@@ -32,6 +33,6 @@ public class UserMapper {
 	 */
 	public static User toDomain(UserInput input) {
 		return new User(input.guest(), input.name(), input.username(), input.email(), input.password(),
-				input.document());
+				input.document(), Role.defaultRole());
 	}
 }

@@ -39,7 +39,8 @@ public class User {
 	public User() {
 	}
 
-	public User(boolean guest, String name, String username, String email, String password, String document) {
+	public User(boolean guest, String name, String username, String email, String password, String document,
+			Role role) {
 		validateInternalState();
 
 		this.guest = guest;
@@ -48,6 +49,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.document = document;
+		this.role = role;
 	}
 
 	/**
