@@ -32,14 +32,4 @@ public interface OrderEntityMapper {
 	@Mapping(target = "items", source = "orderItems")
 	OrderDTO toDTO(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
-	// @DoIgnore
-	// default Order toDomain(OrderEntity entity) {
-	// return toDomain(entity, new CycleAvoidingMappingContext());
-	// }
-	//
-	// @DoIgnore
-	// default List<Order> toDomainList(List<OrderEntity> entities) {
-	// return toDomainList(entities, new CycleAvoidingMappingContext());
-	// }
-
 }
