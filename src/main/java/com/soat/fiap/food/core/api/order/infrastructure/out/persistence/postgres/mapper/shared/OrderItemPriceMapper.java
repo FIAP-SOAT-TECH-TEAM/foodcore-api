@@ -18,11 +18,11 @@ public interface OrderItemPriceMapper {
 
 	@Named("extractQuantity")
 	static int extractQuantity(OrderItemPrice price) {
-		return price != null ? price.getQuantity() : 0;
+		return price != null ? price.quantity() : 0;
 	}
 
 	@Named("extractPrice")
 	static BigDecimal extractPrice(OrderItemPrice price) {
-		return price != null ? price.getUnitPrice() : null;
+		return price != null ? price.unitPrice() : null;
 	}
 }

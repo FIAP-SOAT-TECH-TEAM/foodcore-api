@@ -94,14 +94,14 @@ public class OrderItem {
 	 * Retorna o preço do item do pedido
 	 */
 	public BigDecimal getUnitPrice() {
-		return orderItemPrice.getUnitPrice();
+		return orderItemPrice.unitPrice();
 	}
 
 	/**
 	 * Retorna a quantidade do item do pedido
 	 */
 	public Integer getQuantity() {
-		return orderItemPrice.getQuantity();
+		return orderItemPrice.quantity();
 	}
 
 	/**

@@ -5,43 +5,44 @@ import java.math.BigDecimal;
 
 import org.apache.commons.lang3.Validate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
 /**
  * Value Object que representa o preço do item de um pedido
  */
-@Embeddable
-public class OrderItemPrice implements Serializable {
+public record OrderItemPrice(int quantity, BigDecimal unitPrice) implements Serializable {
 
-	@Column(name = "quantity", nullable = false)
-	private int quantity;
-
-	@Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
-	private BigDecimal unitPrice;
-
-	protected OrderItemPrice() {
-		// construtor default para o JPA
-	}
-
-	public OrderItemPrice(int quantity, BigDecimal unitPrice) {
+	/**
+	 * Cria um novo preço para o item.
+	 *
+	 * @param quantity
+	 *            unidades do item
+	 * @param unitPrice
+	 *            preço unitário do item
+	 */
+	public OrderItemPrice {
 		validate(quantity, unitPrice);
-		this.quantity = quantity;
-		this.unitPrice = unitPrice;
 	}
 
+	/**
+	 * Retorna a multiplicação entre a quantidade e o preço unitário do item
+	 *
+	 * @return o subtotal do item do pedido
+	 */
 	public BigDecimal getSubTotal() {
 		return unitPrice.multiply(BigDecimal.valueOf(quantity));
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public BigDecimal getUnitPrice() {
-		return unitPrice;
-	}
-
+	/**
+	 * Validação centralizada.
+	 *
+	 * @param quantity
+	 *            Quantidade do item
+	 * @param unitPrice
+	 *            Preço unitário do item
+	 * @throws IllegalArgumentException
+	 *             se a quantidade for menor ou igual a zero
+	 * @throws IllegalArgumentException
+	 *             se o preço unitário for menor ou igual a zero
+	 */
 	private void validate(int quantity, BigDecimal unitPrice) {
 		Validate.isTrue(quantity > 0, "A quantidade do item deve ser maior que 0");
 		Validate.isTrue(unitPrice.compareTo(BigDecimal.ZERO) > 0, "O preço unitário do item deve ser maior que 0");
