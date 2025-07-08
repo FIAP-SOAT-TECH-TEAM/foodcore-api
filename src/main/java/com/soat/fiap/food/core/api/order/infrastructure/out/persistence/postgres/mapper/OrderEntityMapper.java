@@ -12,7 +12,6 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.shared.OrderNumberMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 
 /**
  * Mapper que converte entre a entidade de domínio Order e a entidade JPA
@@ -33,14 +32,14 @@ public interface OrderEntityMapper {
 	@Mapping(target = "items", source = "orderItems")
 	OrderDTO toDTO(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
-	@DoIgnore
-	default Order toDomain(OrderEntity entity) {
-		return toDomain(entity, new CycleAvoidingMappingContext());
-	}
-
-	@DoIgnore
-	default List<Order> toDomainList(List<OrderEntity> entities) {
-		return toDomainList(entities, new CycleAvoidingMappingContext());
-	}
+	// @DoIgnore
+	// default Order toDomain(OrderEntity entity) {
+	// return toDomain(entity, new CycleAvoidingMappingContext());
+	// }
+	//
+	// @DoIgnore
+	// default List<Order> toDomainList(List<OrderEntity> entities) {
+	// return toDomainList(entities, new CycleAvoidingMappingContext());
+	// }
 
 }

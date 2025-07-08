@@ -12,7 +12,6 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.shared.OrderNumberMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 
 /**
  * Mapper que converte entre a entidade de domínio OrderItem e a entidade JPA
@@ -26,22 +25,23 @@ public interface OrderItemEntityMapper {
 
 	List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);
 
-	@Mapping(target = "order", ignore = true)
+	// @Mapping(target = "order", ignore = true)
 	OrderItemEntity toEntity(OrderItemDTO dto, @Context CycleAvoidingMappingContext context);
 
+	// @Mapping(target = "order", ignore = true)
 	List<OrderItemEntity> toEntityList(List<OrderItemDTO> dto, @Context CycleAvoidingMappingContext context);
 
 	OrderItemDTO toDTO(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
 
-	@DoIgnore
-	default OrderItem toDomain(OrderItemEntity entity) {
-		return toDomain(entity, new CycleAvoidingMappingContext());
-	}
-
-	@DoIgnore
-	default List<OrderItem> toDomainList(List<OrderItemEntity> entities) {
-		return toDomainList(entities, new CycleAvoidingMappingContext());
-	}
+	// @DoIgnore
+	// default OrderItem toDomain(OrderItemEntity entity) {
+	// return toDomain(entity, new CycleAvoidingMappingContext());
+	// }
+	//
+	// @DoIgnore
+	// default List<OrderItem> toDomainList(List<OrderItemEntity> entities) {
+	// return toDomainList(entities, new CycleAvoidingMappingContext());
+	// }
 
 	// @DoIgnore
 	// @Mapping(target = "order", ignore = true)

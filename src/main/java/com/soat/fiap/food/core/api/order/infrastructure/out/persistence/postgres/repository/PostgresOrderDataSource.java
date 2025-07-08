@@ -10,6 +10,7 @@ import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderEntity;
+import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.entity.OrderItemEntity;
 import com.soat.fiap.food.core.api.order.infrastructure.out.persistence.postgres.mapper.OrderEntityMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 
@@ -32,6 +33,9 @@ public class PostgresOrderDataSource implements OrderDataSource {
 	public OrderDTO save(OrderDTO orderDTO) {
 		CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
 		OrderEntity orderEntity = orderEntityMapper.toEntity(orderDTO, context);
+		for (OrderItemEntity item : orderEntity.getOrderItems()) {
+			item.setOrder(orderEntity);
+		}
 		OrderEntity savedEntity = springDataOrderRepository.save(orderEntity);
 		return orderEntityMapper.toDTO(savedEntity, context);
 	}

@@ -20,7 +20,7 @@ public class OrderDTOMapper {
 						item.getOrderItemPrice().unitPrice(), item.getObservations()))
 				.collect(Collectors.toList());
 
-		return new OrderDTO(order.getId(), order.getUserId(), order.getOrderStatus(), itemDTOs, order.getCreatedAt(),
-				order.getUpdatedAt());
+		return new OrderDTO(order.getId(), order.getUserId(), order.getOrderNumber(), order.getOrderStatus(),
+				order.getAmount(), itemDTOs, order.getCreatedAt(), order.getUpdatedAt());
 	}
 }
