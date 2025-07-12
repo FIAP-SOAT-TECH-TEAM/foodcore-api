@@ -19,8 +19,8 @@ public class CategoryDTOMapper {
 				.map(ProductDTOMapper::toDTO)
 				.collect(Collectors.toList());
 
-		return new CategoryDTO(category.getId(), category.getName(), category.getDescription(),
-				category.getImageUrlValue(), category.getDisplayOrder(), category.isActive(), products,
-				category.getCreatedAt(), category.getUpdatedAt());
+		return new CategoryDTO(category.getId(), category.getDetails(), category.getImageUrlValue(),
+				category.getDisplayOrder(), category.isActive(), products, category.getCreatedAt(),
+				category.getUpdatedAt());
 	}
 }

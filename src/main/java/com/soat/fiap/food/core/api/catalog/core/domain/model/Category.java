@@ -62,10 +62,9 @@ public class Category {
 	public static Category fromDTO(CategoryDTO dto) {
 		Objects.requireNonNull(dto, "O DTO da categoria não pode ser nulo");
 
-		Details details = new Details(dto.name(), dto.description());
 		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
 
-		Category category = new Category(details, imageUrl, dto.displayOrder(), dto.active());
+		Category category = new Category(dto.details(), imageUrl, dto.displayOrder(), dto.active());
 		category.setId(dto.id());
 
 		if (dto.products() != null) {

@@ -59,6 +59,9 @@ public class Product {
 
 	public static Product fromDTO(ProductDTO dto) {
 		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
+		if (dto.name() == null || dto.description() == null) {
+			return null;
+		}
 
 		Details details = new Details(dto.name(), dto.description());
 		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());

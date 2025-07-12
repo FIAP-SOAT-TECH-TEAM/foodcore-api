@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.common.source;
 import java.util.List;
 import java.util.Optional;
 
-import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 
 /**
@@ -27,7 +26,7 @@ public interface CatalogDataSource {
 	 *            ID do catálogo
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
-	Optional<Catalog> findById(Long id);
+	Optional<CatalogDTO> findById(Long id);
 
 	/**
 	 * Busca um catálogo por nome.
@@ -36,14 +35,14 @@ public interface CatalogDataSource {
 	 *            Nome do catalogo
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
-	Optional<Catalog> findByName(String name);
+	Optional<CatalogDTO> findByName(String name);
 
 	/**
 	 * Lista todos os catálogos.
 	 *
 	 * @return Lista de catálogos
 	 */
-	List<Catalog> findAll();
+	List<CatalogDTO> findAll();
 
 	/**
 	 * Verifica se existe um catalogo com um determinado ID.
@@ -101,5 +100,5 @@ public interface CatalogDataSource {
 	 * @param productId
 	 *            ID do produto
 	 */
-	Optional<Catalog> findByProductId(Long productId);
+	Optional<CatalogDTO> findByProductId(Long productId);
 }

@@ -40,7 +40,8 @@ public class CatalogGateway {
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
 	public Optional<Catalog> findById(Long id) {
-		return catalogDataSource.findById(id);
+
+		return catalogDataSource.findById(id).map(CatalogDTOMapper::toDomain);
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class CatalogGateway {
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
 	public Optional<Catalog> findByName(String name) {
-		return catalogDataSource.findByName(name);
+		return catalogDataSource.findByName(name).map(CatalogDTOMapper::toDomain);
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class CatalogGateway {
 	 * @return Lista de catálogos
 	 */
 	public List<Catalog> findAll() {
-		return catalogDataSource.findAll();
+		return catalogDataSource.findAll().stream().map(CatalogDTOMapper::toDomain).toList();
 	}
 
 	/**
@@ -130,6 +131,6 @@ public class CatalogGateway {
 	 *            ID do produto
 	 */
 	public Optional<Catalog> findByProductId(Long productId) {
-		return catalogDataSource.findByProductId(productId);
+		return catalogDataSource.findByProductId(productId).map(CatalogDTOMapper::toDomain);
 	}
 }

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
@@ -31,8 +30,8 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	/**
 	 * Salva o agregado Catálogo.
 	 *
-	 * @param catalog
-	 *            Agregado Catálogo a ser salvo
+	 * @param catalogDTO
+	 *            DTO do Catálogo a ser salvo
 	 * @return Agregado salvo com identificadores atualizados
 	 */
 	@Override @Transactional
@@ -50,8 +49,8 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
 	@Override @Transactional(readOnly = true)
-	public Optional<Catalog> findById(Long id) {
-		return springDataCatalogRepository.findById(id).map(catalogEntityMapper::toDomain);
+	public Optional<CatalogDTO> findById(Long id) {
+		return springDataCatalogRepository.findById(id).map(catalogEntityMapper::toDTO);
 	}
 
 	/**
@@ -62,8 +61,8 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	 * @return Optional contendo o catálogo ou vazio se não encontrado
 	 */
 	@Override @Transactional(readOnly = true)
-	public Optional<Catalog> findByName(String name) {
-		return springDataCatalogRepository.findByName(name).map(catalogEntityMapper::toDomain);
+	public Optional<CatalogDTO> findByName(String name) {
+		return springDataCatalogRepository.findByName(name).map(catalogEntityMapper::toDTO);
 	}
 
 	/**
@@ -71,12 +70,11 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	 *
 	 * @return Lista de catálogos
 	 */
+
 	@Override @Transactional(readOnly = true)
-	public List<Catalog> findAll() {
-		return springDataCatalogRepository.findAll()
-				.stream()
-				.map(catalogEntityMapper::toDomain)
-				.collect(Collectors.toList());
+	public List<CatalogDTO> findAll() {
+		List<CatalogEntity> catalogsEntities = springDataCatalogRepository.findAll();
+		return catalogsEntities.stream().map(catalogEntityMapper::toDTO).collect(Collectors.toList());
 	}
 
 	/**
@@ -151,7 +149,7 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	 *            ID do produto
 	 */
 	@Override @Transactional(readOnly = true)
-	public Optional<Catalog> findByProductId(Long productId) {
-		return springDataCatalogRepository.findByProductId(productId).map(catalogEntityMapper::toDomain);
+	public Optional<CatalogDTO> findByProductId(Long productId) {
+		return springDataCatalogRepository.findByProductId(productId).map(catalogEntityMapper::toDTO);
 	}
 }
