@@ -62,6 +62,7 @@ public interface CategoryEntityMapper {
 	 * @return Entidade JPA
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	@Mapping(target = "catalog", ignore = true)
 	CategoryEntity toEntity(CategoryDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	@DoIgnore
@@ -75,6 +76,7 @@ public interface CategoryEntityMapper {
 	}
 
 	@DoIgnore @Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	@Mapping(target = "catalog", ignore = true)
 	default CategoryEntity toEntity(CategoryDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());
 	}

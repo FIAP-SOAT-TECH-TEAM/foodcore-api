@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CategoryEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.CatalogEntityMapper;
 
 /**
@@ -37,6 +38,13 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	@Override @Transactional
 	public CatalogDTO save(CatalogDTO catalogDTO) {
 		CatalogEntity entity = catalogEntityMapper.toEntity(catalogDTO);
+
+		if (entity.getCategories() != null) {
+			for (CategoryEntity category : entity.getCategories()) {
+				category.setCatalog(entity);
+			}
+		}
+
 		CatalogEntity saved = springDataCatalogRepository.save(entity);
 		return catalogEntityMapper.toDTO(saved);
 	}

@@ -38,7 +38,7 @@ public class CategoryController {
 		this.imageDataSource = imageDataSource;
 	}
 
-	@PostMapping("/categories")
+	@PostMapping(value = "/categories", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria vinculada a um catálogo existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
 			"Categorias"})
 	@ApiResponses(value = {
@@ -47,9 +47,11 @@ public class CategoryController {
 			@ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
 			@ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)})
 	@Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos") @Transactional
-	public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest request) {
+	public ResponseEntity<CategoryResponse> createCategory(@RequestPart("data") @Valid CategoryRequest request,
+			@RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
 		log.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
-		CategoryResponse response = SaveCategoryController.saveCategory(request, catalogDataSource);
+		CategoryResponse response = SaveCategoryController.saveCategory(request, imageFile, catalogDataSource,
+				imageDataSource);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 

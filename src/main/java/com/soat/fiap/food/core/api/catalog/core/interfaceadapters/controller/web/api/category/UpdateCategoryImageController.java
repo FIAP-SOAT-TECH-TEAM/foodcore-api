@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryImageInCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
@@ -36,7 +37,7 @@ public class UpdateCategoryImageController {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload da imagem
 	 */
-	public static void updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile,
+	public static Category updateCategoryImage(Long catalogId, Long categoryId, MultipartFile imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 		log.debug("Atualizando imagem do categoria ID: {}", categoryId);
 
@@ -47,6 +48,12 @@ public class UpdateCategoryImageController {
 		var catalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
 				catalogGateway, imageStorageGateway);
 
-		catalogGateway.save(catalog);
+		var savedCatalog = catalogGateway.save(catalog);
+
+		return savedCatalog.getCategories()
+				.stream()
+				.filter(c -> c.getId().equals(categoryId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada após atualização da imagem"));
 	}
 }

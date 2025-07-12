@@ -11,7 +11,7 @@ public class ProductDTOMapper {
 
 	public static ProductDTO toDTO(Product product) {
 		return new ProductDTO(product.getId(), product.getDetails(), product.getImageUrlValue(), product.getPrice(),
-				product.getDisplayOrder(), product.getStockQuantity(), product.isActive(), product.getCreatedAt(),
+				product.getStockQuantity(), product.getDisplayOrder(), product.isActive(), product.getCreatedAt(),
 				product.getUpdatedAt());
 	}
 }

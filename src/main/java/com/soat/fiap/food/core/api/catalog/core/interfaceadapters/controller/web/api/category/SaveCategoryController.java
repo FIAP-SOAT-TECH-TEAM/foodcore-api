@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.category;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.CategoryMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.AddCategoryToCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
@@ -7,6 +9,7 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +28,8 @@ public class SaveCategoryController {
 	 *            Origem de dados para o gateway
 	 * @return Categoria salva com identificadores atualizados
 	 */
-	public static CategoryResponse saveCategory(CategoryRequest categoryRequest, CatalogDataSource catalogDataSource) {
+	public static CategoryResponse saveCategory(CategoryRequest categoryRequest, MultipartFile imageFile,
+			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 
 		var gateway = new CatalogGateway(catalogDataSource);
 
@@ -38,6 +42,13 @@ public class SaveCategoryController {
 		var savedCategory = savedCatalog.getCategories().getLast();
 
 		log.debug("Categoria criada com sucesso: {}", savedCategory.getId());
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			savedCategory = UpdateCategoryImageController.updateCategoryImage(savedCategory.getCatalog().getId(),
+					savedCategory.getId(), imageFile, catalogDataSource, imageDataSource);
+
+			log.debug("Categoria atualizada com sucesso: {}", savedCategory.getImageUrl().imageUrl());
+		}
 
 		return CategoryPresenter.toCategoryResponse(savedCategory);
 	}
