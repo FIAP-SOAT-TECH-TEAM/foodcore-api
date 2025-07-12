@@ -8,6 +8,7 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -54,6 +55,20 @@ public class Product {
 		this.price = price;
 		this.imageUrl = imageUrl;
 		this.displayOrder = displayOrder;
+	}
+
+	public static Product fromDTO(ProductDTO dto) {
+		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
+
+		Details details = new Details(dto.name(), dto.description());
+		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+
+		Product product = new Product(details, dto.price(), imageUrl, dto.displayOrder());
+		product.setId(dto.id());
+		product.setStockQuantity(dto.stockQuantity());
+		product.setActive(dto.active());
+
+		return product;
 	}
 
 	/**

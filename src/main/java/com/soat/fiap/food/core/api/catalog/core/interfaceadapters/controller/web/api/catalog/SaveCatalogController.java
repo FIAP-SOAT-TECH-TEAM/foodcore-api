@@ -37,6 +37,6 @@ public class SaveCatalogController {
 
 		log.debug("Catalogo criado com sucesso: {}", savedCatalog.getId());
 
-		return CatalogPresenter.toCatalogResponse(catalog);
+		return CatalogPresenter.toCatalogResponse(savedCatalog);
 	}
 }

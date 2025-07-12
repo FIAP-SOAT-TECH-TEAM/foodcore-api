@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.ProductEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 
@@ -15,8 +18,19 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
  * Mapper que converte entre a entidade de domínio Product e a entidade JPA
  * ProductEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockEntityMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StockEntityMapper.class,
+		ImageURLMapper.class})
 public interface ProductEntityMapper {
+
+	/**
+	 * Converte uma entidade JPA para um DTO.
+	 *
+	 * @param entity
+	 *            Entidade JPA
+	 * @return DTO correspondente
+	 */
+	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
+	ProductDTO toDTO(ProductEntity entity);
 
 	/**
 	 * Converte uma entidade JPA para uma entidade de domínio
@@ -44,11 +58,12 @@ public interface ProductEntityMapper {
 	/**
 	 * Converte uma entidade de domínio para uma entidade JPA
 	 *
-	 * @param domain
-	 *            Entidade de domínio
+	 * @param dto
+	 *            DTO do produto
 	 * @return Entidade JPA
 	 */
-	ProductEntity toEntity(Product domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	ProductEntity toEntity(ProductDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	@DoIgnore
 	default Product toDomain(ProductEntity entity) {
@@ -60,8 +75,8 @@ public interface ProductEntityMapper {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore
-	default ProductEntity toEntity(Product domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
+	@DoIgnore @Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	default ProductEntity toEntity(ProductDTO dto) {
+		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
 }

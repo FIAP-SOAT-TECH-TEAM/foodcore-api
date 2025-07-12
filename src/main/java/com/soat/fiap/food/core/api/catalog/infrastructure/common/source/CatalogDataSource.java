@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 
 /**
  * DataSource para persistência do agregado Catálogo.
@@ -13,11 +14,11 @@ public interface CatalogDataSource {
 	/**
 	 * Salva o agregado Catálogo.
 	 *
-	 * @param catalog
-	 *            Agregado Catálogo a ser salvo
-	 * @return Agregado salvo com identificadores atualizados
+	 * @param catalogDTO
+	 *            DTO do Catálogo a ser salvo
+	 * @return DTO do Catálogo salvo com identificadores atualizados
 	 */
-	Catalog save(Catalog catalog);
+	CatalogDTO save(CatalogDTO catalogDTO);
 
 	/**
 	 * Busca um catálogo por ID.

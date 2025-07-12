@@ -10,6 +10,8 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryConflictException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CategoryNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -42,6 +44,21 @@ public class Catalog {
 	public Catalog(String name) {
 		validate(name);
 		this.name = name;
+	}
+
+	public static Catalog fromDTO(CatalogDTO dto) {
+		Objects.requireNonNull(dto, "O DTO do catálogo não pode ser nulo");
+
+		Catalog catalog = new Catalog(dto.name());
+		catalog.setId(dto.id());
+
+		if (dto.categories() != null) {
+			for (CategoryDTO categoryDTO : dto.categories()) {
+				catalog.addCategory(Category.fromDTO(categoryDTO));
+			}
+		}
+
+		return catalog;
 	}
 
 	/**

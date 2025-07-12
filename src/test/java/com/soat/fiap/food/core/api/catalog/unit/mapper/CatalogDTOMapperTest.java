@@ -10,7 +10,7 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Catal
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 
 @DisplayName("CatalogMapper - Testes Unitários")
-class CatalogMapperTest {
+class CatalogDTOMapperTest {
 
 	@Test @DisplayName("Deve mapear CatalogRequest para CatalogInput")
 	void shouldMapCatalogRequestToCatalogInput() {

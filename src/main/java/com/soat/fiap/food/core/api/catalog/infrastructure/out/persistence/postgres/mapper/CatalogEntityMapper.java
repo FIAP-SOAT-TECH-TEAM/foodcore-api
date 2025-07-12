@@ -7,15 +7,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 
 /**
- * Mapper que converte entre a entidade de domínio Catalog e a entidade JPA
- * CatalogEntity
+ * Mapper que converte entre a entidade JPA CatalogEntity e o DTO CatalogDTO.
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CategoryEntityMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ImageURLMapper.class,
+		CategoryEntityMapper.class})
 public interface CatalogEntityMapper {
 
 	/**
@@ -42,13 +44,32 @@ public interface CatalogEntityMapper {
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
-	 * Converte uma entidade de domínio para uma entidade JPA
+	 * Converte uma entidade JPA para um DTO.
 	 *
-	 * @param domain
-	 *            Entidade de domínio
-	 * @return Entidade JPA
+	 * @param entity
+	 *            Entidade JPA
+	 * @return DTO correspondente
 	 */
-	CatalogEntity toEntity(Catalog domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+	CatalogDTO toDTO(CatalogEntity entity);
+
+	/**
+	 * Converte uma lista de entidades JPA para uma lista de DTOs.
+	 *
+	 * @param entities
+	 *            Lista de entidades JPA
+	 * @return Lista de DTOs
+	 */
+	List<CatalogDTO> toDTOList(List<CatalogEntity> entities);
+
+	/**
+	 * Converte um DTO para uma entidade JPA.
+	 *
+	 * @param dto
+	 *            DTO
+	 * @return Entidade JPA correspondente
+	 */
+	CatalogEntity toEntity(CatalogDTO dto, @Context CycleAvoidingMappingContext context);
 
 	@DoIgnore
 	default Catalog toDomain(CatalogEntity entity) {
@@ -61,7 +82,7 @@ public interface CatalogEntityMapper {
 	}
 
 	@DoIgnore
-	default CatalogEntity toEntity(Catalog domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
+	default CatalogEntity toEntity(CatalogDTO dto) {
+		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
 }

@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CategoryEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 
@@ -15,9 +18,19 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
  * Mapper que converte entre a entidade de domínio Category e a entidade JPA
  * CategoryEntity
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ProductEntityMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ProductEntityMapper.class,
+		ImageURLMapper.class})
 public interface CategoryEntityMapper {
 
+	/**
+	 * Converte uma entidade JPA para um DTO.
+	 *
+	 * @param entity
+	 *            Entidade JPA
+	 * @return DTO correspondente
+	 */
+	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
+	CategoryDTO toDTO(CategoryEntity entity);
 	/**
 	 * Converte uma entidade JPA para uma entidade de domínio
 	 *
@@ -44,11 +57,12 @@ public interface CategoryEntityMapper {
 	/**
 	 * Converte uma entidade de domínio para uma entidade JPA
 	 *
-	 * @param domain
-	 *            Entidade de domínio
+	 * @param dto
+	 *            DTO da categoria
 	 * @return Entidade JPA
 	 */
-	CategoryEntity toEntity(Category domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	CategoryEntity toEntity(CategoryDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	@DoIgnore
 	default Category toDomain(CategoryEntity entity) {
@@ -60,8 +74,8 @@ public interface CategoryEntityMapper {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore
-	default CategoryEntity toEntity(Category domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
+	@DoIgnore @Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	default CategoryEntity toEntity(CategoryDTO dto) {
+		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
 }

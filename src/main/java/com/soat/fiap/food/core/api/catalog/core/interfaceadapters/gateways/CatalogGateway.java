@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers.CatalogDTOMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 
 /**
@@ -25,7 +27,9 @@ public class CatalogGateway {
 	 * @return Agregado salvo com identificadores atualizados
 	 */
 	public Catalog save(Catalog catalog) {
-		return catalogDataSource.save(catalog);
+		CatalogDTO dto = CatalogDTOMapper.toDTO(catalog);
+		CatalogDTO savedDTO = catalogDataSource.save(dto);
+		return CatalogDTOMapper.toDomain(savedDTO);
 	}
 
 	/**

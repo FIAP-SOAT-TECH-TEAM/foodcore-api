@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.CatalogEntityMapper;
@@ -35,10 +36,10 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	 * @return Agregado salvo com identificadores atualizados
 	 */
 	@Override @Transactional
-	public Catalog save(Catalog catalog) {
-		CatalogEntity entity = catalogEntityMapper.toEntity(catalog);
+	public CatalogDTO save(CatalogDTO catalogDTO) {
+		CatalogEntity entity = catalogEntityMapper.toEntity(catalogDTO);
 		CatalogEntity saved = springDataCatalogRepository.save(entity);
-		return catalogEntityMapper.toDomain(saved);
+		return catalogEntityMapper.toDTO(saved);
 	}
 
 	/**

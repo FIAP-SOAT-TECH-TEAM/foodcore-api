@@ -12,6 +12,8 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductConflic
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -55,6 +57,24 @@ public class Category {
 		this.imageUrl = imageUrl;
 		this.displayOrder = displayOrder;
 		this.active = active;
+	}
+
+	public static Category fromDTO(CategoryDTO dto) {
+		Objects.requireNonNull(dto, "O DTO da categoria não pode ser nulo");
+
+		Details details = new Details(dto.name(), dto.description());
+		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+
+		Category category = new Category(details, imageUrl, dto.displayOrder(), dto.active());
+		category.setId(dto.id());
+
+		if (dto.products() != null) {
+			for (ProductDTO productDTO : dto.products()) {
+				category.addProduct(Product.fromDTO(productDTO));
+			}
+		}
+
+		return category;
 	}
 
 	/**
