@@ -59,16 +59,12 @@ public class Product {
 
 	public static Product fromDTO(ProductDTO dto) {
 		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
-		if (dto.name() == null || dto.description() == null) {
-			return null;
-		}
 
-		Details details = new Details(dto.name(), dto.description());
 		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
 
-		Product product = new Product(details, dto.price(), imageUrl, dto.displayOrder());
+		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
 		product.setId(dto.id());
-		product.setStockQuantity(dto.stockQuantity());
+		product.setStockQuantity(dto.stockQuantity() != null ? dto.stockQuantity() : 0);
 		product.setActive(dto.active());
 
 		return product;

@@ -10,8 +10,8 @@ public class ProductDTOMapper {
 	}
 
 	public static ProductDTO toDTO(Product product) {
-		return new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getImageUrlValue(),
-				product.getPrice(), product.getDisplayOrder(), product.getStockQuantity(), product.isActive(),
-				product.getCreatedAt(), product.getUpdatedAt());
+		return new ProductDTO(product.getId(), product.getDetails(), product.getImageUrlValue(), product.getPrice(),
+				product.getDisplayOrder(), product.getStockQuantity(), product.isActive(), product.getCreatedAt(),
+				product.getUpdatedAt());
 	}
 }
