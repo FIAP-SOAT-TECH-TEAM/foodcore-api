@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.persistence.postgres.entity.PaymentEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.persistence.postgres.mapper.PaymentEntityMapper;
 
 /**
@@ -26,15 +27,15 @@ public class PostgresPaymentDataSource implements PaymentDataSource {
 	}
 
 	@Override @Transactional
-	public Payment save(Payment payment) {
-		var entity = mapper.toEntity(payment);
-		var savedEntity = repository.save(entity);
-		return mapper.toDomain(savedEntity);
+	public PaymentDTO save(PaymentDTO paymentDTO) {
+		PaymentEntity entity = mapper.toEntity(paymentDTO);
+		PaymentEntity savedEntity = repository.save(entity);
+		return mapper.toDTO(savedEntity);
 	}
 
 	@Override @Transactional(readOnly = true)
-	public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return repository.findTopByOrderIdOrderByIdDesc(orderId).map(mapper::toDomain);
+	public Optional<PaymentDTO> findTopByOrderIdOrderByIdDesc(Long orderId) {
+		return repository.findTopByOrderIdOrderByIdDesc(orderId).map(mapper::toDTO);
 	}
 
 	@Override @Transactional(readOnly = true)
@@ -43,9 +44,9 @@ public class PostgresPaymentDataSource implements PaymentDataSource {
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
+	public List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
 		var paymentEntities = repository.findExpiredPaymentsWithoutApprovedOrCancelled(now);
 
-		return mapper.toDomainList(paymentEntities);
+		return paymentEntities.stream().map(mapper::toDTO).toList();
 	}
 }

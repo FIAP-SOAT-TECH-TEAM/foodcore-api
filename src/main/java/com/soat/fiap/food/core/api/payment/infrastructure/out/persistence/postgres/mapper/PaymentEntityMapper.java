@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.persistence.postgres.entity.PaymentEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.persistence.postgres.mapper.shared.QrCodeMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
@@ -23,7 +25,13 @@ public interface PaymentEntityMapper {
 
 	List<Payment> toDomainList(List<PaymentEntity> entities, @Context CycleAvoidingMappingContext context);
 
-	PaymentEntity toEntity(Payment domain, @Context CycleAvoidingMappingContext context);
+	PaymentEntity toEntity(PaymentDTO domain, @Context CycleAvoidingMappingContext context);
+
+	// @Mapping(target = "qrCode", source = "qrCode", qualifiedByName =
+	// "mapQrCodeToString")
+	@Mapping(target = "createdAt", source = "auditInfo.createdAt")
+	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")
+	PaymentDTO toDTO(PaymentEntity entity);
 
 	@DoIgnore
 	default Payment toDomain(PaymentEntity entity) {
@@ -36,7 +44,7 @@ public interface PaymentEntityMapper {
 	}
 
 	@DoIgnore
-	default PaymentEntity toEntity(Payment domain) {
-		return toEntity(domain, new CycleAvoidingMappingContext());
+	default PaymentEntity toEntity(PaymentDTO dto) {
+		return toEntity(dto, new CycleAvoidingMappingContext());
 	}
 }

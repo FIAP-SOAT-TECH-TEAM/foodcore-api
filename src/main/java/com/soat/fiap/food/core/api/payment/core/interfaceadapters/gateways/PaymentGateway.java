@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.PaymentDTO;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.mappers.PaymentDTOMapper;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 
 /**
@@ -26,7 +28,9 @@ public class PaymentGateway {
 	 * @return Pagamento salvo com identificador atualizado
 	 */
 	public Payment save(Payment payment) {
-		return paymentDataSource.save(payment);
+		PaymentDTO dto = PaymentDTOMapper.toDTO(payment);
+		PaymentDTO savedDTO = paymentDataSource.save(dto);
+		return PaymentDTOMapper.toDomain(savedDTO);
 	}
 
 	/**
@@ -37,7 +41,7 @@ public class PaymentGateway {
 	 * @return Optional contendo o pagamento ou vazio se não encontrado
 	 */
 	public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId);
+		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::toDomain);
 	}
 
 	/**
@@ -48,7 +52,10 @@ public class PaymentGateway {
 	 * @return Lista de pagamentos expirados
 	 */
 	public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
-		return paymentDataSource.findExpiredPaymentsWithoutApprovedOrCancelled(now);
+		return paymentDataSource.findExpiredPaymentsWithoutApprovedOrCancelled(now)
+				.stream()
+				.map(PaymentDTOMapper::toDomain)
+				.toList();
 	}
 
 	/**
