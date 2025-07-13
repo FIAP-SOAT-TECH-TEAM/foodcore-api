@@ -77,6 +77,10 @@ public class User {
 
 		user.setRole(role);
 
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			user.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
 		return user;
 	}
 

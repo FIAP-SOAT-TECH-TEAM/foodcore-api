@@ -25,6 +25,7 @@ public interface UserEntityMapper {
 	 *            Entidade JPA
 	 * @return Entidade de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	User toDomain(UserEntity entity);
 
 	/**
@@ -34,6 +35,7 @@ public interface UserEntityMapper {
 	 *            Lista de entidades JPA
 	 * @return Lista de entidades de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<User> toDomainList(List<UserEntity> entities);
 
 	/**
@@ -44,6 +46,7 @@ public interface UserEntityMapper {
 	 * @return Entidade JPA
 	 */
 	@Mapping(source = "roleId", target = "role")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	UserEntity toEntity(UserDTO dto);
 
 	/**
@@ -53,7 +56,8 @@ public interface UserEntityMapper {
 	 *            Entidade de domínio
 	 * @return UserDTO
 	 */
-	@Mapping(source = "role", target = "roleId")
+	@Mapping(source = "role", target = "roleId") @Mapping(target = "createdAt", source = "auditInfo.createdAt")
+	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")
 	UserDTO toDTO(UserEntity entity);
 
 	/**
@@ -63,6 +67,8 @@ public interface UserEntityMapper {
 	 *            Lista de entidades JPA
 	 * @return Lista de DTOs
 	 */
+	@Mapping(target = "createdAt", source = "auditInfo.createdAt")
+	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")
 	List<UserDTO> toDTOList(List<UserEntity> entities);
 
 	// Conversão auxiliar de Long para RoleEntity

@@ -29,6 +29,6 @@ public class UserDTOMapper {
 	public static UserDTO toDTO(User user) {
 		return new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(),
 				user.getDocument(), user.getRole() != null ? user.getRole().getId() : null, user.isGuest(),
-				user.isActive());
+				user.isActive(), user.getAuditInfo().getCreatedAt(), user.getAuditInfo().getUpdatedAt());
 	}
 }
