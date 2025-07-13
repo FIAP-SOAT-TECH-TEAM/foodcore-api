@@ -9,10 +9,25 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO
 
 public class OrderDTOMapper {
 
+	/**
+	 * Cria uma instância de {@link Order} a partir de um {@link OrderDTO}.
+	 *
+	 * @param dto
+	 *            DTO de pedido contendo os dados a serem convertidos
+	 * @return Instância de um Order{@link Order}
+	 */
 	public static Order toDomain(OrderDTO dto) {
 		return Order.fromDTO(dto);
 	}
 
+	/**
+	 * Cria uma instância de {@link OrderDTO} a partir de um {@link Order}.
+	 *
+	 * @param order
+	 *            Entidade de domínio de pedido contendo os dados a serem
+	 *            convertidos
+	 * @return Instância do DTO de pedido {@link OrderDTO}
+	 */
 	public static OrderDTO toDTO(Order order) {
 		List<OrderItemDTO> itemDTOs = order.getOrderItems()
 				.stream()
