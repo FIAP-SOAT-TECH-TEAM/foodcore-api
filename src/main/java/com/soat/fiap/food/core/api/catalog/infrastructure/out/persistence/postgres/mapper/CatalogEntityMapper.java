@@ -43,6 +43,7 @@ public interface CatalogEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Lista de entidades de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<Catalog> toDomainList(List<CatalogEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
