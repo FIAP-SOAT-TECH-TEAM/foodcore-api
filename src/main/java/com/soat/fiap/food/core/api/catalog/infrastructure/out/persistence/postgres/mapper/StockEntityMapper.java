@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.StockEntity;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
@@ -27,6 +29,7 @@ public interface StockEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Entidade de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	Stock toDomain(StockEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -38,6 +41,7 @@ public interface StockEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Lista de entidades de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<Stock> toDomainList(List<StockEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
@@ -48,7 +52,19 @@ public interface StockEntityMapper {
 	 *            Entidade de domínio
 	 * @return Entidade JPA
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(domain.getAuditInfo().getCreatedAt(), domain.getAuditInfo().getUpdatedAt()))")
 	StockEntity toEntity(Stock domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+	/**
+	 * Converte uma entidade JPA para um DTO.
+	 *
+	 * @param entity
+	 *            Entidade JPA
+	 * @return DTO correspondente
+	 */
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
+	StockDTO toDTO(StockEntity entity);
 
 	@DoIgnore
 	default Stock toDomain(StockEntity entity) {

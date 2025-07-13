@@ -30,6 +30,8 @@ public interface ProductEntityMapper {
 	 * @return DTO correspondente
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
 	ProductDTO toDTO(ProductEntity entity);
 
 	/**
@@ -42,6 +44,7 @@ public interface ProductEntityMapper {
 	 * @return Entidade de domínio
 	 */
 	@Mapping(target = "stock", source = "stock")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	Product toDomain(ProductEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -54,6 +57,7 @@ public interface ProductEntityMapper {
 	 * @return Lista de entidades de domínio
 	 */
 	@Mapping(target = "stock", source = "stock")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<Product> toDomainList(List<ProductEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
@@ -66,20 +70,20 @@ public interface ProductEntityMapper {
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
 	@Mapping(target = "stock", source = "stock")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	ProductEntity toEntity(ProductDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
-	@DoIgnore @Mapping(target = "stock", source = "stock")
+	@DoIgnore
 	default Product toDomain(ProductEntity entity) {
 		return toDomain(entity, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore @Mapping(target = "stock", source = "stock")
+	@DoIgnore
 	default List<Product> toDomainList(List<ProductEntity> entities) {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore @Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
-	@Mapping(target = "stock", source = "stock")
+	@DoIgnore
 	default ProductEntity toEntity(ProductDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());
 	}

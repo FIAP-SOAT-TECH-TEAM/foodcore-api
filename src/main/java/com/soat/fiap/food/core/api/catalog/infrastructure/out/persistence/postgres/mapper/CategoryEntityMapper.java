@@ -30,6 +30,8 @@ public interface CategoryEntityMapper {
 	 * @return DTO correspondente
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
 	CategoryDTO toDTO(CategoryEntity entity);
 	/**
 	 * Converte uma entidade JPA para uma entidade de domínio
@@ -40,6 +42,7 @@ public interface CategoryEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Entidade de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	Category toDomain(CategoryEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -51,6 +54,7 @@ public interface CategoryEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Lista de entidades de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<Category> toDomainList(List<CategoryEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
@@ -63,6 +67,7 @@ public interface CategoryEntityMapper {
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
 	@Mapping(target = "catalog", ignore = true)
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	CategoryEntity toEntity(CategoryDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	@DoIgnore
