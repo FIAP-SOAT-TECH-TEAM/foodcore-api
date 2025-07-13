@@ -2,6 +2,8 @@ package com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +44,7 @@ public class UserResponse {
 	private LocalDateTime updatedAt;
 
 	@Schema(description = "Token JWT", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-	private transient String token;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String token;
 
 }
