@@ -40,7 +40,12 @@ public class OrderPresenter {
 	 * @return Um DTO {@link OrderStatusResponse} com os dados do status do pedido.
 	 */
 	public static OrderStatusResponse toOrderStatusResponse(Order order) {
-		return OrderStatusResponse.builder().orderId(order.getId()).orderStatus(order.getOrderStatus()).build();
+		return OrderStatusResponse.builder()
+				.orderId(order.getId())
+				.orderStatus(order.getOrderStatus())
+				.createdAt(order.getCreatedAt())
+				.updatedAt(order.getUpdatedAt())
+				.build();
 	}
 
 	/**

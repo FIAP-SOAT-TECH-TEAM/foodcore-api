@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response;
 
+import java.time.LocalDateTime;
+
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,4 +19,8 @@ public class OrderStatusResponse {
 	private Long orderId;
 	@Schema(description = "Status do pedido")
 	private OrderStatus orderStatus;
+	@Schema(description = "Data e hora da criação do pedido")
+	private LocalDateTime createdAt;
+	@Schema(description = "Data e hora da atualização do status")
+	private LocalDateTime updatedAt;
 }

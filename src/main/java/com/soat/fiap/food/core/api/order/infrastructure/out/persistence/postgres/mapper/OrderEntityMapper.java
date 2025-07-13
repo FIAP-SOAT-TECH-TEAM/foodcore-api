@@ -26,10 +26,10 @@ public interface OrderEntityMapper {
 
 	List<Order> toDomainList(List<OrderEntity> entities, @Context CycleAvoidingMappingContext context);
 
-	@Mapping(target = "orderItems", source = "items")
+	@Mapping(target = "orderItems", source = "items") @Mapping(target = "orderStatus", source = "status")
 	OrderEntity toEntity(OrderDTO dto, @Context CycleAvoidingMappingContext context);
 
-	@Mapping(target = "items", source = "orderItems")
+	@Mapping(target = "items", source = "orderItems") @Mapping(target = "status", source = "orderStatus")
 	OrderDTO toDTO(OrderEntity entity, @Context CycleAvoidingMappingContext context);
 
 }

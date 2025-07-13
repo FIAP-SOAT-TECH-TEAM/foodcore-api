@@ -18,6 +18,7 @@ public class OrderStatusPresenter {
 	 * @return Um DTO {@link OrderStatusResponse} contendo o ID e o novo status.
 	 */
 	public static OrderStatusResponse toOrderStatusResponse(Order order) {
-		return new OrderStatusResponse(order.getId(), order.getOrderStatus());
+		return new OrderStatusResponse(order.getId(), order.getOrderStatus(), order.getCreatedAt(),
+				order.getUpdatedAt());
 	}
 }
