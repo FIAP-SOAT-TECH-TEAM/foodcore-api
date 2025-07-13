@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderItemPrice;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -51,6 +52,29 @@ public class OrderItem {
 	}
 
 	/**
+	 * Construtor que cria um item de pedido com os dados informados via DTO
+	 *
+	 * @param dto
+	 *            DTO que contém os dados do item do pedido
+	 * @throws NullPointerException
+	 *             se qualquer parâmetro for nulo
+	 */
+	public static OrderItem fromDTO(OrderItemDTO dto) {
+		Objects.requireNonNull(dto, "O DTO do item do pedido não pode ser nulo");
+
+		OrderItemPrice price = new OrderItemPrice(dto.quantity(), dto.price());
+
+		OrderItem item = new OrderItem(dto.productId(), dto.name(), price, dto.observations());
+		item.setId(dto.id());
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			item.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return item;
+	}
+
+	/**
 	 * Validação centralizada.
 	 *
 	 * @param productId
@@ -69,6 +93,13 @@ public class OrderItem {
 		if (name.isEmpty()) {
 			throw new OrderItemException("O nome do item do pedido não pode ser nulo");
 		}
+	}
+
+	/**
+	 * Retorna o id da orderm do item de pedido
+	 */
+	public Long getOrderId() {
+		return this.order.getId();
 	}
 
 	/**

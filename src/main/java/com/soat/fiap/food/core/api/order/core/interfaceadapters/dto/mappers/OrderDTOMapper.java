@@ -16,8 +16,9 @@ public class OrderDTOMapper {
 	public static OrderDTO toDTO(Order order) {
 		List<OrderItemDTO> itemDTOs = order.getOrderItems()
 				.stream()
-				.map(item -> new OrderItemDTO(item.getProductId(), item.getName(), item.getOrderItemPrice().quantity(),
-						item.getOrderItemPrice().unitPrice(), item.getObservations()))
+				.map(item -> new OrderItemDTO(item.getId(), item.getProductId(), item.getName(),
+						item.getOrderItemPrice().quantity(), item.getOrderItemPrice().unitPrice(),
+						item.getObservations(), item.getCreatedAt(), item.getUpdatedAt()))
 				.collect(Collectors.toList());
 
 		return new OrderDTO(order.getId(), order.getUserId(), order.getOrderNumber(), order.getOrderStatus(),

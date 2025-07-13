@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
-import com.soat.fiap.food.core.api.order.core.domain.vo.OrderItemPrice;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
@@ -75,10 +74,7 @@ public class Order {
 	 *             menor ou igual a zero
 	 */
 	public static Order fromDTO(OrderDTO dto) {
-		List<OrderItem> items = dto.items().stream().map(itemDTO -> {
-			OrderItemPrice orderItemPrice = new OrderItemPrice(itemDTO.quantity(), itemDTO.price());
-			return new OrderItem(itemDTO.productId(), itemDTO.name(), orderItemPrice, itemDTO.observations());
-		}).collect(Collectors.toList());
+		List<OrderItem> items = dto.items().stream().map(OrderItem::fromDTO).collect(Collectors.toList());
 
 		Order order = new Order(dto.userId(), items);
 
@@ -88,8 +84,8 @@ public class Order {
 			order.setOrderStatus(dto.status());
 		}
 
-		if (dto.updatedAt() != null) {
-			order.getAuditInfo().setUpdatedAt(dto.updatedAt());
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			order.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
 		}
 
 		return order;
