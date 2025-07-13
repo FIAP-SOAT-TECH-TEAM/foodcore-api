@@ -119,6 +119,27 @@ public class Order {
 	}
 
 	/**
+	 * Define o ID do pedido e atualiza o número do pedido.
+	 *
+	 * @param id
+	 *            ID do pedido
+	 * @throws NullPointerException
+	 *             se o ID for nulo
+	 */
+	public void setId(Long id) {
+		this.id = id;
+		this.rebuildOrderNumber();
+	}
+
+	/**
+	 * Recria o número do pedido com base no ID e no ano atual. Este método é
+	 * chamado sempre que o ID do pedido é definido ou alterado.
+	 */
+	private void rebuildOrderNumber() {
+		this.orderNumber = new OrderNumber(LocalDate.now().getYear(), this.id);
+	}
+
+	/**
 	 * Obtém o número do pedido
 	 *
 	 * @return o número do pedido
