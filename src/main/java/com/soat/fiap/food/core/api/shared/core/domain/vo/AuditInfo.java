@@ -13,8 +13,18 @@ import lombok.Getter;
  */
 @Getter
 public class AuditInfo {
-	private final LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();
 	private LocalDateTime updatedAt = LocalDateTime.now();
+
+	public AuditInfo() {
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
+	}
+
+	public AuditInfo(LocalDateTime createdAt, LocalDateTime updatedAt) {
+		this.createdAt = Objects.requireNonNull(createdAt);
+		setUpdatedAt(updatedAt);
+	}
 
 	/**
 	 * Autualiza o campo updatedAt

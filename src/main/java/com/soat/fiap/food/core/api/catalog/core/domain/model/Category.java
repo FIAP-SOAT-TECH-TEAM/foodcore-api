@@ -73,6 +73,10 @@ public class Category {
 			}
 		}
 
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			category.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
 		return category;
 	}
 
