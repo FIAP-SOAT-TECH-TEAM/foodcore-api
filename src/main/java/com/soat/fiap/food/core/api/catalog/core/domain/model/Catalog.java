@@ -58,6 +58,10 @@ public class Catalog {
 			}
 		}
 
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			catalog.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
 		return catalog;
 	}
 

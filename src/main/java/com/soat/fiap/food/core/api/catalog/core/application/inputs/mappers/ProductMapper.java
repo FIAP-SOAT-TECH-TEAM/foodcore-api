@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers;
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductInput;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
@@ -36,7 +37,10 @@ public class ProductMapper {
 	 * @return Um objeto {@link Product} representando o modelo de domínio.
 	 */
 	public static Product toDomain(ProductInput input) {
-		return new Product(new Details(input.name(), input.description()), input.price(), new ImageUrl(""),
+		Stock stock = new Stock(input.stockQuantity());
+		Product product = new Product(new Details(input.name(), input.description()), input.price(), new ImageUrl(""),
 				input.displayOrder());
+		product.setStock(stock);
+		return product;
 	}
 }

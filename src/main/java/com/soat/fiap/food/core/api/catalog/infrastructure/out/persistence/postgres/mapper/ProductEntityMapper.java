@@ -41,6 +41,7 @@ public interface ProductEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Entidade de domínio
 	 */
+	@Mapping(target = "stock", source = "stock")
 	Product toDomain(ProductEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -52,6 +53,7 @@ public interface ProductEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Lista de entidades de domínio
 	 */
+	@Mapping(target = "stock", source = "stock")
 	List<Product> toDomainList(List<ProductEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
@@ -63,19 +65,21 @@ public interface ProductEntityMapper {
 	 * @return Entidade JPA
 	 */
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	@Mapping(target = "stock", source = "stock")
 	ProductEntity toEntity(ProductDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
-	@DoIgnore
+	@DoIgnore @Mapping(target = "stock", source = "stock")
 	default Product toDomain(ProductEntity entity) {
 		return toDomain(entity, new CycleAvoidingMappingContext());
 	}
 
-	@DoIgnore
+	@DoIgnore @Mapping(target = "stock", source = "stock")
 	default List<Product> toDomainList(List<ProductEntity> entities) {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
 	@DoIgnore @Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
+	@Mapping(target = "stock", source = "stock")
 	default ProductEntity toEntity(ProductDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());
 	}

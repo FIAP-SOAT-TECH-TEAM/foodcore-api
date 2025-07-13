@@ -9,6 +9,7 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers.StockDTOMapper;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -64,8 +65,18 @@ public class Product {
 
 		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
 		product.setId(dto.id());
-		product.setStockQuantity(dto.stockQuantity() != null ? dto.stockQuantity() : 0);
+
+		if (dto.stock() != null) {
+			Stock stock = StockDTOMapper.toDomain(dto.stock());
+			product.setStock(stock);
+		} else {
+			product.setStockQuantity(0);
+		}
 		product.setActive(dto.active());
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			product.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
 
 		return product;
 	}

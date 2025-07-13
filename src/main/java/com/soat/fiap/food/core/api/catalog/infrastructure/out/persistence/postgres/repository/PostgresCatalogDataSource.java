@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CategoryEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.ProductEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.CatalogEntityMapper;
 
 /**
@@ -39,10 +40,22 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	public CatalogDTO save(CatalogDTO catalogDTO) {
 		CatalogEntity entity = catalogEntityMapper.toEntity(catalogDTO);
 
+		// Configura o relacionamento entre as entidades
 		if (entity.getCategories() != null) {
 			for (CategoryEntity category : entity.getCategories()) {
 				category.setCatalog(entity);
+
+				if (category.getProducts() != null) {
+					for (ProductEntity product : category.getProducts()) {
+						product.setCategory(category);
+
+						if (product.getStock() != null) {
+							product.getStock().setProduct(product);
+						}
+					}
+				}
 			}
+
 		}
 
 		CatalogEntity saved = springDataCatalogRepository.save(entity);

@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
@@ -17,7 +19,7 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
  * Mapper que converte entre a entidade JPA CatalogEntity e o DTO CatalogDTO.
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ImageURLMapper.class,
-		CategoryEntityMapper.class})
+		CategoryEntityMapper.class, AuditInfoMapper.class})
 public interface CatalogEntityMapper {
 
 	/**
@@ -29,6 +31,7 @@ public interface CatalogEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Entidade de domínio
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	Catalog toDomain(CatalogEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -50,7 +53,8 @@ public interface CatalogEntityMapper {
 	 *            Entidade JPA
 	 * @return DTO correspondente
 	 */
-
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
 	CatalogDTO toDTO(CatalogEntity entity);
 
 	/**
@@ -60,6 +64,8 @@ public interface CatalogEntityMapper {
 	 *            Lista de entidades JPA
 	 * @return Lista de DTOs
 	 */
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
 	List<CatalogDTO> toDTOList(List<CatalogEntity> entities);
 
 	/**
@@ -69,6 +75,7 @@ public interface CatalogEntityMapper {
 	 *            DTO
 	 * @return Entidade JPA correspondente
 	 */
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	CatalogEntity toEntity(CatalogDTO dto, @Context CycleAvoidingMappingContext context);
 
 	@DoIgnore
