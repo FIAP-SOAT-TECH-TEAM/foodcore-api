@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.GetActiveOrdersSortedController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.GetOrderByIdController;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.SaveOrderController;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
@@ -21,6 +22,7 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPubl
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -67,6 +69,20 @@ public class OrderController {
 		OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, orderDataSource, userDataSource,
 				catalogDataSource, eventPublisherSource);
 		return ResponseEntity.status(201).body(orderResponse);
+	}
+
+	@GetMapping("/{id}")
+	@Operation(summary = "Buscar pedido por ID", description = "Retorna um pedido específico pelo seu ID", security = @SecurityRequirement(name = "bearer-key"), tags = {
+			"Pedidos"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderResponse.class))),
+			@ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)})
+	@Transactional(readOnly = true)
+	public ResponseEntity<OrderResponse> getOrderById(
+			@Parameter(description = "ID do pedido", example = "1", required = true) @PathVariable Long id) {
+		log.debug("Requisição para buscar pedido por ID: {}", id);
+		OrderResponse orderResponse = GetOrderByIdController.getOrderById(id, orderDataSource);
+		return ResponseEntity.ok(orderResponse);
 	}
 
 	@GetMapping("/active")
