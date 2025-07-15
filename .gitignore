@@ -56,3 +56,6 @@ Thumbs.db
 
 # .env
 /docker/.env
+
+# Helm Packages
+/kubernetes/**/*.tgz
