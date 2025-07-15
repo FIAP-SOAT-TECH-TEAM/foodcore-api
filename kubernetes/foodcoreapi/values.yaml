@@ -121,3 +121,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+postgresql:
+  auth:
+    postgresPassword: "Zm9vZGNvcmVhZG1pbg=="
+    username: "Zm9vZGNvcmU="
+    password: "Zm9vZGNvcmVhcHA="
+    database: "Zm9vZGNvcmVhcGk="
