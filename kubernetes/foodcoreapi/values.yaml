@@ -121,3 +121,40 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+# EFK
+
+elasticsearch:
+  name: "elasticsearch"
+
+  replicaCount: 1
+
+  image:
+    repository: docker.elastic.co/elasticsearch/elasticsearch
+    tag: "7.2.0"
+
+  resources:
+    limits:
+      cpu: "1000m"
+    requests:
+      cpu: "100m"
+
+  clusterName: k8s-logs
+  discoverySeedHosts: "es-cluster-0.elasticsearch,es-cluster-1.elasticsearch,es-cluster-2.elasticsearch"
+  initialMasterNodes: "es-cluster-0,es-cluster-1,es-cluster-2"
+  javaOpts: "-Xms512m -Xmx512m"
+
+  storageSize: 3Gi
+
+  hostPath: /mnt/data/elasticsearch
+  mountPath: /var/lib/elasticsearch/data
+
+  ports:
+    rest: 9200
+    interNode: 9300
+    nameApi: rest
+    nameInternal: inter-node
+
+  vm:
+    max_map_count: 262144
