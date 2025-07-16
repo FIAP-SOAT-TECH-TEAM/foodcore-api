@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kibana.fullname" . }}-deploymentset
+  name: {{ include "kibana.fullname" . }}-deployment
   labels:
     app: {{ include "kibana.name" . }}
 spec:
@@ -15,18 +15,21 @@ spec:
         app: {{ include "kibana.name" . }}
     spec:
       containers:
-      - name: {{ include "kibana.name" . }}
-        image: "{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}"
-        resources:
-          limits:
-            cpu: {{ .Values.kibana.resources.limits.cpu }}
-          requests:
-            cpu: {{ .Values.kibana.resources.requests.cpu }}
-        env:
-          - name: ELASTICSEARCH_URL
-            valueFrom:
-              configMapKeyRef:
-                name: {{ include "kibana.fullname" . }}-config
-                key: ELASTICSEARCH_URL
-        ports:
-        - containerPort: {{ .Values.kibana.ports.port }}
+        - name: {{ include "kibana.name" . }}
+          image: "{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.kibana.ports.port }}
+              name: {{ .Values.kibana.ports.name }}
+          volumeMounts:
+            - name: {{ .Values.kibana.volumes.kibana-config.name }}
+              mountPath: {{ .Values.kibana.volumes.kibana-config.mountPath }}
+              subPath: {{ .Values.kibana.volumes.kibana-config.subPath }}
+          resources:
+            limits:
+              cpu: {{ .Values.kibana.resources.limits.cpu }}
+            requests:
+              cpu: {{ .Values.kibana.resources.requests.cpu }}
+      volumes:
+        - name: {{ .Values.kibana.volumes.kibana-config.name }}
+          configMap:
+            name: {{ include "kibana.fullname" . }}-config

@@ -5,4 +5,7 @@ metadata:
   labels:
     app: {{ include "kibana.name" . }}
 data:
-  ELASTICSEARCH_URL: http://{{ include "elasticsearch.fullname" . }}-service:{{ .Values.elasticsearch.ports.rest }}
+  kibana.yml: |
+    server.basePath: "{{ .Values.kibana.serverBasePath }}"
+    server.rewriteBasePath: {{ .Values.kibana.serverRewriteBasePath }}
+    elasticsearch.hosts: ["http://{{ include "elasticsearch.fullname" . }}-service:{{ .Values.elasticsearch.ports.rest }}"]

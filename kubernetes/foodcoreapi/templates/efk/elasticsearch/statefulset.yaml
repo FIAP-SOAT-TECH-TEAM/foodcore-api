@@ -30,7 +30,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: {{ include "elasticsearch.fullname" . }}-pvc
-              mountPath: {{ .Values.elasticsearch.mountPath | quote }}
+              mountPath: {{ .Values.elasticsearch.volumes.elasticvolume.mountPath | quote }}
           env:
             - name: cluster.name
               valueFrom:
@@ -56,16 +56,21 @@ spec:
                 configMapKeyRef:
                   name: {{ include "elasticsearch.fullname" . }}-config
                   key: ES_JAVA_OPTS
+            - name: discovery.type
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "elasticsearch.fullname" . }}-config
+                  key: discovery.type
       
       initContainers:
         - name: fix-permissions
           image: busybox
-          command: ["sh", "-c", "chown -R 1000:1000 {{ .Values.elasticsearch.mountPath }}"]
+          command: ["sh", "-c", "chown -R 1000:1000 {{ .Values.elasticsearch.volumes.elasticvolume.mountPath }}"]
           securityContext:
             privileged: true
           volumeMounts:
             - name: {{ include "elasticsearch.fullname" . }}-pvc
-              mountPath: {{ .Values.elasticsearch.mountPath | quote }}
+              mountPath: {{ .Values.elasticsearch.volumes.elasticvolume.mountPath | quote }}
         - name: increase-vm-max-map
           image: busybox
           command: ["sysctl", "-w", "vm.max_map_count={{ .Values.elasticsearch.vm.max_map_count }}"]
