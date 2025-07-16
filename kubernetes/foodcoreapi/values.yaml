@@ -126,8 +126,24 @@ tolerations: []
 affinity: {}
 
 postgresql:
+  name: "db"
+
+  replicaCount: 1
+  port: 5432
+  image:
+    repository: postgres
+    tag: "16.1"
+    pullPolicy: IfNotPresent
+  
+  storageSize: 10Gi
+  hostPath: /mnt/data/postgresql
+  volumeName: db-volume
+
+  config:
+    maxConnections: 100
+    sharedBuffers: "128MB"
+
   auth:
-    postgresPassword: "Zm9vZGNvcmVhZG1pbg=="
     username: "Zm9vZGNvcmU="
     password: "Zm9vZGNvcmVhcHA="
     database: "Zm9vZGNvcmVhcGk="
