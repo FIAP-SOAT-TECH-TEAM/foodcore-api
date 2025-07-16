@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "fluentd.fullname" . }}-daemonset
+  labels:
+    app: {{ include "fluentd.name" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "fluentd.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "fluentd.name" . }}
+    spec:
+      serviceAccountName: {{ include "fluentd.fullname" . }}-serviceaccount
+      containers:
+        - name: {{ include "fluentd.name" . }}
+          image: "{{ .Values.fluentd.image.repository }}:{{ .Values.fluentd.image.tag }}"
+          env:
+            - name: FLUENT_ELASTICSEARCH_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_ELASTICSEARCH_HOST
+            - name: FLUENT_ELASTICSEARCH_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_ELASTICSEARCH_PORT
+            - name: FLUENT_ELASTICSEARCH_SCHEME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_ELASTICSEARCH_SCHEME
+            - name: FLUENTD_SYSTEMD_CONF
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENTD_SYSTEMD_CONF
+          resources:
+            limits:
+              memory: {{ .Values.fluentd.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.fluentd.resources.requests.cpu }}
+              memory: {{ .Values.fluentd.resources.requests.memory }}
+          volumeMounts:
+            - name: {{ .Values.fluentd.volumes.varlog.name }}
+              mountPath: {{ .Values.fluentd.volumes.varlog.mountPath }}
+            - name: {{ .Values.fluentd.volumes.varlibdockercontainers.name }}
+              mountPath: {{ .Values.fluentd.volumes.varlibdockercontainers.mountPath }}
+              readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: {{ .Values.fluentd.volumes.varlog.name }}
+          hostPath:
+            path: {{ .Values.fluentd.volumes.varlog.hostPath }}
+        - name: {{ .Values.fluentd.volumes.varlibdockercontainers.name }}
+          hostPath:
+            path: {{ .Values.fluentd.volumes.varlibdockercontainers.hostPath }}

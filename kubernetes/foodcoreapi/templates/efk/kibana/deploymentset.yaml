@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kibana.fullname" . }}-deploymentset
+  labels:
+    app: {{ include "kibana.name" . }}
+spec:
+  replicas: {{ .Values.kibana.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "kibana.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "kibana.name" . }}
+    spec:
+      containers:
+      - name: {{ include "kibana.name" . }}
+        image: "{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}"
+        resources:
+          limits:
+            cpu: {{ .Values.kibana.resources.limits.cpu }}
+          requests:
+            cpu: {{ .Values.kibana.resources.requests.cpu }}
+        env:
+          - name: ELASTICSEARCH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "kibana.fullname" . }}-config
+                key: ELASTICSEARCH_URL
+        ports:
+        - containerPort: {{ .Values.kibana.ports.port }}

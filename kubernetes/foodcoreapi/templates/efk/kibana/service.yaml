@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kibana.fullname" . }}-service
+  labels:
+    app: {{ include "kibana.name" . }}
+spec:
+  selector:
+    app: {{ include "kibana.name" . }}
+  ports:
+    - port: {{ .Values.kibana.ports.port }}
+      name: {{ .Values.kibana.ports.name }}

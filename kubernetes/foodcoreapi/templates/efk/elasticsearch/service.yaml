@@ -7,7 +7,6 @@ metadata:
 spec:
   selector:
     app: {{ include "elasticsearch.name" . }}
-  clusterIP: None
   ports:
     - port: {{ .Values.elasticsearch.ports.rest }}
       name: {{ .Values.elasticsearch.ports.nameApi }}
