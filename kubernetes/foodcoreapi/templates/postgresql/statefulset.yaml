@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "postgresql.fullname" . }}-statefulset
+spec:
+  serviceName: {{ include "postgresql.name" . }}
+  replicas: {{ .Values.postgresql.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "postgresql.name" . }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ include "postgresql.name" . }}
+
+    spec:
+      containers:
+      - name: {{ include "postgresql.name" . }}
+        image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+        imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+
+        ports:
+        - name: postgresql
+          containerPort: {{ .Values.postgresql.port }}
+
+        envFrom:
+        - secretRef:
+            name: {{ include "postgresql.fullname" . }}-secrets
+        - configMapRef:
+            name: {{ include "postgresql.fullname" . }}-config
+
+        startupProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 30
+
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        volumeMounts:
+            - name: {{ .Values.postgresql.volumeName }}
+              mountPath: {{ .Values.postgresql.mountPath | quote }}
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.postgresql.volumeName }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: manual
+      resources:
+        requests:
+          storage: {{ .Values.postgresql.storageSize }}
