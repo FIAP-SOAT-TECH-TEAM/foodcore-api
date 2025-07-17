@@ -71,6 +71,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   #nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
+    - host: foodcoreapi.local
     - host: localhost
 
   tls: []
@@ -151,9 +152,9 @@ postgresql:
     sharedBuffers: "128MB"
 
   auth:
-    username: "Zm9vZGNvcmU="
-    password: "Zm9vZGNvcmVhcHA="
-    database: "Zm9vZGNvcmVhcGk="
+    username: "postgres"
+    password: "postgres"
+    database: "fastfood"
 
 adminer:
   name: "adminer"

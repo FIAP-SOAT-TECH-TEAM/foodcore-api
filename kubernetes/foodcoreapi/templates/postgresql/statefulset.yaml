@@ -37,29 +37,21 @@ spec:
               - -c
               - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
           initialDelaySeconds: 10
-          periodSeconds: 5
+          periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
 
         livenessProbe:
-          exec:
-            command:
-              - /bin/sh
-              - -c
-              - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-          initialDelaySeconds: 30
+          tcpSocket:
+            port: {{ .Values.postgresql.port }}
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
 
         readinessProbe:
-          exec:
-            command:
-              - /bin/sh
-              - -c
-              - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          tcpSocket:
+            port: {{ .Values.postgresql.port }}
+          periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
 
