@@ -21,15 +21,15 @@ spec:
             - containerPort: {{ .Values.kibana.ports.port }}
               name: {{ .Values.kibana.ports.name }}
           volumeMounts:
-            - name: {{ .Values.kibana.volumes.kibana-config.name }}
-              mountPath: {{ .Values.kibana.volumes.kibana-config.mountPath }}
-              subPath: {{ .Values.kibana.volumes.kibana-config.subPath }}
+            - name: {{ .Values.kibana.volumes.kibanaconfig.name }}
+              mountPath: {{ .Values.kibana.volumes.kibanaconfig.mountPath }}
+              subPath: {{ .Values.kibana.volumes.kibanaconfig.subPath }}
           resources:
             limits:
               cpu: {{ .Values.kibana.resources.limits.cpu }}
             requests:
               cpu: {{ .Values.kibana.resources.requests.cpu }}
       volumes:
-        - name: {{ .Values.kibana.volumes.kibana-config.name }}
+        - name: {{ .Values.kibana.volumes.kibanaconfig.name }}
           configMap:
             name: {{ include "kibana.fullname" . }}-config

@@ -63,6 +63,7 @@ ingress:
   className: "nginx"
   annotations: {
     #nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/service-upstream: "true"
   }
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -221,10 +222,12 @@ kibana:
       cpu: 100m
 
   volumes:
-    kibana-config:
+    kibanaconfig:
       name: kibana-config
       mountPath: /usr/share/kibana/config/kibana.yml
-      subPath: kibana.yml
+      subPath: "kibana.yml"
 
+    
   serverBasePath: /kibana
   serverRewriteBasePath: true
+  serverHost: "0.0.0.0"
