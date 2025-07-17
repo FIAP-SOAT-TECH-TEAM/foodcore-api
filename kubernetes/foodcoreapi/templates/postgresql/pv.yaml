@@ -12,8 +12,6 @@ spec:
     - ReadWriteOnce
   
   persistentVolumeReclaimPolicy: Retain
-
-  storageClassName: manual
-  
+  storageClassName: {{ .Values.postgresql.volumes.postgrevolume.storageClassName }}
   hostPath:
-    path: {{ .Values.postgresql.hostPath | quote }}
+    path: {{ .Values.postgresql.volumes.postgrevolume.hostPath | quote }}

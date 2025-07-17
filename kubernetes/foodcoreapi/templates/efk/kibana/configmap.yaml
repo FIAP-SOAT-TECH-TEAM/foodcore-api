@@ -7,6 +7,6 @@ metadata:
 data:
   kibana.yml: |
     server.host: {{ .Values.kibana.serverHost }}
-    server.basePath: "{{ .Values.kibana.serverBasePath }}"
+    server.basePath: "{{ .Values.kibana.ingress.path }}"
     server.rewriteBasePath: {{ .Values.kibana.serverRewriteBasePath }}
     elasticsearch.hosts: ["http://{{ include "elasticsearch.fullname" . }}-service:{{ .Values.elasticsearch.ports.rest }}"]

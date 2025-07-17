@@ -8,5 +8,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.elasticsearch.volumes.elasticvolume.storageClassName }}
   hostPath:
     path: {{ .Values.elasticsearch.volumes.elasticvolume.hostPath | quote }}

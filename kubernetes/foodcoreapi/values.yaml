@@ -72,9 +72,7 @@ ingress:
   #nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: localhost
-      paths:
-        - path: /kibana
-          pathType: Prefix
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -131,7 +129,7 @@ tolerations: []
 affinity: {}
 
 postgresql:
-  name: "db"
+  name: "postgresql"
 
   replicaCount: 1
   port: 5432
@@ -141,8 +139,12 @@ postgresql:
     pullPolicy: IfNotPresent
 
   storageSize: 10Gi
-  hostPath: /mnt/data/postgresql
-  volumeName: db-volume
+
+  volumes:
+    postgrevolume:
+      hostPath: /mnt/data/postgresql
+      mountPath: /var/lib/postgresql/data
+      storageClassName: manual
 
   config:
     maxConnections: 100
@@ -168,7 +170,6 @@ adminer:
     name: adminer
     protocol: TCP
 
-  defaultServer: {{ .Values.postgresql.name | default "db" | quote }}
   design: "pepa-linha"
   
   resources:
@@ -178,6 +179,10 @@ adminer:
     limits:
       memory: "128Mi"
       cpu: "100m"
+  
+  ingress:
+    path: /adminer
+    pathType: Prefix
 
 # EFK
 
@@ -208,6 +213,7 @@ elasticsearch:
     elasticvolume:
       hostPath: /mnt/data/elasticsearch
       mountPath: /var/lib/elasticsearch/data
+      storageClassName: manual
 
   ports:
     rest: 9200
@@ -270,9 +276,11 @@ kibana:
     kibanaconfig:
       name: kibana-config
       mountPath: /usr/share/kibana/config/kibana.yml
-      subPath: "kibana.yml"
+      subPath: kibana.yml
 
-    
-  serverBasePath: /kibana
+  ingress:
+    path: /kibana
+    pathType: Prefix
+
   serverRewriteBasePath: true
   serverHost: "0.0.0.0"

@@ -64,15 +64,17 @@ spec:
           failureThreshold: 3
 
         volumeMounts:
-            - name: {{ .Values.postgresql.volumeName }}
-              mountPath: {{ .Values.postgresql.mountPath | quote }}
+            - name: {{ include "postgresql.fullname" . }}-pvc
+              mountPath: {{ .Values.postgresql.volumes.postgrevolume.mountPath | quote }}
 
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.postgresql.volumeName }}
+      name: {{ include "postgresql.fullname" . }}-pvc
+      labels:
+        app: {{ include "postgresql.name" . }}
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: manual
+      storageClassName: {{ .Values.postgresql.volumes.postgrevolume.storageClassName }}
       resources:
         requests:
           storage: {{ .Values.postgresql.storageSize }}

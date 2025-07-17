@@ -28,14 +28,15 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          {{- $services := (include "ingress.services" $ | fromYamlArray) }}
+          {{- range $svc := $services }}
+          - path: {{ $svc.path }}
+            pathType: {{ $svc.pathType }}
             backend:
               service:
-                name: {{ include "kibana.fullname" $ }}-service
+                name: {{ $svc.name }}
                 port:
-                  number: {{ $.Values.kibana.ports.port }}
+                  number: {{ $svc.port }}
           {{- end }}
     {{- end }}
 {{- end }}

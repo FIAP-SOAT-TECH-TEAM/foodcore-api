@@ -30,7 +30,13 @@ spec:
               cpu: "{{ .Values.adminer.resources.limits.cpu }}"
           env:
             - name: ADMINER_DEFAULT_SERVER
-              value: {{ .Values.adminer.defaultServer | default "db" | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "adminer.fullname" . }}-config
+                  key: adminerDefaultServer
 
             - name: ADMINER_DESIGN
-              value: {{ .Values.adminer.design | default "pepa-linha" | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "adminer.fullname" . }}-config
+                  key: adminerDesign
