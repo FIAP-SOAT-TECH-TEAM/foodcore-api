@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "adminer.name" . }}-service
+  labels:
+    app: {{ include "adminer.name" . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.adminer.ports.port }}
+      targetPort: {{ .Values.adminer.ports.port }}
+      protocol: {{ .Values.adminer.ports.protocol }}
+      name: {{ .Values.adminer.ports.name }}
+  selector:
+    app: {{ include "adminer.name" . }}
