@@ -66,7 +66,7 @@ spec:
         app: {{ include "postgresql.name" . }}
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: {{ .Values.postgresql.volumes.postgrevolume.storageClassName }}
+      storageClassName: {{ include "storageclass.fullname" . }}-storageclass
       resources:
         requests:
           storage: {{ .Values.postgresql.storageSize }}

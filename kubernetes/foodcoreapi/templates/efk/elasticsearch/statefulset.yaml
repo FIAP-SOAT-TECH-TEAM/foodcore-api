@@ -89,7 +89,7 @@ spec:
         app: {{ include "elasticsearch.name" . }}
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: {{ .Values.elasticsearch.volumes.elasticvolume.storageClassName }}
+      storageClassName: {{ include "storageclass.fullname" . }}-storageclass
       resources:
         requests:
           storage: {{ .Values.elasticsearch.storageSize }}

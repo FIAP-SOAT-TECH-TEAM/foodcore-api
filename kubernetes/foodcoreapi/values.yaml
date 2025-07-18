@@ -128,9 +128,9 @@ tolerations: []
 
 affinity: {}
 
-metrics-server:
-  args:
-    - --kubelet-insecure-tls #TODO: Remover isso ao migrar para AWS. AWS ja tem o metrics-server instalado
+# metrics-server:
+#   args:
+#     - --kubelet-insecure-tls #TODO: Remover isso ao migrar para AWS. AWS ja tem o metrics-server instalado
 
 api:
   name: api
@@ -198,7 +198,7 @@ postgresql:
     postgrevolume:
       hostPath: /mnt/data/postgresql
       mountPath: /var/lib/postgresql/data
-      storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
+      # storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
 
   config:
     maxConnections: 100
@@ -267,7 +267,7 @@ elasticsearch:
     elasticvolume:
       hostPath: /mnt/data/elasticsearch
       mountPath: /var/lib/elasticsearch/data
-      storageClassName: manual
+      # storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
 
   ports:
     rest: 9200
@@ -338,3 +338,12 @@ kibana:
 
   serverRewriteBasePath: true
   serverHost: "0.0.0.0"
+
+
+storageClass:
+  name: ebs-ext4-sc
+  type: gp3
+  fsType: ext4
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+  allowVolumeExpansion: true
