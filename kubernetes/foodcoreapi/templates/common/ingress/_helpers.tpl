@@ -7,6 +7,10 @@
 {{- end }}
 
 {{- define "ingress.services" -}}
+- name: {{ printf "%s-service" (include "api.fullname" .) }}
+  port: {{ .Values.api.ports.port }}
+  path: {{ .Values.api.ingress.path }}
+  pathType: {{ .Values.api.ingress.pathType }}
 - name: {{ printf "%s-service" (include "kibana.fullname" .) }}
   port: {{ .Values.kibana.ports.port }}
   path: {{ .Values.kibana.ingress.path }}

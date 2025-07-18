@@ -71,7 +71,6 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   #nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: foodcoreapi.local
     - host: localhost
 
   tls: []
@@ -128,6 +127,49 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+api:
+  name: foodcoreapi
+
+  replicaCount: 1
+
+  image:
+    repository: ferrarezzodev/foodcoreapi-monolito-cleanarch
+    tag: latest
+
+  ports:
+    port: 9090
+    name: http
+
+  resources:
+    limits:
+      cpu: 1000m
+    requests:
+      cpu: 100m
+
+  ingress:
+    path: /api
+    pathType: Prefix
+
+  mercadoPago:
+    baseUrl: https://api.mercadopago.com
+    token: APP_USR-6067894635102235-051018-411ad7e519a24f5652d328ba205a2b9a-2430659417
+    userId: "2430659417"
+    posId: POCMP001POS001
+  
+  server:
+    port: 9090
+    profilesActive: "prod"
+
+  azure:
+    blob:
+      connectionString: DefaultEndpointsProtocol=https;AccountName=fastfoodcoreapi;AccountKey=zdptHpyapo/jatHe2DdaajF1zUv7UzC6T81NAWtKCHoEL4NJNOEqiJ7iFxyjutnaAwlUL5i7Ri4P+ASt9KfI4g==;EndpointSuffix=core.windows.net
+      containerName: images
+  
+  auth:
+    jwt:
+      secret: UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==
+      expirationTime: "10"
 
 postgresql:
   name: "postgresql"
