@@ -2,5 +2,8 @@ dependencies:
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 4.13.0
-digest: sha256:a360c1f3abca38532ab58b1d8cc590450fcbd78fbaa39521cd50ebaa1dafcd27
-generated: "2025-07-15T23:19:18.236129983-03:00"
+- name: metrics-server
+  repository: https://kubernetes-sigs.github.io/metrics-server/
+  version: 3.12.1
+digest: sha256:bd459a8d1062ffff7c58e18d9fa33b2785f367edf3f94a8f28c3cc89956dd109
+generated: "2025-07-18T08:20:58.735711868-03:00"

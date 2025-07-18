@@ -128,8 +128,12 @@ tolerations: []
 
 affinity: {}
 
+metrics-server:
+  args:
+    - --kubelet-insecure-tls #TODO: Remover isso ao migrar para AWS. AWS ja tem o metrics-server instalado
+
 api:
-  name: foodcoreapi
+  name: api
 
   replicaCount: 1
 
@@ -171,6 +175,13 @@ api:
       secret: UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==
       expirationTime: "10"
 
+  hpa:
+    minReplicas: 1
+    maxReplicas: 5
+    cpu:
+      utilization:
+        averageUtilization: 30
+
 postgresql:
   name: "postgresql"
 
@@ -187,7 +198,7 @@ postgresql:
     postgrevolume:
       hostPath: /mnt/data/postgresql
       mountPath: /var/lib/postgresql/data
-      storageClassName: manual
+      storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
 
   config:
     maxConnections: 100
