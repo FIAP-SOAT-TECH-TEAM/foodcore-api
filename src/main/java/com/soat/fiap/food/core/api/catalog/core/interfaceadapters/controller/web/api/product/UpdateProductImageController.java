@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
@@ -37,7 +38,7 @@ public class UpdateProductImageController {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload da imagem
 	 */
-	public static void updateProductImage(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
+	public static Product updateProductImage(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 		log.debug("Atualizando imagem do produto ID: {}", productId);
 
@@ -48,6 +49,9 @@ public class UpdateProductImageController {
 		var catalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
 				imageFile, catalogGateway, imageStorageGateway);
 
-		catalogGateway.save(catalog);
+		var savedProduct = catalogGateway.save(catalog);
+
+		return savedProduct.getProductById(productId);
+
 	}
 }

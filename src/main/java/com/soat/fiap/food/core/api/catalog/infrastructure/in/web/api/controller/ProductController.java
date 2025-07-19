@@ -44,7 +44,7 @@ public class ProductController {
 		this.eventPublisherSource = eventPublisherSource;
 	}
 
-	@PostMapping("/{catalogId}/categories/products")
+	@PostMapping(value = "/{catalogId}/categories/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Operation(summary = "Criar novo produto", description = "Cria um novo produto vinculado a uma categoria existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
 			"Produtos"})
 	@ApiResponses(value = {
@@ -55,11 +55,16 @@ public class ProductController {
 	@Tag(name = "Produtos", description = "Operações para gerenciamento de produtos") @Transactional
 	public ResponseEntity<ProductResponse> createProduct(
 			@Parameter(description = "ID do catálogo", example = "1", required = true) @PathVariable Long catalogId,
-			@Valid @RequestBody ProductRequest request) {
+			@RequestPart("data") @Valid ProductRequest request,
+			@RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 		log.debug("Requisição para criar novo produto na categoria {} do catálogo {}", request.getCategoryId(),
 				catalogId);
-		ProductResponse response = SaveProductController.saveProduct(catalogId, request, catalogDataSource,
-				eventPublisherSource);
+		FileUploadDTO imageUpload = null;
+		if (imageFile != null && !imageFile.isEmpty()) {
+			imageUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
+		}
+		ProductResponse response = SaveProductController.saveProduct(catalogId, request, imageUpload, catalogDataSource,
+				imageDataSource, eventPublisherSource);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
