@@ -1,11 +1,10 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
@@ -38,7 +37,7 @@ public class UpdateProductImageController {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload da imagem
 	 */
-	public static void updateProductImage(Long catalogId, Long categoryId, Long productId, MultipartFile imageFile,
+	public static void updateProductImage(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 		log.debug("Atualizando imagem do produto ID: {}", productId);
 

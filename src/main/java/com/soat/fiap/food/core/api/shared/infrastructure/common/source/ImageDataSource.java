@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.common.source;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 
 /**
  * DataSource para persistência de imagens.
@@ -20,7 +20,7 @@ public interface ImageDataSource {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload
 	 */
-	String uploadImage(String path, MultipartFile file);
+	String uploadImage(String path, FileUploadDTO file);
 
 	/**
 	 * Exclui uma imagem do serviço de armazenamento com base em sua URL pública.

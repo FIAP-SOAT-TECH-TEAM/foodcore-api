@@ -1,15 +1,15 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.out.persistence.azureblobstorage.repository;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.out.persistence.azureblobstorage.config.AzureStorageProperties;
 
@@ -39,12 +39,10 @@ public class AzureBlobStorageDataSource implements ImageDataSource {
 	 *             se ocorrer uma falha ao realizar o upload
 	 */
 	@Override
-	public String uploadImage(String path, MultipartFile file) {
+	public String uploadImage(String path, FileUploadDTO file) {
 		log.info("Iniciando upload da imagem para o Azure Blob Storage...");
 
 		try {
-			String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
-
 			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
 					.connectionString(properties.getConnectionString())
 					.buildClient();
@@ -57,13 +55,15 @@ public class AzureBlobStorageDataSource implements ImageDataSource {
 				containerClient.create();
 			}
 
+			String fileName = UUID.randomUUID() + "-" + file.fileName();
 			BlobClient blobClient = containerClient.getBlobClient(path + "/" + fileName);
-			blobClient.upload(file.getInputStream(), file.getSize(), true);
+
+			blobClient.upload(new ByteArrayInputStream(file.content()), file.content().length, true);
 
 			log.info("Upload concluído com sucesso. URL: {}", blobClient.getBlobUrl());
 			return blobClient.getBlobUrl();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Erro ao fazer upload da imagem para o Azure Blob", e);
 			throw new RuntimeException("Erro ao fazer upload da imagem para o Azure Blob", e);
 		}

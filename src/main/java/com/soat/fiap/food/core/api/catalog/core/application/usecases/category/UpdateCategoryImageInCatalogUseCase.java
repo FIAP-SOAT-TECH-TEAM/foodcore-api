@@ -1,10 +1,9 @@
 package com.soat.fiap.food.core.api.catalog.core.application.usecases.category;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class UpdateCategoryImageInCatalogUseCase {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload da imagem
 	 */
-	public static Catalog updateCategoryImageInCatalog(Long catalogId, Long categoryId, MultipartFile imageFile,
+	public static Catalog updateCategoryImageInCatalog(Long catalogId, Long categoryId, FileUploadDTO imageFile,
 			CatalogGateway catalogGateway, ImageStorageGateway imageStorageGateway) {
 		var catalog = catalogGateway.findById(catalogId);
 
@@ -45,7 +44,7 @@ public class UpdateCategoryImageInCatalogUseCase {
 			throw new CatalogNotFoundException("Catalogo", catalogId);
 		}
 
-		if (imageFile == null || imageFile.isEmpty()) {
+		if (imageFile == null) {
 			log.warn("Tentativa de upload de imagem com arquivo vazio ou nulo");
 			throw new IllegalArgumentException("O arquivo de imagem não pode ser vazio");
 		}

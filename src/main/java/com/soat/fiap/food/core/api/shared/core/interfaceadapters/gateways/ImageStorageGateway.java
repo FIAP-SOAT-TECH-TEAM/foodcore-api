@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ public class ImageStorageGateway {
 	 * @throws RuntimeException
 	 *             se ocorrer uma falha ao realizar o upload
 	 */
-	public String uploadImage(String path, MultipartFile file) {
+	public String uploadImage(String path, FileUploadDTO file) {
 		var url = imageDataSource.uploadImage(path, file);
 		log.debug("Nova imagem enviada para o caminho: {}", path);
 		return url;

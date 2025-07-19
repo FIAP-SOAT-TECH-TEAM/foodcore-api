@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,9 +50,16 @@ public class CategoryController {
 			@ApiResponse(responseCode = "409", description = "Categoria com nome já existente no catálogo", content = @Content)})
 	@Tag(name = "Categorias", description = "Operações para gerenciamento de categorias de produtos") @Transactional
 	public ResponseEntity<CategoryResponse> createCategory(@RequestPart("data") @Valid CategoryRequest request,
-			@RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+			@RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 		log.debug("Requisição para criar nova categoria no catálogo: {}", request.getCatalogId());
-		CategoryResponse response = SaveCategoryController.saveCategory(request, imageFile, catalogDataSource,
+
+		FileUploadDTO fileUpload = null;
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
+		}
+
+		CategoryResponse response = SaveCategoryController.saveCategory(request, fileUpload, catalogDataSource,
 				imageDataSource);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
@@ -134,9 +143,16 @@ public class CategoryController {
 			@Parameter(description = "ID do catálogo", example = "1", required = true) @PathVariable Long catalogId,
 			@Parameter(description = "ID da categoria", example = "10", required = true) @PathVariable Long categoryId,
 			@Parameter(description = "Arquivo da nova imagem", required = true)
-			@RequestPart("imageFile") MultipartFile imageFile) {
+			@RequestPart("imageFile") MultipartFile imageFile) throws IOException {
 		log.debug("Requisição para atualizar imagem da categoria {} do catálogo {}", categoryId, catalogId);
-		UpdateCategoryImageController.updateCategoryImage(catalogId, categoryId, imageFile, catalogDataSource,
+
+		FileUploadDTO fileUpload = null;
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
+		}
+
+		UpdateCategoryImageController.updateCategoryImage(catalogId, categoryId, fileUpload, catalogDataSource,
 				imageDataSource);
 		return ResponseEntity.noContent().build();
 	}

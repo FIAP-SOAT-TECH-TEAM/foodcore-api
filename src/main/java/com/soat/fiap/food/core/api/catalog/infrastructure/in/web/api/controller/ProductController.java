@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
@@ -147,10 +149,17 @@ public class ProductController {
 			@PathVariable Long categoryId,
 			@Parameter(description = "ID do produto", example = "100", required = true) @PathVariable Long productId,
 			@Parameter(description = "Arquivo da nova imagem", required = true)
-			@RequestPart("imageFile") MultipartFile imageFile) {
+			@RequestPart("imageFile") MultipartFile imageFile) throws IOException {
 		log.debug("Requisição para atualizar imagem do produto {} na categoria {} do catálogo {}", productId,
 				categoryId, catalogId);
-		UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, imageFile, catalogDataSource,
+
+		FileUploadDTO fileUpload = null;
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
+		}
+
+		UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, fileUpload, catalogDataSource,
 				imageDataSource);
 		return ResponseEntity.noContent().build();
 	}
