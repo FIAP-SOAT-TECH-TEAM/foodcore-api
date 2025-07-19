@@ -28,8 +28,12 @@ public class SaveProductController {
 	 *            ID do catálogo
 	 * @param productRequest
 	 *            Produto a ser salvo
+	 * @param imageFile
+	 *            Arquivo de imagem para o produto
 	 * @param catalogDataSource
-	 *            Origem de dados
+	 *            Origem de dados para o gateway de catálogo
+	 * @param imageDataSource
+	 *            Origem de dados para o gateway de imagens
 	 * @param eventPublisherSource
 	 *            Origem de publicação de eventos
 	 * @return Produto salvo com identificadores atualizados

@@ -23,8 +23,12 @@ public class SaveCategoryController {
 	 *
 	 * @param categoryRequest
 	 *            Categoria a ser salva
+	 * @param imageFile
+	 *            Arquivo de imagem para a categoria
 	 * @param catalogDataSource
 	 *            Origem de dados para o gateway
+	 * @param imageDataSource
+	 *            Origem de dados para o gateway de imagens
 	 * @return Categoria salva com identificadores atualizados
 	 */
 	public static CategoryResponse saveCategory(CategoryRequest categoryRequest, FileUploadDTO imageFile,
