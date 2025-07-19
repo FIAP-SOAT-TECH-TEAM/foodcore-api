@@ -24,4 +24,14 @@ public class Role {
 		role.setName(RoleType.USER.name());
 		return role;
 	}
+
+	/**
+	 * Cria uma instância padrão de Role com o tipo GUEST.
+	 */
+	public static Role guestRole() {
+		Role role = new Role();
+		role.setId((long) RoleType.GUEST.getId());
+		role.setName(RoleType.GUEST.name());
+		return role;
+	}
 }
