@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
 
@@ -34,7 +36,7 @@ class UpdateProductImageInCategoryUseCaseTest {
 	private MultipartFile imageFile;
 
 	@Test @DisplayName("Deve atualizar imagem do produto com sucesso")
-	void shouldUpdateProductImageSuccessfully() {
+	void shouldUpdateProductImageSuccessfully() throws IOException {
 		// Arrange
 		var catalog = CatalogFixture.createCatalogWithProducts();
 		var catalogId = 1L;
@@ -44,20 +46,22 @@ class UpdateProductImageInCategoryUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
 		var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
-				imageFile, catalogGateway, imageStorageGateway);
+				fileUploadDTO, catalogGateway, imageStorageGateway);
 
 		// Assert
 		assertThat(result).isNotNull();
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve excluir imagem anterior quando produto já possui imagem")
-	void shouldDeletePreviousImageWhenProductAlreadyHasImage() {
+	void shouldDeletePreviousImageWhenProductAlreadyHasImage() throws IOException {
 		// Arrange
 		var catalog = CatalogFixture.createCatalogWithProducts();
 		var product = catalog.getProductFromCategoryById(1L, 1L);
@@ -70,16 +74,18 @@ class UpdateProductImageInCategoryUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
 		var result = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
-				imageFile, catalogGateway, imageStorageGateway);
+				fileUploadDTO, catalogGateway, imageStorageGateway);
 
 		// Assert
 		assertThat(result).isNotNull();
 		verify(imageStorageGateway).deleteImage("products/1/old-image.jpg");
-		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
@@ -88,12 +94,13 @@ class UpdateProductImageInCategoryUseCaseTest {
 		var catalogId = 999L;
 		var categoryId = 1L;
 		var productId = 1L;
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.empty());
 
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
-				productId, imageFile, catalogGateway, imageStorageGateway))
+				productId, fileUploadDTO, catalogGateway, imageStorageGateway))
 				.isInstanceOf(CatalogNotFoundException.class);
 
 		verify(catalogGateway).findById(catalogId);
@@ -130,9 +137,12 @@ class UpdateProductImageInCategoryUseCaseTest {
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(true);
 
+		FileUploadDTO fileUploadDTO = new FileUploadDTO(null, new byte[0]);
+
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
-				productId, imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
+				productId, fileUploadDTO, catalogGateway, imageStorageGateway))
+				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("O arquivo de imagem não pode ser vazio");
 
 		verify(catalogGateway).findById(catalogId);
@@ -149,15 +159,18 @@ class UpdateProductImageInCategoryUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile)))
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO)))
 				.thenThrow(new RuntimeException("Erro no upload"));
 
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
-				productId, imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
+				productId, fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
 				.hasMessageContaining("Falha ao processar imagem");
 
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("products/" + productId, imageFile);
+		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
 	}
 }
