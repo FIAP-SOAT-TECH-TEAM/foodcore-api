@@ -61,6 +61,7 @@ public class User {
 	public static User fromDTO(UserDTO dto) {
 		User user = new User();
 		user.setId(dto.id());
+		user.setName(dto.name());
 		user.setUsername(dto.username());
 		user.setEmail(dto.email());
 		user.setPassword(dto.password());
@@ -183,7 +184,7 @@ public class User {
 			if (!this.email.contains("@")) {
 				throw new UserException("Email inválido");
 			}
-			if (hasName()) {
+			if (!hasName()) {
 				throw new UserException("Nome é obrigatório");
 			}
 		}
