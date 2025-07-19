@@ -13,7 +13,8 @@ public class CatalogDTOMapper {
 	/**
 	 * Converte um CatalogDTO para um objeto Catalog.
 	 *
-	 * @param dto o CatalogDTO a ser convertido
+	 * @param dto
+	 *            o CatalogDTO a ser convertido
 	 * @return o objeto Catalog correspondente
 	 */
 	public static Catalog toDomain(CatalogDTO dto) {
@@ -28,7 +29,8 @@ public class CatalogDTOMapper {
 	/**
 	 * Converte um objeto Catalog para um CatalogDTO.
 	 *
-	 * @param catalog o objeto Catalog a ser convertido
+	 * @param catalog
+	 *            o objeto Catalog a ser convertido
 	 * @return o CatalogDTO correspondente
 	 */
 	public static CatalogDTO toDTO(Catalog catalog) {

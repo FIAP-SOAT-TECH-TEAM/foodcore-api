@@ -7,8 +7,8 @@ import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 
 /**
- * DTO (Data Transfer Object) para Payment.
- * Este objeto é usado para transferir dados entre camadas da aplicação.
+ * DTO (Data Transfer Object) para Payment. Este objeto é usado para transferir
+ * dados entre camadas da aplicação.
  */
 public record PaymentDTO(Long id, Long userId, Long orderId, PaymentMethod type, LocalDateTime expiresIn, String tid,
 		BigDecimal amount, String qrCode, PaymentStatus status, LocalDateTime paidAt, String observations,

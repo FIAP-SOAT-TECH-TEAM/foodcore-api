@@ -8,7 +8,8 @@ public class StockDTOMapper {
 	/**
 	 * Converte um StockDTO para um objeto de dominio Stock.
 	 *
-	 * @param dto o StockDTO a ser convertido
+	 * @param dto
+	 *            o StockDTO a ser convertido
 	 * @return o objeto Stock correspondente
 	 */
 	public static Stock toDomain(StockDTO dto) {
@@ -18,7 +19,8 @@ public class StockDTOMapper {
 	/**
 	 * Converte um objeto Stock para um StockDTO.
 	 *
-	 * @param stock o objeto Stock a ser convertido
+	 * @param stock
+	 *            o objeto Stock a ser convertido
 	 * @return o StockDTO correspondente
 	 */
 	public static StockDTO toDTO(Stock stock) {

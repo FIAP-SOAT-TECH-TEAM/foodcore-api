@@ -9,7 +9,8 @@ public class ProductDTOMapper {
 	/**
 	 * Converte um ProductDTO para um objeto de dominio Product.
 	 *
-	 * @param dto o ProductDTO a ser convertido
+	 * @param dto
+	 *            o ProductDTO a ser convertido
 	 * @return o objeto Product correspondente
 	 */
 	public static Product toDomain(ProductDTO dto) {
@@ -19,7 +20,8 @@ public class ProductDTOMapper {
 	/**
 	 * Converte um objeto Product para um ProductDTO.
 	 *
-	 * @param product o objeto Product a ser convertido
+	 * @param product
+	 *            o objeto Product a ser convertido
 	 * @return o ProductDTO correspondente
 	 */
 	public static ProductDTO toDTO(Product product) {

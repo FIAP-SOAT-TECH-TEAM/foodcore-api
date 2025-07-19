@@ -12,7 +12,8 @@ public class CategoryDTOMapper {
 	/**
 	 * Converts a CategoryDTO to a Category domain object.
 	 *
-	 * @param dto the CategoryDTO to be converted
+	 * @param dto
+	 *            the CategoryDTO to be converted
 	 * @return the corresponding Category domain object
 	 */
 	public static Category toDomain(CategoryDTO dto) {
@@ -22,7 +23,8 @@ public class CategoryDTOMapper {
 	/**
 	 * Converte a Category domain object para CategoryDTO.
 	 *
-	 * @param category categoria a ser convertida
+	 * @param category
+	 *            categoria a ser convertida
 	 * @return o CategoryDTO correspondente
 	 */
 	public static CategoryDTO toDTO(Category category) {
