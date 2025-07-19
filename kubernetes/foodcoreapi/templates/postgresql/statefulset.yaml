@@ -55,6 +55,13 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
 
+        env:
+          - name: PGDATA
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "postgresql.fullname" . }}-config
+                key: PGDATA
+                
         volumeMounts:
             - name: {{ include "postgresql.fullname" . }}-pvc
               mountPath: {{ .Values.postgresql.volumes.postgrevolume.mountPath | quote }}

@@ -70,13 +70,22 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   #nginx.ingress.kubernetes.io/rewrite-target: /
+
   hosts:
-    - host: localhost
+    - host: foodcoreapi.eastus.cloudapp.azure.com
 
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+ingress-nginx:
+  controller:
+    service:
+      annotations:
+        # Health Check para o Azure Load Balancer
+        service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      loadBalancerIP: 4.236.134.239
 
 resources:
   {}
@@ -127,10 +136,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-# metrics-server:
-#   args:
-#     - --kubelet-insecure-tls #TODO: Remover isso ao migrar para AWS. AWS ja tem o metrics-server instalado
 
 api:
   name: api
@@ -196,9 +201,8 @@ postgresql:
 
   volumes:
     postgrevolume:
-      hostPath: /mnt/data/postgresql
+      dataFolder: pgdata
       mountPath: /var/lib/postgresql/data
-      # storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
 
   config:
     maxConnections: 100
@@ -265,9 +269,7 @@ elasticsearch:
 
   volumes:
     elasticvolume:
-      hostPath: /mnt/data/elasticsearch
       mountPath: /var/lib/elasticsearch/data
-      # storageClassName: manual #TODO: Remover isso ao migrar para AWS. Criaremos um storageClass genérico para o EBS
 
   ports:
     rest: 9200
@@ -341,9 +343,11 @@ kibana:
 
 
 storageClass:
-  name: ebs-ext4-sc
-  type: gp3
-  fsType: ext4
+  name: azure-disk
+  skuName: Standard_LRS
+  kind: Managed
+  cachingMode: ReadOnly
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
   allowVolumeExpansion: true
+  fsType: ext4
