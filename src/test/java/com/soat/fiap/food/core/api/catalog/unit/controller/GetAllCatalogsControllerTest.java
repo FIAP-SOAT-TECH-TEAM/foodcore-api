@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog.GetAllCatalogsController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers.CatalogDTOMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
 
@@ -27,7 +28,9 @@ class GetAllCatalogsControllerTest {
 	void shouldReturnCatalogListSuccessfully() {
 		// Arrange
 		var catalogs = List.of(CatalogFixture.createValidCatalog(), CatalogFixture.createEmptyCatalog());
-		when(catalogDataSource.findAll()).thenReturn(catalogs);
+		var catalogsDTOs = catalogs.stream().map(CatalogDTOMapper::toDTO).toList();
+
+		when(catalogDataSource.findAll()).thenReturn(catalogsDTOs);
 
 		// Act
 		var response = assertDoesNotThrow(() -> GetAllCatalogsController.getAllCatalogs(catalogDataSource));
@@ -57,7 +60,9 @@ class GetAllCatalogsControllerTest {
 	void shouldExecuteSearchWithoutThrowingException() {
 		// Arrange
 		var catalogs = List.of(CatalogFixture.createCatalogWithCategories());
-		when(catalogDataSource.findAll()).thenReturn(catalogs);
+		var catalogsDTOs = catalogs.stream().map(CatalogDTOMapper::toDTO).toList();
+
+		when(catalogDataSource.findAll()).thenReturn(catalogsDTOs);
 
 		// Act & Assert
 		assertDoesNotThrow(() -> GetAllCatalogsController.getAllCatalogs(catalogDataSource));

@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.catalog.SaveCatalogController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers.CatalogDTOMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CatalogRequest;
 import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
@@ -28,7 +30,9 @@ class SaveCatalogControllerTest {
 		// Arrange
 		var catalogRequest = CatalogRequest.builder().name("Lanche").build();
 		var catalog = CatalogFixture.createValidCatalog();
-		when(catalogDataSource.save(any())).thenReturn(catalog);
+		CatalogDTO catalogDTO = CatalogDTOMapper.toDTO(catalog);
+
+		when(catalogDataSource.save(any())).thenReturn(catalogDTO);
 		when(catalogDataSource.existsByName(any())).thenReturn(false);
 
 		// Act
@@ -45,7 +49,9 @@ class SaveCatalogControllerTest {
 		// Arrange
 		var catalogRequest = CatalogRequest.builder().name("Bebidas").build();
 		var catalog = CatalogFixture.createValidCatalog();
-		when(catalogDataSource.save(any())).thenReturn(catalog);
+		CatalogDTO catalogDTO = CatalogDTOMapper.toDTO(catalog);
+
+		when(catalogDataSource.save(any())).thenReturn(catalogDTO);
 		when(catalogDataSource.existsByName(any())).thenReturn(false);
 
 		// Act & Assert
@@ -60,7 +66,9 @@ class SaveCatalogControllerTest {
 		// Arrange
 		var catalogRequest = CatalogRequest.builder().name("Sobremesas").build();
 		var catalog = CatalogFixture.createValidCatalog();
-		when(catalogDataSource.save(any())).thenReturn(catalog);
+		CatalogDTO catalogDTO = CatalogDTOMapper.toDTO(catalog);
+
+		when(catalogDataSource.save(any())).thenReturn(catalogDTO);
 		when(catalogDataSource.existsByName(any())).thenReturn(false);
 
 		// Act

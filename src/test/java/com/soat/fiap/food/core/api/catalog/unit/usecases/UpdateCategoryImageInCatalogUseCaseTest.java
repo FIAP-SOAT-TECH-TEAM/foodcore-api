@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryImageInCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.fixtures.CatalogFixture;
 
@@ -43,16 +44,19 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
-		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
-				catalogGateway, imageStorageGateway);
+		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
+				fileUploadDTO, catalogGateway, imageStorageGateway);
 
 		// Assert
 		assertThat(result).isNotNull();
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, imageFile);
+		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve excluir imagem anterior quando categoria já possui imagem")
@@ -68,16 +72,19 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
-		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
-				catalogGateway, imageStorageGateway);
+		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
+				fileUploadDTO, catalogGateway, imageStorageGateway);
 
 		// Assert
 		assertThat(result).isNotNull();
 		verify(imageStorageGateway).deleteImage("categories/1/old-image.jpg");
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, imageFile);
+		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
@@ -88,9 +95,11 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.empty());
 
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
-				imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(CatalogNotFoundException.class);
+				fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(CatalogNotFoundException.class);
 
 		verify(catalogGateway).findById(catalogId);
 		verifyNoInteractions(imageStorageGateway);
@@ -124,9 +133,10 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(true);
 
+		var fileUploadDTO = new FileUploadDTO(null, new byte[0]);
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
-				imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
+				fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("O arquivo de imagem não pode ser vazio");
 
 		verify(catalogGateway).findById(catalogId);
@@ -142,16 +152,19 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile)))
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO)))
 				.thenThrow(new RuntimeException("Erro no upload"));
 
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
-				imageFile, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
+				fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
 				.hasMessageContaining("Falha ao processar imagem");
 
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, imageFile);
+		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve manter propriedades da categoria inalteradas exceto a imagem")
@@ -168,11 +181,14 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
 		when(imageFile.isEmpty()).thenReturn(false);
-		when(imageStorageGateway.uploadImage(anyString(), eq(imageFile))).thenReturn(newImagePath);
+
+		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
-		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
-				catalogGateway, imageStorageGateway);
+		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
+				fileUploadDTO, catalogGateway, imageStorageGateway);
 
 		// Assert
 		assertThat(result).isNotNull();
