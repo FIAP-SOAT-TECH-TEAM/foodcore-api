@@ -6,14 +6,6 @@
 {{- printf "%s-%s" .Chart.Name .Values.ingress.name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{- define "storageclass.name" -}}
-{{- .Values.storageClass.name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "storageclass.fullname" -}}
-{{- printf "%s-%s" .Chart.Name .Values.storageClass.name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
 {{- define "ingress.services" -}}
 - name: {{ printf "%s-service" (include "api.fullname" .) }}
   port: {{ .Values.api.ports.port }}
