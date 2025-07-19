@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.GetUserByIdController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetUserByIdController - Testes Unitários")
@@ -29,7 +30,7 @@ class GetUserByIdControllerTest {
 		var userId = 1L;
 		var user = UserFixture.createValidUser();
 
-		when(userDataSource.findById(userId)).thenReturn(Optional.of(user));
+		when(userDataSource.findById(userId)).thenReturn(Optional.of(user).map(UserDTOMapper::toDTO));
 
 		// Act
 		var result = GetUserByIdController.getUserById(userId, userDataSource);
@@ -54,7 +55,7 @@ class GetUserByIdControllerTest {
 		var userId = 2L;
 		var user = UserFixture.createUserWithEmail();
 
-		when(userDataSource.findById(userId)).thenReturn(Optional.of(user));
+		when(userDataSource.findById(userId)).thenReturn(Optional.of(user).map(UserDTOMapper::toDTO));
 
 		// Act
 		var result = GetUserByIdController.getUserById(userId, userDataSource);

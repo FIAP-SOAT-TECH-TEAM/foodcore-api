@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
 import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserNotFoundException;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.DeleteUserController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("DeleteUserController - Testes Unitários")
@@ -30,7 +31,7 @@ class DeleteUserControllerTest {
 		var userId = 1L;
 		var user = UserFixture.createValidUser();
 
-		when(userDataSource.findById(userId)).thenReturn(Optional.of(user));
+		when(userDataSource.findById(userId)).thenReturn(Optional.of(user).map(UserDTOMapper::toDTO));
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> DeleteUserController.deleteUser(userId, userDataSource));
@@ -61,7 +62,7 @@ class DeleteUserControllerTest {
 		var userId = 123L;
 		var user = UserFixture.createValidUser();
 
-		when(userDataSource.findById(userId)).thenReturn(Optional.of(user));
+		when(userDataSource.findById(userId)).thenReturn(Optional.of(user).map(UserDTOMapper::toDTO));
 
 		// Act
 		DeleteUserController.deleteUser(userId, userDataSource);

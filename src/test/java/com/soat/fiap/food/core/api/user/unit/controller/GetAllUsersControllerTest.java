@@ -15,7 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.GetAllUsersController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
+import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response.UserResponse;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetAllUsersController - Testes Unitários")
 class GetAllUsersControllerTest {
@@ -28,18 +30,23 @@ class GetAllUsersControllerTest {
 		// Arrange
 		var users = List.of(UserFixture.createValidUser(), UserFixture.createUserWithEmail(),
 				UserFixture.createUserWithDocument());
+		var userDTOs = users.stream().map(UserDTOMapper::toDTO).toList();
 
-		when(userDataSource.findAll()).thenReturn(users);
+		when(userDataSource.findAll()).thenReturn(userDTOs);
 
 		// Act
 		var result = GetAllUsersController.getAllUsers(userDataSource);
 
+		var expectedResponses = userDTOs.stream()
+				.map(dto -> new UserResponse(dto.id(), dto.name(), dto.username(), dto.email(), dto.document(),
+						dto.active(), dto.roleId(), dto.createdAt(), dto.updatedAt(), null // token
+				))
+				.toList();
+
 		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(3);
-		assertThat(result.get(0).getName()).isEqualTo(users.get(0).getName());
-		assertThat(result.get(1).getName()).isEqualTo(users.get(1).getName());
-		assertThat(result.get(2).getName()).isEqualTo(users.get(2).getName());
+		assertThat(result).isEqualTo(expectedResponses);
 
 		verify(userDataSource).findAll();
 	}
@@ -70,9 +77,10 @@ class GetAllUsersControllerTest {
 	void shouldProcessListWithOnlyOneUser() {
 		// Arrange
 		var user = UserFixture.createValidUser();
-		var users = List.of(user);
+		var userDTO = UserDTOMapper.toDTO(user);
+		var userDTOs = List.of(userDTO);
 
-		when(userDataSource.findAll()).thenReturn(users);
+		when(userDataSource.findAll()).thenReturn(userDTOs);
 
 		// Act
 		var result = GetAllUsersController.getAllUsers(userDataSource);
@@ -80,7 +88,7 @@ class GetAllUsersControllerTest {
 		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(1);
-		assertThat(result.getFirst().getName()).isEqualTo(user.getName());
+		assertThat(result.getFirst()).isEqualTo(userDTO);
 
 		verify(userDataSource).findAll();
 	}

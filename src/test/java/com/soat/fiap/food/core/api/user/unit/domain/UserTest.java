@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
 import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserException;
+import com.soat.fiap.food.core.api.user.core.domain.model.Role;
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
 
 @DisplayName("User - Testes de Domínio")
@@ -55,7 +56,7 @@ class UserTest {
 	@Test @DisplayName("Deve retornar falso para documento inválido")
 	void shouldReturnFalseForInvalidDocument() {
 		// Arrange
-		User user = new User(false, "Test User", null, null, "senha123456", "123");
+		User user = new User(false, "Test User", null, null, "senha123456", "123", Role.defaultRole());
 
 		// Act & Assert
 		assertFalse(user.isValidDocument());
@@ -192,7 +193,7 @@ class UserTest {
 	@Test @DisplayName("Deve identificar usuário como convidado quando não tem identificadores")
 	void shouldIdentifyUserAsGuestWhenNoIdentifiers() {
 		// Arrange
-		User user = new User(false, "Test User", null, null, "senha123456", null);
+		User user = new User(false, "Test User", null, null, "senha123456", null, Role.defaultRole());
 
 		// Act & Assert
 		assertTrue(user.isGuest());
