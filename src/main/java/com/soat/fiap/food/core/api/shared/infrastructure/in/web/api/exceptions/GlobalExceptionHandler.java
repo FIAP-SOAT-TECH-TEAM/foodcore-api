@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
+import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
 
@@ -193,4 +194,18 @@ public class GlobalExceptionHandler {
 		}
 		return names;
 	}
+
+	/**
+	 * Trata erros de conflito de recursos (ex: CPF duplicado)
+	 */
+	@ExceptionHandler(ResourceConflictException.class)
+	public ResponseEntity<ErrorResponse> handleResourceConflictException(ResourceConflictException ex,
+			HttpServletRequest request) {
+
+		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+				ex.getMessage(), request.getRequestURI());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+	}
+
 }
