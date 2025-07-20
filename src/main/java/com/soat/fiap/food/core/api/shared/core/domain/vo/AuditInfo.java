@@ -13,12 +13,12 @@ import lombok.Getter;
  */
 @Getter
 public class AuditInfo {
-	private LocalDateTime createdAt = LocalDateTime.now();
-	private LocalDateTime updatedAt = LocalDateTime.now();
+	private final LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
 	public AuditInfo() {
 		this.createdAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now().plusNanos(1);
 	}
 
 	public AuditInfo(LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -57,7 +57,7 @@ public class AuditInfo {
 		if (updatedAt.isBefore(createdAt)) {
 			throw new BusinessException("UpdatedAt não pode ser menor ou igual a CreatedAt");
 		} else if (updatedAt.isEqual(createdAt)) {
-			updatedAt.plusNanos(1);
+			this.updatedAt = LocalDateTime.now().plusNanos(1);
 		}
 	}
 }
