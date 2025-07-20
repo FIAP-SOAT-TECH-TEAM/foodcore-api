@@ -1,9 +1,13 @@
 package com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.api.user.core.domain.model.Role;
 import com.soat.fiap.food.core.api.user.core.domain.model.User;
+import com.soat.fiap.food.core.api.user.core.domain.vo.RoleType;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 /**
@@ -19,7 +23,30 @@ public class UserDTOMapper {
 	 * @return Entidade de domínio User
 	 */
 	public static User toDomain(UserDTO dto) {
-		return User.fromDTO(dto);
+		User user = new User();
+		user.setId(dto.id());
+		user.setName(dto.name());
+		user.setUsername(dto.username());
+		user.setEmail(dto.email());
+		user.setPassword(dto.password());
+		user.setDocument(dto.document());
+		user.setGuest(dto.guest());
+		user.setActive(dto.active());
+
+		Long id = Objects.requireNonNullElse(dto.roleId(), (long) RoleType.GUEST.getId());
+		RoleType roleType = RoleType.fromId(id.intValue());
+
+		Role role = new Role();
+		role.setId(id);
+		role.setName(roleType.getName());
+
+		user.setRole(role);
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			user.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return user;
 	}
 
 	/**

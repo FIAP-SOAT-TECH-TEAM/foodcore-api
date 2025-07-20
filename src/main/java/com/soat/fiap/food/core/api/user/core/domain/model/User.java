@@ -1,12 +1,9 @@
 package com.soat.fiap.food.core.api.user.core.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserException;
-import com.soat.fiap.food.core.api.user.core.domain.vo.RoleType;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 import lombok.Data;
 
@@ -50,39 +47,6 @@ public class User {
 		this.password = password;
 		this.document = document;
 		this.role = role;
-	}
-
-	/**
-	 * Construtor para criar um usuário a partir de um UserDTO
-	 *
-	 * @param dto
-	 *            UserDTO com os dados do usuário
-	 */
-	public static User fromDTO(UserDTO dto) {
-		User user = new User();
-		user.setId(dto.id());
-		user.setName(dto.name());
-		user.setUsername(dto.username());
-		user.setEmail(dto.email());
-		user.setPassword(dto.password());
-		user.setDocument(dto.document());
-		user.setGuest(dto.guest());
-		user.setActive(dto.active());
-
-		Long id = Objects.requireNonNullElse(dto.roleId(), (long) RoleType.GUEST.getId());
-		RoleType roleType = RoleType.fromId(id.intValue());
-
-		Role role = new Role();
-		role.setId(id);
-		role.setName(roleType.getName());
-
-		user.setRole(role);
-
-		if (dto.createdAt() != null && dto.updatedAt() != null) {
-			user.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
-		}
-
-		return user;
 	}
 
 	/**
