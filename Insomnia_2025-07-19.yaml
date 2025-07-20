@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2025-07-13T21:41:52.624Z
+__export_date: 2025-07-20T02:15:13.942Z
 __export_source: insomnia.desktop.app:v2023.5.8
 resources:
   - _id: req_05a9289d357143f5a07cfd41a309dc43
@@ -64,9 +64,9 @@ resources:
     _type: workspace
   - _id: req_d7acd5f9a1a740dd84125be44915c050
     parentId: fld_5b0750762d40498e8730121a721a206f
-    modified: 1752352588321
+    modified: 1752972158017
     created: 1752296095816
-    url: "{{ _.base_url }}/catalogs/10"
+    url: "{{ _.base_url }}/catalogs/47"
     name: Get Catalog by ID
     description: ""
     method: GET
@@ -95,7 +95,7 @@ resources:
     _type: request
   - _id: req_8ed87a62c2ff4723a8cb9a14b2b41a02
     parentId: fld_5b0750762d40498e8730121a721a206f
-    modified: 1752369675778
+    modified: 1752972150041
     created: 1752295714069
     url: "{{ _.base_url }}/catalogs"
     name: Create Catalog
@@ -105,7 +105,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-          "name": "Teste7"
+          "name": "Teste87"
         }
     parameters: []
     headers:
@@ -134,9 +134,9 @@ resources:
     _type: request
   - _id: req_b5217335c77e4e6d9583c3b81ac20bbb
     parentId: fld_5b0750762d40498e8730121a721a206f
-    modified: 1752352613739
+    modified: 1752972165219
     created: 1752296190351
-    url: "{{ _.base_url }}/catalogs/10"
+    url: "{{ _.base_url }}/catalogs/47"
     name: Update Catalog
     description: ""
     method: PUT
@@ -173,9 +173,9 @@ resources:
     _type: request
   - _id: req_106fa183701c47e3828f8e8990e8b763
     parentId: fld_5b0750762d40498e8730121a721a206f
-    modified: 1752352619606
+    modified: 1752972170430
     created: 1752296224426
-    url: "{{ _.base_url }}/catalogs/10"
+    url: "{{ _.base_url }}/catalogs/47"
     name: Delete Catalog
     description: ""
     method: DELETE
@@ -204,9 +204,9 @@ resources:
     _type: request
   - _id: req_cdefd2dc8ef341c0a5612acdd01ac734
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752433739868
+    modified: 1752972224589
     created: 1752353730108
-    url: "{{ _.base_url }}/catalogs/44/categories/23"
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
     name: Get Category by ID
     description: ""
     method: GET
@@ -245,9 +245,9 @@ resources:
     _type: request_group
   - _id: req_2c200216ee914ab79cdbff3650d63c05
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752433723066
+    modified: 1752972194618
     created: 1752353795322
-    url: "{{ _.base_url }}/catalogs/44/categories"
+    url: "{{ _.base_url }}/catalogs/48/categories"
     name: Get All Categories by Catalog
     description: ""
     method: GET
@@ -276,7 +276,7 @@ resources:
     _type: request
   - _id: req_e1a5a2fc6d7a4f8a9c9abffbe249219b
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752369697157
+    modified: 1752972214873
     created: 1752296394821
     url: "{{ _.base_url }}/catalogs/categories"
     name: Create Category
@@ -288,9 +288,9 @@ resources:
         - name: data
           value: |-
             {
-              "catalogId": 44,
-              "name": "Testes",
-              "description": "Testes 44",
+              "catalogId": 48,
+              "name": "Testes batata 2",
+              "description": "Testes upload",
               "active": true,
               "displayOrder": 1
             }
@@ -331,9 +331,9 @@ resources:
     _type: request
   - _id: req_1ee6e8d261554e548188c40fc5977c43
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752361761360
+    modified: 1752972443030
     created: 1752357927184
-    url: "{{ _.base_url }}/catalogs/43/categories/22"
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
     name: Update Category
     description: ""
     method: PUT
@@ -341,7 +341,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-          "catalogId": 43,
+          "catalogId": 48,
           "name": "Teste update 2",
           "description": "Eu sou um teste",
           "active": true,
@@ -373,9 +373,9 @@ resources:
     _type: request
   - _id: req_20ee633996af40ee9672c225eba391fa
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752358078525
+    modified: 1752972260661
     created: 1752358033933
-    url: "{{ _.base_url }}/catalogs/43/categories/21/image"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/image"
     name: Update Category Image
     description: ""
     method: PATCH
@@ -413,9 +413,9 @@ resources:
     _type: request
   - _id: req_2ac61f2a6496419da270acb2e3231e38
     parentId: fld_3b9024a9e46c41759811958246fccd90
-    modified: 1752358132455
+    modified: 1752972280637
     created: 1752358117068
-    url: "{{ _.base_url }}/catalogs/43/categories/21"
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
     name: Delete Category
     description: ""
     method: DELETE
@@ -444,9 +444,9 @@ resources:
     _type: request
   - _id: req_027dbbac814a4f448ee0eb30c5926ee6
     parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
-    modified: 1752441333407
+    modified: 1752972053127
     created: 1748754281053
-    url: "{{ _.base_url }}/payments/88/qrCode"
+    url: "{{ _.base_url }}/payments/89/qrCode"
     name: Get Order QrCode
     description: ""
     method: GET
@@ -485,9 +485,9 @@ resources:
     _type: request_group
   - _id: req_ccada0bcf9b14bc78bb828987de2195d
     parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
-    modified: 1752441431899
+    modified: 1752972108006
     created: 1748755033430
-    url: "{{ _.base_url }}/payments/88/status"
+    url: "{{ _.base_url }}/payments/89/status"
     name: Get Order Status
     description: ""
     method: GET
@@ -579,9 +579,9 @@ resources:
     _type: request
   - _id: req_5dc1f2a405614f3d941228938132c374
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426676429
+    modified: 1752972691067
     created: 1752358602170
-    url: "{{ _.base_url }}/catalogs/44/categories/23/products/35"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
     name: Get Product by ID
     description: ""
     method: GET
@@ -620,9 +620,9 @@ resources:
     _type: request_group
   - _id: req_2d12f9d0beab40fda07c43a1ea842952
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426680850
+    modified: 1752972329107
     created: 1752364471809
-    url: "{{ _.base_url }}/catalogs/2/categories/4/products"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products"
     name: Get Product by category
     description: ""
     method: GET
@@ -651,27 +651,40 @@ resources:
     _type: request
   - _id: req_cd40936a7e27425b8109b35740559a81
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426684835
+    modified: 1752972652821
     created: 1752366920851
-    url: "{{ _.base_url }}/catalogs/44/categories/products"
+    url: "{{ _.base_url }}/catalogs/48/categories/products"
     name: Create Product
     description: ""
     method: POST
     body:
-      mimeType: application/json
-      text: |-
-        {
-          "categoryId": 23,
-          "name": "Teste5",
-          "description": "Teste 4444",
-          "price": 25.9,
-          "stockQuantity": 5,
-          "displayOrder": 4
-        }
+      mimeType: multipart/form-data
+      params:
+        - id: pair_be93a00ce80749f781253b1d68abd7e6
+          name: data
+          value: |-
+            {
+              "categoryId": 28,
+              "name": "Teste8",
+              "description": "Teste 4445",
+              "price": 25.9,
+              "stockQuantity": 5,
+              "displayOrder": 4
+            }
+          description: ""
+          type: text
+          multiline: application/json
+        - id: pair_dfde4eacb81c497fbcf53bdbb335692b
+          name: imageFile
+          value: ""
+          description: ""
+          type: file
+          fileName: C:\Users\cesgu\Downloads\Batata-Especial-1kg.png
+          disabled: false
     parameters: []
     headers:
       - name: Content-Type
-        value: application/json
+        value: multipart/form-data
       - name: User-Agent
         value: insomnia/2023.5.8
         id: pair_f30b9afca8024471ba0919cd5267f1e6
@@ -694,9 +707,9 @@ resources:
     _type: request
   - _id: req_c1572fe5c50744cdaa11681ada231cd2
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426687952
+    modified: 1752972705011
     created: 1752370831559
-    url: "{{ _.base_url }}/catalogs/44/categories/23/products/35"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
     name: Update Product
     description: ""
     method: PUT
@@ -704,7 +717,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-          "categoryId": 23,
+          "categoryId": 28,
           "name": "Teste update",
           "description": "teste update batata",
           "price": 25.9,
@@ -737,9 +750,9 @@ resources:
     _type: request
   - _id: req_20c0eee85c7e428993bc10986a816c4a
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426690562
+    modified: 1752973159033
     created: 1752370475314
-    url: "{{ _.base_url }}/catalogs/44/categories/23/products/35/image"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/41/image"
     name: Update Product Image
     description: ""
     method: PATCH
@@ -777,9 +790,9 @@ resources:
     _type: request
   - _id: req_120d5b1e606347258422059fad11be97
     parentId: fld_3b0a79dfd349416385988f0a73c60f7f
-    modified: 1752426689304
+    modified: 1752972716892
     created: 1752370921632
-    url: "{{ _.base_url }}/catalogs/44/categories/23/products/35"
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
     name: Delete Product
     description: ""
     method: DELETE
@@ -808,7 +821,7 @@ resources:
     _type: request
   - _id: req_7084ae2f4d1e464d9434b336fc2fabe9
     parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
-    modified: 1752431307848
+    modified: 1752972017267
     created: 1748754210615
     url: "{{ _.base_url }}/orders"
     name: Create Order
@@ -866,9 +879,9 @@ resources:
     _type: request_group
   - _id: req_5738e354370543249a29586155b6b539
     parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
-    modified: 1752435985717
+    modified: 1752972041550
     created: 1752435964407
-    url: "{{ _.base_url }}/orders/82"
+    url: "{{ _.base_url }}/orders/89"
     name: Get order by ID
     description: ""
     method: GET
@@ -1039,7 +1052,7 @@ resources:
     _type: request
   - _id: req_33c465ee0545429da993d43213301e9c
     parentId: fld_b7d0109a253c42c18cd58e15a29110c7
-    modified: 1752432389267
+    modified: 1752971907909
     created: 1748728518626
     url: "{{ _.base_url }}/users/document/929.924.370-00"
     name: Get user by document
@@ -1192,9 +1205,9 @@ resources:
     _type: request
   - _id: req_a89da0ea540c4c979a4d4af9b6981763
     parentId: fld_b7d0109a253c42c18cd58e15a29110c7
-    modified: 1752432307294
+    modified: 1752971998145
     created: 1752432141053
-    url: "{{ _.base_url }}/users/21"
+    url: "{{ _.base_url }}/users/16"
     name: Delete User
     description: ""
     method: DELETE
