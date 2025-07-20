@@ -1,8 +1,13 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
+import java.util.Objects;
+
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
+import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 public class ProductDTOMapper {
 
@@ -14,7 +19,26 @@ public class ProductDTOMapper {
 	 * @return o objeto Product correspondente
 	 */
 	public static Product toDomain(ProductDTO dto) {
-		return Product.fromDTO(dto);
+		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
+
+		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+
+		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
+		product.setId(dto.id());
+
+		if (dto.stock() != null) {
+			Stock stock = StockDTOMapper.toDomain(dto.stock());
+			product.setStock(stock);
+		} else {
+			product.setStockQuantity(0);
+		}
+		product.setActive(dto.active());
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			product.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return product;
 	}
 
 	/**

@@ -8,8 +8,6 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogExcepti
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers.StockDTOMapper;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -56,29 +54,6 @@ public class Product {
 		this.price = price;
 		this.imageUrl = imageUrl;
 		this.displayOrder = displayOrder;
-	}
-
-	public static Product fromDTO(ProductDTO dto) {
-		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
-
-		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
-
-		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
-		product.setId(dto.id());
-
-		if (dto.stock() != null) {
-			Stock stock = StockDTOMapper.toDomain(dto.stock());
-			product.setStock(stock);
-		} else {
-			product.setStockQuantity(0);
-		}
-		product.setActive(dto.active());
-
-		if (dto.createdAt() != null && dto.updatedAt() != null) {
-			product.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
-		}
-
-		return product;
 	}
 
 	/**
@@ -159,7 +134,7 @@ public class Product {
 	 * @param quantity
 	 *            nova quantidade de estoque
 	 */
-	void setStockQuantity(Integer quantity) {
+	public void setStockQuantity(Integer quantity) {
 		this.stock.setQuantity(quantity);
 		stock.markUpdatedNow();
 	}
@@ -237,7 +212,8 @@ public class Product {
 	 * @return true se o produto estiver com preço válido e estoque positivo
 	 */
 	public boolean isActive() {
-		return price != null && price.compareTo(BigDecimal.ZERO) > 0 && stock != null && stock.getQuantity() > 0;
+		this.active = price != null && price.compareTo(BigDecimal.ZERO) > 0 && stock != null && stock.getQuantity() > 0;
+		return this.active;
 	}
 
 	/**
