@@ -30,7 +30,7 @@ public class PaymentGateway {
 	public Payment save(Payment payment) {
 		PaymentDTO dto = PaymentDTOMapper.toDTO(payment);
 		PaymentDTO savedDTO = paymentDataSource.save(dto);
-		return PaymentDTOMapper.toDomain(savedDTO);
+		return PaymentDTOMapper.fromDTO(savedDTO);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class PaymentGateway {
 	 * @return Optional contendo o pagamento ou vazio se não encontrado
 	 */
 	public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::toDomain);
+		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::fromDTO);
 	}
 
 	/**
@@ -54,18 +54,8 @@ public class PaymentGateway {
 	public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
 		return paymentDataSource.findExpiredPaymentsWithoutApprovedOrCancelled(now)
 				.stream()
-				.map(PaymentDTOMapper::toDomain)
+				.map(PaymentDTOMapper::fromDTO)
 				.toList();
 	}
 
-	/**
-	 * Verifica se já existe um pagamento associado ao pedido.
-	 *
-	 * @param orderId
-	 *            ID do pedido
-	 * @return true se existir pagamento associado, false caso contrário
-	 */
-	public boolean existsByOrderId(Long orderId) {
-		return paymentDataSource.existsByOrderId(orderId);
-	}
 }

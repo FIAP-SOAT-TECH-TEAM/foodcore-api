@@ -8,7 +8,6 @@ import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentExcepti
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.QrCode;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -54,27 +53,6 @@ public class Payment {
 	}
 
 	/**
-	 * Cria uma instância de {@link Payment} a partir de um {@link PaymentDTO}.
-	 *
-	 * @param dto
-	 *            DTO de pagamento contendo os dados a serem convertidos
-	 * @return Instância da entidade de domínio {@link Payment}
-	 */
-	public static Payment fromDTO(PaymentDTO dto) {
-		Payment payment = new Payment(dto.userId(), dto.orderId(), dto.amount());
-		payment.setId(dto.id());
-		payment.setType(dto.type());
-		payment.setExpiresIn(dto.expiresIn());
-		payment.setTid(dto.tid());
-		payment.setQrCode(dto.qrCode());
-		payment.setStatus(dto.status());
-		payment.setPaidAt(dto.paidAt());
-		payment.setObservations(dto.observations());
-		payment.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
-		return payment;
-	}
-
-	/**
 	 * Define o qrCode do pagamento.
 	 */
 	public void setQrCode(String qrCode) {
@@ -117,16 +95,6 @@ public class Payment {
 		Objects.requireNonNull(userId, "O ID do cliente do pedido não pode ser nulo");
 		Objects.requireNonNull(orderId, "O ID do pedido não pode ser nulo");
 		Objects.requireNonNull(amount, "O valor total não pode ser nulo");
-	}
-
-	/**
-	 * Verifica se o pagamento está expirado.
-	 *
-	 * @return {@code true} se o pagamento estiver expirado, {@code false} caso
-	 *         contrário
-	 */
-	public boolean isExpired() {
-		return expiresIn.isBefore(LocalDateTime.now());
 	}
 
 	/**
