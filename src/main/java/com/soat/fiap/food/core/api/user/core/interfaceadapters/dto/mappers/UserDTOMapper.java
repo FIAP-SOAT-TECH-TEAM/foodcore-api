@@ -1,8 +1,6 @@
 package com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 import com.soat.fiap.food.core.api.user.core.domain.model.Role;
@@ -62,14 +60,4 @@ public class UserDTOMapper {
 				user.isActive(), user.getAuditInfo().getCreatedAt(), user.getAuditInfo().getUpdatedAt());
 	}
 
-	/**
-	 * Converte uma lista de UserDTOs em uma lista de entidades de domínio User.
-	 *
-	 * @param dtoList
-	 *            Lista de DTOs
-	 * @return Lista de entidades de domínio User
-	 */
-	public static List<User> toDomainList(List<UserDTO> dtoList) {
-		return dtoList.stream().map(UserDTOMapper::toDomain).collect(Collectors.toList());
-	}
 }
