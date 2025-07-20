@@ -1,11 +1,15 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 public class CategoryDTOMapper {
 
@@ -17,7 +21,24 @@ public class CategoryDTOMapper {
 	 * @return the corresponding Category domain object
 	 */
 	public static Category toDomain(CategoryDTO dto) {
-		return Category.fromDTO(dto);
+		Objects.requireNonNull(dto, "O DTO da categoria não pode ser nulo");
+
+		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+
+		Category category = new Category(dto.details(), imageUrl, dto.displayOrder(), dto.active());
+		category.setId(dto.id());
+
+		if (dto.products() != null) {
+			for (ProductDTO productDTO : dto.products()) {
+				category.addProduct(Product.fromDTO(productDTO));
+			}
+		}
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			category.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return category;
 	}
 
 	/**

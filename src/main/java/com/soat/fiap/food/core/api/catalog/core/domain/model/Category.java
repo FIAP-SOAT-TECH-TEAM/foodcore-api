@@ -12,8 +12,6 @@ import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductConflic
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.ProductNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -57,27 +55,6 @@ public class Category {
 		this.imageUrl = imageUrl;
 		this.displayOrder = displayOrder;
 		this.active = active;
-	}
-
-	public static Category fromDTO(CategoryDTO dto) {
-		Objects.requireNonNull(dto, "O DTO da categoria não pode ser nulo");
-
-		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
-
-		Category category = new Category(dto.details(), imageUrl, dto.displayOrder(), dto.active());
-		category.setId(dto.id());
-
-		if (dto.products() != null) {
-			for (ProductDTO productDTO : dto.products()) {
-				category.addProduct(Product.fromDTO(productDTO));
-			}
-		}
-
-		if (dto.createdAt() != null && dto.updatedAt() != null) {
-			category.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
-		}
-
-		return category;
 	}
 
 	/**
@@ -213,7 +190,7 @@ public class Category {
 	 * @throws ProductConflictException
 	 *             se já existir um produto com o mesmo nome
 	 */
-	void addProduct(Product product) {
+	public void addProduct(Product product) {
 		Objects.requireNonNull(product, "O produto não pode ser nulo");
 
 		if (products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
