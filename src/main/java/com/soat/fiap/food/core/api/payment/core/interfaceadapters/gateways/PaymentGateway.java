@@ -30,7 +30,7 @@ public class PaymentGateway {
 	public Payment save(Payment payment) {
 		PaymentDTO dto = PaymentDTOMapper.toDTO(payment);
 		PaymentDTO savedDTO = paymentDataSource.save(dto);
-		return PaymentDTOMapper.fromDTO(savedDTO);
+		return PaymentDTOMapper.toDomain(savedDTO);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class PaymentGateway {
 	 * @return Optional contendo o pagamento ou vazio se não encontrado
 	 */
 	public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::fromDTO);
+		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::toDomain);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class PaymentGateway {
 	public List<Payment> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
 		return paymentDataSource.findExpiredPaymentsWithoutApprovedOrCancelled(now)
 				.stream()
-				.map(PaymentDTOMapper::fromDTO)
+				.map(PaymentDTOMapper::toDomain)
 				.toList();
 	}
 

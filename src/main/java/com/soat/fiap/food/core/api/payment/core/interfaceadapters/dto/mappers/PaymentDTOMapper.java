@@ -13,7 +13,7 @@ public class PaymentDTOMapper {
 	 *            DTO de pagamento contendo os dados a serem convertidos
 	 * @return Instância da entidade de domínio {@link Payment}
 	 */
-	public static Payment fromDTO(PaymentDTO dto) {
+	public static Payment toDomain(PaymentDTO dto) {
 
 		Payment payment = new Payment(dto.userId(), dto.orderId(), dto.amount());
 		payment.setId(dto.id());
