@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
+import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
+import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 public class OrderDTOMapper {
 
@@ -17,7 +20,21 @@ public class OrderDTOMapper {
 	 * @return Instância de um Order{@link Order}
 	 */
 	public static Order toDomain(OrderDTO dto) {
-		return Order.fromDTO(dto);
+		List<OrderItem> items = dto.items().stream().map(OrderItem::fromDTO).collect(Collectors.toList());
+
+		Order order = new Order(dto.userId(), items);
+
+		order.setId(dto.id());
+
+		if (dto.status() != null && dto.status() != OrderStatus.RECEIVED) {
+			order.setOrderStatus(dto.status());
+		}
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			order.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return order;
 	}
 
 	/**
