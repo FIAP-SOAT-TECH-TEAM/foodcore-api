@@ -29,7 +29,7 @@ public class CatalogGateway {
 	public Catalog save(Catalog catalog) {
 		CatalogDTO dto = CatalogDTOMapper.toDTO(catalog);
 		CatalogDTO savedDTO = catalogDataSource.save(dto);
-		return CatalogDTOMapper.fromDTO(savedDTO);
+		return CatalogDTOMapper.toDomain(savedDTO);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class CatalogGateway {
 	 */
 	public Optional<Catalog> findById(Long id) {
 
-		return catalogDataSource.findById(id).map(CatalogDTOMapper::fromDTO);
+		return catalogDataSource.findById(id).map(CatalogDTOMapper::toDomain);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class CatalogGateway {
 	 * @return Lista de catálogos
 	 */
 	public List<Catalog> findAll() {
-		return catalogDataSource.findAll().stream().map(CatalogDTOMapper::fromDTO).toList();
+		return catalogDataSource.findAll().stream().map(CatalogDTOMapper::toDomain).toList();
 	}
 
 	/**
@@ -120,6 +120,6 @@ public class CatalogGateway {
 	 *            ID do produto
 	 */
 	public Optional<Catalog> findByProductId(Long productId) {
-		return catalogDataSource.findByProductId(productId).map(CatalogDTOMapper::fromDTO);
+		return catalogDataSource.findByProductId(productId).map(CatalogDTOMapper::toDomain);
 	}
 }

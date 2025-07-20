@@ -19,7 +19,7 @@ public class CatalogDTOMapper {
 	 *            o CatalogDTO a ser convertido
 	 * @return o objeto Catalog correspondente
 	 */
-	public static Catalog fromDTO(CatalogDTO dto) {
+	public static Catalog toDomain(CatalogDTO dto) {
 		Objects.requireNonNull(dto, "O DTO do catálogo não pode ser nulo");
 
 		Catalog catalog = new Catalog(dto.name());
