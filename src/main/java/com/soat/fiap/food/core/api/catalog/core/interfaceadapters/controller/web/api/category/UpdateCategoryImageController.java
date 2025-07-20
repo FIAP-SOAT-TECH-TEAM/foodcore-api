@@ -4,7 +4,9 @@ import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.Up
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.CategoryPresenter;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
@@ -38,6 +40,21 @@ public class UpdateCategoryImageController {
 	 */
 	public static Category updateCategoryImage(Long catalogId, Long categoryId, FileUploadDTO imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+		return executeUpdate(catalogId, categoryId, imageFile, catalogDataSource, imageDataSource);
+	}
+
+	public static CategoryResponse updateProductImageResponse(Long catalogId, Long categoryId, FileUploadDTO imageFile,
+			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+		var updatedCategory = executeUpdate(catalogId, categoryId, imageFile, catalogDataSource, imageDataSource);
+		return CategoryPresenter.toCategoryResponse(updatedCategory);
+	}
+
+	/**
+	 * Executa a atualização de imagem de uma catgoria.
+	 */
+	private static Category executeUpdate(Long catalogId, Long categoryId, FileUploadDTO imageFile,
+			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+
 		log.debug("Atualizando imagem do categoria ID: {}", categoryId);
 
 		var catalogGateway = new CatalogGateway(catalogDataSource);

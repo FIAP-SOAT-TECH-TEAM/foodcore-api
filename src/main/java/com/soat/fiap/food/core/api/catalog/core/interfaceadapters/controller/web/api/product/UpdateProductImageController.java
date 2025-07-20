@@ -4,7 +4,9 @@ import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.Upd
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.ProductPresenter;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
@@ -40,11 +42,29 @@ public class UpdateProductImageController {
 	 */
 	public static Product updateProductImage(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+		return executeUpdate(catalogId, categoryId, productId, imageFile, catalogDataSource, imageDataSource);
+	}
+
+	/**
+	 * Atualiza a imagem de um produto e retorna o DTO de resposta.
+	 */
+	public static ProductResponse updateProductImageResponse(Long catalogId, Long categoryId, Long productId,
+			FileUploadDTO imageFile, CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+		Product updatedProduct = executeUpdate(catalogId, categoryId, productId, imageFile, catalogDataSource,
+				imageDataSource);
+		return ProductPresenter.toProductResponse(updatedProduct);
+	}
+
+	/**
+	 * Executa a atualização de imagem de um produto.
+	 */
+	private static Product executeUpdate(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
+			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
+
 		log.debug("Atualizando imagem do produto ID: {}", productId);
 
-		var catalogGateway = new CatalogGateway(catalogDataSource);
-
-		var imageStorageGateway = new ImageStorageGateway(imageDataSource);
+		CatalogGateway catalogGateway = new CatalogGateway(catalogDataSource);
+		ImageStorageGateway imageStorageGateway = new ImageStorageGateway(imageDataSource);
 
 		var catalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
 				imageFile, catalogGateway, imageStorageGateway);
@@ -52,6 +72,5 @@ public class UpdateProductImageController {
 		var savedProduct = catalogGateway.save(catalog);
 
 		return savedProduct.getProductById(productId);
-
 	}
 }

@@ -143,12 +143,13 @@ public class ProductController {
 	@PatchMapping(value = "/{catalogId}/categories/{categoryId}/products/{productId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Operation(summary = "Atualizar imagem do produto", description = "Atualiza apenas a imagem de um produto existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
 			"Produtos"})
-	@ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Imagem do produto atualizada com sucesso"),
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Imagem do produto atualizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),
 			@ApiResponse(responseCode = "404", description = "Catálogo, categoria ou produto não encontrado", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Imagem inválida", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Erro ao processar imagem", content = @Content)})
 	@Tag(name = "Produtos", description = "Operações para gerenciamento de produtos") @Transactional
-	public ResponseEntity<Void> updateProductImage(
+	public ProductResponse updateProductImage(
 			@Parameter(description = "ID do catálogo", example = "1", required = true) @PathVariable Long catalogId,
 			@Parameter(description = "ID da categoria do produto", example = "10", required = true)
 			@PathVariable Long categoryId,
@@ -164,9 +165,9 @@ public class ProductController {
 			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
 		}
 
-		UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, fileUpload, catalogDataSource,
-				imageDataSource);
-		return ResponseEntity.noContent().build();
+		return UpdateProductImageController.updateProductImageResponse(catalogId, categoryId, productId, fileUpload,
+				catalogDataSource, imageDataSource);
+
 	}
 
 }
