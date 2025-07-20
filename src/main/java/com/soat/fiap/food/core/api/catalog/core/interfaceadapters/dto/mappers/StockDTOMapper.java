@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 public class StockDTOMapper {
 
@@ -13,7 +14,18 @@ public class StockDTOMapper {
 	 * @return o objeto Stock correspondente
 	 */
 	public static Stock toDomain(StockDTO dto) {
-		return Stock.fromDTO(dto);
+		if (dto == null) {
+			throw new IllegalArgumentException("O DTO de estoque não pode ser nulo");
+		}
+
+		Stock stock = new Stock(dto.quantity());
+		stock.setId(dto.id());
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			stock.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return stock;
 	}
 
 	/**

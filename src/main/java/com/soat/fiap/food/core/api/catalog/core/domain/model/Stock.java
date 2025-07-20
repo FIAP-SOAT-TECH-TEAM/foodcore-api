@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.catalog.core.domain.model;
 import java.time.LocalDateTime;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.StockException;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
@@ -34,21 +33,6 @@ public class Stock {
 	public Stock(int quantity) {
 		validate(quantity);
 		this.quantity = quantity;
-	}
-
-	public static Stock fromDTO(StockDTO dto) {
-		if (dto == null) {
-			throw new IllegalArgumentException("O DTO de estoque não pode ser nulo");
-		}
-
-		Stock stock = new Stock(dto.quantity());
-		stock.setId(dto.id());
-
-		if (dto.createdAt() != null && dto.updatedAt() != null) {
-			stock.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
-		}
-
-		return stock;
 	}
 
 	/**
