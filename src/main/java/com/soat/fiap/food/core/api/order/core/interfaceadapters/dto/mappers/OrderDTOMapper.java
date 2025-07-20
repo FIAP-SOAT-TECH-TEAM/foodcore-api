@@ -20,7 +20,7 @@ public class OrderDTOMapper {
 	 * @return Instância de um Order{@link Order}
 	 */
 	public static Order toDomain(OrderDTO dto) {
-		List<OrderItem> items = dto.items().stream().map(OrderItemDTOMapper::fromDTO).collect(Collectors.toList());
+		List<OrderItem> items = dto.items().stream().map(OrderItemDTOMapper::toDomain).collect(Collectors.toList());
 
 		Order order = new Order(dto.userId(), items);
 

@@ -17,7 +17,7 @@ public class OrderItemDTOMapper {
 	 * @throws NullPointerException
 	 *             se qualquer parâmetro for nulo
 	 */
-	public static OrderItem fromDTO(OrderItemDTO dto) {
+	public static OrderItem toDomain(OrderItemDTO dto) {
 		Objects.requireNonNull(dto, "O DTO do item do pedido não pode ser nulo");
 
 		OrderItemPrice price = new OrderItemPrice(dto.quantity(), dto.price());
