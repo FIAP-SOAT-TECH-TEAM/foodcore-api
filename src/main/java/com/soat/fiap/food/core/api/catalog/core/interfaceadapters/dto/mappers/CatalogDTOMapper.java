@@ -1,12 +1,14 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
+import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 public class CatalogDTOMapper {
 
@@ -17,13 +19,23 @@ public class CatalogDTOMapper {
 	 *            o CatalogDTO a ser convertido
 	 * @return o objeto Catalog correspondente
 	 */
-	public static Catalog toDomain(CatalogDTO dto) {
-		List<Category> categories = dto.categories()
-				.stream()
-				.map(CategoryDTOMapper::toDomain)
-				.collect(Collectors.toList());
+	public static Catalog fromDTO(CatalogDTO dto) {
+		Objects.requireNonNull(dto, "O DTO do catálogo não pode ser nulo");
 
-		return Catalog.fromDTO(dto);
+		Catalog catalog = new Catalog(dto.name());
+		catalog.setId(dto.id());
+
+		if (dto.categories() != null) {
+			for (CategoryDTO categoryDTO : dto.categories()) {
+				catalog.addCategory(Category.fromDTO(categoryDTO));
+			}
+		}
+
+		if (dto.createdAt() != null && dto.updatedAt() != null) {
+			catalog.setAuditInfo(new AuditInfo(dto.createdAt(), dto.updatedAt()));
+		}
+
+		return catalog;
 	}
 
 	/**
