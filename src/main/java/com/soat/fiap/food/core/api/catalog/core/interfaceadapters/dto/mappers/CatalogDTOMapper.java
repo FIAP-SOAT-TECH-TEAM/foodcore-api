@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
-import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
@@ -27,7 +26,7 @@ public class CatalogDTOMapper {
 
 		if (dto.categories() != null) {
 			for (CategoryDTO categoryDTO : dto.categories()) {
-				catalog.addCategory(Category.fromDTO(categoryDTO));
+				catalog.addCategory(CategoryDTOMapper.toDomain(categoryDTO));
 			}
 		}
 
