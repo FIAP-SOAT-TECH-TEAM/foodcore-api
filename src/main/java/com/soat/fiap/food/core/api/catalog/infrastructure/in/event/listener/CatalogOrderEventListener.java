@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product.UpdateProductStockForCanceledItemsController;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.web.api.product.UpdateProductStockForCreatedItemsController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controller.web.api.product.UpdateProductStockForCanceledItemsController;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controller.web.api.product.UpdateProductStockForCreatedItemsController;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderNotFoundException;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetAcquirerOrderController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetAcquirerOrderController;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetAcquirerOrderController - Testes Unitários")

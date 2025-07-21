@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.ProcessExpiredPaymentsController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.ProcessExpiredPaymentsController;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 

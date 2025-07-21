@@ -8,7 +8,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.InitializePaymentController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.InitializePaymentController;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;

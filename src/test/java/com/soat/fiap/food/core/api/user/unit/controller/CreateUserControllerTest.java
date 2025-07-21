@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.SaveUserController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api.SaveUserController;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;
 

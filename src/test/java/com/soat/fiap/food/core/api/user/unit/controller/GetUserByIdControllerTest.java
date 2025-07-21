@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.controller.web.api.GetUserByIdController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api.GetUserByIdController;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 

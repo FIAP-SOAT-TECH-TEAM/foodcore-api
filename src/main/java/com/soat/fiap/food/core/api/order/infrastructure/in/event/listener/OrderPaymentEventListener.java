@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentApprovedEvent;

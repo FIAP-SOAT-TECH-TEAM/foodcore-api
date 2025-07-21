@@ -4,10 +4,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetAcquirerOrderController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetOrderPaymentQrCodeController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.GetOrderPaymentStatusController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.controller.web.api.ProcessPaymentNotificationController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetAcquirerOrderController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetOrderPaymentQrCodeController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetOrderPaymentStatusController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.ProcessPaymentNotificationController;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;

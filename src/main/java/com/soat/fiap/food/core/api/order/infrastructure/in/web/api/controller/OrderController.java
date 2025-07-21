@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.GetActiveOrdersSortedController;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.GetOrderByIdController;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.SaveOrderController;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.GetActiveOrdersSortedController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.GetOrderByIdController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.SaveOrderController;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
