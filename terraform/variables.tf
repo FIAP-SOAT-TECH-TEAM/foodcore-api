@@ -1,6 +1,6 @@
 variable "resource_group_name" {
   type    = string
-  default = "rg-foodcoreapi"
+  default = "tc2"
 }
 
 variable "location" {
@@ -18,6 +18,7 @@ variable "public_ip_dns_label" {
   default = "foodcoreapi"
 }
 
+# Via tfvars
 variable "subscription_id" {
   type        = string
   description = "Azure Subscription ID"
