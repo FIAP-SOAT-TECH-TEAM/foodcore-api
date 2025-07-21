@@ -38,6 +38,21 @@ spec:
                 configMapKeyRef:
                   name: {{ include "fluentd.fullname" . }}-config
                   key: FLUENTD_SYSTEMD_CONF
+            - name: FLUENT_CONTAINER_TAIL_EXCLUDE_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_CONTAINER_TAIL_EXCLUDE_PATH
+            - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+            - name: FLUENT_KUBERNETES_METADATA_SKIP_LABELS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "fluentd.fullname" . }}-config
+                  key: FLUENT_KUBERNETES_METADATA_SKIP_LABELS
           resources:
             limits:
               memory: {{ .Values.fluentd.resources.limits.memory }}
@@ -47,14 +62,8 @@ spec:
           volumeMounts:
             - name: {{ .Values.fluentd.volumes.varlog.name }}
               mountPath: {{ .Values.fluentd.volumes.varlog.mountPath }}
-            - name: {{ .Values.fluentd.volumes.varlibdockercontainers.name }}
-              mountPath: {{ .Values.fluentd.volumes.varlibdockercontainers.mountPath }}
-              readOnly: true
       terminationGracePeriodSeconds: 30
       volumes:
         - name: {{ .Values.fluentd.volumes.varlog.name }}
           hostPath:
             path: {{ .Values.fluentd.volumes.varlog.hostPath }}
-        - name: {{ .Values.fluentd.volumes.varlibdockercontainers.name }}
-          hostPath:
-            path: {{ .Values.fluentd.volumes.varlibdockercontainers.hostPath }}

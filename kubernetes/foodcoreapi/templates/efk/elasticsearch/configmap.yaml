@@ -6,7 +6,6 @@ metadata:
     app: {{ include "elasticsearch.name" . }}
 data:
   cluster.name: {{ .Values.elasticsearch.clusterName | quote }}
-  discovery.seed_hosts: {{ .Values.elasticsearch.discoverySeedHosts | quote }}
-  cluster.initial_master_nodes: {{ .Values.elasticsearch.initialMasterNodes | quote }}
   ES_JAVA_OPTS: {{ .Values.elasticsearch.javaOpts | quote }}
   discovery.type: {{ .Values.elasticsearch.discoveryType | quote }}
+  xpack.security.enabled: {{ .Values.elasticsearch.sslEnabled | quote }}

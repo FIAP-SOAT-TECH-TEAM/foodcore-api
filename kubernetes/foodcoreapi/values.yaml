@@ -79,7 +79,7 @@ ingress-nginx:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
-      loadBalancerIP: 172.191.25.0
+      loadBalancerIP: 172.172.219.118
 
 resources:
   {}
@@ -245,7 +245,7 @@ elasticsearch:
 
   image:
     repository: docker.elastic.co/elasticsearch/elasticsearch
-    tag: "7.5.0"
+    tag: "8.13.4"
 
   resources:
     limits:
@@ -254,10 +254,9 @@ elasticsearch:
       cpu: "100m"
 
   clusterName: k8s-logs
-  discoverySeedHosts: "" # Single Node
-  initialMasterNodes: "" # Single Node
   javaOpts: "-Xms512m -Xmx512m"
   discoveryType: "single-node"
+  sslEnabled: false
 
   storageSize: 3Gi
 
@@ -279,12 +278,14 @@ fluentd:
 
   image:
     repository: fluent/fluentd-kubernetes-daemonset
-    tag: v1.4.2-debian-elasticsearch-1.1
+    tag: v1.18-debian-elasticsearch8-1
 
   elasticsearch:
     scheme: "http"
 
   systemdConf: "disable"
+  containerTailParserType: "cri"
+  skipLabels: true
 
   resources:
     limits:
@@ -298,10 +299,6 @@ fluentd:
       name: varlog
       hostPath: /var/log
       mountPath: /var/log
-    varlibdockercontainers:
-      name: varlibdockercontainers
-      hostPath: /var/lib/docker/containers
-      mountPath: /var/lib/docker/containers
 
 kibana:
   name: kibana
@@ -310,7 +307,7 @@ kibana:
 
   image:
     repository: docker.elastic.co/kibana/kibana
-    tag: "7.5.0"
+    tag: "8.13.4"
 
   ports:
     port: 5601

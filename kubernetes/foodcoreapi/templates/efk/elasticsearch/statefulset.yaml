@@ -41,16 +41,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: discovery.seed_hosts
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "elasticsearch.fullname" . }}-config
-                  key: discovery.seed_hosts
-            - name: cluster.initial_master_nodes
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "elasticsearch.fullname" . }}-config
-                  key: cluster.initial_master_nodes
             - name: ES_JAVA_OPTS
               valueFrom:
                 configMapKeyRef:
@@ -61,7 +51,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "elasticsearch.fullname" . }}-config
                   key: discovery.type
-      
+            - name: xpack.security.enabled
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "elasticsearch.fullname" . }}-config
+                  key: xpack.security.enabled
       initContainers:
         - name: fix-permissions
           image: busybox
