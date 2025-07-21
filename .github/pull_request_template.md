@@ -9,13 +9,15 @@ Por favor, delete as opções não relevantes.
 
 - [ ] Correção de bug (mudança que corrige um problema sem quebrar funcionalidades)
 - [ ] Nova funcionalidade (mudança que adiciona uma funcionalidade sem quebrar outras)
-- [ ] Mudança com breaking change (correção ou funcionalidade que faria com que funcionalidades existentes não funcionassem como esperado)
+- [ ] Mudança com breaking change (correção ou funcionalidade que faria com que funcionalidades existentes não
+  funcionassem como esperado)
 - [ ] Esta mudança requer uma atualização de documentação
 
 ## Como isso foi testado?
 
 Por favor descreva os testes que você executou para verificar suas mudanças.
-Forneça instruções para que possamos reproduzir. Liste também quaisquer detalhes relevantes para a configuração do teste.
+Forneça instruções para que possamos reproduzir. Liste também quaisquer detalhes relevantes para a configuração do
+teste.
 
 - [ ] Teste unitário
 - [ ] Teste de integração

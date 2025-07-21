@@ -1,0 +1,1266 @@
+_type: export
+__export_format: 4
+__export_date: 2025-07-20T02:15:13.942Z
+__export_source: insomnia.desktop.app:v2023.5.8
+resources:
+  - _id: req_05a9289d357143f5a07cfd41a309dc43
+    parentId: fld_5b0750762d40498e8730121a721a206f
+    modified: 1752352599829
+    created: 1752296059337
+    url: "{{ _.base_url }}/catalogs"
+    name: Get all Catalogs
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_c52bbb14a66346d38ed453f8cf6eb26b
+      - id: pair_f08cecc95e9e45cfa0211c122eec22bb
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296462887
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5b0750762d40498e8730121a721a206f
+    parentId: fld_a808993f9d454c7881ca971d62cf422c
+    modified: 1752296460879
+    created: 1752296452003
+    name: CRUD
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1752296452203
+    _type: request_group
+  - _id: fld_a808993f9d454c7881ca971d62cf422c
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1752295712097
+    created: 1752295709834
+    name: Catalog
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1748754276674
+    _type: request_group
+  - _id: wrk_33cd790473774ea09dbcf50a1785ac31
+    parentId: null
+    modified: 1748133733728
+    created: 1748133733728
+    name: Food Core API
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_d7acd5f9a1a740dd84125be44915c050
+    parentId: fld_5b0750762d40498e8730121a721a206f
+    modified: 1752972158017
+    created: 1752296095816
+    url: "{{ _.base_url }}/catalogs/47"
+    name: Get Catalog by ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_3907b4a1ecc444e3b7718b50adea229c
+      - id: pair_6838b9d01ceb4948a4a93808b95f6408
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296462837
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_8ed87a62c2ff4723a8cb9a14b2b41a02
+    parentId: fld_5b0750762d40498e8730121a721a206f
+    modified: 1752972150041
+    created: 1752295714069
+    url: "{{ _.base_url }}/catalogs"
+    name: Create Catalog
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Teste87"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_a9fe3534acd949459fd23189874d5b56
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_40a950dcf4a340059e599bd415115a0d
+      - id: pair_de9ec065117d400c9ce8b9f45be6a366
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296462812
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b5217335c77e4e6d9583c3b81ac20bbb
+    parentId: fld_5b0750762d40498e8730121a721a206f
+    modified: 1752972165219
+    created: 1752296190351
+    url: "{{ _.base_url }}/catalogs/47"
+    name: Update Catalog
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "TesteBatata2"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_dee8f5410ee34cfa97a63f39ee839664
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_2cff7d1dd56c424b871ca3ca56ec8821
+      - id: pair_1bab157908a94ed9b0d32235ce450cb6
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296462799.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_106fa183701c47e3828f8e8990e8b763
+    parentId: fld_5b0750762d40498e8730121a721a206f
+    modified: 1752972170430
+    created: 1752296224426
+    url: "{{ _.base_url }}/catalogs/47"
+    name: Delete Catalog
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_dbc9c488a6094e719aa2105c557ad88c
+      - id: pair_010be574ec5d46f7935d3607a330e993
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296462793.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cdefd2dc8ef341c0a5612acdd01ac734
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972224589
+    created: 1752353730108
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
+    name: Get Category by ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296481789
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_3b9024a9e46c41759811958246fccd90
+    parentId: fld_a808993f9d454c7881ca971d62cf422c
+    modified: 1752296501402
+    created: 1752296380717
+    name: Categories
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1752295714269
+    _type: request_group
+  - _id: req_2c200216ee914ab79cdbff3650d63c05
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972194618
+    created: 1752353795322
+    url: "{{ _.base_url }}/catalogs/48/categories"
+    name: Get All Categories by Catalog
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296481739
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e1a5a2fc6d7a4f8a9c9abffbe249219b
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972214873
+    created: 1752296394821
+    url: "{{ _.base_url }}/catalogs/categories"
+    name: Create Category
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: data
+          value: |-
+            {
+              "catalogId": 48,
+              "name": "Testes batata 2",
+              "description": "Testes upload",
+              "active": true,
+              "displayOrder": 1
+            }
+          id: pair_b2c58878affb426a89cf8f0b8f384db0
+          type: text
+          multiline: application/json
+        - id: pair_e29004da559d4a5eba46122c81bda561
+          name: imageFile
+          value: ""
+          description: ""
+          type: file
+          multiline: true
+          fileName: C:\Users\cesgu\Downloads\Batata-Especial-1kg.png
+          disabled: true
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296481689
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_1ee6e8d261554e548188c40fc5977c43
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972443030
+    created: 1752357927184
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
+    name: Update Category
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "catalogId": 48,
+          "name": "Teste update 2",
+          "description": "Eu sou um teste",
+          "active": true,
+          "displayOrder": 4
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296472288
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_20ee633996af40ee9672c225eba391fa
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972260661
+    created: 1752358033933
+    url: "{{ _.base_url }}/catalogs/48/categories/28/image"
+    name: Update Category Image
+    description: ""
+    method: PATCH
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: "imageFile "
+          value: ""
+          id: pair_97d76a90ed0848e4bb47f3592205bf0b
+          type: file
+          fileName: C:\Users\cesgu\Downloads\Batata-Especial-1kg.png
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296467587.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2ac61f2a6496419da270acb2e3231e38
+    parentId: fld_3b9024a9e46c41759811958246fccd90
+    modified: 1752972280637
+    created: 1752358117068
+    url: "{{ _.base_url }}/catalogs/48/categories/27"
+    name: Delete Category
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752296465237.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_027dbbac814a4f448ee0eb30c5926ee6
+    parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
+    modified: 1752972053127
+    created: 1748754281053
+    url: "{{ _.base_url }}/payments/89/qrCode"
+    name: Get Order QrCode
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_fe22fd536ccf4337ab5fe2f5e49b356e
+      - id: pair_6d4eda170f03417cbc86fcbc96588e4f
+        name: accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748754281053
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_8623d42ea6134357bbfa7c7e5ff42c34
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1752358592496
+    created: 1748754276624
+    name: Payments
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1748754276661.5
+    _type: request_group
+  - _id: req_ccada0bcf9b14bc78bb828987de2195d
+    parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
+    modified: 1752972108006
+    created: 1748755033430
+    url: "{{ _.base_url }}/payments/89/status"
+    name: Get Order Status
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_c6709d99512843f1b19aa45399188564
+      - id: pair_13f896b2ee2248608e5de0d5e39a396f
+        name: accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748754278888.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d5328d3366094bdbbe4b2dd423d9ef40
+    parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
+    modified: 1752436329769
+    created: 1752426166865
+    url: "{{ _.base_url }}/payments/merchant_orders/2"
+    name: Get Order By Merchant ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_c6709d99512843f1b19aa45399188564
+      - id: pair_13f896b2ee2248608e5de0d5e39a396f
+        name: accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748754256167.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_6367e71271cb490cb469e236a414eee3
+    parentId: fld_8623d42ea6134357bbfa7c7e5ff42c34
+    modified: 1752426217165
+    created: 1752426203376
+    url: "{{ _.base_url }}/payments/webhook"
+    name: Webhook Order
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_c6709d99512843f1b19aa45399188564
+      - id: pair_13f896b2ee2248608e5de0d5e39a396f
+        name: accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      disabled: true
+    metaSortKey: -1748754244807.375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_5dc1f2a405614f3d941228938132c374
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752972691067
+    created: 1752358602170
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
+    name: Get Product by ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671166
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_3b0a79dfd349416385988f0a73c60f7f
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1752358589688
+    created: 1752358583968
+    name: Products
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1748754276649
+    _type: request_group
+  - _id: req_2d12f9d0beab40fda07c43a1ea842952
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752972329107
+    created: 1752364471809
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products"
+    name: Get Product by category
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671141
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cd40936a7e27425b8109b35740559a81
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752972652821
+    created: 1752366920851
+    url: "{{ _.base_url }}/catalogs/48/categories/products"
+    name: Create Product
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_be93a00ce80749f781253b1d68abd7e6
+          name: data
+          value: |-
+            {
+              "categoryId": 28,
+              "name": "Teste8",
+              "description": "Teste 4445",
+              "price": 25.9,
+              "stockQuantity": 5,
+              "displayOrder": 4
+            }
+          description: ""
+          type: text
+          multiline: application/json
+        - id: pair_dfde4eacb81c497fbcf53bdbb335692b
+          name: imageFile
+          value: ""
+          description: ""
+          type: file
+          fileName: C:\Users\cesgu\Downloads\Batata-Especial-1kg.png
+          disabled: false
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671134.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c1572fe5c50744cdaa11681ada231cd2
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752972705011
+    created: 1752370831559
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
+    name: Update Product
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "categoryId": 28,
+          "name": "Teste update",
+          "description": "teste update batata",
+          "price": 25.9,
+          "stockQuantity": 44,
+          "displayOrder": 1
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671133.1875
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_20c0eee85c7e428993bc10986a816c4a
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752973159033
+    created: 1752370475314
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/41/image"
+    name: Update Product Image
+    description: ""
+    method: PATCH
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: "imageFile "
+          value: ""
+          id: pair_a72b3255834f4f709349d0502039b238
+          type: file
+          fileName: C:\Users\cesgu\Downloads\Batata-Especial-1kg.png
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671132.7969
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_120d5b1e606347258422059fad11be97
+    parentId: fld_3b0a79dfd349416385988f0a73c60f7f
+    modified: 1752972716892
+    created: 1752370921632
+    url: "{{ _.base_url }}/catalogs/48/categories/28/products/40"
+    name: Delete Product
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_f30b9afca8024471ba0919cd5267f1e6
+      - id: pair_9160315f7fa246cdaff14d3a97f4cb74
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1752426671132.4062
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_7084ae2f4d1e464d9434b336fc2fabe9
+    parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
+    modified: 1752972017267
+    created: 1748754210615
+    url: "{{ _.base_url }}/orders"
+    name: Create Order
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "userId": 26,
+          "items": [
+            {
+              "productId": 2,
+              "name": "X-Bacon",
+              "quantity": 2,
+              "unitPrice": 24.9,
+              "observations": "Sem cebola"
+            }
+          ]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b0948be04a3a47bea07c575cadad2ede
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_4e8dd3ea278e4adb9eda94f6a11fe7cf
+      - id: pair_6d709b8befc54df891bd67674dd40d4a
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_9577f4cf2b494c7ba552cb8188921fa5',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748754210615
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5bff4191f53a4dba839cd6f7ef15b7f3
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1748754190245
+    created: 1748754190245
+    name: Orders
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1748754190245
+    _type: request_group
+  - _id: req_5738e354370543249a29586155b6b539
+    parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
+    modified: 1752972041550
+    created: 1752435964407
+    url: "{{ _.base_url }}/orders/89"
+    name: Get order by ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_4b4e5209075341368e96251c3205f3f0
+      - id: pair_f62f407b7fed4d5f8d5af262137f5834
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748676649083.125
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9a17629e002d439b91043cf882f07b65
+    parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
+    modified: 1752431301740
+    created: 1752426257957
+    url: "{{ _.base_url }}/orders/2/status"
+    name: Update Order Status
+    description: ""
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "status": "PREPARING"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7722f70577f34473a59b11a7afd0c1c4
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_ba4903b2980a40cf97f8795fd61a1063
+      - id: pair_508fc6f00dab4138ae1cba9e98e2f5d8
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748599087551.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_8fa7ce2b4a944adab685ae77451e15ca
+    parentId: fld_5bff4191f53a4dba839cd6f7ef15b7f3
+    modified: 1752431292313
+    created: 1752426297112
+    url: "{{ _.base_url }}/orders/active"
+    name: Get all active orders
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_4b4e5209075341368e96251c3205f3f0
+      - id: pair_f62f407b7fed4d5f8d5af262137f5834
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748521526019.375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_ea8f30dbbd3a444795f52d7313c24010
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752432201553
+    created: 1748227888097
+    url: "{{ _.base_url }}/users/1"
+    name: Get user by ID
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_eeb713b143174f8ba1488897a82bc098
+      - id: pair_b5656d50f8f145c980605e2d0c590a25
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748133740239
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_b7d0109a253c42c18cd58e15a29110c7
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1752296418768
+    created: 1748133738730
+    name: User
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1748599077366.25
+    _type: request_group
+  - _id: req_a5837f2515e74bd59e6c00601f2628df
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752432214600
+    created: 1748134031252
+    url: "{{ _.base_url }}/users"
+    name: Get all users
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_e1bc67974ed3444586245daf286ddd8c
+      - id: pair_7ff274f3ad274f54a463f4e2e6ae013d
+        name: Accept
+        value: Application/Json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748133740189
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_33c465ee0545429da993d43213301e9c
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752971907909
+    created: 1748728518626
+    url: "{{ _.base_url }}/users/document/929.924.370-00"
+    name: Get user by document
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_9b9a6970fca444119e598129518728e4
+      - id: pair_e9a8e51b6e054f8da35a44be1871734b
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1748133740164
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9577f4cf2b494c7ba552cb8188921fa5
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1751857526626
+    created: 1748133740139
+    url: "{{ _.base_url }}/users"
+    name: Create User
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "guest": false,
+          "name": "João Silva",
+          "username": "Jão3",
+          "email": "joao.silva5@email.com",
+          "password": "batata123",
+        	"document": "929.924.370-00"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_25a70ec7a2884770bc6d38de1d0046cf
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_de5fdd2a0986424592a8086ac43ac612
+      - id: pair_c4c47165ffa94693b8651ac27f2f9783
+        name: Accept
+        value: application/json
+        description: ""
+    authentication: {}
+    metaSortKey: -1748133740139
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_50d953059d534c679398acee73611542
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752432148679
+    created: 1748306699603
+    url: "{{ _.base_url }}/users/login"
+    name: Login
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "admin@fastfood.com",
+        	"password": "admin123"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_25a70ec7a2884770bc6d38de1d0046cf
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_de5fdd2a0986424592a8086ac43ac612
+      - id: pair_c4c47165ffa94693b8651ac27f2f9783
+        name: Accept
+        value: application/json
+        description: ""
+    authentication: {}
+    metaSortKey: -1748058006652.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9461810e316f4fd1a4494e98cd4e8b6c
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752432409370
+    created: 1752432126406
+    url: "{{ _.base_url }}/users/26"
+    name: Update User
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "guest": false,
+          "name": "Teste Update",
+          "username": "Jão3",
+          "email": "joao.silva5@email.com",
+          "password": "batata123",
+        	"document": "929.924.370-00"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_25a70ec7a2884770bc6d38de1d0046cf
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_de5fdd2a0986424592a8086ac43ac612
+      - id: pair_c4c47165ffa94693b8651ac27f2f9783
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1747982273166
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_a89da0ea540c4c979a4d4af9b6981763
+    parentId: fld_b7d0109a253c42c18cd58e15a29110c7
+    modified: 1752971998145
+    created: 1752432141053
+    url: "{{ _.base_url }}/users/16"
+    name: Delete User
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/2023.5.8
+        id: pair_4cb8921b0b8f42438d8c200dbb846d87
+      - id: pair_2bfb2003530c4bc9bc967237732ced3c
+        name: Accept
+        value: application/json
+        description: ""
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_50d953059d534c679398acee73611542',
+        'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+    metaSortKey: -1747906539679.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_16f1920b3b8358f8d81a71a88411c18801831855
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1748133780485
+    created: 1748133733739
+    name: Base Environment
+    data:
+      base_url: http://batata.com:8085/api
+    dataPropertyOrder:
+      "&":
+        - base_url
+    color: null
+    isPrivate: false
+    metaSortKey: 1748133733739
+    _type: environment
+  - _id: jar_16f1920b3b8358f8d81a71a88411c18801831855
+    parentId: wrk_33cd790473774ea09dbcf50a1785ac31
+    modified: 1748754437997
+    created: 1748133733741
+    name: Default Jar
+    cookies:
+      - key: JSESSIONID
+        value: BC38AAE64A4B7E6CCD0370752FECD30B
+        domain: batata.com
+        path: /api
+        httpOnly: true
+        hostOnly: true
+        creation: 2025-05-26T02:51:00.619Z
+        lastAccessed: 2025-06-01T05:07:17.996Z
+        id: "9964526184881215"
+    _type: cookie_jar
