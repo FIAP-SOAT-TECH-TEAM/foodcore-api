@@ -5,8 +5,8 @@ Este diretório contém as configurações Docker do projeto, organizadas em sub
 ## Estrutura de Diretórios
 
 - `/docker`
-  - `/sonar` - Configuração do SonarQube para análise de código
-  - `/act` - Configuração do Act para execução local de GitHub Actions
+    - `/sonar` - Configuração do SonarQube para análise de código
+    - `/act` - Configuração do Act para execução local de GitHub Actions
 
 ## Redes Docker
 
