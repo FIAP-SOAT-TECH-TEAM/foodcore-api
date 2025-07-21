@@ -2,12 +2,14 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.CategoryMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.AddCategoryToCatalogUseCase;
+import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryImageInCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.CategoryPresenter;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ public class SaveCategoryController {
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 
 		var gateway = new CatalogGateway(catalogDataSource);
+		var imageStorageGateway = new ImageStorageGateway(imageDataSource);
 
 		var categoryInput = CategoryMapper.toInput(categoryRequest);
 
@@ -42,13 +45,15 @@ public class SaveCategoryController {
 
 		var savedCatalog = gateway.save(catalog);
 
-		var savedCategory = savedCatalog.getCategories().getLast();
+		var savedCategory = savedCatalog.getLastCategoryOfCatalog();
 
 		log.debug("Categoria criada com sucesso: {}", savedCategory.getId());
 
 		if (imageFile != null) {
-			savedCategory = UpdateCategoryImageController.updateCategoryImage(savedCategory.getCatalog().getId(),
-					savedCategory.getId(), imageFile, catalogDataSource, imageDataSource);
+			var updatedCatalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(savedCategory.getCatalog().getId(),
+					savedCategory.getId(), imageFile, gateway, imageStorageGateway);
+			savedCatalog = gateway.save(updatedCatalog);
+			savedCategory = savedCatalog.getLastCategoryOfCatalog();
 
 			log.debug("Categoria atualizada com sucesso: {}", savedCategory.getImageUrl().imageUrl());
 		}

@@ -165,7 +165,7 @@ public class ProductController {
 			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
 		}
 
-		return UpdateProductImageController.updateProductImageResponse(catalogId, categoryId, productId, fileUpload,
+		return UpdateProductImageController.updateProductImage(catalogId, categoryId, productId, fileUpload,
 				catalogDataSource, imageDataSource);
 
 	}

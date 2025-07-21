@@ -38,38 +38,20 @@ public class UpdateCategoryImageController {
 	 * @throws RuntimeException
 	 *             se ocorrer um erro durante o upload da imagem
 	 */
-	public static Category updateCategoryImage(Long catalogId, Long categoryId, FileUploadDTO imageFile,
-			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
-		return executeUpdate(catalogId, categoryId, imageFile, catalogDataSource, imageDataSource);
-	}
-
-	public static CategoryResponse updateProductImageResponse(Long catalogId, Long categoryId, FileUploadDTO imageFile,
-			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
-		var updatedCategory = executeUpdate(catalogId, categoryId, imageFile, catalogDataSource, imageDataSource);
-		return CategoryPresenter.toCategoryResponse(updatedCategory);
-	}
-
-	/**
-	 * Executa a atualização de imagem de uma catgoria.
-	 */
-	private static Category executeUpdate(Long catalogId, Long categoryId, FileUploadDTO imageFile,
+	public static CategoryResponse updateProductImage(Long catalogId, Long categoryId, FileUploadDTO imageFile,
 			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 
 		log.debug("Atualizando imagem do categoria ID: {}", categoryId);
 
 		var catalogGateway = new CatalogGateway(catalogDataSource);
-
 		var imageStorageGateway = new ImageStorageGateway(imageDataSource);
 
 		var catalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId, imageFile,
 				catalogGateway, imageStorageGateway);
 
 		var savedCatalog = catalogGateway.save(catalog);
+		var savedCategory = savedCatalog.getCategoryById(categoryId);
 
-		return savedCatalog.getCategories()
-				.stream()
-				.filter(c -> c.getId().equals(categoryId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada após atualização da imagem"));
+		return CategoryPresenter.toCategoryResponse(savedCategory);
 	}
 }

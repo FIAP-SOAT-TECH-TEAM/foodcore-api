@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class UpdateProductImageController {
+
 	/**
 	 * Atualiza apenas a imagem de um produto existente.
 	 *
@@ -26,40 +27,23 @@ public class UpdateProductImageController {
 	 * @param categoryId
 	 *            ID da categoria do produto
 	 * @param productId
-	 *            ID do produto
+	 *            ID do produto a ter a imagem atualizada
 	 * @param imageFile
-	 *            Arquivo da nova imagem
+	 *            Arquivo da nova imagem do produto
 	 * @param catalogDataSource
-	 *            Origem de dados para o gateway
+	 *            Origem de dados para o gateway do catálogo
 	 * @param imageDataSource
-	 *            Origem de dados de imagem para o gateway
+	 *            Origem de dados para o gateway de armazenamento de imagem
+	 * @return Produto com a imagem atualizada
 	 * @throws CatalogNotFoundException
-	 *             se o catálogo não for encontrado
+	 *            se o catálogo não for encontrado
 	 * @throws IllegalArgumentException
-	 *             se o arquivo de imagem for nulo ou vazio
+	 *            se o arquivo de imagem for nulo ou vazio
 	 * @throws RuntimeException
-	 *             se ocorrer um erro durante o upload da imagem
+	 *            se ocorrer um erro durante o upload da imagem
 	 */
-	public static Product updateProductImage(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
-			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
-		return executeUpdate(catalogId, categoryId, productId, imageFile, catalogDataSource, imageDataSource);
-	}
-
-	/**
-	 * Atualiza a imagem de um produto e retorna o DTO de resposta.
-	 */
-	public static ProductResponse updateProductImageResponse(Long catalogId, Long categoryId, Long productId,
+	public static ProductResponse updateProductImage(Long catalogId, Long categoryId, Long productId,
 			FileUploadDTO imageFile, CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
-		Product updatedProduct = executeUpdate(catalogId, categoryId, productId, imageFile, catalogDataSource,
-				imageDataSource);
-		return ProductPresenter.toProductResponse(updatedProduct);
-	}
-
-	/**
-	 * Executa a atualização de imagem de um produto.
-	 */
-	private static Product executeUpdate(Long catalogId, Long categoryId, Long productId, FileUploadDTO imageFile,
-			CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {
 
 		log.debug("Atualizando imagem do produto ID: {}", productId);
 
@@ -69,8 +53,9 @@ public class UpdateProductImageController {
 		var catalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId, productId,
 				imageFile, catalogGateway, imageStorageGateway);
 
-		var savedProduct = catalogGateway.save(catalog);
+		var savedCatalog = catalogGateway.save(catalog);
+		var savedProduct = savedCatalog.getProductById(productId);
 
-		return savedProduct.getProductById(productId);
+		return ProductPresenter.toProductResponse(savedProduct);
 	}
 }

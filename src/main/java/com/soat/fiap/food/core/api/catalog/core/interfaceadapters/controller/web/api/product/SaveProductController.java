@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.controller.we
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.ProductMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.AddProductToCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.PublishProductCreatedEventUseCase;
+import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.presenter.web.api.ProductPresenter;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
@@ -10,6 +11,7 @@ import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.request
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.ImageStorageGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.ImageDataSource;
 
@@ -43,6 +45,7 @@ public class SaveProductController {
 			EventPublisherSource eventPublisherSource) {
 
 		var gateway = new CatalogGateway(catalogDataSource);
+		var imageStorageGateway = new ImageStorageGateway(imageDataSource);
 		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 
 		var productInput = ProductMapper.toInput(productRequest);
@@ -54,8 +57,10 @@ public class SaveProductController {
 		var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 
 		if (imageFile != null) {
-			savedProduct = UpdateProductImageController.updateProductImage(catalogId, productRequest.getCategoryId(),
-					savedProduct.getId(), imageFile, catalogDataSource, imageDataSource);
+			var updatedCatalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, productRequest.getCategoryId(),
+					savedProduct.getId(), imageFile, gateway, imageStorageGateway);
+			savedCatalog = gateway.save(updatedCatalog);
+			savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 		}
 
 		PublishProductCreatedEventUseCase.publishProductCreatedEvent(savedProduct, eventPublisherGateway);

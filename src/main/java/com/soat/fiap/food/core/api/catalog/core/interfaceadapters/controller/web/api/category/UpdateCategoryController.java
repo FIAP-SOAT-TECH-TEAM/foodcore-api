@@ -41,11 +41,7 @@ public class UpdateCategoryController {
 
 		var updatedCatalog = gateway.save(catalog);
 
-		var updatedCategory = updatedCatalog.getCategories()
-				.stream()
-				.filter(c -> c.getId().equals(categoryId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada após atualização"));
+		var updatedCategory = updatedCatalog.getCategoryById(categoryId);
 
 		log.debug("Categoria atualizada com sucesso: {}", updatedCategory.getId());
 

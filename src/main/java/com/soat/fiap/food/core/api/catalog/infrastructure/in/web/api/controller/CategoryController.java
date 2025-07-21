@@ -152,7 +152,7 @@ public class CategoryController {
 			fileUpload = new FileUploadDTO(imageFile.getOriginalFilename(), imageFile.getBytes());
 		}
 
-		return UpdateCategoryImageController.updateProductImageResponse(catalogId, categoryId, fileUpload,
+		return UpdateCategoryImageController.updateProductImage(catalogId, categoryId, fileUpload,
 				catalogDataSource, imageDataSource);
 
 	}

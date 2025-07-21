@@ -163,6 +163,15 @@ public class Catalog {
 	}
 
 	/**
+	 * Retorna a última categoria do catálogo.
+	 *
+	 * @return a categoria correspondente
+	 */
+	public Category getLastCategoryOfCatalog() {
+		return categories.getLast();
+	}
+
+	/**
 	 * Atualiza o nome do catálogo.
 	 *
 	 * @param name
