@@ -7,8 +7,8 @@ import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 
 /**
- * DTO utilizado para representar dados da entidade Payment.
- * Serve como objeto de transferência entre o domínio e o mundo externo (DataSource).
+ * DTO utilizado para representar dados da entidade Payment. Serve como objeto
+ * de transferência entre o domínio e o mundo externo (DataSource).
  */
 public record PaymentDTO(Long id, Long userId, Long orderId, PaymentMethod type, LocalDateTime expiresIn, String tid,
 		BigDecimal amount, String qrCode, PaymentStatus status, LocalDateTime paidAt, String observations,

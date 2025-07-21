@@ -5,7 +5,8 @@ import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.PaymentDTO
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
 /**
- * Mapper responsável por mapear entre a entidade de domínio Payment e seu correspondente DTO.
+ * Mapper responsável por mapear entre a entidade de domínio Payment e seu
+ * correspondente DTO.
  */
 public class PaymentDTOMapper {
 

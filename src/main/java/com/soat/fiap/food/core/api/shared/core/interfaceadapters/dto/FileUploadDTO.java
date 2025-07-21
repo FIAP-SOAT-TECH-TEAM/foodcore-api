@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * DTO utilizado para representar dados básicos para upload de imagens.
- * Serve como objeto de transferência entre o domínio e o mundo externo (DataSource).
+ * DTO utilizado para representar dados básicos para upload de imagens. Serve
+ * como objeto de transferência entre o domínio e o mundo externo (DataSource).
  */
 public record FileUploadDTO(String fileName, byte[] content) {
 

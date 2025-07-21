@@ -9,7 +9,8 @@ import com.soat.fiap.food.core.api.user.core.domain.vo.RoleType;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.UserDTO;
 
 /**
- * Mapper responsável por mapear entre a entidade de domínio User e seu correspondente DTO.
+ * Mapper responsável por mapear entre a entidade de domínio User e seu
+ * correspondente DTO.
  */
 public class UserDTOMapper {
 

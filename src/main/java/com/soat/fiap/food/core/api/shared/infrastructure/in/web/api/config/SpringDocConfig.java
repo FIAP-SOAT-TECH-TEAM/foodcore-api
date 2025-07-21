@@ -30,7 +30,8 @@ public class SpringDocConfig {
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 				.info(new Info().title("Food Core API")
-						.description("API de gerenciamento de pedidos para restaurantes fast-food com Clean Architecture, DDD e monólitos modulares usando Spring Modulith.")
+						.description(
+								"API de gerenciamento de pedidos para restaurantes fast-food com Clean Architecture, DDD e monólitos modulares usando Spring Modulith.")
 						.version("1.0.0")
 						.contact(new Contact().name("Equipe FIAP/SOAT")
 								.email("suporte@foodcoreapi.com")
