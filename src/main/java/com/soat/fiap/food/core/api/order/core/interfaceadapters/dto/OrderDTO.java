@@ -7,7 +7,8 @@ import java.util.List;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 
 /**
- * DTO que representa os dados de um pedido na comunicação entre camadas.
+ * DTO utilizado para representar dados da entidade Order.
+ * Serve como objeto de transferência entre o domínio e o mundo externo (DataSource).
  */
 public record OrderDTO(Long id, Long userId, String orderNumber, OrderStatus status, BigDecimal amount,
 		List<OrderItemDTO> items, LocalDateTime createdAt, LocalDateTime updatedAt) {

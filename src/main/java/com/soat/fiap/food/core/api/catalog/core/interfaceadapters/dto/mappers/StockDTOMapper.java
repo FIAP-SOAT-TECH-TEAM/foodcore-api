@@ -4,6 +4,9 @@ import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
+/**
+ * Mapper responsável por mapear entre a entidade de domínio Stock e seu correspondente DTO.
+ */
 public class StockDTOMapper {
 
 	/**

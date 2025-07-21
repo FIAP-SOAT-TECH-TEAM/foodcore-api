@@ -9,6 +9,9 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
+/**
+ * Mapper responsável por mapear entre a entidade de domínio Catalog e seu correspondente DTO.
+ */
 public class CatalogDTOMapper {
 
 	/**

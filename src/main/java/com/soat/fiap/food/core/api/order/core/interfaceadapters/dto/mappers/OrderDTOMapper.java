@@ -10,6 +10,9 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.OrderItemDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
+/**
+ * Mapper responsável por mapear entre a entidade de domínio Order e seu correspondente DTO.
+ */
 public class OrderDTOMapper {
 
 	/**

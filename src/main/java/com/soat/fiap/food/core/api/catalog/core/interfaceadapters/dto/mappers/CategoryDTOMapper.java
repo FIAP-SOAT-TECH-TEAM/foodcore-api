@@ -10,6 +10,9 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDT
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
 
+/**
+ * Mapper responsável por mapear entre a entidade de domínio Category e seu correspondente DTO.
+ */
 public class CategoryDTOMapper {
 
 	/**
