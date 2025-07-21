@@ -2,8 +2,8 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controlle
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.domain.exceptions.CatalogNotFoundException;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api.ProductPresenter;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
@@ -35,11 +35,11 @@ public class UpdateProductImageController {
 	 *            Origem de dados para o gateway de armazenamento de imagem
 	 * @return Produto com a imagem atualizada
 	 * @throws CatalogNotFoundException
-	 *            se o catálogo não for encontrado
+	 *             se o catálogo não for encontrado
 	 * @throws IllegalArgumentException
-	 *            se o arquivo de imagem for nulo ou vazio
+	 *             se o arquivo de imagem for nulo ou vazio
 	 * @throws RuntimeException
-	 *            se ocorrer um erro durante o upload da imagem
+	 *             se ocorrer um erro durante o upload da imagem
 	 */
 	public static ProductResponse updateProductImage(Long catalogId, Long categoryId, Long productId,
 			FileUploadDTO imageFile, CatalogDataSource catalogDataSource, ImageDataSource imageDataSource) {

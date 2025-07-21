@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 /**
- * Evento de domínio emitido quando um pedido é cancelado
+ * Evento de domínio (DDD) emitido quando um pedido é cancelado
  */
 @Data
 public class OrderItemCanceledEvent {

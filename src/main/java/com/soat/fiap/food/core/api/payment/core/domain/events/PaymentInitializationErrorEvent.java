@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Evento de domínio emitido quando ocorre um erro na inicialização do pagamento
+ * Evento de domínio emitido (DDD) quando ocorre um erro na inicialização do
+ * pagamento
  */
 @Getter @AllArgsConstructor
 public class PaymentInitializationErrorEvent {

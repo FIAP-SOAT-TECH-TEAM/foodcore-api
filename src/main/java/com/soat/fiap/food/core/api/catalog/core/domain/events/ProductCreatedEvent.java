@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Evento de domínio emitido quando um produto é criado
+ * Evento de domínio (DDD) emitido quando um produto é criado
  */
 @Getter @AllArgsConstructor
 public class ProductCreatedEvent {

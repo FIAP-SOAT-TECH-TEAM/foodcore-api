@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controlle
 import java.util.List;
 
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.GetAllCategoriesUseCase;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api.CategoryPresenter;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
 

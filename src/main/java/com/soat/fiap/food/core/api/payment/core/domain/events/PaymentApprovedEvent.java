@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Evento de domínio emitido quando um pagamento é aprovado
+ * Evento de domínio (DDD) emitido quando um pagamento é aprovado
  */
 @Getter @AllArgsConstructor
 public class PaymentApprovedEvent {

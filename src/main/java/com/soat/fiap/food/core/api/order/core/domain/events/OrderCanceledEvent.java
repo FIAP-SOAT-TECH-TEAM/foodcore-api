@@ -7,7 +7,7 @@ import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import lombok.Data;
 
 /**
- * Evento de domínio emitido quando um pedido é cancelado
+ * Evento de domínio (DDD) emitido quando um pedido é cancelado
  */
 @Data
 public class OrderCanceledEvent {

@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api;
 
 import com.soat.fiap.food.core.api.user.core.application.usecases.GetUserByIdUseCase;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.presenter.web.api.UserPresenter;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response.UserResponse;
 

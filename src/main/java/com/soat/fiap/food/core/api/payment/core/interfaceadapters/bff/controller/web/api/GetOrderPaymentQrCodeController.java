@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api;
 
 import com.soat.fiap.food.core.api.payment.core.application.usecases.GetLatestPaymentByOrderIdUseCase;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.presenter.web.api.PaymentPresenter;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AccessManagerGateway;

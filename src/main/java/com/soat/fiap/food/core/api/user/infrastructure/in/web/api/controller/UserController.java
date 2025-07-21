@@ -2,7 +2,6 @@ package com.soat.fiap.food.core.api.user.infrastructure.in.web.api.controller;
 
 import java.util.List;
 
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecuritySource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api.*;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.LoginRequest;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.request.UserRequest;

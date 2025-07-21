@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * DTO reoresentando dados básicos para upload de imagem. Inclui o nome do arquivo e seu conteúdo.
+ * DTO reoresentando dados básicos para upload de imagem. Inclui o nome do
+ * arquivo e seu conteúdo.
  */
 public record FileUploadDTO(String fileName, byte[] content) {
 

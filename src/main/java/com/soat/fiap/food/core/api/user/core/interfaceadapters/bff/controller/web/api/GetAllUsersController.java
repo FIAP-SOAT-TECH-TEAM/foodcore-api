@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.w
 import java.util.List;
 
 import com.soat.fiap.food.core.api.user.core.application.usecases.GetAllUsersUseCase;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.presenter.web.api.UserPresenter;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response.UserResponse;
 

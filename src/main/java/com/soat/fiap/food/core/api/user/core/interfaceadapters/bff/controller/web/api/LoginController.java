@@ -6,8 +6,8 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.SecurityS
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.TokenSource;
 import com.soat.fiap.food.core.api.user.core.application.usecases.GenerateTokenUseCase;
 import com.soat.fiap.food.core.api.user.core.application.usecases.LoginUseCase;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.presenter.web.api.UserPresenter;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response.UserResponse;
 

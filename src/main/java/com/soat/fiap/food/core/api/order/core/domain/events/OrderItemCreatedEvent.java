@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 /**
- * Evento de domínio emitido quando um pedido é criado
+ * Evento de domínio (DDD) emitido quando um pedido é criado
  */
 @Data
 public class OrderItemCreatedEvent {

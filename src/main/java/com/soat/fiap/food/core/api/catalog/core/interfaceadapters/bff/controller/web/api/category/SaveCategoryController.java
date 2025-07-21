@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controlle
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.CategoryMapper;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.AddCategoryToCatalogUseCase;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.category.UpdateCategoryImageInCatalogUseCase;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api.CategoryPresenter;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.CategoryRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
@@ -50,8 +50,8 @@ public class SaveCategoryController {
 		log.debug("Categoria criada com sucesso: {}", savedCategory.getId());
 
 		if (imageFile != null) {
-			var updatedCatalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(savedCategory.getCatalog().getId(),
-					savedCategory.getId(), imageFile, gateway, imageStorageGateway);
+			var updatedCatalog = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(
+					savedCategory.getCatalog().getId(), savedCategory.getId(), imageFile, gateway, imageStorageGateway);
 			savedCatalog = gateway.save(updatedCatalog);
 			savedCategory = savedCatalog.getLastCategoryOfCatalog();
 

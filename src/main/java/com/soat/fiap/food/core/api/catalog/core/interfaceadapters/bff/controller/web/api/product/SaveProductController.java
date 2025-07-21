@@ -4,8 +4,8 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Produ
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.AddProductToCategoryUseCase;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.PublishProductCreatedEventUseCase;
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductImageInCategoryUseCase;
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api.ProductPresenter;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
@@ -57,8 +57,8 @@ public class SaveProductController {
 		var savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 
 		if (imageFile != null) {
-			var updatedCatalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, productRequest.getCategoryId(),
-					savedProduct.getId(), imageFile, gateway, imageStorageGateway);
+			var updatedCatalog = UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId,
+					productRequest.getCategoryId(), savedProduct.getId(), imageFile, gateway, imageStorageGateway);
 			savedCatalog = gateway.save(updatedCatalog);
 			savedProduct = savedCatalog.getLastProductOfCategory(productRequest.getCategoryId());
 		}

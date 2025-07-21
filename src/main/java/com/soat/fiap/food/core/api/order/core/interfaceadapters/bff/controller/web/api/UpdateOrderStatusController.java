@@ -6,8 +6,8 @@ import com.soat.fiap.food.core.api.order.core.application.usecases.PublishOrderC
 import com.soat.fiap.food.core.api.order.core.application.usecases.UpdateOrderStatusUseCase;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderAlreadyHasStatusException;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;

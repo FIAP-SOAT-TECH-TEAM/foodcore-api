@@ -8,7 +8,7 @@ import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import lombok.Data;
 
 /**
- * Evento de domínio emitido quando um pedido é criado
+ * Evento de domínio (DDD) emitido quando um pedido é criado
  */
 @Data
 public class OrderCreatedEvent {

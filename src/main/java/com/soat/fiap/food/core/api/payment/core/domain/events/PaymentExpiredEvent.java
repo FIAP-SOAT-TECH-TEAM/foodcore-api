@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Evento de domínio emitido quando um pagamento expirou
+ * Evento de domínio (DDD) emitido quando um pagamento expirou
  */
 @Getter @AllArgsConstructor
 public class PaymentExpiredEvent {
