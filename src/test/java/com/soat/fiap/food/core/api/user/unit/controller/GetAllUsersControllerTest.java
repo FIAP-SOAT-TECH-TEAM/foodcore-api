@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.api.shared.fixtures.UserFixture;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.controller.web.api.GetAllUsersController;
+import com.soat.fiap.food.core.api.user.core.interfaceadapters.bff.presenter.web.api.UserPresenter;
 import com.soat.fiap.food.core.api.user.core.interfaceadapters.dto.mappers.UserDTOMapper;
 import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 import com.soat.fiap.food.core.api.user.infrastructure.in.web.api.dto.response.UserResponse;
@@ -77,6 +78,7 @@ class GetAllUsersControllerTest {
 	void shouldProcessListWithOnlyOneUser() {
 		// Arrange
 		var user = UserFixture.createValidUser();
+		var userResponse = UserPresenter.toUserResponse(user);
 		var userDTO = UserDTOMapper.toDTO(user);
 		var userDTOs = List.of(userDTO);
 
@@ -88,7 +90,7 @@ class GetAllUsersControllerTest {
 		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(1);
-		assertThat(result.getFirst()).isEqualTo(userDTO);
+		assertThat(result.getFirst()).isEqualTo(userResponse);
 
 		verify(userDataSource).findAll();
 	}

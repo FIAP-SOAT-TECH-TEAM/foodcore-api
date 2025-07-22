@@ -45,9 +45,9 @@ class UpdateProductImageInCategoryUseCaseTest {
 		var newImagePath = "products/1/new-image.jpg";
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+		var imagePath = "products/" + productId;
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
@@ -57,7 +57,7 @@ class UpdateProductImageInCategoryUseCaseTest {
 		// Assert
 		assertThat(result).isNotNull();
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve excluir imagem anterior quando produto já possui imagem")
@@ -73,9 +73,9 @@ class UpdateProductImageInCategoryUseCaseTest {
 		var newImagePath = "products/1/new-image.jpg";
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+		var imagePath = "products/" + productId;
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
 		// Act
@@ -85,7 +85,7 @@ class UpdateProductImageInCategoryUseCaseTest {
 		// Assert
 		assertThat(result).isNotNull();
 		verify(imageStorageGateway).deleteImage("products/1/old-image.jpg");
-		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
@@ -135,9 +135,8 @@ class UpdateProductImageInCategoryUseCaseTest {
 		var productId = 1L;
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(true);
 
-		FileUploadDTO fileUploadDTO = new FileUploadDTO(null, new byte[0]);
+		FileUploadDTO fileUploadDTO = null;
 
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateProductImageInCategoryUseCase.updateProductImageInCategory(catalogId, categoryId,
@@ -158,9 +157,10 @@ class UpdateProductImageInCategoryUseCaseTest {
 		var productId = 1L;
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		var imagePath = "products/" + productId;
 
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO)))
 				.thenThrow(new RuntimeException("Erro no upload"));
@@ -171,6 +171,6 @@ class UpdateProductImageInCategoryUseCaseTest {
 				.hasMessageContaining("Falha ao processar imagem");
 
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("products/" + productId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 }

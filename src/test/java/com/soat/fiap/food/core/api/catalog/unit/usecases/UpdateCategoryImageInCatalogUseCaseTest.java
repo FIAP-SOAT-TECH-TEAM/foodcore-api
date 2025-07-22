@@ -43,11 +43,12 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		var newImagePath = "categories/1/new-image.jpg";
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
 
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
+
+		var imagePath = "categories/" + categoryId;
 
 		// Act
 		var result = UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
@@ -56,7 +57,7 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		// Assert
 		assertThat(result).isNotNull();
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve excluir imagem anterior quando categoria já possui imagem")
@@ -71,9 +72,10 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		var newImagePath = "categories/1/new-image.jpg";
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
+
+		var imagePath = "categories/" + categoryId;
 
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO))).thenReturn(newImagePath);
 
@@ -84,7 +86,7 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		// Assert
 		assertThat(result).isNotNull();
 		verify(imageStorageGateway).deleteImage("categories/1/old-image.jpg");
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve lançar exceção quando catálogo não for encontrado")
@@ -131,9 +133,9 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		var categoryId = 1L;
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(true);
 
-		var fileUploadDTO = new FileUploadDTO(null, new byte[0]);
+		FileUploadDTO fileUploadDTO = null;
+
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
 				fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(IllegalArgumentException.class)
@@ -151,20 +153,21 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		var categoryId = 1L;
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
 
 		when(imageStorageGateway.uploadImage(anyString(), eq(fileUploadDTO)))
 				.thenThrow(new RuntimeException("Erro no upload"));
 
+		var imagePath = "categories/" + categoryId;
+
 		// Act & Assert
 		assertThatThrownBy(() -> UpdateCategoryImageInCatalogUseCase.updateCategoryImageInCatalog(catalogId, categoryId,
 				fileUploadDTO, catalogGateway, imageStorageGateway)).isInstanceOf(RuntimeException.class)
-				.hasMessageContaining("Falha ao processar imagem");
+				.hasMessageContaining("Erro no upload");
 
 		verify(catalogGateway).findById(catalogId);
-		verify(imageStorageGateway).uploadImage("categories/" + categoryId, eq(fileUploadDTO));
+		verify(imageStorageGateway).uploadImage(eq(imagePath), eq(fileUploadDTO));
 	}
 
 	@Test @DisplayName("Deve manter propriedades da categoria inalteradas exceto a imagem")
@@ -180,7 +183,6 @@ class UpdateCategoryImageInCatalogUseCaseTest {
 		var newImagePath = "categories/1/new-image.jpg";
 
 		when(catalogGateway.findById(catalogId)).thenReturn(Optional.of(catalog));
-		when(imageFile.isEmpty()).thenReturn(false);
 
 		var fileUploadDTO = new FileUploadDTO("new-image.jpg", new byte[]{1, 2, 3});
 

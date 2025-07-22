@@ -29,7 +29,7 @@ class SaveCatalogControllerTest {
 	void shouldSaveCatalogSuccessfully() {
 		// Arrange
 		var catalogRequest = CatalogRequest.builder().name("Lanche").build();
-		var catalog = CatalogFixture.createValidCatalog();
+		var catalog = CatalogFixture.createValidCatalog(catalogRequest.getName());
 		CatalogDTO catalogDTO = CatalogDTOMapper.toDTO(catalog);
 
 		when(catalogDataSource.save(any())).thenReturn(catalogDTO);
@@ -65,7 +65,7 @@ class SaveCatalogControllerTest {
 	void shouldReturnValidResponseForCreatedCatalog() {
 		// Arrange
 		var catalogRequest = CatalogRequest.builder().name("Sobremesas").build();
-		var catalog = CatalogFixture.createValidCatalog();
+		var catalog = CatalogFixture.createValidCatalog(catalogRequest.getName());
 		CatalogDTO catalogDTO = CatalogDTOMapper.toDTO(catalog);
 
 		when(catalogDataSource.save(any())).thenReturn(catalogDTO);

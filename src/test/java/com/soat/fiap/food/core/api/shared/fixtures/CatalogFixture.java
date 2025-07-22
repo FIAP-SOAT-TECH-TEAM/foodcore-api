@@ -21,6 +21,10 @@ public class CatalogFixture {
 		return new Catalog("Catálogo Principal");
 	}
 
+	public static Catalog createValidCatalog(String name) {
+		return new Catalog(name);
+	}
+
 	public static Catalog createCatalogWithCategories() {
 		var catalog = new Catalog("Catálogo com Categorias");
 
