@@ -99,7 +99,7 @@ public class Product {
 	 * @return URL da imagem
 	 */
 	public String getImageUrlValue() {
-		return this.imageUrl.imageUrl();
+		return this.imageUrl != null ? this.imageUrl.imageUrl() : null;
 	}
 
 	/**

@@ -25,7 +25,7 @@ public class ProductDTOMapper {
 	public static Product toDomain(ProductDTO dto) {
 		Objects.requireNonNull(dto, "O DTO do produto não pode ser nulo");
 
-		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+		ImageUrl imageUrl = dto.imageUrl() != null ? new ImageUrl(dto.imageUrl()) : null;
 
 		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
 		product.setId(dto.id());

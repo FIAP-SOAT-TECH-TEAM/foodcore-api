@@ -26,7 +26,7 @@ public class CategoryDTOMapper {
 	public static Category toDomain(CategoryDTO dto) {
 		Objects.requireNonNull(dto, "O DTO da categoria não pode ser nulo");
 
-		ImageUrl imageUrl = new ImageUrl(dto.imageUrl());
+		ImageUrl imageUrl = dto.imageUrl() != null ? new ImageUrl(dto.imageUrl()) : null;
 
 		Category category = new Category(dto.details(), imageUrl, dto.displayOrder(), dto.active());
 		category.setId(dto.id());
