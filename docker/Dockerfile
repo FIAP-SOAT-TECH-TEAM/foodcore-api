@@ -2,6 +2,7 @@ FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
 # Copiar arquivos de dependências e build
+COPY spotless-formatter.xml ./
 COPY gradle/ ./gradle/
 COPY gradlew build.gradle settings.gradle ./
 RUN chmod +x ./gradlew
@@ -11,6 +12,9 @@ RUN ./gradlew dependencies --no-daemon
 
 # Copiar código fonte
 COPY src/ ./src/
+
+# Corrigir erros de formatação
+RUN ./gradlew :spotlessApply
 
 # Construir o aplicativo
 RUN ./gradlew build -x test --no-daemon
