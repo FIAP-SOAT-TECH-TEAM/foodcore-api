@@ -11,5 +11,5 @@
 {{- end }}
 
 {{- define "api.mercadopago.notification.url" -}}
-{{- printf "https://%s%s/payments/webhook" (index .Values.ingress.hosts 0).host .Values.api.ingress.path | quote }}
+{{- printf "http://%s%s/payments/webhook" (index .Values.ingress.hosts 0).host .Values.api.ingress.path | quote }}
 {{- end }}

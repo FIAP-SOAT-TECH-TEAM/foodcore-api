@@ -79,7 +79,7 @@ ingress-nginx:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
-      loadBalancerIP: 172.172.219.118
+      loadBalancerIP: 172.178.66.216
 
 resources:
   {}
@@ -159,7 +159,7 @@ api:
     token: APP_USR-6067894635102235-051018-411ad7e519a24f5652d328ba205a2b9a-2430659417
     userId: "2430659417"
     posId: POCMP001POS001
-  
+
   server:
     port: 9090
     profilesActive: "prod"
@@ -168,7 +168,7 @@ api:
     blob:
       connectionString: DefaultEndpointsProtocol=https;AccountName=fastfoodcoreapi;AccountKey=zdptHpyapo/jatHe2DdaajF1zUv7UzC6T81NAWtKCHoEL4NJNOEqiJ7iFxyjutnaAwlUL5i7Ri4P+ASt9KfI4g==;EndpointSuffix=core.windows.net
       containerName: images
-  
+
   auth:
     jwt:
       secret: UOskZ5mykjrhRU8aHuT0sKaOj8Q9i+l6nFZzdpICF0zTSHi8PnbTQtUnKI6mUlNMrSdfQUpN59oWddOc4S3DXQ==
@@ -176,7 +176,7 @@ api:
 
   hpa:
     minReplicas: 1
-    maxReplicas: 5
+    maxReplicas: 10
     cpu:
       utilization:
         averageUtilization: 30
@@ -216,14 +216,14 @@ adminer:
     repository: adminer
     tag: latest
     pullPolicy: IfNotPresent
-  
-  ports: 
+
+  ports:
     port: 8080
     name: adminer
     protocol: TCP
 
   design: "pepa-linha"
-  
+
   resources:
     requests:
       memory: "64Mi"
@@ -231,7 +231,7 @@ adminer:
     limits:
       memory: "128Mi"
       cpu: "100m"
-  
+
   ingress:
     path: /adminer
     pathType: Prefix
