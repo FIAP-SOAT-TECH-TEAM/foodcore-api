@@ -1,0 +1,43 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-service" (include "api.fullname" .) }}
+  labels:
+    app: {{ include "api.name" . }}
+spec:
+  type: ExternalName
+  externalName: {{ printf "%s-service.%s.svc.cluster.local" (include "api.fullname" .) .Values.namespace.default.name }}
+  ports:
+    - port: {{ .Values.api.ports.port }}
+      targetPort: {{ .Values.api.ports.port }}
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-service" (include "kibana.fullname" .) }}
+  labels:
+    app: {{ include "kibana.name" . }}
+spec:
+  type: ExternalName
+  externalName: {{ printf "%s-service.%s.svc.cluster.local" (include "kibana.fullname" .) .Values.namespace.efk.name }}
+  ports:
+    - port: {{ .Values.kibana.ports.port }}
+      targetPort: {{ .Values.kibana.ports.port }}
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-service" (include "adminer.fullname" .) }}
+  labels:
+    app: {{ include "adminer.name" . }}
+spec:
+  type: ExternalName
+  externalName: {{ printf "%s-service.%s.svc.cluster.local" (include "adminer.fullname" .) .Values.namespace.default.name }}
+  ports:
+    - port: {{ .Values.adminer.ports.port }}
+      targetPort: {{ .Values.adminer.ports.port }}
+      protocol: TCP
+{{- end }}

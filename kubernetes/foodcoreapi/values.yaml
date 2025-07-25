@@ -83,7 +83,7 @@ ingress-nginx:
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
       
       # Output Terraform: public_ip_address
-      loadBalancerIP: 20.120.101.44
+      loadBalancerIP: 52.255.181.196
 
 resources:
   {}
@@ -149,12 +149,12 @@ api:
     name: http
 
   resources:
-    limits:
+    requests:
       cpu: 500m
       memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
+    limits:
+      cpu: 900m
+      memory: 1024Mi
 
   ingress:
     path: /api
@@ -173,7 +173,7 @@ api:
   azure:
     blob:
       # Output Terraform: storage_account_connection_string
-      connectionString: DefaultEndpointsProtocol=https;AccountName=foodcoreapi2stgaccount;AccountKey=JZajWjYJqP9+O/CmWbF3y28hhPixgcF8iRPkj9IWtMqXbZ7+b/GwvpUkeMz/gU1xlqwhiYUIxvq3+AStS/SuXQ==;EndpointSuffix=core.windows.net
+      connectionString: DefaultEndpointsProtocol=https;AccountName=foodcoreapi2stgaccount;AccountKey=3jcMAQF4qYLFcPoMNg+EUj45zsJ3gqGeuWrE11LOV2DKZ6R7R/N9cheVqty28a6kQdzznmIOYJeD+AStNb4+1A==;EndpointSuffix=core.windows.net
       # Output Terraform: storage_container_name
       containerName: images
 
@@ -184,10 +184,10 @@ api:
 
   hpa:
     minReplicas: 1
-    maxReplicas: 4
+    maxReplicas: 3
     cpu:
       utilization:
-        averageUtilization: 60
+        averageUtilization: 70
 
 postgresql:
   name: "postgresql"
@@ -211,10 +211,10 @@ postgresql:
     sharedBuffers: "128MB"
 
   resources:
-    limits:
-      cpu: "500m"
-      memory: "2048Mi"
     requests:
+      cpu: "100m"
+      memory: "512Mi"
+    limits:
       cpu: "200m"
       memory: "1024Mi"
 
@@ -242,11 +242,11 @@ adminer:
 
   resources:
     requests:
-      memory: "64Mi"
-      cpu: "50m"
+      cpu: "10m"
+      memory: "32Mi"
     limits:
-      memory: "100Mi"
-      cpu: "70m"
+      cpu: "20m"
+      memory: "64Mi"
 
   ingress:
     path: /adminer
@@ -264,12 +264,12 @@ elasticsearch:
     tag: "8.13.4"
 
   resources:
-    limits:
-      cpu: "500m"
-      memory: "1024Mi"
     requests:
       cpu: "200m"
       memory: "512Mi"
+    limits:
+      cpu: "300m"
+      memory: "1024Mi"
 
   clusterName: k8s-logs
   javaOpts: "-Xms512m -Xmx512m"
@@ -306,12 +306,12 @@ fluentd:
   skipLabels: true
 
   resources:
-    limits:
-      memory: 512Mi
-      cpu: 200m
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
 
   volumes:
     varlog:
@@ -333,12 +333,12 @@ kibana:
     name: http
 
   resources:
-    limits:
-      cpu: 200m
-      memory: 512Mi
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
 
   volumes:
     kibanaconfig:
