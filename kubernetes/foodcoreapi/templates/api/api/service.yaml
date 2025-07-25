@@ -4,6 +4,7 @@ metadata:
   name: {{ include "api.fullname" . }}-service
   labels:
     app: {{ include "api.name" . }}
+  namespace: {{ .Values.namespace.api.name }}
 spec:
   selector:
     app: {{ include "api.name" . }}

@@ -9,4 +9,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ include "fluentd.fullname" . }}-serviceaccount
-  namespace: default
+  namespace: {{ .Values.namespace.efk.name }}

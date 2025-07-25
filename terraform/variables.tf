@@ -15,7 +15,7 @@ variable "dns_prefix" {
 
 variable "public_ip_dns_label" {
   type    = string
-  default = "foodcoreapi"
+  default = "foodcoreapi2" # Único globalmente
 }
 
 # Via tfvars

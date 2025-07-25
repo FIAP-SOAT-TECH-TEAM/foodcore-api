@@ -4,6 +4,7 @@ metadata:
   name: {{ include "adminer.fullname" . }}-service
   labels:
     app: {{ include "adminer.name" . }}
+  namespace: {{ .Values.namespace.api.name }}
 spec:
   type: ClusterIP
   ports:

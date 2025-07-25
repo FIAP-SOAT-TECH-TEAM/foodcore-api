@@ -4,6 +4,7 @@ metadata:
   name: {{ include "api.fullname" . }}-deployment
   labels:
     app: {{ include "api.name" . }}
+  namespace: {{ .Values.namespace.api.name }}
 spec:
   replicas: {{ .Values.api.replicaCount }}
   selector:
@@ -127,5 +128,7 @@ spec:
           resources:
             limits:
               cpu: {{ .Values.api.resources.limits.cpu }}
+              memory: {{ .Values.api.resources.limits.memory }}
             requests:
               cpu: {{ .Values.api.resources.requests.cpu }}
+              memory: {{ .Values.api.resources.requests.memory }}

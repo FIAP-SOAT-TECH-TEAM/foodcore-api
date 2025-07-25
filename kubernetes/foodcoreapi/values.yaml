@@ -66,7 +66,7 @@ ingress:
   annotations: {
   }
   hosts:
-    - host: foodcoreapi.eastus.cloudapp.azure.com
+    - host: foodcoreapi2.eastus.cloudapp.azure.com
 
   tls: []
   #  - secretName: chart-example-tls
@@ -79,7 +79,7 @@ ingress-nginx:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
-      loadBalancerIP: 40.88.28.209
+      loadBalancerIP: 20.120.101.44
 
 resources:
   {}
@@ -146,9 +146,11 @@ api:
 
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
+      memory: 512Mi
     requests:
-      cpu: 100m
+      cpu: 250m
+      memory: 256Mi
 
   ingress:
     path: /api
@@ -176,10 +178,10 @@ api:
 
   hpa:
     minReplicas: 1
-    maxReplicas: 5
+    maxReplicas: 4
     cpu:
       utilization:
-        averageUtilization: 30
+        averageUtilization: 60
 
 postgresql:
   name: "postgresql"
@@ -204,9 +206,11 @@ postgresql:
 
   resources:
     limits:
-      cpu: "1000m"
+      cpu: "500m"
+      memory: "2048Mi"
     requests:
-      cpu: "100m"
+      cpu: "200m"
+      memory: "1024Mi"
 
   auth:
     username: "postgres"
@@ -255,9 +259,11 @@ elasticsearch:
 
   resources:
     limits:
-      cpu: "1000m"
+      cpu: "500m"
+      memory: "1024Mi"
     requests:
-      cpu: "100m"
+      cpu: "200m"
+      memory: "512Mi"
 
   clusterName: k8s-logs
   javaOpts: "-Xms512m -Xmx512m"
@@ -299,7 +305,7 @@ fluentd:
       cpu: 200m
     requests:
       cpu: 100m
-      memory: 200Mi
+      memory: 256Mi
 
   volumes:
     varlog:
@@ -322,9 +328,11 @@ kibana:
 
   resources:
     limits:
-      cpu: 500m
+      cpu: 200m
+      memory: 512Mi
     requests:
       cpu: 100m
+      memory: 256Mi
 
   volumes:
     kibanaconfig:
@@ -349,3 +357,9 @@ storageClass:
   volumeBindingMode: WaitForFirstConsumer
   allowVolumeExpansion: true
   fsType: ext4
+
+namespace:
+  efk:
+    name: efk
+  api:
+    name: foodcoreapi

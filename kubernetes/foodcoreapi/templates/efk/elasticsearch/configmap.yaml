@@ -4,6 +4,7 @@ metadata:
   name: {{ include "elasticsearch.fullname" . }}-config
   labels:
     app: {{ include "elasticsearch.name" . }}
+  namespace: {{ .Values.namespace.efk.name }}
 data:
   cluster.name: {{ .Values.elasticsearch.clusterName | quote }}
   ES_JAVA_OPTS: {{ .Values.elasticsearch.javaOpts | quote }}

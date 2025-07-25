@@ -4,6 +4,7 @@ metadata:
   name: {{ include "postgresql.fullname" . }}-service
   labels:
     app: {{ include "postgresql.name" . }}
+  namespace: {{ .Values.namespace.api.name }}
 spec:
   type: ClusterIP
   ports:

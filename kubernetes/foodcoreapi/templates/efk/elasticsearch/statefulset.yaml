@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "elasticsearch.fullname" . }}-statefulset
+  namespace: {{ .Values.namespace.efk.name }}
 spec:
   serviceName: {{ include "elasticsearch.name" . }}
   replicas: {{ .Values.elasticsearch.replicaCount }}
@@ -19,8 +20,10 @@ spec:
           resources:
             limits:
               cpu: {{ .Values.elasticsearch.resources.limits.cpu }}
+              memory: {{ .Values.elasticsearch.resources.limits.memory }}
             requests:
               cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
+              memory: {{ .Values.elasticsearch.resources.requests.memory }}
           ports:
             - containerPort: {{ .Values.elasticsearch.ports.rest }}
               name: {{ .Values.elasticsearch.ports.nameApi | quote }}

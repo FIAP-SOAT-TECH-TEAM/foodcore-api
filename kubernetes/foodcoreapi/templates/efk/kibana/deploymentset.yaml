@@ -4,6 +4,7 @@ metadata:
   name: {{ include "kibana.fullname" . }}-deployment
   labels:
     app: {{ include "kibana.name" . }}
+  namespace: {{ .Values.namespace.efk.name }}
 spec:
   replicas: {{ .Values.kibana.replicaCount }}
   selector:
@@ -27,8 +28,10 @@ spec:
           resources:
             limits:
               cpu: {{ .Values.kibana.resources.limits.cpu }}
+              memory: {{ .Values.kibana.resources.limits.memory }}
             requests:
               cpu: {{ .Values.kibana.resources.requests.cpu }}
+              memory: {{ .Values.kibana.resources.requests.memory }}
       volumes:
         - name: {{ .Values.kibana.volumes.kibanaconfig.name }}
           configMap:
