@@ -66,6 +66,7 @@ ingress:
   annotations: {
   }
   hosts:
+    # Output Terraform: public_ip_fqdn
     - host: foodcoreapi2.eastus.cloudapp.azure.com
 
   tls: []
@@ -78,7 +79,10 @@ ingress-nginx:
     service:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+        # Output Terraform: resource_group_name
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
+      
+      # Output Terraform: public_ip_address
       loadBalancerIP: 20.120.101.44
 
 resources:
@@ -168,7 +172,9 @@ api:
 
   azure:
     blob:
-      connectionString: DefaultEndpointsProtocol=https;AccountName=fastfoodcoreapi;AccountKey=zdptHpyapo/jatHe2DdaajF1zUv7UzC6T81NAWtKCHoEL4NJNOEqiJ7iFxyjutnaAwlUL5i7Ri4P+ASt9KfI4g==;EndpointSuffix=core.windows.net
+      # Output Terraform: storage_account_connection_string
+      connectionString: DefaultEndpointsProtocol=https;AccountName=foodcoreapi2stgaccount;AccountKey=JZajWjYJqP9+O/CmWbF3y28hhPixgcF8iRPkj9IWtMqXbZ7+b/GwvpUkeMz/gU1xlqwhiYUIxvq3+AStS/SuXQ==;EndpointSuffix=core.windows.net
+      # Output Terraform: storage_container_name
       containerName: images
 
   auth:

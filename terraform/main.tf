@@ -6,21 +6,31 @@ module "resource_group" {
 
 module "public_ip" {
   source              = "./modules/public_ip"
+  dns_prefix          = var.dns_prefix
   resource_group_name = module.resource_group.name
   location            = var.location
-  dns_label           = var.public_ip_dns_label
   allocation_method   = var.allocation_method
   sku                 = var.sku
 }
 
+module "blob" {
+  source                    = "./modules/blob"
+  dns_prefix                = var.dns_prefix
+  resource_group_name       = module.resource_group.name
+  location                  = var.location
+  container_name            = var.container_name
+  account_tier              = var.account_tier
+  account_replication_type  = var.account_replication_type
+}
+
 module "aks" {
   source              = "./modules/aks"
-  resource_group_name = module.resource_group.name
-  location            = var.location
   dns_prefix          = var.dns_prefix
+  resource_group_name = module.resource_group.name
+  resource_group_id   = module.resource_group.id
+  location            = var.location
   node_count          = var.node_count
   vm_size             = var.vm_size
   identity_type       = var.identity_type
   kubernetes_version  = var.kubernetes_version
-  resource_group_id   = module.resource_group.id
 }

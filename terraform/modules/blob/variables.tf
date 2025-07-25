@@ -1,7 +1,7 @@
 # Common
   variable "dns_prefix" {
     type = string
-    description = "Prefixo DNS para o IP público. Deve ser único globalmente."
+    description = "Prefixo DNS para a conta de armazenamento. Deve ser único globalmente."
     
     validation {
       condition     = length(var.dns_prefix) >= 1 && length(var.dns_prefix) <= 54
@@ -22,12 +22,16 @@
     type = string
   }
 
-# Public IP
-  variable "allocation_method" {
-    description = "Método de alocação do IP público"
-    type = string
+# Blob Storage
+  variable "container_name" {
+    description = "Nome do container"
+    type        = string
   }
-  variable "sku" {
-    description = "SKU do IP público"
-    type = string
+  variable "account_tier" {
+    description = "Nivel da conta de armazenamento"
+    type        = string
+  }
+  variable "account_replication_type" {
+    description = "Tipo de replicação da conta de armazenamento"
+    type        = string
   }
