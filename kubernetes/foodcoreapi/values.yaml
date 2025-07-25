@@ -79,7 +79,7 @@ ingress-nginx:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
-      loadBalancerIP: 172.178.66.216
+      loadBalancerIP: 40.88.28.209
 
 resources:
   {}
@@ -176,7 +176,7 @@ api:
 
   hpa:
     minReplicas: 1
-    maxReplicas: 10
+    maxReplicas: 5
     cpu:
       utilization:
         averageUtilization: 30
@@ -201,6 +201,12 @@ postgresql:
   config:
     maxConnections: 100
     sharedBuffers: "128MB"
+
+  resources:
+    limits:
+      cpu: "1000m"
+    requests:
+      cpu: "100m"
 
   auth:
     username: "postgres"
@@ -229,8 +235,8 @@ adminer:
       memory: "64Mi"
       cpu: "50m"
     limits:
-      memory: "128Mi"
-      cpu: "100m"
+      memory: "100Mi"
+      cpu: "70m"
 
   ingress:
     path: /adminer
@@ -290,6 +296,7 @@ fluentd:
   resources:
     limits:
       memory: 512Mi
+      cpu: 200m
     requests:
       cpu: 100m
       memory: 200Mi
@@ -315,7 +322,7 @@ kibana:
 
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
     requests:
       cpu: 100m
 

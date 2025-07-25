@@ -19,7 +19,11 @@ spec:
       - name: {{ include "postgresql.name" . }}
         image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
         imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
-
+        resources:
+          limits:
+            cpu: {{ .Values.postgresql.resources.limits.cpu }}
+          requests:
+            cpu: {{ .Values.postgresql.resources.requests.cpu }}
         ports:
         - name: postgresql
           containerPort: {{ .Values.postgresql.port }}
@@ -61,7 +65,7 @@ spec:
               configMapKeyRef:
                 name: {{ include "postgresql.fullname" . }}-config
                 key: PGDATA
-                
+
         volumeMounts:
             - name: {{ include "postgresql.fullname" . }}-pvc
               mountPath: {{ .Values.postgresql.volumes.postgrevolume.mountPath | quote }}

@@ -41,7 +41,7 @@ variable "node_count" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_DS2_v2"
+  default = "Standard_A4_v2"
 }
 
 variable "identity_type" {
@@ -51,5 +51,5 @@ variable "identity_type" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.32.5" 
+  default = "1.32.5"
 }
