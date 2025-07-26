@@ -8,7 +8,7 @@ metadata:
   name: {{ $svc.name }}
 spec:
   type: ExternalName
-  externalName: "{{ $svc.name }}.{{ $svc.namespace }}.svc.cluster.local"
+  externalName: "{{ $svc.name }}.{{ $svc.namespace }}.svc.cluster.local" # "svc.cluster.local" - sufixo padrão do k8s para serviços internos dentro do cluster
   ports:
     - port: {{ $svc.port }}
 ---
