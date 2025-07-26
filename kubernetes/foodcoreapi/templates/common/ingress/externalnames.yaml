@@ -1,3 +1,4 @@
+# DNS Alias para services em outros namespaces, utilizados pelo Ingress
 {{- if .Values.ingress.enabled }}
 {{- $services := (include "ingress.services" $ | fromYamlArray) }}
 {{- range $svc := $services }}
