@@ -246,7 +246,7 @@ adminer:
       memory: "32Mi"
     limits:
       cpu: "20m"
-      memory: "64Mi"
+      memory: "100Mi"
 
   ingress:
     path: /adminer
@@ -268,8 +268,8 @@ elasticsearch:
       cpu: "200m"
       memory: "512Mi"
     limits:
-      cpu: "300m"
-      memory: "1024Mi"
+      cpu: "400m"
+      memory: "1524Mi"
 
   clusterName: k8s-logs
   javaOpts: "-Xms512m -Xmx512m"
@@ -368,4 +368,4 @@ namespace:
   efk:
     name: efk
   api:
-    name: foodcoreapi
+    name: api
