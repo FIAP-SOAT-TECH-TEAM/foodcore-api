@@ -1022,45 +1022,47 @@ food-core-api/
 └── README.md                                   # Este arquivo
 ```
 
-### Organização Modular (DDD / Arquitetura Hexagonal)
 
-Cada módulo segue a mesma estrutura, implementando a arquitetura hexagonal:
+### 🧱 Estrutura Modular (Clean Architecture)
+
+Cada módulo (catalog, order, payment, ...) segue a mesma estrutura padrão 
 
 ```
-módulo/
-├── application/                          # Camada de aplicação
-│   ├── ports/                            # Portas
-│   │   ├── in/                           # Portas de entrada
-│   │   │   └── ModuloUseCase.java
-│   │   └── out/                          # Portas de saída
-│   │       └── ModuloRepository.java
-│   └── services/                         # Serviços de aplicação
-│       └── ModuloService.java
-├── domain/                               # Domínio
-│   ├── model/                            # Entidades e objetos de valor
-│   │   ├── Entidade.java
-│   │   └── ObjetoValor.java
-│   ├── events/                           # Eventos de domínio
-│   │   └── EntidadeCreatedEvent.java
-│   └── exception/                        # Exceções de domínio
-├── mapper/                               # Mappers entre domínio e DTOs
-│   └── ModuloDtoMapper.java
-└── infrastructure/                       # Infraestrutura
-    ├── adapters/                         # Adaptadores
-    │   ├── in/                           # Adaptadores de entrada
-    │   │   ├── controller/               # Controllers REST
-    │   │   │   └── ModuloController.java
-    │   │   └── dto/                      # DTOs para comunicação externa
-    │   │       ├── request/              # DTOs de requisição
-    │   │       └── response/             # DTOs de resposta
-    │   └── out/                          # Adaptadores de saída
-    │       ├── persistence/              # Persistência de dados
-    │       │   ├── entity/               # Entidades JPA
-    │       │   ├── mapper/               # Mappers entre entidades e domínio
-    │       │   └── repository/           # Repositórios Spring Data
-    │       └── integration/              # Integrações com serviços externos
-    └── config/                           # Configurações específicas do módulo
+módulo/                                 # Módulo da aplicação (ex: catalog)
+├── core/                               # Camada de domínio e aplicação (Core Business Rules)
+│   ├── application/                    # Camada de aplicação (Application Business Rules)
+│   │   ├── inputs/                     # DTOs de entrada para casos de uso
+│   │   │   └── mappers/                # Mapeadores entre inputs e domínio
+│   │   └── usecases/                   # Casos de uso (Application Business Rules)
+│   ├── domain/                         # Camada de domínio (Domain Business Rules)
+│   │   ├── model/                      # Entidades e objetos de valor (Enterprise Business Rules)
+│   │   ├── events/                     # Eventos de domínio
+│   │   ├── exceptions/                 # Exceções de domínio
+│   │   └── vo/                         # Objetos de valor
+│   └── interfaceadapters/              # Camada de adaptação (Interface Adapters)
+│       ├── bff/                        # Camada de interface web (BFF - Backend for Frontend)
+│       │   └── controller/web/api      # Controllers REST (BFF)           
+│       │           └── api/            # Controllers REST (BFF)
+│       ├── presenter/web/api           # Saídas dos casos de uso (Presenter -> ViewModel)
+│       ├── dto/                        # DTOs intermediários e mapeadores
+│       │   └── mappers/                # Mapeadores entre DTOs e domínio
+│       └── gateways/                   # Interfaces de acesso a recursos externos (ex: repos)
+└── infrastructure/                     # Camada de infraestrutura (Frameworks e Drivers)
+    ├── common/                         # Fontes genéricas, utilitários
+    │   └── source                      # DataSource do módulo
+    ├── in/                             # Camada de entrada (Interface Adapters) 
+    │   ├── event/listener/             # Listeners de eventos internos/externos
+    │   └── web/api/controller/         # Endpoints REST (forma alternativa à controller BFF)
+    │       └── dto/                    # DTOs de entrada e saída para camada web
+    ├── out/                            # Camada de saída (Interface Adapters)
+    │   └── persistence/                # Persistência de dados
+    │       └── postgres/               # Implementação específica para PostgreSQL
+    │           ├── entity/             # Entidades JPA
+    │           ├── mapper/             # Mapper Entity <-> Domain
+    │           └── repository/         # Spring Data ou implementação custom
+    └── config/                         # Configurações específicas do módulo
 ```
+
 
 </details>
 
