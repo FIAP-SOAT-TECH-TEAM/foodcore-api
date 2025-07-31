@@ -980,6 +980,29 @@ food-core-api/
 │   ├── docker-compose.yml
 │   └── services/                               # Serviços adicionais
 │
+│
+├── kubernetes/
+│   └── foodcoreapi/                            # Chart Helm principal da aplicação
+│       ├── Chart.yaml                          # Metadata do chart
+│       ├── Chart.lock                          # Dependências travadas
+│       ├── values.yaml                         # Configurações parametrizáveis do chart
+│       └── templates/                          # Templates Helm
+│           ├── api/                            # Subcomponentes da API
+│           │   ├── adminer/                    # Adminer (gerenciador de DB)
+│           │   ├── api/                        # FoodCore API (app principal)
+│           │   ├── postgresql/                 # StatefulSet do banco PostgreSQL
+│           │   └── namespace.yaml              # Namespace da aplicação
+│           ├── common/                         # Componentes reutilizáveis
+│           │   ├── ingress/                    # Ingress + ExternalNames
+│           │   └── volume/                     # StorageClass
+│           └── efk/                            # Stack EFK para logging
+│               ├── elasticsearch/              # StatefulSet e ConfigMap
+│               ├── fluentd/                    # DaemonSet + RBAC
+│               ├── kibana/                     # Interface Kibana
+│               └── namespace.yaml
+│   
+│   
+│
 ├── scripts/                                    # Scripts de gerenciamento
 │
 ├── docs/                                       # Documentação
