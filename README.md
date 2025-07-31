@@ -941,16 +941,31 @@ food-core-api/
 │   │   ├── java/com/soat/fiap/food/core/api/
 │   │   │   ├── FoodCoreApiApplication.java     # Aplicação principal
 │   │   │   │
-│   │   │   ├── catalog/                        # Módulo Catálogo
-│   │   │   │   ├── application/                # Portas e serviços de aplicação
-│   │   │   │   ├── domain/                     # Modelos de domínio e regras de negócio
-│   │   │   │   ├── mapper/                     # Mappers entre domínio e DTOs
-│   │   │   │   └── infrastructure/             # Implementações de adaptadores
+│   │   │   ├── catalog                         # Módulo responsável pelo catálogo (catálogos, categorias e produtos)
+│   │   │   │   ├── core                        # Camada de domínio e aplicação
+│   │   │   │   │    ├── application            # Casos de uso e DTOs de entrada
+│   │   │   │   │    ├── domain                 # Entidades, VOs, eventos e exceções do domínio
+│   │   │   │   │    └── interfaceadapters
+│   │   │   │   │        ├── bff                # Camada de interface web (controllers e presenters)
+│   │   │   │   │        ├── dto                # DTOs e mapeadores da camada de apresentação
+│   │   │   │   │        └── gateways           # Interfaces dos gateways (ports de saída)
+│   │   │   │   └── infrastructure              # Implementações técnicas (web, persistência, eventos, configurações)
 │   │   │   │
-│   │   │   ├── order/                          # Módulo Pedidos
-│   │   │   ├── payment/                        # Módulo Pagamento
-│   │   │   ├── user/                           # Módulo Usuários
-│   │   │   └── shared/                         # Componentes compartilhados
+│   │   │   ├── order                           # Módulo responsável pelos pedidos
+│   │   │   │     ├── core                      # Lógica de domínio e regras de negócio
+│   │   │   │     └── infrastructure            # Implementações de persistência, web e eventos
+│   │   │   │ 
+│   │   │   ├── payment                         # Módulo responsável pelos pagamentos e integração com Mercado Pago
+│   │   │   │   ├── core                        # Casos de uso, entidades, eventos e VOs de pagamento
+│   │   │   │   └── infrastructure              # Web, integração externa (Mercado Pago) e persistência
+│   │   │   │ 
+│   │   │   ├── user                            # Módulo responsável pela gestão de usuários e autenticação
+│   │   │   │   ├── core                        # Casos de uso, modelo de domínio e validações
+│   │   │   │   └── infrastructure              # Controllers e persistência
+│   │   │   ├── shared/                         # Componentes compartilhados
+│   │   │   │   ├── core                        # VOs e exceções genéricas
+│   │   │   │   ├── interfaceadapters           # Gateways genéricos e DTOs utilitários
+│   │   │   │   └── infrastructure              # Configurações globais, autenticação JWT, eventos e storage
 │   │   │
 │   │   └── resources/
 │   │       ├── application.yml                 # Configurações gerais
