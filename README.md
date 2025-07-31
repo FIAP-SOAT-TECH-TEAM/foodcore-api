@@ -1001,7 +1001,18 @@ food-core-api/
 │               ├── kibana/                     # Interface Kibana
 │               └── namespace.yaml
 │   
-│   
+│ 
+├── terraform/
+│   ├── backend.tf                              # Configuração do backend remoto (ex: Azure Storage para o state)
+│   ├── main.tf                                 # Composição dos módulos e recursos
+│   ├── provider.tf                             # Configuração do provedor (Azure)
+│   ├── outputs.tf                              # Outputs globais da infraestrutura
+│   ├── variables.tf                            # Variáveis globais
+│   └── modules/                                # Módulos reutilizáveis para recursos Azure
+│       ├── aks/                                # Criação do cluster AKS (Kubernetes)
+│       ├── blob/                               # Storage Account e Containers
+│       ├── public_ip/                          # Endereços IP públicos
+│       └── resource_group/                     # Resource Group base do ambiente  
 │
 ├── scripts/                                    # Scripts de gerenciamento
 │
