@@ -1049,7 +1049,7 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
 └── infrastructure/                     # Camada de infraestrutura (Frameworks e Drivers)
     ├── common/                         # Fontes genéricas, utilitários
     │   └── source                      # DataSource do módulo
-    ├── in/                             # Camada de entrada (Interface Adapters) 
+    ├── in/                             # Camada de entrada
     │   ├── event/listener/             # Listeners de eventos internos/externos
     │   └── web/api/controller/         # Endpoints REST (forma alternativa à controller BFF)
     │       └── dto/                    # DTOs de entrada e saída para camada web
