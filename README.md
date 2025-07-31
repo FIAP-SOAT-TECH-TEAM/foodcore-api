@@ -45,48 +45,64 @@ um painel administrativo para gerenciamento de produtos, clientes e acompanhamen
 - **Acompanhamento de pedido**: Status em tempo real (Recebido, Em preparação, Pronto, Finalizado)
 - **Painel administrativo**: Gerenciamento de produtos, categorias e pedidos
 
-<h2 id="arquitetura">🏗️ Arquitetura</h2>
+## 🧱 Arquitetura Limpa (Clean Architecture)
 
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-O projeto segue uma arquitetura modular baseada em **Domain-Driven Design (DDD)** com **Spring Modulith** e *
-*Arquitetura Hexagonal**, facilitando a manutenção e promovendo desacoplamento.
+Este projeto segue os princípios da **Arquitetura Limpa** com o objetivo de manter um core de negócio independente, purista e facilmente testável. O desenho modular segue uma separação clara de responsabilidades entre camadas, respeitando dependências unidirecionais e regras de isolamento.
 
-### Arquitetura Hexagonal (Ports & Adapters)
+### 🎯 Princípios Adotados
+
+- O **core** (domain, application e interface adapters) **não possui dependências de frameworks**
+- O uso de bibliotecas externas (como Spring, MapStruct ou JPA) está **restrito à infraestrutura**
+- Todas as interfaces de entrada e saída são representadas por **portas (interfaces)** no core
+- O fluxo é baseado em **casos de uso (UseCases)** acionados por adaptadores de interface
+- As comunicações são feitas por **gateways**, permitindo **inversão de dependência**
+- A arquitetura permite **extração futura para microsserviços**, sem acoplamento com tecnologias específicas
+
+---
+
+### 📐 Diagrama de Fluxo
 
 ```mermaid
-graph TD
-    subgraph "Arquitetura Hexagonal"
-        DOMAIN[Domínio]
+flowchart TD
+    A["Usuário (Frontend / Cliente)"] 
+    B["REST Controller<br/>(Spring Web - Infraestrutura)"]
+    C["Controller<br/>(Web Adapter - Interface Adapter)"]
+    D["UseCase: Criar Pedido<br/>(Core Application)"]
+    E["Gateway: PedidoGateway<br/>(Interface Adapter)"]
+    F["DataSource: PedidoRepository<br/>(Infraestrutura)"]
+    G["Postgres<br/>(Banco de Dados)"]
+    MP["Gateway: MercadoPago<br/>(Interface Adapter)"]
+    MP_API[API Externa: Mercado Pago]
+    H["Presenter<br/>(Interface Adapter)"]
 
-        subgraph "Portas de Entrada"
-            API_Port["API (Porta)"]
-            Webhook_Port["Webhook (Porta)"]
-            Event_Port["Eventos (Porta)"]
-        end
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    D --> MP
+    MP --> MP_API
+    C --> H
+    H --> A
 
-        subgraph "Portas de Saída"
-            DB_Port["Banco de Dados (Porta)"]
-            Acquirer_Port["Adquirente (Porta)"]
-            EventBus_Port["Eventos (Porta)"]
-        end
+    classDef infra fill:#e3f2fd,stroke:#2196f3,stroke-width:1px
+    classDef adapter fill:#f3e5f5,stroke:#9c27b0,stroke-width:1px
+    classDef core fill:#e8f5e9,stroke:#4caf50,stroke-width:1px
+    classDef db fill:#fffde7,stroke:#fbc02d,stroke-width:1px
+    classDef user fill:#fce4ec,stroke:#e91e63,stroke-width:1px
+    classDef external fill:#f1f8e9,stroke:#8bc34a,stroke-width:1px
 
-        DOMAIN --- API_Port
-        DOMAIN --- Webhook_Port
-        DOMAIN --- Event_Port
-        DOMAIN --- DB_Port
-        DOMAIN --- Acquirer_Port
-        DOMAIN --- EventBus_Port
-
-        API_Port --- API_Adapter["/api REST Controller"]
-        Webhook_Port --- Webhook_Adapter["Webhook Controller"]
-        Event_Port --- Event_Adapter["Event Listener"]
-
-        DB_Port --- DB_Adapter["JPA Repository"]
-        Acquirer_Port --- MercadoPago_Adapter["MercadoPago Client"]
-        EventBus_Port --- EventBus_Adapter["ApplicationEventPublisher"]
-    end
+    class A user
+    class B,F infra
+    class C,E,H adapter
+    class D core
+    class G db
+    class MP external
+    class MP_API external
 ```
 
 ### Monolito Modular (Spring Modulith)
