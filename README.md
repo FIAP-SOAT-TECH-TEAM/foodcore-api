@@ -45,12 +45,12 @@ um painel administrativo para gerenciamento de produtos, clientes e acompanhamen
 - **Acompanhamento de pedido**: Status em tempo real (Recebido, Em preparação, Pronto, Finalizado)
 - **Painel administrativo**: Gerenciamento de produtos, categorias e pedidos
 
-## 🧱 Arquitetura Limpa (Clean Architecture)
+## 🧱 Arquitetura
 
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-Este projeto segue os princípios da **Arquitetura Limpa** com o objetivo de manter um core de negócio independente, purista e facilmente testável. O desenho modular segue uma separação clara de responsabilidades entre camadas, respeitando dependências unidirecionais e regras de isolamento.
+Este projeto segue os princípios da **Arquitetura Limpa (Clean Architecture)** com o objetivo de manter um core de negócio independente, purista e facilmente testável. O desenho modular segue uma separação clara de responsabilidades entre camadas, respeitando dependências unidirecionais e regras de isolamento.
 
 ### 🎯 Princípios Adotados
 
@@ -899,11 +899,20 @@ docker build -t seu-usuario/seu-app:tag .
 docker push seu-usuario/seu-app:tag
 ```
 
-### 6. Atualize o IP público no values.yaml
-Copie o IP público gerado pelo Terraform (output) e atualize o campo correspondente no seu arquivo values.yaml.
+### 6. Configure os valores do Helm com os outputs do Terraform
+Após executar o Terraform, copie os valores de saída necessários (resource group, IP público, connection string e nome do container do Azure Storage) e atualize o arquivo values.yaml do Helm Chart com essas informações:
 
 ```yaml
+service.beta.kubernetes.io/azure-load-balancer-resource-group: "SEU_RESOURCE_GROUP"
 loadBalancerIP: "SEU_IP_PUBLICO"
+connectionString: "SEU_STORAGE_CONNECTION_STRING"
+containerName: "SEU_CONTAINER_NAME"
+```
+
+Você também poderá obter esses valores com o comando:
+
+```bash
+terraform output
 ```
 
 ### 7. Atualize o kubeconfig para se conectar ao novo cluster AKS
