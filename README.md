@@ -23,6 +23,7 @@ da FIAP (Tech Challenge).
   <a href="#taskboard">Task Board</a> •
   <a href="#dicionario">Dicionário de linguagem ubíqua</a>
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
+  <a href="#provisionamento-na-nuvem">Provisionar o projeto na nuvem</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
   <a href="#apis">APIs</a> •
   <a href="#banco-de-dados">Banco de Dados</a> •
@@ -602,6 +603,7 @@ flowchart TD
 ### Requisitos
 
 - Docker e Docker Compose
+- Ngrok (para testes locais de webhook)
 - JDK 21+
 - Gradle 8.0+
 
@@ -662,6 +664,37 @@ chmod +x food
 ./food start:all --build
 ```
 
+### 🛠️ Como configurar o ambiente local com Ngrok
+
+Para que sua aplicação local receba os webhooks de forma funcional (especialmente em endpoints que estão em `localhost`), é necessário utilizar o [Ngrok](https://ngrok.com/).
+
+### ⚙️ Passo a passo para configurar o Ngrok
+
+1. **Baixe o Ngrok:**
+    - Acesse: [https://ngrok.com/download](https://ngrok.com/download) e faça o download de acordo com seu sistema operacional.
+
+2. **Instale e autentique o Ngrok (apenas na primeira vez):**
+   ```bash
+   ngrok config add-authtoken SEU_TOKEN_DO_NGROK
+
+3. **Exponha a porta da aplicação (ex: 8085):**
+   ```bash
+   ngrok http 8085
+   ```
+
+4. **Copie o link gerado:**
+    - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost:8085`.
+
+5. **Atualize o application.properties:**
+    - No arquivo `application.properties`, adicione a URL do Ngrok como base para os webhooks:
+   ```properties
+   mercado-pago.notification-url=https://abc123.ngrok.io/api/payments/webhook
+   ```
+   Se quiser, você pode definir a URL do Ngrok como variável de ambiente:
+   ```bash
+    export MERCADO_PAGO_NOTIFICATION_URL=https://sua-url-do-ngrok.ngrok.io/api/payments/webhook
+    ```
+
 ### Acessando a Aplicação
 
 - **API**: <http://localhost/api>
@@ -691,6 +724,190 @@ SPRING_PROFILES_ACTIVE=dev ./gradlew bootRun
 ```
 
 </details>
+
+<h2 id="provisionar-na-nuvem">☁️ Como provisionar o projeto na nuvem</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+Este projeto utiliza **infraestrutura como código** com Terraform para provisionamento no Azure, e Helm para deploy no AKS.
+
+### Requisitos
+- **Azure CLI**: Para interagir com o Azure ([instalação](#1-azure-cli))
+- **Terraform**: Para provisionamento da infraestrutura ([instalação](#2-terraform))
+- **Helm**: Para gerenciar o Kubernetes ([instalação](#3-helm))
+- **Kubectl**: Para interagir com o cluster Kubernetes ([instalação](#4-kubectl))
+- **Docker**: Para construir e enviar imagens ([instalação](#5-docker))
+- **K6**: Para testes de carga ([instalação](#6-k6))
+
+### 🔧 Instalação dos Requisitos
+
+Siga os passos abaixo para instalar as ferramentas necessárias no seu ambiente:
+
+---
+
+#### 1. Azure CLI
+```bash
+# Windows (via PowerShell)
+Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
+
+# macOS (Homebrew)
+brew install azure-cli
+
+# Linux (APT)
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Verifique a instalação
+az --version
+```
+
+#### 2. Terraform
+```bash
+# macOS/Linux
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+
+# Windows (choco)
+choco install terraform
+
+# Verifique a instalação
+terraform -v
+```
+
+#### 3. Helm
+```bash
+# macOS
+brew install helm
+
+# Windows (choco)
+choco install kubernetes-helm
+
+# Linux
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Verifique a instalação
+helm version --short
+```
+
+#### 4. Kubectl
+```bash
+# macOS
+brew install kubectl
+
+# Windows (choco)
+choco install kubernetes-cli
+
+# Linux
+curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Verifique a instalação
+kubectl version --client
+```
+
+#### 5. Docker
+```bash
+# macOS
+brew install --cask docker
+
+
+# Windows
+choco install docker-desktop
+
+
+# Linux
+sudo apt-get install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Verifique a instalação
+docker --version
+```
+
+#### 6. K6
+```bash
+# macOS
+brew install k6
+
+# Windows (choco)
+choco install k6
+
+# Linux (Ubuntu)
+sudo apt install gnupg ca-certificates
+curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+sudo apt update
+sudo apt install k6
+
+# Verifique a instalação
+k6 version
+```
+
+---
+
+## 🚀 Passo a passo
+
+### 1. Crie uma conta de Armazenamento e um Container no Azure
+
+Essa conta será usada para armazenar o `terraform.tfstate`. Você pode criar isso pelo portal do Azure ou com os comandos CLI abaixo:
+
+```bash
+az storage account create --name nomeDaConta --resource-group nomeDoGrupo --location brazilsouth --sku Standard_LRS
+az storage container create --account-name nomeDaConta --name tfstate
+```
+
+### 2. Crie o arquivo terraform.tfvars
+Crie um arquivo `terraform.tfvars` na raiz do projeto com as seguintes variáveis:
+
+```hcl
+subscription_id = "SUA_SUBSCRIPTION_ID_AZURE"
+```
+
+### 3. Faça login na sua conta Azure
+Instale o Azure CLI e faça login na sua conta:
+
+```bash
+az login
+```
+
+### 4. Execute o Terraform
+```bash
+terraform init
+terraform plan -var-file=terraform.tfvars
+terraform apply -var-file=terraform.tfvars
+ ```
+
+### 5. Faça build da imagem Docker e dê push para o Docker Hub
+```bash
+docker build -t seu-usuario/seu-app:tag .
+docker push seu-usuario/seu-app:tag
+```
+
+### 6. Atualize o IP público no values.yaml
+Copie o IP público gerado pelo Terraform (output) e atualize o campo correspondente no seu arquivo values.yaml.
+
+```yaml
+loadBalancerIP: "SEU_IP_PUBLICO"
+```
+
+### 7. Atualize o kubeconfig para se conectar ao novo cluster AKS
+```bash
+az aks get-credentials --resource-group seu-grupo --name seu-cluster
+```
+
+### 8. Empacote e instale o Helm chart
+```bash
+helm package ./helm
+helm install nome-do-release ./helm-chart-0.1.0.tgz -n nome-do-namespace --create-namespace
+```
+
+### 9. Execute teste de estresse com K6
+```bash
+k6 run stress-test.js
+```
+
+</details>
+
 
 <h2 id="estrutura-do-projeto">📁 Estrutura do Projeto</h2>
 
