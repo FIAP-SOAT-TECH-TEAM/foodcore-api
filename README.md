@@ -1035,14 +1035,13 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
 │   │   │   └── mappers/                # Mapeadores entre inputs e domínio
 │   │   └── usecases/                   # Casos de uso (Application Business Rules)
 │   ├── domain/                         # Camada de domínio (Domain Business Rules)
-│   │   ├── model/                      # Entidades e objetos de valor (Enterprise Business Rules)
+│   │   ├── model/                      # Entidades de domínio 
 │   │   ├── events/                     # Eventos de domínio
 │   │   ├── exceptions/                 # Exceções de domínio
 │   │   └── vo/                         # Objetos de valor
 │   └── interfaceadapters/              # Camada de adaptação (Interface Adapters)
 │       ├── bff/                        # Camada de interface web (BFF - Backend for Frontend)
 │       │   └── controller/web/api      # Controllers REST (BFF)           
-│       │           └── api/            # Controllers REST (BFF)
 │       ├── presenter/web/api           # Saídas dos casos de uso (Presenter -> ViewModel)
 │       ├── dto/                        # DTOs intermediários e mapeadores
 │       │   └── mappers/                # Mapeadores entre DTOs e domínio
