@@ -1025,14 +1025,14 @@ food-core-api/
 
 ### 🧱 Estrutura Modular (Clean Architecture)
 
-Cada módulo (catalog, order, payment, ...) segue a mesma estrutura padrão 
+Cada módulo (ex: `catalog`, `order`, `payment`, etc.) segue a mesma estrutura padrão, baseada nos princípios da Clean Architecture, com separação clara entre regras de negócio, adaptação e infraestrutura.
 
 ```
 módulo/                                 # Módulo da aplicação (ex: catalog)
 ├── core/                               # Camada de domínio e aplicação (Core Business Rules)
 │   ├── application/                    # Camada de aplicação (Application Business Rules)
 │   │   ├── inputs/                     # DTOs de entrada para casos de uso
-│   │   │   └── mappers/                # Mapeadores entre inputs e domínio
+│   │   │   └── mappers/                # Mapeadores Input -> Domínio
 │   │   └── usecases/                   # Casos de uso (Application Business Rules)
 │   ├── domain/                         # Camada de domínio (Domain Business Rules)
 │   │   ├── model/                      # Entidades de domínio 
@@ -1043,8 +1043,8 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
 │       ├── bff/                        # Camada de interface web (BFF - Backend for Frontend)
 │       │   └── controller/web/api      # Controllers REST (BFF)           
 │       ├── presenter/web/api           # Saídas dos casos de uso (Presenter -> ViewModel)
-│       ├── dto/                        # DTOs intermediários e mapeadores
-│       │   └── mappers/                # Mapeadores entre DTOs e domínio
+│       ├── dto/                        # DTOs intermediários
+│       │   └── mappers/                # Mapeadores DTO <-> Domínio
 │       └── gateways/                   # Interfaces de acesso a recursos externos (ex: repos)
 └── infrastructure/                     # Camada de infraestrutura (Frameworks e Drivers)
     ├── common/                         # Fontes genéricas, utilitários
@@ -1052,13 +1052,13 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
     ├── in/                             # Camada de entrada
     │   ├── event/listener/             # Listeners de eventos internos/externos
     │   └── web/api/controller/         # REST controllers (controllers exposto ao mundo externo)
-    │       └── dto/                    # DTOs de entrada e saída para camada web
-    ├── out/                            # Camada de saída
+    │       └── dto/                    # DTOs de entrada/saída (web layer)
+    ├── out/                            # Camada de saída para sistemas externos
     │   └── persistence/                # Persistência de dados
     │       └── postgres/               # Implementação específica para PostgreSQL
     │           ├── entity/             # Entidades JPA
     │           ├── mapper/             # Mapper Entity <-> Domain
-    │           └── repository/         # Spring Data ou implementação custom
+    │           └── repository/         # Implementações de repositórios
     └── config/                         # Configurações específicas do módulo
 ```
 
