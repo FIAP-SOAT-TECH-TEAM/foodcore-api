@@ -1051,9 +1051,9 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
     │   └── source                      # DataSource do módulo
     ├── in/                             # Camada de entrada
     │   ├── event/listener/             # Listeners de eventos internos/externos
-    │   └── web/api/controller/         # Endpoints REST (forma alternativa à controller BFF)
+    │   └── web/api/controller/         # REST controllers (controllers exposto ao mundo externo)
     │       └── dto/                    # DTOs de entrada e saída para camada web
-    ├── out/                            # Camada de saída (Interface Adapters)
+    ├── out/                            # Camada de saída
     │   └── persistence/                # Persistência de dados
     │       └── postgres/               # Implementação específica para PostgreSQL
     │           ├── entity/             # Entidades JPA
