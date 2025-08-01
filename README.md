@@ -141,122 +141,15 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 
 ![Diagrama Entidade-Relacionamento](docs/diagrams/DER.svg)
 
-### Fluxo de Realização do Pedido e Pagamento (Event Storming)
-
-```mermaid
-flowchart TD
-    %% Eventos de Domínio
-    E1[CustomerIdentified] --> E2[OrderCreated]
-    E2 --> E3[ItemAdded]
-    E3 --> E4[OrderConfirmed]
-    E4 --> E5[PaymentRequested]
-    E5 --> E6[QRCodeGenerated]
-    E6 --> E7[PaymentReceived]
-    E7 --> E8[OrderReceived]
-
-    %% Comandos
-    C1[IdentifyCustomer] --> E1
-    C2[CreateOrder] --> E2
-    C3[AddItem] --> E3
-    C4[ConfirmOrder] --> E4
-    C5[RequestPayment] --> E5
-    C6[GenerateQRCode] --> E6
-    C7[ConfirmPayment] --> E7
-    C8[ReceiveOrder] --> E8
-
-    %% Atores
-    A1[Customer] --> C1
-    A1 --> C2
-    A1 --> C3
-    A1 --> C4
-    A1 --> C5
-    A2[PaymentSystem] --> C7
-    A3[Attendant] --> C8
-```
-
-```mermaid
-flowchart TD
-    %% Eventos de Domínio
-    E1[OrderReceived] --> E2[PreparationStarted]
-    E2 --> E3[OrderReady]
-    E3 --> E4[CustomerNotified]
-    E4 --> E5[OrderDelivered]
-    E5 --> E6[OrderFinished]
-
-    %% Comandos
-    C1[StartPreparation] --> E2
-    C2[MarkAsReady] --> E3
-    C3[NotifyCustomer] --> E4
-    C4[DeliverOrder] --> E5
-    C5[FinishOrder] --> E6
-
-    %% Atores
-    A1[Cook] --> C1
-    A1 --> C2
-    A2[System] --> C3
-    A3[Attendant] --> C4
-    A3 --> C5
-
-```
 
 ### Fluxo de Realização do Pedido e Pagamento (Event Storming)
 
-```mermaid
-flowchart TD
-    %% Eventos de Domínio
-    E1[CustomerIdentified] --> E2[OrderCreated]
-    E2 --> E3[ItemAdded]
-    E3 --> E4[OrderConfirmed]
-    E4 --> E5[PaymentRequested]
-    E5 --> E6[QRCodeGenerated]
-    E6 --> E7[PaymentReceived]
-    E7 --> E8[OrderReceived]
-
-    %% Comandos
-    C1[IdentifyCustomer] --> E1
-    C2[CreateOrder] --> E2
-    C3[AddItem] --> E3
-    C4[ConfirmOrder] --> E4
-    C5[RequestPayment] --> E5
-    C6[GenerateQRCode] --> E6
-    C7[ConfirmPayment] --> E7
-    C8[ReceiveOrder] --> E8
-
-    %% Atores
-    A1[Customer] --> C1
-    A1 --> C2
-    A1 --> C3
-    A1 --> C4
-    A1 --> C5
-    A2[PaymentSystem] --> C7
-    A3[Attendant] --> C8
-```
+![Diagrama criação de pedido](docs/diagrams/order-created.svg)
 
 ### Fluxo de Preparação e Entrega do Pedido (Event Storming)
 
-```mermaid
-flowchart TD
-    %% Eventos de Domínio
-    E1[OrderReceived] --> E2[PreparationStarted]
-    E2 --> E3[OrderReady]
-    E3 --> E4[CustomerNotified]
-    E4 --> E5[OrderDelivered]
-    E5 --> E6[OrderFinished]
+![Diagrama preparação de pedido](docs/diagrams/order-preparing.svg)
 
-    %% Comandos
-    C1[StartPreparation] --> E2
-    C2[MarkAsReady] --> E3
-    C3[NotifyCustomer] --> E4
-    C4[DeliverOrder] --> E5
-    C5[FinishOrder] --> E6
-
-    %% Atores
-    A1[Cook] --> C1
-    A1 --> C2
-    A2[System] --> C3
-    A3[Attendant] --> C4
-    A3 --> C5
-```
 
 </details>
 
