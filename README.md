@@ -150,6 +150,18 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 
 ![Diagrama preparação de pedido](docs/diagrams/order-preparing.svg)
 
+### Fluxo de compra e pagamento (Event Storming)
+![Diagrama compra e pagamento](docs/diagrams/order-payment.png)
+
+### Infraestrutura como Código (Terraform)
+
+![Terraform](docs/diagrams/terraform.png)
+
+### Kubernetes
+![Kubernetes](docs/diagrams/kubernetsDiagram.png)
+
+
+
 
 </details>
 
