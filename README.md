@@ -640,7 +640,13 @@ connectionString: "SEU_STORAGE_CONNECTION_STRING"
 containerName: "SEU_CONTAINER_NAME"
 ```
 
-Você também poderá obter esses valores com o comando:
+Para obter a connection string, pois se trata de um output sensível que não será exibido por default, você pode usar o comando:
+
+```bash
+terraform output -raw storage_account_connection_string
+```
+
+Você também poderá ver os outros valores com o comando:
 
 ```bash
 terraform output
