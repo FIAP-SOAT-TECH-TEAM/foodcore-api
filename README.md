@@ -376,6 +376,100 @@ SPRING_PROFILES_ACTIVE=dev ./gradlew bootRun
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
+
+### Testando a Aplicação (Fluxo de compra 🛒)
+
+Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
+
+1. **Criar Usuário** (Opcional):
+   - Você pode se identificar criando um usuário ou seguir como um convidado:
+   ```http
+   POST /users
+   Content-Type: application/json
+   {
+     "guest": false,
+     "name": "João da Silva",
+     "username": "Jão3",
+     "email": "joao@example.com",
+     "password": "batata123",
+	 "document": "929.924.370-00"
+   }
+    ```
+   - Caso você envie o payload vazio, com o campo `guest` como `true` ou até mesmo sem informar email ou CPF, o usuário será criado como convidado
+   - Reenviar o mesmo payload irá retornar o usuário já existente.
+
+2. **Realizar Pedido**:
+   - Crie um pedido com os produtos disponíveis:
+   ```http
+   POST /orders
+   Content-Type: application/json
+   {
+     "customerId": 1,
+     "items": [
+       {
+         "productId": 1,
+         "quantity": 2
+       },
+       {
+         "productId": 2,
+         "quantity": 1
+       }
+     ]
+   }
+   ```
+   - Se o pedido for criado com sucesso, o status retornado será RECEIVED.
+
+3. **Acessar QrCode para Pagamento**:
+   - Após criar o pedido, você receberá o id do pedido que será utilizado nessa rota para gerar o QrCode.
+   ```http
+    GET /orders/{orderId}/qrCode
+    ```
+   - Com o retorno, você poderá copiar o valor de qrCode e utiliza-lo no site [QRCode Monkey](https://www.qrcode-monkey.com/) para gerar o QrCode.
+
+4. **Escaneie o QrCode com o aplicativo do Mercado Pago**:
+   - Abra o aplicativo do Mercado Pago e escaneie o QrCode gerado.
+   - Siga as instruções para concluir o pagamento.
+   - Após o pagamento ser efetuado, o Mercado Pago notificará a aplicação via webhook:
+   ```http
+   POST /payments/webhook
+    ```
+   - Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
+
+
+5. **Preparação do Pedido (Admin/Restaurante)**:
+   - Logue com o usuário admin.
+    ```http
+    POST /users/login
+    Content-Type: application/json
+    {
+	  "email": "admin@fastfood.com",
+	  "password": "admin123"
+    }
+    ```
+   - Após o login, busque todas os pedidos ativos ou busque seu pedido pelo id dele:
+   ```http
+    GET /orders/active
+    GET /orders/{orderId}
+    ```
+    - Altere o status para PREPARING quando iniciar a preparação:   
+    ```http
+    PATCH /orders/{orderId}/status
+    Content-Type: application/json
+    {
+      "status": "PREPARING"
+    }
+    ```
+
+6. **Finalizar Pedido (Admin/Restaurante)**:
+   - Quando o pedido estiver pronto, você poderá finalizar o pedido:
+    ```http
+    PATCH /orders/{orderId}/status
+    Content-Type: application/json
+    {
+      "status": "READY"
+    }
+    ```
+
 </details>
 
 <h2 id="provisionar-na-nuvem">☁️ Como provisionar o projeto na nuvem</h2>
