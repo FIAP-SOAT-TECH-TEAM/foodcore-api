@@ -65,37 +65,7 @@ Este projeto segue os princípios da **Arquitetura Limpa (Clean Architecture)** 
 
 ### 📐 Diagrama de Fluxo
 
-```mermaid
-flowchart TD
-    UI["Cliente / Frontend"]
-    CONTROLLER["Controller de Entrada<br/>(Web Adapter)"]
-    USECASE["Caso de Uso<br/>(Application Core)"]
-    GATEWAY["Gateway / Interface<br/>(Interface Adapter)"]
-    DATASOURCE["DataSource / Repositório<br/>(Infraestrutura)"]
-    DB["Banco de Dados / API Externa"]
-    PRESENTER["Presenter / Mapper<br/>(Interface Adapter)"]
-
-    UI --> CONTROLLER
-    CONTROLLER --> USECASE
-    USECASE --> GATEWAY
-    GATEWAY --> DATASOURCE
-    DATASOURCE --> DB
-    CONTROLLER --> PRESENTER
-    PRESENTER --> UI
-
-    classDef infra fill:#e3f2fd,stroke:#2196f3,stroke-width:1px
-    classDef adapter fill:#f3e5f5,stroke:#9c27b0,stroke-width:1px
-    classDef core fill:#e8f5e9,stroke:#4caf50,stroke-width:1px
-    classDef db fill:#fffde7,stroke:#fbc02d,stroke-width:1px
-    classDef user fill:#fce4ec,stroke:#e91e63,stroke-width:1px
-
-    class UI user
-    class CONTROLLER,PRESENTER adapter
-    class USECASE core
-    class GATEWAY adapter
-    class DATASOURCE infra
-    class DB db
-```
+![Diagrama de Fluxo](docs/diagrams/user-flowchart.svg)
 
 ### Monolito Modular (Spring Modulith)
 
