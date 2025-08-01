@@ -668,6 +668,14 @@ helm install nome-do-release ./helm-chart-0.1.0.tgz -n nome-do-namespace --creat
 k6 run stress-test.js
 ```
 
+### ☁️ Resultado 
+- Após seguir todos os passos, você terá a aplicação provisionada no Azure AKS, com o banco de dados PostgreSQL configurado e a API acessível via Load Balancer. Você poderá acessar a aplicação através do IP público fornecido pelo Terraform.
+- Sua infraestrutura estará da seguinte forma:
+## Terraform
+![Terraform](docs/diagrams/terraform.png)
+## Kubernetes
+![Kubernetes](docs/diagrams/kubernetsDiagram.png)
+
 </details>
 
 
