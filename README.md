@@ -137,7 +137,7 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 
 ![Diagrama Modelo de Domínio](docs/diagrams/domain-model.svg)
 
-### DER (Diagrama Entidade-Relacionamento) [Banco de dados](#banco-de-dados)
+### DER (Diagrama Entidade-Relacionamento) 
 
 ![Diagrama Entidade-Relacionamento](docs/diagrams/DER.svg)
 
@@ -150,14 +150,14 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 
 ![Diagrama preparação de pedido](docs/diagrams/order-preparing.svg)
 
-### Fluxo de compra e pagamento (Event Storming)
+### Fluxo de compra e pagamento (Event Storming) 
 ![Diagrama compra e pagamento](docs/diagrams/order-payment.png)
 
-### Infraestrutura como Código (Terraform)
+### Infraestrutura como Código (Terraform) 
 
 ![Terraform](docs/diagrams/terraform.png)
 
-### Kubernetes
+### Kubernetes 
 ![Kubernetes](docs/diagrams/kubernetsDiagram.png)
 
 
