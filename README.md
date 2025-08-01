@@ -102,27 +102,7 @@ flowchart TD
 A aplicação é estruturada como um monolito modular usando Spring Modulith, com contextos limitados (bounded contexts)
 bem definidos para cada domínio de negócio:
 
-```mermaid
-graph TD
-    subgraph "Monolito Modular"
-        USER[Módulo Usuário]
-        ORDER[Módulo Pedido]
-        CATÁLOGO[Módulo Catálago]
-        PAYMENT[Módulo Pagamento]
-        SHARED[Componentes Compartilhados]
-
-        USER --> CATÁLOGO
-        USER --> ORDER
-        ORDER --> CATÁLOGO
-        ORDER --> PAYMENT
-        PAYMENT --> ORDER
-
-        SHARED --> ORDER
-        SHARED --> USER
-        SHARED --> CATÁLOGO
-        SHARED --> PAYMENT
-    end
-```
+![Diagrama Monolito Modular](docs/diagrams/monolito-modular.svg)
 
 Cada módulo:
 
