@@ -163,6 +163,9 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 ### Infraestrutura & Observabilidade
 
 - **Docker**: Containerização
+- **Docker Compose**: Orquestração de containers
+- **Kubernetes (AKS)**: Orquestração de containers em produção
+- **Terraform**: Provisionamento de infraestrutura como código
 - **Gradle**: Gerenciamento de dependências e builds
 - **SonarQube/SonarCloud**: Análise estática de código
 - **Azure DevOps**: Armazenamento de imagens com o Azure Blob Storage
