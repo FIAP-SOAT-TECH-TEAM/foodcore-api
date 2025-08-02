@@ -22,7 +22,7 @@ da FIAP (Tech Challenge).
   <a href="#diagramas">Diagramas</a> •
   <a href="#eventstorming">Event Storming</a> •
   <a href="#taskboard">Task Board</a> •
-  <a href="#dicionario">Dicionário de linguagem ubíqua</a>
+  <a href="#dicionario">Dicionário de linguagem ubíqua</a> •
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#provisionamento-na-nuvem">Provisionar o projeto na nuvem</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
@@ -1275,6 +1275,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
