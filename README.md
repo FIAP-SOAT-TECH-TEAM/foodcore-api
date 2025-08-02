@@ -468,13 +468,13 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
    ```bash
    ngrok config add-authtoken SEU_TOKEN_DO_NGROK
 
-3. **Exponha a porta da aplicação (ex: 8085):**
+3. **Exponha a porta da aplicação:**
    ```bash
-   ngrok http 8085
+   ngrok http 80
    ```
 
 4. **Copie o link gerado:**
-    - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost:8080`.
+    - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost`.
 
 5. **Atualize o .env:**
     - No arquivo `docker\.env`, adicione a URL do Ngrok como base para os webhooks (não esqueça de adicionar o caminho `/api/payments/webhook` para que o webhook funcione corretamente):
@@ -500,7 +500,8 @@ Com o Ngrok configurado, agora precisamos subir a aplicação.
 ### Iniciando a Aplicação Localmente (via Docker Compose)
 
 ```bash
-# Mude de diretório
+# Clone o repositório
+git clone https://github.com/soat-fiap/food-core-api.git
 cd docker
 
 # Execute a aplicação
@@ -1032,7 +1033,7 @@ POST /api/payments/webhook              # Webhook de notificação de pagamento
 ```
 
 Para documentação completa e interativa, consulte o Swagger/OpenAPI disponível em:
-<http://localhost:8080/swagger-ui.html>
+<http://localhost/swagger-ui.html>
 
 </details>
 

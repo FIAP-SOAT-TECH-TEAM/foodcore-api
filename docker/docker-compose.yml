@@ -6,7 +6,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: food-core-api
+    image: foodcoreapi-monolito-cleanarch:latest
+    container_name: foodcoreapi
     ports:
       - "80:${SERVER_PORT}"
     env_file:
@@ -63,7 +64,7 @@ services:
   # Ferramenta para gerenciar banco de dados (aepnas local)
   adminer:
     image: adminer:latest
-    container_name: food-core-adminer
+    container_name: foodcore-adminer
     ports:
       - "8081:8080"
     depends_on:
@@ -71,8 +72,6 @@ services:
     networks:
       - fastfood-network
     restart: unless-stopped
-    profiles:
-      - local
 
 networks:
   fastfood-network:
