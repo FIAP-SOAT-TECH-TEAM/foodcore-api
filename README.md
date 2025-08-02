@@ -304,26 +304,6 @@ O projeto utiliza um script centralizador `food` para gerenciar todas as operaç
 
 ### Iniciando o Ambiente do Zero
 
-```bash
-# Clone o repositório
-git clone https://github.com/soat-fiap/food-core-api.git
-cd food-core-api
-
-# Tornar o script principal executável
-chmod +x food
-
-# Iniciar infraestrutura (banco, adminer)
-./food start:infra
-
-# Resetar e configurar o banco de dados
-./food db:reset
-
-# Iniciar a aplicação
-./food start:app --build
-
-# Ou iniciar tudo de uma vez
-./food start:all --build
-```
 
 ### 🛠️ Como configurar o ambiente local com Ngrok
 
@@ -347,7 +327,7 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
     - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost:8085`.
 
 5. **Atualize o application.properties:**
-    - No arquivo `application.properties`, adicione a URL do Ngrok como base para os webhooks:
+    - No arquivo `application.properties`, adicione a URL do Ngrok como base para os webhooks (não esqueça de adicionar o caminho `/api/payments/webhook` para que o webhook funcione corretamente):
    ```properties
    mercado-pago.notification-url=https://abc123.ngrok.io/api/payments/webhook
    ```
@@ -355,6 +335,35 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
    ```bash
     export MERCADO_PAGO_NOTIFICATION_URL=https://sua-url-do-ngrok.ngrok.io/api/payments/webhook
     ```
+
+Com o Ngrok configurado, agora precisamos subir a aplicação.
+
+
+
+### Iniciando a Aplicação Localmente
+
+
+
+```bash
+# Clone o repositório
+git clone https://github.com/soat-fiap/food-core-api.git
+cd food-core-api
+
+# Tornar o script principal executável
+chmod +x food
+
+# Iniciar infraestrutura (banco, adminer)
+./food start:infra
+
+# Resetar e configurar o banco de dados
+./food db:reset
+
+# Iniciar a aplicação
+./food start:app --build
+
+# Ou iniciar tudo de uma vez
+./food start:all --build
+```
 
 ### Acessando a Aplicação
 
