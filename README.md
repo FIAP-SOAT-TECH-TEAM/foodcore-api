@@ -46,8 +46,7 @@ um painel administrativo para gerenciamento de produtos, clientes e acompanhamen
 - **Acompanhamento de pedido**: Status em tempo real (Recebido, Em preparação, Pronto, Finalizado)
 - **Painel administrativo**: Gerenciamento de produtos, categorias e pedidos
 
-## 🧱 Arquitetura
-
+<h2 id="arquitetura">🧱 Arquitetura</h2>
 <details>
 <summary>Expandir para mais detalhes</summary>
 
@@ -90,9 +89,6 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 - Fácil migração para uma arquitetura distribuída no futuro
 
 </details>
-
-
-### Infraestrutura
 
 <h2 id="infra">🌐 Infraestrutura</h2>
 <details>
@@ -1241,3 +1237,4 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
