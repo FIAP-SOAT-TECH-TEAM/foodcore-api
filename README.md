@@ -637,9 +637,9 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     }
     ```
    - Após o login, busque todas os pedidos ativos ou busque seu pedido pelo id dele:
-   ``` curl
+   ``` http
     GET /orders/active
-    GET /orders/{orderId}
+    GET /orders/:orderId
     ```
 
 7. **Finalizar Pedido (Admin/Restaurante)**:
