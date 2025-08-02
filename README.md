@@ -640,7 +640,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    ```
     GET /orders/active
     GET /orders/{orderId}
-
+    ```curl
 
 7. **Finalizar Pedido (Admin/Restaurante)**:
    - Quando o pedido estiver pronto, você poderá finalizar o pedido:
