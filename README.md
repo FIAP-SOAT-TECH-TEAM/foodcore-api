@@ -580,15 +580,21 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    POST /orders
    Content-Type: application/json
    {
-     "customerId": 1,
+     "userId": 1,
      "items": [
        {
          "productId": 1,
-         "quantity": 2
+         "name": "X-Bacon",
+         "quantity": 2,
+         "unitPrice": 19.99,
+         "observation": "Sem cebola"
        },
        {
          "productId": 2,
-         "quantity": 1
+         "name": "X-Salada",
+         "quantity": 1,
+         "unitPrice": 15.99,
+         "observation": "Capricha na alface"
        }
      ]
    }
