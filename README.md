@@ -889,7 +889,7 @@ Para documentação completa e interativa, consulte o Swagger/OpenAPI disponíve
 
 O sistema utiliza PostgreSQL como banco de dados principal, com o seguinte esquema:
 
-![Diagrama criação de pedido](docs/diagrams/ER.svg)
+![Diagrama Entidade e Relacionamento](docs/diagrams/DER.svg)
 
 ### Gerenciamento de Migrações
 
