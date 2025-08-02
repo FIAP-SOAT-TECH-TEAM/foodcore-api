@@ -138,25 +138,30 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 ![Diagrama Modelo de Domínio](docs/diagrams/domain-model.svg)
 
 
-### Fluxo de Realização do Pedido e Pagamento 
+### 🛒 Fluxo de Realização do Pedido e Pagamento
 
-![Diagrama criação de pedido](docs/diagrams/order-created.svg)
+#### 📌 Eventos de Domínio
+![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
 
-### Fluxo de Preparação e Entrega do Pedido (Event Storming)
+#### 👤 Fluxo do Usuário
+![Fluxo do Usuário - Criação de Pedido](docs/diagrams/UserFlow.png)
 
-![Diagrama preparação de pedido](docs/diagrams/order-preparing.svg)
+---
 
-### Fluxo de compra e pagamento (Event Storming) 
-![Diagrama compra e pagamento](docs/diagrams/order-payment.png)
+### 🍳 Fluxo de Preparação e Entrega do Pedido
 
-### Infraestrutura como Código (Terraform) 
+#### 📌 Eventos de Domínio
+![Eventos de domínio - Preparação e Entrega do Pedido](docs/diagrams/order-preparing.svg)
 
-![Terraform](docs/diagrams/terraform.png)
+#### 🧑‍🍳 Fluxo do Restaurante
+![Fluxo do Restaurante - Preparação e Entrega](docs/diagrams/AdminFlow.png)
 
-### Kubernetes 
-![Kubernetes](docs/diagrams/kubernetsDiagram.png)
+---
 
+### 💳 Fluxo de Compra e Pagamento
 
+#### 📈 Diagrama Sequencial
+![Diagrama Sequencial - Compra e Pagamento](docs/diagrams/sequencialDiagram.png)
 
 
 </details>
