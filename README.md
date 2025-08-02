@@ -560,8 +560,8 @@ chmod +x food scripts/*.sh
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
 1. **Identificação do cliente** (Opcional):
-   - Você pode se identificar criando um usuário ou seguir como um convidado:
-   #### Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
+   Você pode se identificar criando um usuário ou seguir como um convidado:
+   - Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
    ```http
    POST /users
    Content-Type: application/json
@@ -571,10 +571,10 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "username": "Jão3",
      "email": "joao@example.com",
      "password": "", // vazio pois se trata de um cliente
- 	"document": "929.924.370-00"
+	"document": "929.924.370-00"
    }
     ```
-   #### Caso você envie o payload vazio, com o campo `guest = true` ou até mesmo sem ele, o usuário será criado como convidado:
+   - Caso queira seguir como convidado, envie o payload vazio ou com o campo `guest = true`:
    ```http
    POST /users
    Content-Type: application/json
@@ -656,7 +656,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     GET /orders/active
     GET /orders/{orderId}
     ```
-
+    > ⚠️ O pedido foi alterado para `PREPARING` automaticamente após aprovação do pagamento.
 7. **Marcar o pedido como pronto (Admin/Restaurante)**:
     - Quando o pedido estiver pronto, você poderá marca-lo como pronto para que o usuário possa retira-lo:
    
@@ -1275,6 +1275,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
