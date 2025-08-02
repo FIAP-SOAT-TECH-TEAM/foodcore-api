@@ -502,6 +502,7 @@ Com o Ngrok configurado, agora precisamos subir a aplicação.
 ```bash
 # Clone o repositório
 git clone https://github.com/soat-fiap/food-core-api.git
+cd food-core-api
 cd docker
 
 # Execute a aplicação
@@ -1241,6 +1242,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
