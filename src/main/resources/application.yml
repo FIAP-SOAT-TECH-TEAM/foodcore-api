@@ -66,7 +66,7 @@ logging:
     org.springdoc: DEBUG
 
 server:
-  address: ${SERVER_ADDRESS:0.0.0.0} #endereço para testes
+  address: ${SERVER_ADDRESS:0.0.0.0}
   port: ${SERVER_PORT:8085}
   servlet:
     context-path: /api
