@@ -555,7 +555,7 @@ chmod +x food scripts/*.sh
 
 ### Testando a Aplicação (Fluxo de compra 🛒)
 
-> ⚠️ Para testar o fluxo completo, é necessário executar o seeder, pois ele popula o sistema com dados de catálogos, produtos e estoque essenciais para a continuidade dos testes.
+> ⚠️ O fluxo completo requer dados de catálogos, produtos e estoque, que são automaticamente populados pelos seeders do Liquibase ao iniciar a aplicação.
 
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
