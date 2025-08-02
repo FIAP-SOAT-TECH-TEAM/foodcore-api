@@ -586,17 +586,17 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "items": [
        {
          "productId": 1,
-         "name": "X-Bacon",
+         "name": "X-Burger",
          "quantity": 2,
-         "unitPrice": 19.99,
+         "unitPrice": 22.90,
          "observation": "Sem cebola"
        },
        {
          "productId": 2,
-         "name": "X-Salada",
+         "name": "X-Bacon",
          "quantity": 1,
-         "unitPrice": 15.99,
-         "observation": "Capricha na alface"
+         "unitPrice": 24.90,
+         "observation": "Capricha no bacon"
        }
      ]
    }
@@ -619,12 +619,12 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     ```
    - Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
 
-5. **Acompanhar o Status do Pedido**:
-   - Você pode acompanhar o status do seu pedido a qualquer momento:
+5. **Acompanhar o Status do pagamento do pedido**:
+   - Você pode acompanhar o status do pagamento do seu pedido a qualquer momento:
    ```
     GET /payments/{orderId}/status
     ```
-   - Caso o status seja `APPROVED`, o pedido está pronto para ser preparado pelo restaurante.
+   - Caso o status do pagamento seja `APPROVED`, o pedido foi confirmado e já estará sendo preparado pelo restaurante.
 
 6. **Preparação do Pedido (Admin/Restaurante)**:
    - Logue com o usuário admin.
@@ -640,15 +640,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    ```
     GET /orders/active
     GET /orders/{orderId}
-    ```
-    - Altere o status para PREPARING quando iniciar a preparação:   
-    ```http
-    PATCH /orders/{orderId}/status
-    Content-Type: application/json
-    {
-      "status": "PREPARING"
-    }
-    ```
+
 
 7. **Finalizar Pedido (Admin/Restaurante)**:
    - Quando o pedido estiver pronto, você poderá finalizar o pedido:
