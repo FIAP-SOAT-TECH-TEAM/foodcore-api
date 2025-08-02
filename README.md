@@ -500,8 +500,15 @@ Com o Ngrok configurado, agora precisamos subir a aplicação.
 git clone https://github.com/soat-fiap/food-core-api.git
 cd food-core-api
 
+# Baixar o dos2unix para converter os arquivos de script
+sudo apt install dos2unix     # Debian/Ubuntu
+brew install dos2unix         # macOS
+
+# Converter os arquivos de script para o formato Unix
+dos2unix food scripts/*.sh
+
 # Tornar o script principal executável
-chmod +x food
+chmod +x food scripts/*.sh
 
 # Iniciar infraestrutura (banco, adminer)
 ./food start:infra
