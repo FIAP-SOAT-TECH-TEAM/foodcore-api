@@ -283,23 +283,22 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 
 ![Diagrama Modelo de Domínio](docs/diagrams/domain-model.svg)
 
+---
 
 ### 🛒 Fluxo de Realização do Pedido e Pagamento
 
-#### 📌 Eventos de Domínio
 ![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
 
-#### 👤 Fluxo do Usuário
+#### 🎯 Fluxo Clean Arch
 ![Fluxo do Usuário - Criação de Pedido](docs/diagrams/UserFlow.png)
 
 ---
 
 ### 🍳 Fluxo de Preparação e Entrega do Pedido
 
-#### 📌 Eventos de Domínio
 ![Eventos de domínio - Preparação e Entrega do Pedido](docs/diagrams/order-preparing.svg)
 
-#### 🧑‍🍳 Fluxo do Restaurante
+#### 🎯 Fluxo Clean Arch
 ![Fluxo do Restaurante - Preparação e Entrega](docs/diagrams/AdminFlow.png)
 
 ---
@@ -475,25 +474,40 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
    ```
 
 4. **Copie o link gerado:**
-    - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost:8085`.
+    - O Ngrok irá gerar uma URL do tipo `https://abc123.ngrok.io` que redireciona para `http://localhost:8080`.
 
-5. **Atualize o application.properties:**
-    - No arquivo `application.properties`, adicione a URL do Ngrok como base para os webhooks (não esqueça de adicionar o caminho `/api/payments/webhook` para que o webhook funcione corretamente):
+5. **Atualize o .env:**
+    - No arquivo `docker\.env`, adicione a URL do Ngrok como base para os webhooks (não esqueça de adicionar o caminho `/api/payments/webhook` para que o webhook funcione corretamente):
    ```properties
-   mercado-pago.notification-url=https://abc123.ngrok.io/api/payments/webhook
+   MERCADO_PAGO_NOTIFICATION_URL=https://abc123.ngrok.io/api/payments/webhook
    ```
-   Se quiser, você pode definir a URL do Ngrok como variável de ambiente:
-   ```bash
-    export MERCADO_PAGO_NOTIFICATION_URL=https://sua-url-do-ngrok.ngrok.io/api/payments/webhook
-    ```
 
 Com o Ngrok configurado, agora precisamos subir a aplicação.
 
+>### ⚠️ Ambientes e Dados de Seed
+>
+>O projeto suporta diferentes ambientes com diferentes conjuntos de dados:
+>
+>- **Produção (perfil: prod)**: Apenas dados essenciais
+>- **Desenvolvimento (perfil: dev/local)**: Dados essenciais + dados adicionais para testes
+>
+>Por default, a aplicação iniciará em modo produção. Caso deseje alterar, edite `docker\.env` com o perfil escolhido:
+>
+>```bash
+>SPRING_PROFILES_ACTIVE=nome_do_perfil
+>```
 
+### Iniciando a Aplicação Localmente (via Docker Compose)
 
-### Iniciando a Aplicação Localmente
+```bash
+# Mude de diretório
+cd docker
 
+# Execute a aplicação
+docker compose up -d
+```
 
+### Iniciando a Aplicação Localmente (via Script Centralizador)
 
 ```bash
 # Clone o repositório
@@ -523,6 +537,8 @@ chmod +x food scripts/*.sh
 ./food start:all --build
 ```
 
+> ⚠️ O pacote `dos2unix` é necessário pois os scripts foram criados em ambiente Windows e podem conter quebras de linha no formato `CRLF`, incompatíveis com sistemas `Unix`.
+
 ### Acessando a Aplicação
 
 - **API**: <http://localhost/api>
@@ -533,23 +549,6 @@ chmod +x food scripts/*.sh
     - Usuário: postgres
     - Senha: postgres
     - Banco: fastfood
-
-### Ambientes e Dados de Seed
-
-O projeto suporta diferentes ambientes com diferentes conjuntos de dados:
-
-- **Produção (perfil: prod)**: Apenas dados essenciais
-- **Desenvolvimento (perfil: dev/local)**: Dados essenciais + dados adicionais para testes
-
-Para executar a aplicação em modo de desenvolvimento:
-
-```bash
-# Usando variável de ambiente SPRING_PROFILES_ACTIVE
-SPRING_PROFILES_ACTIVE=dev ./gradlew bootRun
-
-# Ou usando parâmetro na linha de comando
-./gradlew bootRun --args='--spring.profiles.active=local'
-```
 
 
 ### Testando a Aplicação (Fluxo de compra 🛒)
@@ -765,8 +764,6 @@ sudo apt install k6
 k6 version
 ```
 
----
-
 ## 🚀 Passo a passo
 
 ### 1. Crie uma conta de Armazenamento e um Container no Azure
@@ -799,6 +796,18 @@ terraform plan -var-file=terraform.tfvars
 terraform apply -var-file=terraform.tfvars
  ```
 
+Consulte os outputs gerados:
+
+```bash
+terraform output
+```
+
+> ⚠️ A connection string é um valor sensível, logo, será exibida de forma mascarada com `<sensitive>`. Para recuperá-la, use o comando:
+>
+> ```bash
+> terraform output -raw storage_account_connection_string
+>```
+
 ### 5. Faça build da imagem Docker e dê push para o Docker Hub
 ```bash
 docker build -t seu-usuario/seu-app:tag .
@@ -815,18 +824,6 @@ connectionString: "SEU_STORAGE_CONNECTION_STRING"
 containerName: "SEU_CONTAINER_NAME"
 ```
 
-Para obter a connection string, pois se trata de um output sensível que não será exibido por default, você pode usar o comando:
-
-```bash
-terraform output -raw storage_account_connection_string
-```
-
-Você também poderá ver os outros valores com o comando:
-
-```bash
-terraform output
-```
-
 ### 7. Atualize o kubeconfig para se conectar ao novo cluster AKS
 ```bash
 az aks get-credentials --resource-group seu-grupo --name seu-cluster
@@ -834,8 +831,9 @@ az aks get-credentials --resource-group seu-grupo --name seu-cluster
 
 ### 8. Empacote e instale o Helm chart
 ```bash
-helm package ./helm
-helm install nome-do-release ./helm-chart-0.1.0.tgz -n nome-do-namespace --create-namespace
+cd kubernetes
+helm package foodcoreapi
+helm install foodcoreapi ./foodcoreapi-0.1.0.tgz
 ```
 
 ### 9. Execute teste de estresse com K6
@@ -1034,7 +1032,7 @@ POST /api/payments/webhook              # Webhook de notificação de pagamento
 ```
 
 Para documentação completa e interativa, consulte o Swagger/OpenAPI disponível em:
-<http://localhost:8083/swagger-ui.html>
+<http://localhost:8080/swagger-ui.html>
 
 </details>
 
@@ -1051,7 +1049,7 @@ O sistema utiliza PostgreSQL como banco de dados principal, com o seguinte esque
 
 ### Gerenciamento de Migrações
 
-O projeto utiliza Liquibase para gerenciar migrações de banco de dados, organizadas por módulo:
+O projeto utiliza `Liquibase` para gerenciar migrações de banco de dados, organizadas por módulo:
 
 ```
 src/main/resources/db/changelog/
