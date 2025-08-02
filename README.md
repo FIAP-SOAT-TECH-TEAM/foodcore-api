@@ -555,6 +555,8 @@ chmod +x food scripts/*.sh
 
 ### Testando a Aplicação (Fluxo de compra 🛒)
 
+> ⚠️ Para testar o fluxo completo, é necessário executar o seeder, pois ele popula o sistema com dados de catálogos, produtos e estoque essenciais para a continuidade dos testes.
+
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
 1. **Criar Usuário** (Opcional):
