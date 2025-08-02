@@ -54,6 +54,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "api.fullname" . }}-config
                   key: SERVER_CONTEXT_PATH
+            - name: SERVER_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: { { include "api.fullname" . } }-config
+                  key: SERVER_ADDRESS
             - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:
