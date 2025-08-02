@@ -561,6 +561,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
 1. **Criar Usuário** (Opcional):
    - Você pode se identificar criando um usuário ou seguir como um convidado:
+   #### Caso queria se identificar, crie um usuário com os dados abaixo:
    ```http
    POST /users
    Content-Type: application/json
@@ -573,8 +574,22 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 	 "document": "929.924.370-00"
    }
     ```
-   - Caso você envie o payload vazio, com o campo `guest` como `true` ou até mesmo sem informar email ou CPF, o usuário será criado como convidado
-   - Reenviar o mesmo payload irá retornar o usuário já existente.
+   #### Caso você envie o payload vazio, com o campo `guest` como `true` ou até mesmo sem informar email ou CPF, o usuário será criado como convidado
+   ```http
+   POST /users
+   Content-Type: application/json
+   {
+      "guest": true,
+   }
+    ```
+   ou
+    ```http
+   POST /users
+   Content-Type: application/json
+   {
+   }
+    ```
+   > ⚠️ Reenviar o mesmo payload irá retornar o usuário já existente.
 
 2. **Realizar Pedido**:
    - Crie um pedido com os produtos disponíveis:
