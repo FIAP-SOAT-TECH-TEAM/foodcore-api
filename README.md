@@ -559,9 +559,9 @@ chmod +x food scripts/*.sh
 
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
-1. **Criar Usuário** (Opcional):
+1. **Identificação do cliente** (Opcional):
    - Você pode se identificar criando um usuário ou seguir como um convidado:
-   #### Caso queria se identificar, crie um usuário com os dados abaixo:
+   #### Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
    ```http
    POST /users
    Content-Type: application/json
@@ -570,16 +570,16 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "name": "João da Silva",
      "username": "Jão3",
      "email": "joao@example.com",
-     "password": "batata123",
-	 "document": "929.924.370-00"
+     "password": "", // vazio pois se trata de um cliente
+ 	"document": "929.924.370-00"
    }
     ```
-   #### Caso você envie o payload vazio, com o campo `guest` como `true` ou até mesmo sem informar email ou CPF, o usuário será criado como convidado
+   #### Caso você envie o payload vazio, com o campo `guest = true` ou até mesmo sem ele, o usuário será criado como convidado:
    ```http
    POST /users
    Content-Type: application/json
    {
-      "guest": true,
+      "guest": true
    }
     ```
    ou
@@ -1275,6 +1275,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
