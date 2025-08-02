@@ -137,12 +137,8 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 
 ![Diagrama Modelo de Domínio](docs/diagrams/domain-model.svg)
 
-### DER (Diagrama Entidade-Relacionamento) 
 
-![Diagrama Entidade-Relacionamento](docs/diagrams/DER.svg)
-
-
-### Fluxo de Realização do Pedido e Pagamento (Event Storming)
+### Fluxo de Realização do Pedido e Pagamento 
 
 ![Diagrama criação de pedido](docs/diagrams/order-created.svg)
 
