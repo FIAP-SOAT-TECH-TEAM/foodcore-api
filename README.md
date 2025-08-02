@@ -484,7 +484,7 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
 
 Com o Ngrok configurado, agora precisamos subir a aplicação.
 
->### ⚠️ Ambientes e Dados de Seed
+>### ⚠️ Ambientes
 >
 >O projeto suporta diferentes ambientes com diferentes conjuntos de dados:
 >
@@ -1275,6 +1275,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
