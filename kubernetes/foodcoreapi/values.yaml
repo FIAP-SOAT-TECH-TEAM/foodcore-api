@@ -81,7 +81,7 @@ ingress-nginx:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         # Output Terraform: resource_group_name
         service.beta.kubernetes.io/azure-load-balancer-resource-group: tc2
-      
+
       # Output Terraform: public_ip_address
       loadBalancerIP: 52.255.181.196
 
@@ -167,6 +167,7 @@ api:
     posId: POCMP001POS001
 
   server:
+    address: 0.0.0.0
     port: 9090
     profilesActive: "prod"
 

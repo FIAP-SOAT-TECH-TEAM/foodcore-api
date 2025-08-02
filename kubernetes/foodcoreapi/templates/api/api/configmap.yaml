@@ -7,6 +7,7 @@ metadata:
   namespace: {{ .Values.namespace.api.name }}
 data:
   SERVER_CONTEXT_PATH: {{ .Values.api.ingress.path | quote }}
+  SERVER_ADDRESS: {{ .Values.api.server.address | quote }}
   SERVER_PORT: {{ .Values.api.server.port | quote }}
   SPRING_PROFILES_ACTIVE: {{ .Values.api.server.profilesActive | quote }}
   MERCADO_PAGO_BASE_URL: {{ .Values.api.mercadoPago.baseUrl | quote }}
