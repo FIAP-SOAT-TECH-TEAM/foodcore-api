@@ -30,7 +30,11 @@ da FIAP (Tech Challenge).
   <a href="#banco-de-dados">Banco de Dados</a> •
   <a href="#resolucao-de-problemas">Resolução de Problemas</a> •
   <a href="#contribuicao-e-licenca">Contribuição e Licença</a>
-</div>
+</div><br>
+
+
+> 📽️ Vídeo de demonstração da arquitetura: https://www.youtube.com/watch?v=soaATSbSRPc<br>
+
 
 <h2 id="visao-geral">📋 Visão Geral</h2>
 
@@ -1237,5 +1241,6 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
