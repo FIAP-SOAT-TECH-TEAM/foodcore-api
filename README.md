@@ -17,6 +17,7 @@ da FIAP (Tech Challenge).
 <div align="center">
   <a href="#visao-geral">Visão Geral</a> •
   <a href="#arquitetura">Arquitetura</a> •
+  <a href="#infra">Infraestrutura</a> •
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#diagramas">Diagramas</a> •
   <a href="#eventstorming">Event Storming</a> •
@@ -89,6 +90,151 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 - Fácil migração para uma arquitetura distribuída no futuro
 
 </details>
+
+
+### Infraestrutura
+
+<h2 id="infra">🌐 Infraestrutura</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+A infraestrutura do projeto é baseada em containers Docker, orquestrados com Kubernetes e provisionados via Terraform. A aplicação é dividida em módulos, cada um com suas próprias responsabilidades e adaptadores.
+
+## ☁️ Provisionamento de Infraestrutura com Terraform
+
+A infraestrutura é provisionada de forma automatizada e reprodutível usando o **Terraform**, uma ferramenta de infraestrutura como código (IaC). O fluxo é organizado em etapas que garantem a criação segura e modular dos recursos no Azure.
+
+![Terraform Infraestrutura](docs/diagrams/terraform.png) 
+
+---
+
+### 🔄 Fluxo de Execução
+
+#### 1. **Inicialização**
+- Carrega a configuração do backend remoto (para manter o estado do Terraform) e os provedores necessários.
+
+#### 2. **Carregamento de Variáveis**
+- As variáveis são separadas por responsabilidade:
+    - `Common Variables`: configurações compartilhadas.
+    - `AKS Variables`: definições específicas do cluster Kubernetes.
+    - `Blob Storage Variables`: informações do armazenamento de blobs.
+    - `Public IP Variables`: configurações de IP público.
+
+#### 3. **Provisionamento de Recursos**
+- Criação dos principais recursos de infraestrutura:
+    - **Resource Group**: grupo de recursos principal do Azure.
+    - **Public IP**: IP público para serviços de entrada.
+    - **Blob Storage**:
+        - `Storage Account`: conta de armazenamento no Azure.
+        - `Storage Container`: container para armazenar arquivos (ex: estado do Terraform ou imagens).
+    - **AKS Cluster**: cluster do Azure Kubernetes Service.
+    - **Assign Network Role**: atribui as permissões de rede necessárias ao AKS.
+
+#### 4. **Coleta de Outputs**
+- Ao final da execução, o Terraform retorna informações essenciais:
+    - Nome e ID do Resource Group
+    - Nome do cluster AKS
+    - IP público (FQDN e endereço)
+    - Nome e conexão do Storage Account
+    - Nome do container no Blob Storage
+
+---
+
+### ✅ Vantagens do Provisionamento com Terraform
+
+- **Reprodutibilidade**: qualquer ambiente (dev, staging, prod) pode ser recriado com exatidão.
+- **Automação**: reduz intervenção manual, evita erros e melhora consistência.
+- **Modularização**: separação de variáveis e responsabilidades torna o código mais limpo e reutilizável.
+- **Infra como Código**: o estado da infraestrutura é versionado e auditável via Git.
+
+---
+
+
+## ⚙️ Infraestrutura e Arquitetura no Kubernetes
+
+A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando práticas modernas de escalabilidade, observabilidade e isolamento de responsabilidades para garantir alta disponibilidade, segurança e performance.
+
+### 📌 Visão Geral
+
+![Diagrama da Kubernets](docs/diagrams/kubernetsDiagram.png) 
+
+---
+
+### 🧩 Componentes Principais
+
+#### 🧑‍💻 Usuário Web/Mobile
+- A interação começa com o usuário via navegador ou aplicativo.
+- Todo o tráfego HTTPS passa pelo **NGINX Ingress Controller**, responsável pelo roteamento.
+
+#### 🌐 Ingress NGINX Controller
+- Atua como gateway de entrada do cluster.
+- Roteia requisições conforme o caminho:
+    - `/api` → **Order Management API**
+    - `/adminer` → **Interface do banco**
+    - `/kibana` → **Dashboard de observabilidade**
+
+---
+
+### 🧱 API Namespace
+
+#### 🚀 Order API Pod
+- Core da aplicação: processa pedidos, persiste dados e integra com o **MercadoPago**.
+- Gera logs de aplicação e banco, enviados ao namespace de observabilidade.
+
+#### ⚖️ Horizontal Pod Autoscaler (HPA)
+- Escala automaticamente os pods com base em **uso de CPU e memória**.
+- Monitora continuamente os pods e ajusta a quantidade conforme a carga do sistema.
+
+##### 🧪 Probes e Configurações de Saúde
+- **Liveness Probe**: reinicia o pod se estiver travado.
+- **Readiness Probe**: verifica se o pod está pronto para receber requisições.
+- **Startup Probe**: usada na inicialização para garantir que o pod esteja saudável antes de ativar as outras probes.
+
+##### 📊 Políticas de Recursos
+- **Requests & Limits**: define recursos mínimos e máximos para o pod.
+- **Node Affinity**: aloca pods em nós apropriados para melhor performance.
+
+---
+
+### 🗃️ Armazenamento e Dados
+
+#### Order Database
+- Banco relacional que armazena os dados dos pedidos e transações.
+
+#### Image Storage
+- Serviço de armazenamento de imagens de produtos ou comprovantes de pedidos.
+
+---
+
+### 📡 Integração com MercadoPago
+- A **Order API** comunica-se diretamente com a API de pagamentos.
+- Processa **QR Codes**, escuta **webhooks** e confirma **transações em tempo real**.
+
+---
+
+### 📊 Observabilidade com EFK Stack (EFK Namespace)
+
+- **Fluentd**: coleta e roteia logs de aplicação e banco.
+- **Elasticsearch**: armazena os logs com capacidade de pesquisa.
+- **Kibana**: interface para visualização e análise de logs via `/kibana`.
+
+---
+
+### ✅ Benefícios da Arquitetura
+- **Escalabilidade automática com HPA**
+- **Observabilidade centralizada com EFK**
+- **Roteamento seguro e flexível via NGINX**
+- **Separação clara de responsabilidades por namespace**
+- **Alta disponibilidade e performance no AKS**
+
+
+
+
+
+</details>
+
+
+
 
 <h2 id="tecnologias">🔧 Tecnologias</h2>
 
@@ -689,15 +835,6 @@ helm install nome-do-release ./helm-chart-0.1.0.tgz -n nome-do-namespace --creat
 ```bash
 k6 run stress-test.js
 ```
-
-### ☁️ Resultado 
-- Após seguir todos os passos, você terá a aplicação provisionada no Azure AKS, com o banco de dados PostgreSQL configurado e a API acessível via Load Balancer. Você poderá acessar a aplicação através do IP público fornecido pelo Terraform.
-- Sua infraestrutura estará da seguinte forma:
-## Terraform
-![Terraform](docs/diagrams/terraform.png)
-## Kubernetes
-![Kubernetes](docs/diagrams/kubernetsDiagram.png)
-
 </details>
 
 
