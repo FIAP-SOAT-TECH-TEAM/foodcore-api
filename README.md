@@ -677,6 +677,16 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
       "status": "COMPLETED"
     }
     ```
+9. **Verificar pedido finalizado (Admin/Restaurante)**:
+   - Você pode verificar o status do pedido a qualquer momento:
+    ```
+    GET /orders/{orderId}
+    ```
+   - O status final será `COMPLETED` quando o pedido for retirado pelo cliente.
+   - O pedido finalizado também não aparecerá mais na lista de pedidos ativos:
+    ```
+    GET /orders/active
+    ```
 
 </details>
 
