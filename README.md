@@ -570,8 +570,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "name": "João da Silva",
      "username": "Jão3",
      "email": "joao@example.com",
-     "password": "", // vazio pois se trata de um cliente
-	"document": "929.924.370-00"
+     "document": "929.924.370-00"
    }
     ```
    - Caso queira seguir como convidado, envie o payload vazio ou com o campo `guest = true`:
@@ -1275,6 +1274,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
