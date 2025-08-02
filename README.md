@@ -22,7 +22,7 @@ da FIAP (Tech Challenge).
   <a href="#diagramas">Diagramas</a> •
   <a href="#eventstorming">Event Storming</a> •
   <a href="#taskboard">Task Board</a> •
-  <a href="#dicionario">Dicionário de linguagem ubíqua</a>
+  <a href="#dicionario">Dicionário de linguagem ubíqua</a> •
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#provisionamento-na-nuvem">Provisionar o projeto na nuvem</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
@@ -484,7 +484,7 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
 
 Com o Ngrok configurado, agora precisamos subir a aplicação.
 
->### ⚠️ Ambientes e Dados de Seed
+>### ⚠️ Ambientes
 >
 >O projeto suporta diferentes ambientes com diferentes conjuntos de dados:
 >
@@ -559,9 +559,9 @@ chmod +x food scripts/*.sh
 
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
-1. **Criar Usuário** (Opcional):
-   - Você pode se identificar criando um usuário ou seguir como um convidado:
-   #### Caso queria se identificar, crie um usuário com os dados abaixo:
+1. **Identificação do cliente** (Opcional):
+   Você pode se identificar criando um usuário ou seguir como um convidado:
+   - Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
    ```http
    POST /users
    Content-Type: application/json
@@ -570,16 +570,15 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "name": "João da Silva",
      "username": "Jão3",
      "email": "joao@example.com",
-     "password": "batata123",
-	 "document": "929.924.370-00"
+     "document": "929.924.370-00"
    }
     ```
-   #### Caso você envie o payload vazio, com o campo `guest` como `true` ou até mesmo sem informar email ou CPF, o usuário será criado como convidado
+   - Caso queira seguir como convidado, envie o payload vazio ou com o campo `guest = true`:
    ```http
    POST /users
    Content-Type: application/json
    {
-      "guest": true,
+      "guest": true
    }
     ```
    ou
@@ -656,7 +655,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     GET /orders/active
     GET /orders/{orderId}
     ```
-
+    > ⚠️ O pedido foi alterado para `PREPARING` automaticamente após aprovação do pagamento.
 7. **Marcar o pedido como pronto (Admin/Restaurante)**:
     - Quando o pedido estiver pronto, você poderá marca-lo como pronto para que o usuário possa retira-lo:
    
@@ -1275,6 +1274,11 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
+
+
+
+
 
 
 
