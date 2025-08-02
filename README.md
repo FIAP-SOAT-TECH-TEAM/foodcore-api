@@ -605,7 +605,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
 3. **Acessar QrCode para Pagamento**:
    - Após criar o pedido, você receberá o id do pedido que será utilizado nessa rota para gerar o QrCode.
-   ```http
+   ```
     GET /orders/{orderId}/qrCode
     ```
    - Com o retorno, você poderá copiar o valor de qrCode e utiliza-lo no site [QRCode Monkey](https://www.qrcode-monkey.com/) para gerar o QrCode.
@@ -619,8 +619,14 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     ```
    - Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
 
+5. **Acompanhar o Status do Pedido**:
+   - Você pode acompanhar o status do seu pedido a qualquer momento:
+   ```
+    GET /payments/{orderId}/status
+    ```
+   - Caso o status seja `APPROVED`, o pedido está pronto para ser preparado pelo restaurante.
 
-5. **Preparação do Pedido (Admin/Restaurante)**:
+6. **Preparação do Pedido (Admin/Restaurante)**:
    - Logue com o usuário admin.
     ```http
     POST /users/login
@@ -631,7 +637,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     }
     ```
    - Após o login, busque todas os pedidos ativos ou busque seu pedido pelo id dele:
-   ```http
+   ```
     GET /orders/active
     GET /orders/{orderId}
     ```
@@ -644,7 +650,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     }
     ```
 
-6. **Finalizar Pedido (Admin/Restaurante)**:
+7. **Finalizar Pedido (Admin/Restaurante)**:
    - Quando o pedido estiver pronto, você poderá finalizar o pedido:
     ```http
     PATCH /orders/{orderId}/status
