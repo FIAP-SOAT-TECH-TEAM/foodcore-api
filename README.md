@@ -642,13 +642,25 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     GET /orders/{orderId}
     ```
 
-7. **Finalizar Pedido (Admin/Restaurante)**:
-   - Quando o pedido estiver pronto, você poderá finalizar o pedido:
+7. **Marcar o pedido como pronto (Admin/Restaurante)**:
+    - Quando o pedido estiver pronto, você poderá marca-lo como pronto para que o usuário possa retira-lo:
+   
     ```http
     PATCH /orders/{orderId}/status
     Content-Type: application/json
     {
       "status": "READY"
+    }
+    ```
+    > ⚠️ Futuramente, o usuário será notificado quando o pedido dele estiver pronto.
+
+8. **Finalizar Pedido (Admin/Restaurante)**:
+   - Quando o pedido for retirado pelo cliente, você poderá finalizar o pedido:
+    ```http
+    PATCH /orders/{orderId}/status
+    Content-Type: application/json
+    {
+      "status": "COMPLETED"
     }
     ```
 
