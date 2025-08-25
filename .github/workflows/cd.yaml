@@ -1,0 +1,22 @@
+  # deploy:
+  #   needs: [build, sonar-quality-gate]
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #
+  #   steps:
+  #   - name: Download Build Artifact
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: food-core-api
+  #
+  #   - name: Azure Login
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #
+  #   - name: Deploy to Azure App Service
+  #     uses: azure/webapps-deploy@v2
+  #     with:
+  #       app-name: 'food-core-api'
+  #       package: '*.jar'
+  #       slot-name: 'production'
