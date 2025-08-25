@@ -210,7 +210,6 @@ tasks.named('build') {
 // Configuração do SonarQube
 sonar {
 	properties {
-		property 'sonar.gradle.skipCompile', 'true'
 		property 'sonar.projectKey', 'com.soat.fiap.food-core-api'
 		property 'sonar.projectName', 'Food Core API'
 		property 'sonar.sources', 'src/main/java'
