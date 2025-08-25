@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew test jacocoTestReport
 
       - name: Build and analyze with SonarCloud
-        run: ./gradlew sonar -Dsonar.projectKey=$SONAR_CLOUD_PROJ_KEY -Dsonar.organization=$SONAR_CLOUD_ORG_NAME -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_CLOUD_TOKEN
+        run: ./gradlew sonarqube -Dsonar.projectKey=$SONAR_CLOUD_PROJ_KEY -Dsonar.organization=$SONAR_CLOUD_ORG_NAME -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_CLOUD_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_CLOUD_ORG_NAME: ${{ secrets.SONAR_CLOUD_ORG_NAME }}
