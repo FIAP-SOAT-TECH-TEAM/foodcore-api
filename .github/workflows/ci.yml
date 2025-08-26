@@ -52,12 +52,6 @@ jobs:
           SONAR_CLOUD_PROJ_KEY: ${{ secrets.SONAR_CLOUD_PROJ_KEY }}
           SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
 
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: foodcore-api-jars
-          path: build/libs/*.jar
-
   sonar-quality-gate:
     needs: build
     runs-on: ubuntu-latest
@@ -69,3 +63,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
         with:
           scanMetadataReportFile: build/sonar/report-task.txt
+          
+  push:
+    needs: sonar-quality-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: foodcore-api-jars
+          path: build/libs/*.jar
