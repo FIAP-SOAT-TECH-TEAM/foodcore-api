@@ -45,27 +45,22 @@ jobs:
         run: ./gradlew test jacocoTestReport
 
       - name: Build and analyze with SonarCloud
-        run: ./gradlew sonar -Dsonar.projectKey="$SONAR_CLOUD_PROJ_KEY" -Dsonar.organization="$SONAR_CLOUD_ORG_KEY" -Dsonar.host.url=https://sonarcloud.io -Dsonar.token="$SONAR_CLOUD_TOKEN"
+        run: |
+          ./gradlew sonar \
+            -Dsonar.projectKey="$SONAR_CLOUD_PROJ_KEY" \
+            -Dsonar.organization="$SONAR_CLOUD_ORG_KEY" \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token="$SONAR_CLOUD_TOKEN" \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
+            -Dsonar.qualitygate.wait=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_CLOUD_ORG_KEY: ${{ secrets.SONAR_CLOUD_ORG_KEY }}
           SONAR_CLOUD_PROJ_KEY: ${{ secrets.SONAR_CLOUD_PROJ_KEY }}
           SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
-
-  sonar-quality-gate:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: SonarQube Quality Gate Check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
-        with:
-          scanMetadataReportFile: build/sonar/report-task.txt
           
   push:
-    needs: sonar-quality-gate
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Upload Build Artifact
