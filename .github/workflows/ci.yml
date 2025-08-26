@@ -85,7 +85,9 @@ jobs:
 
       - name: Show Remote State Output
         working-directory: terraform
-        run: terraform output -raw acr_login_server_from_remote
+        run: |
+          terraform refresh
+          terraform output -raw acr_login_server_from_remote
         env:
           TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
           TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
