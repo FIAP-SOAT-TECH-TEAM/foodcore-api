@@ -62,6 +62,13 @@ jobs:
   push:
     #needs: build
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
+      TF_VAR_foodcore-infra-rs-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
+      TF_VAR_foodcore-infra-rs-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
+      TF_VAR_foodcore-infra-rs-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -93,12 +100,6 @@ jobs:
         run: |
           ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote 2>/dev/null || echo "")
           echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
-        env:
-          TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-          TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
-          TF_VAR_foodcore-infra-rs-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
-          TF_VAR_foodcore-infra-rs-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
-          TF_VAR_foodcore-infra-rs-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
 
       - name: Docker Login to ACR
         run: |
