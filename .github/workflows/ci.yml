@@ -60,7 +60,7 @@ jobs:
   #         SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
 
   push:
-    ##needs: build
+    #needs: build
     runs-on: ubuntu-latest
     env:
       TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
@@ -82,6 +82,11 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
 
       - name: Terraform Init
         working-directory: terraform
@@ -106,8 +111,19 @@ jobs:
         run: |
           az acr login --name ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
 
-      - name: Build and Push Docker Image
+      - name: Helm Login to ACR
         run: |
-          IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:${{ github.sha }}
-          docker build -t $IMAGE_NAME -f docker/Dockerfile .
-          docker push $IMAGE_NAME
+          ACR_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          helm registry login $ACR_NAME --username $ACR_NAME --password $(az acr credential show --name $ACR_NAME --query "passwords[0].value" -o tsv)
+
+      # - name: Build and Push Docker Image
+      #   run: |
+      #     IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:${{ github.sha }}
+      #     docker build -t $IMAGE_NAME -f docker/Dockerfile .
+      #     docker push $IMAGE_NAME
+
+      - name: Build and Push Package Helm Chart
+        run: |
+          helm package kubernetes/foodcoreapi -d ./charts
+          ACR_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          helm push ./charts/foodcoreapi-*.tgz oci://$ACR_NAME/helm
