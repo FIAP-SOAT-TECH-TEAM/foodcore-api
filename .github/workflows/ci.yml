@@ -113,8 +113,9 @@ jobs:
 
       - name: Helm Login to ACR
         run: |
-          ACR_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
-          az acr credential show --name $ACR_NAME --query "passwords[0].value" -o tsv | helm registry login $ACR_NAME --username $ACR_NAME --password-stdin
+          ACR_LOGIN_SERVER=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          ACR_PASSWORD=$(az acr credential show --name ${ACR_LOGIN_SERVER%%.*} --query "passwords[0].value" -o tsv)
+          echo $ACR_PASSWORD | helm registry login $ACR_LOGIN_SERVER --username $ACR_LOGIN_SERVER --password-stdin
 
       # - name: Build and Push Docker Image
       #   run: |
