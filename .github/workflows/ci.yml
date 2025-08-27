@@ -126,6 +126,7 @@ jobs:
 
       - name: Build and Push Package Helm Chart
         run: |
+          helm dependency update kubernetes/foodcoreapi
           helm package kubernetes/foodcoreapi -d ./charts
           ACR_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
           helm push ./charts/foodcoreapi-*.tgz oci://$ACR_NAME/helm
