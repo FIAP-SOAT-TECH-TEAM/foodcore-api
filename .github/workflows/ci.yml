@@ -107,8 +107,7 @@ jobs:
           az acr login --name ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
 
       - name: Build and Push Docker Image
-        working-directory: docker
         run: |
           IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:${{ github.sha }}
-          docker build -t $IMAGE_NAME .
+          docker build -t $IMAGE_NAME -f docker/Dockerfile .
           docker push $IMAGE_NAME
