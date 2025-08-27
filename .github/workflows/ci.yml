@@ -88,7 +88,8 @@ jobs:
         working-directory: terraform
         run: |
           terraform refresh
-          echo "acr_login_server=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_ENV
+          ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)
+          echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
         env:
           TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
           TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
