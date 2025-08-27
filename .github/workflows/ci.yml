@@ -7,60 +7,60 @@ on:
       - main
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-  #     - name: Set up JDK 21
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         java-version: "21"
-  #         distribution: "temurin"
-  #         cache: gradle
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: gradle
 
-  #     - name: Cache Gradle packages
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: |
-  #           ~/.gradle/caches
-  #           ~/.gradle/wrapper
-  #         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-gradle-
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-  #     - name: Grant execute permission for gradlew
-  #       run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-  #     - name: Execute Spotless Apply
-  #       run: ./gradlew spotlessApply
+      - name: Execute Spotless Apply
+        run: ./gradlew spotlessApply
 
-  #     - name: Build with Gradle
-  #       run: ./gradlew build -x test
+      - name: Build with Gradle
+        run: ./gradlew build -x test
 
-  #     - name: Test with Gradle
-  #       run: ./gradlew test jacocoTestReport
+      - name: Test with Gradle
+        run: ./gradlew test jacocoTestReport
 
-  #     - name: Build and analyze with SonarCloud
-  #       run: |
-  #         ./gradlew sonar \
-  #           -Dsonar.projectKey="$SONAR_CLOUD_PROJ_KEY" \
-  #           -Dsonar.organization="$SONAR_CLOUD_ORG_KEY" \
-  #           -Dsonar.host.url=https://sonarcloud.io \
-  #           -Dsonar.token="$SONAR_CLOUD_TOKEN" \
-  #           -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
-  #           -Dsonar.qualitygate.wait=true
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         SONAR_CLOUD_ORG_KEY: ${{ secrets.SONAR_CLOUD_ORG_KEY }}
-  #         SONAR_CLOUD_PROJ_KEY: ${{ secrets.SONAR_CLOUD_PROJ_KEY }}
-  #         SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
+      - name: Build and analyze with SonarCloud
+        run: |
+          ./gradlew sonar \
+            -Dsonar.projectKey="$SONAR_CLOUD_PROJ_KEY" \
+            -Dsonar.organization="$SONAR_CLOUD_ORG_KEY" \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token="$SONAR_CLOUD_TOKEN" \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
+            -Dsonar.qualitygate.wait=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_CLOUD_ORG_KEY: ${{ secrets.SONAR_CLOUD_ORG_KEY }}
+          SONAR_CLOUD_PROJ_KEY: ${{ secrets.SONAR_CLOUD_PROJ_KEY }}
+          SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
 
   push:
-    #needs: build
+    needs: build
     runs-on: ubuntu-latest
     env:
       TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
@@ -118,11 +118,11 @@ jobs:
           ACR_PASSWORD=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "passwords[0].value" -o tsv)
           echo $ACR_PASSWORD | helm registry login $ACR_LOGIN_SERVER --username $ACR_USERNAME --password-stdin
 
-      # - name: Build and Push Docker Image
-      #   run: |
-      #     IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:${{ github.sha }}
-      #     docker build -t $IMAGE_NAME -f docker/Dockerfile .
-      #     docker push $IMAGE_NAME
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:latest
+          docker build -t $IMAGE_NAME -f docker/Dockerfile .
+          docker push $IMAGE_NAME
 
       - name: Build and Push Package Helm Chart
         run: |
