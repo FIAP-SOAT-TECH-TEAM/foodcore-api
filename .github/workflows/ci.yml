@@ -98,16 +98,15 @@ jobs:
         id: acr
         working-directory: terraform
         run: |
-          ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote 2>/dev/null || echo "")
-          echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
+          echo "ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
 
       - name: Docker Login to ACR
         run: |
-          az acr login --name ${{ env.acr_login_server }}
+          az acr login --name ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
 
       - name: Build and Push Docker Image
         working-directory: docker
         run: |
-          IMAGE_NAME=${{ env.acr_login_server }}/foodcoreapi:${{ github.sha }}
+          IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:${{ github.sha }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
