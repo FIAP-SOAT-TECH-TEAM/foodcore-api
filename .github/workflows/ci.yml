@@ -87,7 +87,7 @@ jobs:
         id: acr
         working-directory: terraform
         run: |
-          terraform refresh
+          terraform refresh -no-color
           ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)
           echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
         env:
