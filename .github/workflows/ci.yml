@@ -28,10 +28,6 @@ jobs:
 
   infra-info:
     runs-on: ubuntu-latest
-    env:
-        TF_VAR_docker_image_uri: "default"
-        TF_VAR_acr_username: "default"
-        TF_VAR_acr_password: "default"
     outputs:
       acr_login_server: ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
     steps:
@@ -59,7 +55,7 @@ jobs:
 
       - name: Terraform Refresh
         working-directory: terraform
-        run: terraform refresh -no-color
+        run: terraform refresh -target=azurerm_container_registry.acr -no-color
 
       - name: Get ACR Login Server from remote state
         id: acr
