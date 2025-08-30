@@ -31,7 +31,7 @@ module "apim" {
   apim_api_version     = var.apim_api_version
   apim_display_name    = var.apim_display_name
   swagger_path         = var.swagger_path
-  api_ingress_path     = var.api_ingress_path
+  api_ingress_path     = var.api_ingress_path_without_slash
 
   depends_on = [module.helm]
 }

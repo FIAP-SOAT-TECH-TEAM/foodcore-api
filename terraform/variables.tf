@@ -125,3 +125,9 @@
     description = "Caminho do arquivo swagger.json"
     type        = string
   }
+
+  variable "api_ingress_path_without_slash" {
+    description = "Caminho de ingress da API sem a barra."
+    type        = string
+    default     = replace(var.api_ingress_path, "/", "")
+  }
