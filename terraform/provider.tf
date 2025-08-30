@@ -29,5 +29,4 @@ provider "helm" {
       password = data.azurerm_container_registry.acr.admin_password
     }
   ]
-
 }
