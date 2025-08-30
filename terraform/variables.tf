@@ -96,6 +96,16 @@
     description = "Caminho de ingress da API."
   }
 
+  variable "acr_username" {
+    type        = string
+    description = "Nome de usuário do Azure Container Registry."
+  }
+
+  variable "acr_password" {
+    type        = string
+    description = "Senha do Azure Container Registry."
+  }
+
 # APIM
   variable "apim_api_name" {
     description = "Nome da API no API Management"

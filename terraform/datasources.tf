@@ -17,8 +17,3 @@ data "azurerm_container_registry" "acr" {
   name                = data.terraform_remote_state.infra.outputs.acr_name
   resource_group_name = data.terraform_remote_state.infra.outputs.acr_resource_group
 }
-
-data "azurerm_container_registry_credentials" "acr_creds" {
-  name                = data.terraform_remote_state.infra.outputs.acr_name
-  resource_group_name = data.terraform_remote_state.infra.outputs.acr_resource_group
-}
