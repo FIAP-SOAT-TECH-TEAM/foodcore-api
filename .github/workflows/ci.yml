@@ -31,7 +31,7 @@ jobs:
     env:
         TF_VAR_docker_image_uri: "default"
     outputs:
-      acr_login_server: ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+      acr_login_server: ${{ steps.acr.outputs.acr_login_server }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -63,7 +63,7 @@ jobs:
       - name: Get ACR Login Server from remote state
         id: acr
         working-directory: terraform
-        run: echo "ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
+        run: echo "acr_login_server=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
