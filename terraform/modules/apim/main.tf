@@ -23,7 +23,7 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     <inbound>
       <base />
       <!-- Define backend global -->
-      <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.aks_subnet_last_usable_ip}" />
+      <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}" />
     </inbound>
     <backend>
       <base />
