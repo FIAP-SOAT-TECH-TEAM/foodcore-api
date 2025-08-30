@@ -56,9 +56,9 @@ jobs:
             -backend-config="key=${{secrets.BACKEND_AZURE_KEY}}"
 
       # Somente para que o output seja criado
-      - name: Terraform Plan Refresh Only
+      - name: Terraform Apply Refresh Only
         working-directory: terraform
-        run: terraform plan --refresh-only
+        run: terraform apply --refresh-only
 
       - name: Get ACR Login Server from remote state
         id: acr
