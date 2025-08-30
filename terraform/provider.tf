@@ -24,7 +24,7 @@ provider "kubernetes" {
 provider "helm" {
   registries = [
     {
-      url      = var.repository_url
+      url      = "oci://${data.azurerm_container_registry.acr.login_server}/helm"
       username = data.azurerm_container_registry.acr.admin_username
       password = data.azurerm_container_registry.acr.admin_password
     }
