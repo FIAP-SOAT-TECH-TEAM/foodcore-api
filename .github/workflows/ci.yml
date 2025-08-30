@@ -17,7 +17,7 @@ env:
   TF_VAR_chart_version: "0.1.0"
   TF_VAR_docker_image_tag: "latest"
   TF_VAR_jwt_secret: ${{ secrets.FOODCORE_API_JWT_SECRET }}
-  TF_VAR_swagger_path: "../build/openapi/swagger.json"
+  TF_VAR_swagger_path: "build/openapi/swagger.json"
   TF_VAR_mercadopago_base_url: ${{ secrets.FOODCORE_API_MP_BASE_URL }}
   TF_VAR_mercadopago_token: ${{ secrets.FOODCORE_API_MP_TOKEN }}
   TF_VAR_mercadopago_user_id: ${{ secrets.FOODCORE_API_MP_USER_ID }}
@@ -192,6 +192,18 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+
+      - name: Download artifacts - OpenApi File
+        uses: dawidd6/action-download-artifact@v11
+        with:
+          name: openapi
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: ci.yaml
+          workflow_search: true
+          check_artifacts: true
+          name_is_regexp: false
+          if_no_artifact_found: fail
+          path: terraform/build/openapi
 
       - name: Terraform Fmt
         id: fmt
