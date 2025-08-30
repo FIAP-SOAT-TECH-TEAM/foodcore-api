@@ -173,7 +173,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     #needs: [push, infra-info]
-    needs: infra-info
+    needs: [build, infra-info]
     env:
         TF_VAR_docker_image_uri: "${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi"
 
