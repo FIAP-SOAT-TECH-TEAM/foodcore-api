@@ -1,3 +1,24 @@
+# foodcore-infra
+  variable "foodcore-infra-rs-resource-group" {
+    type        = string
+    description = "Nome do resource group do foodcore-infra"
+  }
+
+  variable "foodcore-infra-rs-storage-account" {
+    type        = string
+    description = "Nome da conta de armazenamento do foodcore-infra"
+  }
+
+  variable "foodcore-infra-rs-container" {
+    type        = string
+    description = "Nome do contêiner do foodcore-infra"
+  }
+
+  variable "foodcore-infra-rs-key" {
+    type        = string
+    description = "Chave do foodcore-infra remote state"
+  }
+
 variable "release_name" {
   type        = string
   description = "Nome do release do Helm."

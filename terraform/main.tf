@@ -1,6 +1,10 @@
 module "helm" {
   source = "./modules/helm"
 
+  foodcore-infra-rs-container = var.foodcore-infra-rs-container
+  foodcore-infra-rs-key = var.foodcore-infra-rs-key
+  foodcore-infra-rs-resource-group = var.foodcore-infra-rs-resource-group
+  foodcore-infra-rs-storage-account = var.foodcore-infra-rs-storage-account
   release_name          = var.release_name
   repository_url        = "https://${data.azurerm_container_registry.acr.login_server}.azurecr.io/helm/foodcoreapi"
   chart_name            = var.chart_name
@@ -19,6 +23,10 @@ module "helm" {
 module "apim" {
   source = "./modules/apim"
 
+  foodcore-infra-rs-container = var.foodcore-infra-rs-container
+  foodcore-infra-rs-key = var.foodcore-infra-rs-key
+  foodcore-infra-rs-resource-group = var.foodcore-infra-rs-resource-group
+  foodcore-infra-rs-storage-account = var.foodcore-infra-rs-storage-account
   apim_api_name        = var.apim_api_name
   apim_api_version     = var.apim_api_version
   apim_display_name    = var.apim_display_name
