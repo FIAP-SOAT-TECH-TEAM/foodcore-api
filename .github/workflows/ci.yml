@@ -128,52 +128,51 @@ jobs:
           name: openapi
           path: build/openapi/swagger.json
 
-  # push:
-  #   needs: [build, infra-info]
-  #   runs-on: ubuntu-latest
+  push:
+    needs: [build, infra-info]
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-  #     - name: Login Azure
-  #       uses: azure/login@v1
-  #       with:
-  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Login Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  #     - name: Setup Helm
-  #       uses: azure/setup-helm@v3
-  #       with:
-  #         version: v3.12.0
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
 
-  #     - name: Docker Login to ACR
-  #       run: |
-  #         az acr login --name ${{ needs.infra-info.outputs.acr_login_server }}
+      - name: Docker Login to ACR
+        run: |
+          az acr login --name ${{ needs.infra-info.outputs.acr_login_server }}
 
-  #     - name: Helm Login to ACR
-  #       run: |
-  #         ACR_LOGIN_SERVER=${{ needs.infra-info.outputs.acr_login_server }}
-  #         ACR_USERNAME=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "username" -o tsv)
-  #         ACR_PASSWORD=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "passwords[0].value" -o tsv)
-  #         echo $ACR_PASSWORD | helm registry login $ACR_LOGIN_SERVER --username $ACR_USERNAME --password-stdin
+      - name: Helm Login to ACR
+        run: |
+          ACR_LOGIN_SERVER=${{ needs.infra-info.outputs.acr_login_server }}
+          ACR_USERNAME=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "username" -o tsv)
+          ACR_PASSWORD=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "passwords[0].value" -o tsv)
+          echo $ACR_PASSWORD | helm registry login $ACR_LOGIN_SERVER --username $ACR_USERNAME --password-stdin
 
-  #     - name: Build and Push Docker Image
-  #       run: |
-  #         IMAGE_NAME=${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi:latest
-  #         docker build -t $IMAGE_NAME -f docker/Dockerfile .
-  #         docker push $IMAGE_NAME
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_NAME=${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi:latest
+          docker build -t $IMAGE_NAME -f docker/Dockerfile .
+          docker push $IMAGE_NAME
 
-  #     - name: Build and Push Package Helm Chart
-  #       run: |
-  #         helm dependency update kubernetes/foodcoreapi
-  #         helm package kubernetes/foodcoreapi -d ./charts
-  #         ACR_NAME=${{ needs.infra-info.outputs.acr_login_server }}
-  #         helm push ./charts/foodcoreapi-*.tgz oci://$ACR_NAME/helm
+      - name: Build and Push Package Helm Chart
+        run: |
+          helm dependency update kubernetes/foodcoreapi
+          helm package kubernetes/foodcoreapi -d ./charts
+          ACR_NAME=${{ needs.infra-info.outputs.acr_login_server }}
+          helm push ./charts/foodcoreapi-*.tgz oci://$ACR_NAME/helm
 
   terraform:
     runs-on: ubuntu-latest
-    #needs: [push, infra-info]
-    needs: [build, infra-info]
+    needs: [push, infra-info]
     env:
         TF_VAR_docker_image_uri: "${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi"
 
