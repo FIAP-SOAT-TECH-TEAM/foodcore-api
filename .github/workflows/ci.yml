@@ -58,7 +58,7 @@ jobs:
       # Somente para que o output seja criado
       - name: Terraform Apply Refresh Only
         working-directory: terraform
-        run: terraform apply --refresh-only
+        run: terraform apply --refresh-only --auto-approve
 
       - name: Get ACR Login Server from remote state
         id: acr
