@@ -90,6 +90,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// A Task generateOpenApiDocs é executada com Profile de teste, e precisa que a aplicação esteja em execução.
+	// Portanto, deixei como implementation para que seja incluída no classpath durante a execução.
+	// https://github.com/springdoc/springdoc-openapi-gradle-plugin
 	implementation 'com.h2database:h2'
 
 	// Liquibase runtime dependencies
