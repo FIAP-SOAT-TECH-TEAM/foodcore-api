@@ -96,12 +96,6 @@
     description = "Caminho de ingress da API."
   }
 
-  variable "repository_url" {
-    type        = string
-    description = "URL do repositório Helm onde o chart está hospedado."
-    default     = "oci://${data.azurerm_container_registry.acr.login_server}/helm"
-  }
-
 # APIM
   variable "apim_api_name" {
     description = "Nome da API no API Management"
