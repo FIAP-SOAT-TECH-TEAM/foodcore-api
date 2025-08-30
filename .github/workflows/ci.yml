@@ -118,7 +118,7 @@ jobs:
 
       - name: Generate OpenApi File
         run: |
-          ./gradlew openApiGenerate
+          ./gradlew generateOpenAPI
         env:
           SERVER_CONTEXT_PATH: "/api"
 
