@@ -5,11 +5,57 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
+    
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+  TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
+  TF_VAR_foodcore-infra-rs-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
+  TF_VAR_foodcore-infra-rs-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
+  TF_VAR_foodcore-infra-rs-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
 
 jobs:
+
+  infra-info:
+    runs-on: ubuntu-latest
+    outputs:
+      acr_login_server: ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Login Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" \
+            -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" \
+            -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}" \
+            -backend-config="key=${{secrets.BACKEND_AZURE_KEY}}"
+
+      - name: Terraform Refresh
+        working-directory: terraform
+        run: terraform refresh -no-color
+
+      - name: Get ACR Login Server from remote state
+        id: acr
+        working-directory: terraform
+        run: |
+          echo "ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
+
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v3
         with:
@@ -54,20 +100,25 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
             -Dsonar.qualitygate.wait=true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_CLOUD_ORG_KEY: ${{ secrets.SONAR_CLOUD_ORG_KEY }}
           SONAR_CLOUD_PROJ_KEY: ${{ secrets.SONAR_CLOUD_PROJ_KEY }}
           SONAR_CLOUD_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
 
+      - name: Generate OpenApi File
+        run: |
+          ./gradlew openApiGenerate
+        env:
+          SERVER_CONTEXT_PATH: "/api"
+
+      - name: Upload OpenApi File
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi
+          path: build/openapi/swagger.json
+
   push:
-    needs: build
+    needs: [build, infra-info]
     runs-on: ubuntu-latest
-    env:
-      TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-      TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
-      TF_VAR_foodcore-infra-rs-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
-      TF_VAR_foodcore-infra-rs-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
-      TF_VAR_foodcore-infra-rs-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
 
     steps:
       - name: Checkout repo
@@ -88,39 +139,20 @@ jobs:
         with:
           version: v3.12.0
 
-      - name: Terraform Init
-        working-directory: terraform
-        run: |
-          terraform init \
-            -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" \
-            -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" \
-            -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}" \
-            -backend-config="key=${{secrets.BACKEND_AZURE_KEY}}"
-
-      - name: Terraform Refresh
-        working-directory: terraform
-        run: terraform refresh -no-color
-
-      - name: Get ACR Login Server from remote state
-        id: acr
-        working-directory: terraform
-        run: |
-          echo "ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
-
       - name: Docker Login to ACR
         run: |
-          az acr login --name ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          az acr login --name ${{ needs.infra-info.outputs.acr_login_server }}
 
       - name: Helm Login to ACR
         run: |
-          ACR_LOGIN_SERVER=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          ACR_LOGIN_SERVER=${{ needs.infra-info.outputs.acr_login_server }}
           ACR_USERNAME=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "username" -o tsv)
           ACR_PASSWORD=$(az acr credential show --name ${ACR_LOGIN_SERVER} --query "passwords[0].value" -o tsv)
           echo $ACR_PASSWORD | helm registry login $ACR_LOGIN_SERVER --username $ACR_USERNAME --password-stdin
 
       - name: Build and Push Docker Image
         run: |
-          IMAGE_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}/foodcoreapi:latest
+          IMAGE_NAME=${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi:latest
           docker build -t $IMAGE_NAME -f docker/Dockerfile .
           docker push $IMAGE_NAME
 
@@ -128,5 +160,62 @@ jobs:
         run: |
           helm dependency update kubernetes/foodcoreapi
           helm package kubernetes/foodcoreapi -d ./charts
-          ACR_NAME=${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
+          ACR_NAME=${{ needs.infra-info.outputs.acr_login_server }}
           helm push ./charts/foodcoreapi-*.tgz oci://$ACR_NAME/helm
+
+  terraform:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Login Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" \
+            -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" \
+            -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}" \
+            -backend-config="key=${{secrets.BACKEND_AZURE_KEY}}"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan
+        env:
+          TF_VAR_chart_name: "foodcoreapi"
+          TF_VAR_chart_version: "0.1.0"
+          TF_VAR_docker_image_uri: "${{ needs.infra-info.outputs.acr_login_server }}/foodcoreapi"
+          TF_VAR_docker_image_tag: "latest"
+          TF_VAR_jwt_secret: ${{ secrets.FOODCORE_API_JWT_SECRET }}
+          TF_VAR_swagger_path: "build/openapi/swagger.json"
+          TF_VAR_mercadopago_base_url: ${{ secrets.FOODCORE_API_MP_BASE_URL }}
+          TF_VAR_mercadopago_token: ${{ secrets.FOODCORE_API_MP_TOKEN }}
+          TF_VAR_mercadopago_user_id: ${{ secrets.FOODCORE_API_MP_USER_ID }}
+          TF_VAR_mercadopago_pos_id: ${{ secrets.FOODCORE_API_MP_POS_ID }}
+          TF_VAR_api_ingress_path: "/api"
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: terraform/tfplan
