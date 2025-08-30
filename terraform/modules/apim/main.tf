@@ -13,7 +13,7 @@ resource "azurerm_api_management_api" "apim" {
   }
 }
 
-resource "azurerm_api_management_api_policy" "global_policy" {
+resource "azurerm_api_management_api_policy" "set_backend_api" {
   api_name            = azurerm_api_management_api.apim.name
   api_management_name = data.terraform_remote_state.infra.outputs.apim_name
   resource_group_name = data.terraform_remote_state.infra.outputs.apim_resource_group
