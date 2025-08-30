@@ -63,6 +63,7 @@ jobs:
         id: acr
         working-directory: terraform
         run: |
+        
           terraform output -raw acr_login_server_from_remote
           echo "ACR_LOGIN_SERVER=$(terraform output -raw acr_login_server_from_remote)" >> $GITHUB_OUTPUT
 
