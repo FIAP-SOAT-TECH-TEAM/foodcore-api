@@ -6,7 +6,7 @@ module "helm" {
   foodcore-infra-rs-resource-group = var.foodcore-infra-rs-resource-group
   foodcore-infra-rs-storage-account = var.foodcore-infra-rs-storage-account
   release_name          = var.release_name
-  repository_url        = var.repository_url
+  repository_url        = "oci://${data.azurerm_container_registry.acr.login_server}/helm"
   chart_name            = var.chart_name
   chart_version         = var.chart_version
   release_namespace     = var.release_namespace
