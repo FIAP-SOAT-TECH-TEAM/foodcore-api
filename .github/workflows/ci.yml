@@ -28,8 +28,8 @@ jobs:
 
   infra-info:
     runs-on: ubuntu-latest
-    # env:
-    #     TF_VAR_docker_image_uri: "default"
+    env:
+        TF_VAR_docker_image_uri: "default"
     outputs:
       acr_login_server: ${{ steps.acr.outputs.ACR_LOGIN_SERVER }}
     steps:
