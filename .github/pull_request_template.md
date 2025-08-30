@@ -3,7 +3,7 @@
 Por favor, inclua um resumo das mudanças e qual problema está sendo corrigido.
 Inclua também motivação e contexto relevantes.
 
-## Tipo de mudança
+## Tipo de mudança 
 
 Por favor, delete as opções não relevantes.
 
