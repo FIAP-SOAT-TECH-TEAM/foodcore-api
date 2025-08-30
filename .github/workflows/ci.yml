@@ -194,16 +194,10 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Download artifacts - OpenApi File
-        uses: dawidd6/action-download-artifact@v11
+        uses: actions/download-artifact@v4
         with:
           name: openapi
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: ci.yaml
-          workflow_search: true
-          check_artifacts: true
-          name_is_regexp: false
-          if_no_artifact_found: fail
-          path: terraform/build/openapi
+          path: build/openapi
 
       - name: Terraform Fmt
         id: fmt
