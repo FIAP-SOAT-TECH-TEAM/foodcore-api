@@ -5,6 +5,8 @@ resource "helm_release" "foodcoreapi" {
   version    = var.chart_version
   namespace  = var.release_namespace
 
+  force_update = true
+
   set = [
     {
       name  = "api.image.repository"
