@@ -25,8 +25,8 @@ provider "helm" {
   registries = [
     {
       url      = "oci://${data.azurerm_container_registry.acr.login_server}/helm"
-      username = var.acr_username
-      password = var.acr_password
+      username = data.azurerm_container_registry.acr.admin_username
+      password = data.azurerm_container_registry.acr.admin_password
     }
   ]
 
