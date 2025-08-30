@@ -48,7 +48,7 @@ resource "helm_release" "foodcoreapi" {
     },
     {
       name  = "api.mercadoPago.userId"
-      value = var.mercadopago_user_id
+      value = tostring(var.mercadopago_user_id) 
     },
     {
       name  = "api.mercadoPago.posId"
