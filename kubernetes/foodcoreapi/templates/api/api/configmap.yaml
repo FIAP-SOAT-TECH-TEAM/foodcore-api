@@ -11,4 +11,4 @@ data:
   SERVER_PORT: {{ .Values.api.server.port | quote }}
   SPRING_PROFILES_ACTIVE: {{ .Values.api.server.profilesActive | quote }}
   MERCADO_PAGO_BASE_URL: {{ .Values.api.mercadoPago.baseUrl | quote }}
-  MERCADO_PAGO_NOTIFICATION_URL: {{ include "api.mercadopago.notification.url" . }}
+  MERCADO_PAGO_NOTIFICATION_URL: {{ .Values.api.mercadoPago.notificationUrl | quote }}

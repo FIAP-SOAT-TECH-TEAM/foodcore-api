@@ -4,75 +4,124 @@
     description = "Azure Subscription ID"
     # Default (Via tfvars)
   }
+
   variable "resource_group_name" {
     type    = string
-    default = "tc2"
+    default = "tc3"
     description = "Nome do resource group"
   }
-  variable "location" {
-    type    = string
-    default = "East US"
-    description = "Localização do recurso"
-  }
-  variable "dns_prefix" {
-    type = string
-    description = "Prefixo DNS. Deve ser único globalmente."
-    default = "foodcoreapi2"
-    
-    validation {
-      condition     = length(var.dns_prefix) >= 1 && length(var.dns_prefix) <= 54
-      error_message = "O 'dns_prefix' deve ter entre 1 e 54 caracteres."
-    }
-  }
 
-# Public IP
-  variable "allocation_method" {
-    type    = string
-    default = "Static"
-    description = "Método de alocação do IP público"
-  }
-  variable "sku" {
-    type    = string
-    default = "Standard"
-    description = "SKU do IP público"
-  }
-
-# AKS
-  variable "node_count" {
-    type    = number
-    default = 1
-    description = "Número de nós no cluster AKS"
-  }
-  variable "vm_size" {
-    type    = string
-    default = "Standard_A4_v2"
-    description = "Tamanho da VM para os nós do AKS"
-  }
-  variable "identity_type" {
-    type = string
-    default = "SystemAssigned"
-    description = "Tipo de identidade do AKS."
-  }
-  variable "kubernetes_version" {
-    type    = string
-    default = "1.32.5"
-    description = "Versão do Kubernetes a ser usada no AKS"
-  }
-
-
-# Blob Storage
-  variable "container_name" {
-    description = "Nome do container"
+# foodcore-infra
+  variable "foodcore-infra-rs-resource-group" {
     type        = string
-    default     = "images"
+    description = "Nome do resource group do foodcore-infra"
   }
-  variable "account_tier" {
-    description = "Nivel da conta de armazenamento"
+
+  variable "foodcore-infra-rs-storage-account" {
     type        = string
-    default     = "Standard"
+    description = "Nome da conta de armazenamento do foodcore-infra"
   }
-  variable "account_replication_type" {
-    description = "Tipo de replicação da conta de armazenamento"
+
+  variable "foodcore-infra-rs-container" {
     type        = string
-    default     = "LRS"
+    description = "Nome do contêiner do foodcore-infra"
+  }
+
+  variable "foodcore-infra-rs-key" {
+    type        = string
+    description = "Chave do foodcore-infra remote state"
+  }
+
+# HELM
+
+  variable "release_name" {
+    type        = string
+    description = "Nome do release do Helm."
+    default = "foodcoreapi"
+  }
+
+  variable "release_namespace" {
+    type        = string
+    description = "Namespace Kubernetes onde o release será instalado."
+    default = "default"
+  }
+
+  variable "chart_name" {
+    type        = string
+    description = "Nome do chart Helm a ser instalado."
+  }
+
+  variable "chart_version" {
+    type        = string
+    description = "Versão do chart Helm."
+  }
+
+  variable "docker_image_uri" {
+    type        = string
+    description = "URI da imagem Docker a ser utilizada."
+  }
+
+  variable "docker_image_tag" {
+    type        = string
+    description = "Tag da imagem Docker a ser utilizada."
+  }
+
+  variable "jwt_secret" {
+    type        = string
+    description = "Segredo para assinatura de tokens JWT."
+  }
+
+  variable "mercadopago_base_url" {
+    type        = string
+    description = "URL base da API do MercadoPago."
+  }
+
+  variable "mercadopago_token" {
+    type        = string
+    description = "Token da API do MercadoPago."
+  }
+
+  variable "mercadopago_user_id" {
+    type        = string
+    description = "User ID da API do MercadoPago."
+  }
+
+  variable "mercadopago_pos_id" {
+    type        = string
+    description = "POS ID da API do MercadoPago."
+  }
+
+  variable "api_ingress_path" {
+    type        = string
+    description = "Caminho de ingress da API."
+  }
+
+# APIM
+  variable "apim_api_name" {
+    description = "Nome da API no API Management"
+    type        = string
+    default = "foodcore-api"
+  }
+
+  variable "apim_api_path" {
+    description = "Caminho da API no API Management"
+    type        = string
+    default     = "/"
+  }
+
+  variable "apim_api_version" {
+    description = "Versão da API no API Management"
+    type        = string
+    default     = "1"
+  }
+
+  variable "apim_display_name" {
+    description = "Nome exibido da API no API Management"
+    type        = string
+    default     = "Foodcore API"
+  }
+
+  variable "swagger_path" {
+    description = "Caminho do arquivo swagger.json"
+    type        = string
   }

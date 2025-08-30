@@ -1,36 +1,37 @@
-module "resource_group" {
-  source              = "./modules/resource_group"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+module "helm" {
+  source = "./modules/helm"
+
+  foodcore-infra-rs-container = var.foodcore-infra-rs-container
+  foodcore-infra-rs-key = var.foodcore-infra-rs-key
+  foodcore-infra-rs-resource-group = var.foodcore-infra-rs-resource-group
+  foodcore-infra-rs-storage-account = var.foodcore-infra-rs-storage-account
+  release_name          = var.release_name
+  repository_url        = "oci://${data.azurerm_container_registry.acr.login_server}/helm"
+  chart_name            = var.chart_name
+  chart_version         = var.chart_version
+  release_namespace     = var.release_namespace
+  docker_image_uri      = var.docker_image_uri
+  docker_image_tag      = var.docker_image_tag
+  jwt_secret            = var.jwt_secret
+  mercadopago_base_url  = var.mercadopago_base_url
+  mercadopago_token     = var.mercadopago_token
+  mercadopago_user_id   = var.mercadopago_user_id
+  mercadopago_pos_id    = var.mercadopago_pos_id
+  api_ingress_path      = var.api_ingress_path
 }
 
-module "public_ip" {
-  source              = "./modules/public_ip"
-  dns_prefix          = var.dns_prefix
-  resource_group_name = module.resource_group.name
-  location            = var.location
-  allocation_method   = var.allocation_method
-  sku                 = var.sku
-}
+module "apim" {
+  source = "./modules/apim"
 
-module "blob" {
-  source                    = "./modules/blob"
-  dns_prefix                = var.dns_prefix
-  resource_group_name       = module.resource_group.name
-  location                  = var.location
-  container_name            = var.container_name
-  account_tier              = var.account_tier
-  account_replication_type  = var.account_replication_type
-}
+  foodcore-infra-rs-container = var.foodcore-infra-rs-container
+  foodcore-infra-rs-key = var.foodcore-infra-rs-key
+  foodcore-infra-rs-resource-group = var.foodcore-infra-rs-resource-group
+  foodcore-infra-rs-storage-account = var.foodcore-infra-rs-storage-account
+  apim_api_name        = var.apim_api_name
+  apim_api_version     = var.apim_api_version
+  apim_display_name    = var.apim_display_name
+  swagger_path         = var.swagger_path
+  api_ingress_path     = local.api_ingress_path_without_slash
 
-module "aks" {
-  source              = "./modules/aks"
-  dns_prefix          = var.dns_prefix
-  resource_group_name = module.resource_group.name
-  resource_group_id   = module.resource_group.id
-  location            = var.location
-  node_count          = var.node_count
-  vm_size             = var.vm_size
-  identity_type       = var.identity_type
-  kubernetes_version  = var.kubernetes_version
+  depends_on = [module.helm]
 }

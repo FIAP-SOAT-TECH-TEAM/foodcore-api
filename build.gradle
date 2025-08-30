@@ -6,6 +6,7 @@ plugins {
 	id 'jacoco'
 	id 'org.sonarqube' version '4.4.1.3373'
 	id 'com.diffplug.spotless' version '6.25.0'
+	id "org.springdoc.openapi-gradle-plugin" version "1.9.0"
 }
 
 group = 'com.soat.fiap'
@@ -89,7 +90,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testRuntimeOnly 'com.h2database:h2'
+	implementation 'com.h2database:h2'
 
 	// Liquibase runtime dependencies
 	liquibaseRuntime 'org.liquibase:liquibase-core'
@@ -101,9 +102,7 @@ dependencies {
 	implementation "com.squareup.retrofit2:converter-gson:${converterGson}"
 
 	// Azure Storage Blob
-	dependencies {
-		implementation("com.azure:azure-storage-blob:${azureBlobSdk}")
-	}
+	implementation("com.azure:azure-storage-blob:${azureBlobSdk}")
 }
 
 dependencyManagement {
@@ -261,11 +260,6 @@ sonar {
 			'**/package-info.java'
 		].join(',')
 		property 'sonar.test.exclusions', '**/fixtures/**'
-		// Configurações para SonarCloud
-		// property 'sonar.organization', 'your-org'
-		// property 'sonar.host.url', 'https://sonarcloud.io'
-		// Para SonarQube local descomente a linha abaixo:
-		// property 'sonar.host.url', 'http://localhost:9000'
 	}
 }
 
@@ -301,5 +295,18 @@ spotless {
 	groovyGradle {
 		target '*.gradle'
 		greclipse()
+	}
+}
+
+// Gerar swagger.json
+openApi {
+	apiDocsUrl.set("http://localhost:8085/api/v3/api-docs")
+	outputDir.set(file("$buildDir/openapi"))
+	outputFileName.set("swagger.json")
+
+	customBootRun {
+		args.set([
+			"--spring.profiles.active=test"
+		])
 	}
 }
