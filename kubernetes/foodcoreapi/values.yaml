@@ -124,7 +124,7 @@ api:
   auth:
     jwt:
       secret: "replaced"
-      expirationTime: "10"
+      expirationTime: 10
 
   hpa:
     minReplicas: 1
