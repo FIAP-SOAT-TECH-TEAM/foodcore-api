@@ -15,7 +15,7 @@ resource "helm_release" "foodcoreapi" {
       value = var.docker_image_tag
     },
     {
-      name  = "ingress.hosts.host"
+      name  = "ingress.hosts[0].host"
       value = data.terraform_remote_state.infra.outputs.aks_subnet_last_usable_ip
     },
     {
