@@ -1,9 +1,10 @@
 resource "helm_release" "foodcoreapi" {
-  name       = var.release_name
-  repository = var.repository_url
-  chart      = var.chart_name
-  version    = var.chart_version
-  namespace  = var.release_namespace
+  name            = var.release_name
+  repository      = var.repository_url
+  chart           = var.chart_name
+  version         = var.chart_version
+  namespace       = var.release_namespace
+  upgrade_install = true
 
   set = [
     {
