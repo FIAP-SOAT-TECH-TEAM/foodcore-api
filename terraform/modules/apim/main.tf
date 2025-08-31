@@ -8,7 +8,7 @@ resource "azurerm_api_management_api" "apim" {
   protocols           = ["http"]
 
   import {
-    content_format = "swagger-link-json"
+    content_format = "swagger-json"
     content_value  = file(var.swagger_path)
   }
 }
