@@ -44,7 +44,7 @@ resource "helm_release" "foodcoreapi" {
   set {
     name  = "ingress-nginx.controller.service.annotations.service.beta.kubernetes.io/azure-load-balancer-ipv4"
     value = data.terraform_remote_state.infra.outputs.aks_subnet_last_usable_ip
-    type  = string
+    type  = "string"
   }
 
   set {
