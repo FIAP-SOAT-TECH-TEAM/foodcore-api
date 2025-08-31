@@ -51,6 +51,7 @@ ingress-nginx:
         ervice.beta.kubernetes.io/azure-load-balancer-internal: "true"
       loadBalancerIP: "replaced"
 
+
 resources:
   {}
 
