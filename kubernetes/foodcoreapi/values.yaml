@@ -49,8 +49,7 @@ ingress-nginx:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
         ervice.beta.kubernetes.io/azure-load-balancer-internal: "true"
-      loadBalancerIP: "replaced"
-
+        service.beta.kubernetes.io/azure-load-balancer-ipv4: "replaced"
 
 resources:
   {}
