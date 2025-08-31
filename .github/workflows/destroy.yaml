@@ -89,6 +89,18 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      - name: Download artifacts - OpenApi File
+        uses: dawidd6/action-download-artifact@v11
+        with:
+          name: openapi
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: ci.yaml
+          workflow_search: true
+          check_artifacts: true
+          name_is_regexp: false
+          if_no_artifact_found: fail
+          path: build/openapi
+
       - name: Terraform Init
         run: |
           terraform init \
