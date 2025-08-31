@@ -9,7 +9,7 @@ terraform {
 
     helm = {
       source  = "hashicorp/helm"
-      version = "3.0.1" # https://github.com/hashicorp/terraform-provider-helm/issues/1689
+      version = "2.17.0" # https://github.com/hashicorp/terraform-provider-helm/issues/1689
     }
   }
 }
