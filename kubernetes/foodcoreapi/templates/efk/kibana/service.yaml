@@ -6,6 +6,7 @@ metadata:
     app: {{ include "kibana.name" . }}
   namespace: {{ .Values.namespace.efk.name }}
 spec:
+  type: LoadBalancer
   selector:
     app: {{ include "kibana.name" . }}
   ports:
