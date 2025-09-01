@@ -1,4 +1,4 @@
-resource "azurerm_api_management_api" "apim" {
+resource "azurerm_api_management_api" "foodcoreapi_apim" {
   name                = var.apim_api_name
   resource_group_name = data.terraform_remote_state.infra.outputs.apim_resource_group
   api_management_name = data.terraform_remote_state.infra.outputs.apim_name
@@ -33,4 +33,11 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     </outbound>
   </policies>
 XML
+}
+
+resource "azurerm_api_management_product_api" "foodcoreapi_start_product_assoc" {
+  api_name            = azurerm_api_management_api.foodcoreapi_apim.name
+  product_id          = data.terraform_remote_state.infra.outputs.apim_foodcore_start_productid
+  api_management_name = data.terraform_remote_state.infra.outputs.apim_name
+  resource_group_name = data.terraform_remote_state.infra.outputs.apim_resource_group
 }
