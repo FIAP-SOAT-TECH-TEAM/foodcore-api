@@ -124,7 +124,7 @@ api:
   auth:
     jwt:
       secret: "replaced"
-      expirationTime: 10
+      expirationTime: "replaced"
 
   hpa:
     minReplicas: 1
@@ -163,9 +163,9 @@ postgresql:
       memory: "1024Mi"
 
   auth:
-    username: "postgres"
-    password: "postgres"
-    database: "fastfood"
+    username: "replaced"
+    password: "replaced"
+    url: "replaced"
 
 adminer:
   name: "adminer"

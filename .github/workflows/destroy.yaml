@@ -11,10 +11,11 @@ permissions:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TF_VAR_subscription_id: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-  TF_VAR_foodcore-infra-rs-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
-  TF_VAR_foodcore-infra-rs-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
-  TF_VAR_foodcore-infra-rs-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
-  TF_VAR_foodcore-infra-rs-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
+  TF_VAR_foodcore-backend-resource-group: ${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}
+  TF_VAR_foodcore-backend-storage-account: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}
+  TF_VAR_foodcore-backend-container: ${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}
+  TF_VAR_foodcore-backend-infra-key: ${{secrets.FOODCORE_INFRA_BACKEND_AZURE_KEY}}
+  TF_VAR_foodcore-backend-db-key: ${{secrets.FOODCORE_DB_BACKEND_AZURE_KEY}}
   TF_VAR_chart_name: "foodcoreapi"
   TF_VAR_chart_version: "0.1.0"
   TF_VAR_docker_image_tag: "latest"
@@ -27,11 +28,10 @@ env:
   TF_VAR_api_ingress_path: "/api"
 
 jobs:
-
   infra-info:
     runs-on: ubuntu-latest
     env:
-        TF_VAR_docker_image_uri: "default"
+      TF_VAR_docker_image_uri: "default"
     outputs:
       acr_login_server: ${{ steps.acr.outputs.acr_login_server }}
     steps:
