@@ -134,33 +134,8 @@ api:
         averageUtilization: 70
 
 postgresql:
-  name: "postgresql"
 
-  replicaCount: 1
-  port: 5432
-  image:
-    repository: postgres
-    tag: "16.1"
-    pullPolicy: IfNotPresent
-
-  storageSize: 10Gi
-
-  volumes:
-    postgrevolume:
-      dataFolder: pgdata
-      mountPath: /var/lib/postgresql/data
-
-  config:
-    maxConnections: 100
-    sharedBuffers: "128MB"
-
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "512Mi"
-    limits:
-      cpu: "200m"
-      memory: "1024Mi"
+  fqdn: "replaced"
 
   auth:
     username: "replaced"
@@ -178,7 +153,8 @@ adminer:
     pullPolicy: IfNotPresent
 
   ports:
-    port: 8080
+    port: 80
+    targetPort: 8080
     name: adminer
     protocol: TCP
 
@@ -191,10 +167,6 @@ adminer:
     limits:
       cpu: "20m"
       memory: "100Mi"
-
-  ingress:
-    path: /adminer
-    pathType: Prefix
 
 # EFK
 
@@ -273,7 +245,8 @@ kibana:
     tag: "8.13.4"
 
   ports:
-    port: 5601
+    port: 80
+    targetPort: 5601
     name: http
 
   resources:
@@ -289,10 +262,6 @@ kibana:
       name: kibana-config
       mountPath: /usr/share/kibana/config/kibana.yml
       subPath: kibana.yml
-
-  ingress:
-    path: /kibana
-    pathType: Prefix
 
   serverRewriteBasePath: true
   serverHost: "0.0.0.0"

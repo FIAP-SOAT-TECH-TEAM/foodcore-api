@@ -11,4 +11,5 @@ spec:
     app: {{ include "kibana.name" . }}
   ports:
     - port: {{ .Values.kibana.ports.port }}
+      targetPort: {{ .Values.kibana.ports.targetPort }}
       name: {{ .Values.kibana.ports.name }}

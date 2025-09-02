@@ -91,4 +91,9 @@ resource "helm_release" "foodcoreapi" {
     value = data.terraform_remote_state.db.outputs.jdbc_pgsql_connection_string_foodcoreapi
   }
 
+  set {
+    name  = "postgresql.fqdn"
+    value = data.terraform_remote_state.db.outputs.pgsql_fqdn
+  }
+
 }
