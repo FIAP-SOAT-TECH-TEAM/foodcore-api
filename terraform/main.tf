@@ -14,6 +14,7 @@ module "helm" {
   docker_image_uri      = var.docker_image_uri
   docker_image_tag      = var.docker_image_tag
   jwt_secret            = var.jwt_secret
+  jwt_expires_time      = var.jwt_expires_time
   mercadopago_base_url  = var.mercadopago_base_url
   mercadopago_token     = var.mercadopago_token
   mercadopago_user_id   = var.mercadopago_user_id
