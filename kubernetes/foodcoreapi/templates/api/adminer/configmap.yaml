@@ -4,5 +4,5 @@ metadata:
   name: {{ include "adminer.fullname" . }}-config
   namespace: {{ .Values.namespace.api.name }}
 data:
-  adminerDefaultServer: {{ include "postgresql.fullname" . }}-service
+  adminerDefaultServer: {{ .Values.postgresql.fqdn }}
   adminerDesign: {{ .Values.adminer.design }}

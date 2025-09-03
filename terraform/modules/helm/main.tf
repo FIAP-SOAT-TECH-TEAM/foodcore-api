@@ -42,6 +42,11 @@ resource "helm_release" "foodcoreapi" {
   }
 
   set {
+    name  = "api.auth.jwt.expirationTime"
+    value = var.jwt_expires_time
+  }
+
+  set {
     name  = "ingress-nginx.controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-ipv4"
     value = data.terraform_remote_state.infra.outputs.aks_subnet_last_usable_ip
   }
@@ -69,6 +74,26 @@ resource "helm_release" "foodcoreapi" {
   set {
     name  = "api.mercadoPago.notificationUrl"
     value = "${data.terraform_remote_state.infra.outputs.apim_gateway_url}/payments/webhook"
+  }
+
+  set {
+    name  = "postgresql.auth.username"
+    value = data.terraform_remote_state.db.outputs.pgsql_admin_username_foodcoreapi
+  }
+
+  set {
+    name  = "postgresql.auth.password"
+    value = data.terraform_remote_state.db.outputs.pgsql_admin_password_foodcoreapi
+  }
+
+  set {
+    name  = "postgresql.auth.url"
+    value = data.terraform_remote_state.db.outputs.jdbc_pgsql_connection_string_foodcoreapi
+  }
+
+  set {
+    name  = "postgresql.fqdn"
+    value = data.terraform_remote_state.db.outputs.pgsql_fqdn
   }
 
 }

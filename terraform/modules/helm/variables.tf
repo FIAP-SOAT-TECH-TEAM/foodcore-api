@@ -1,22 +1,27 @@
-# foodcore-infra
-  variable "foodcore-infra-rs-resource-group" {
+# remote states
+  variable "foodcore-backend-resource-group" {
     type        = string
-    description = "Nome do resource group do foodcore-infra"
+    description = "Nome do resource group onde o backend está armazenado"
   }
 
-  variable "foodcore-infra-rs-storage-account" {
+  variable "foodcore-backend-storage-account" {
     type        = string
-    description = "Nome da conta de armazenamento do foodcore-infra"
+    description = "Nome da conta de armazenamento onde o backend está armazenado"
   }
 
-  variable "foodcore-infra-rs-container" {
+  variable "foodcore-backend-container" {
     type        = string
-    description = "Nome do contêiner do foodcore-infra"
+    description = "Nome do contêiner onde o backend está armazenado"
   }
 
-  variable "foodcore-infra-rs-key" {
+  variable "foodcore-backend-infra-key" {
     type        = string
-    description = "Chave do foodcore-infra remote state"
+    description = "Chave do arquivo tfstate do foodcore-infra"
+  }
+
+  variable "foodcore-backend-db-key" {
+    type        = string
+    description = "Chave do arquivo tfstate do foodcore-db"
   }
 
 variable "release_name" {
@@ -57,6 +62,11 @@ variable "docker_image_tag" {
 variable "jwt_secret" {
   type        = string
   description = "Segredo para assinatura de tokens JWT."
+}
+
+variable "jwt_expires_time" {
+  type        = number
+  description = "Tempo de expiração do token JWT em minutos."
 }
 
 variable "mercadopago_base_url" {

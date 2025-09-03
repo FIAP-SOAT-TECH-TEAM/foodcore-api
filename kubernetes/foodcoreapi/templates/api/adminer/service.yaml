@@ -9,7 +9,7 @@ spec:
   type: LoadBalancer
   ports:
     - port: {{ .Values.adminer.ports.port }}
-      targetPort: {{ .Values.adminer.ports.port }}
+      targetPort: {{ .Values.adminer.ports.targetPort }}
       protocol: {{ .Values.adminer.ports.protocol }}
       name: {{ .Values.adminer.ports.name }}
   selector:

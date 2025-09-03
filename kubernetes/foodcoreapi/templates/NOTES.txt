@@ -8,9 +8,9 @@ Acesse as URLs da aplicação:
 {{- range $host := $.Values.ingress.hosts }}
 
 🖥️  {{ $host.host }}:
-🍔 Food Core API: http://{{ $host.host }}{{ $.Values.api.ingress.path }}
-📊 Kibana (Monitoramento EFK): http://{{ $host.host }}{{ $.Values.kibana.ingress.path }}
-🗄️  Adminer (Gerenciador de BD): http://{{ $host.host }}{{ $.Values.adminer.ingress.path }}
+🍔 Food Core API: consulte Gateway URL do APIM
+📊 Kibana (Monitoramento EFK): consulte Public IP do SVC LoadBalancer
+🗄️  Adminer (Gerenciador de BD): consulte Public IP do SVC LoadBalancer
 
 {{- end }}
 {{- end }}
