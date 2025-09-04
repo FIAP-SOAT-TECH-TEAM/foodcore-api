@@ -262,8 +262,7 @@ kibana:
       name: kibana-config
       mountPath: /usr/share/kibana/config/kibana.yml
       subPath: kibana.yml
-
-  serverRewriteBasePath: true
+      
   serverHost: "0.0.0.0"
 
 
