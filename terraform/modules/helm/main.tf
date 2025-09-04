@@ -4,7 +4,10 @@ resource "helm_release" "foodcoreapi" {
   chart           = var.chart_name
   version         = var.chart_version
   namespace       = var.release_namespace
+
+  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
   upgrade_install = true
+  force_update    = true
 
   set {
     name  = "api.image.repository"
