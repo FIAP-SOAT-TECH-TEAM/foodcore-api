@@ -97,39 +97,39 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 
-	/**
-	 * Cria um novo usuário
-	 *
-	 * @param request
-	 *            Dados do usuário
-	 * @return Usuário criado
-	 */
-	@PostMapping
-	@Operation(summary = "Criar novo usuário", description = "Cria um novo usuário com os dados fornecidos")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)})
-	@Transactional
-	public ResponseEntity<UserResponse> createUser(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do usuário a ser criado", required = true, content = @Content(schema = @Schema(implementation = UserRequest.class)))
-			@Valid @RequestBody UserRequest request) {
-		var user = SaveUserController.saveUser(request, userDataSource, tokenSource, securitySource);
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
-	}
+	// /**
+	//  * Cria um novo usuário
+	//  *
+	//  * @param request
+	//  *            Dados do usuário
+	//  * @return Usuário criado
+	//  */
+	// @PostMapping
+	// @Operation(summary = "Criar novo usuário", description = "Cria um novo usuário com os dados fornecidos")
+	// @ApiResponses(value = {
+	// 		@ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserResponse.class))),
+	// 		@ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)})
+	// @Transactional
+	// public ResponseEntity<UserResponse> createUser(
+	// 		@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do usuário a ser criado", required = true, content = @Content(schema = @Schema(implementation = UserRequest.class)))
+	// 		@Valid @RequestBody UserRequest request) {
+	// 	var user = SaveUserController.saveUser(request, userDataSource, tokenSource, securitySource);
+	// 	return new ResponseEntity<>(user, HttpStatus.CREATED);
+	// }
 
-	@PostMapping("/login")
-	@Operation(summary = "Login", description = "Realiza o login de um usuário com email e senha")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Login realizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)})
-	@Transactional
-	public ResponseEntity<UserResponse> login(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do login", required = true, content = @Content(schema = @Schema(implementation = LoginRequest.class)))
-			@Valid @RequestBody LoginRequest request) {
-		var loggedUser = LoginController.login(request.getEmail(), request.getPassword(), userDataSource, tokenSource,
-				securitySource);
-		return new ResponseEntity<>(loggedUser, HttpStatus.OK);
-	}
+	// @PostMapping("/login")
+	// @Operation(summary = "Login", description = "Realiza o login de um usuário com email e senha")
+	// @ApiResponses(value = {
+	// 		@ApiResponse(responseCode = "200", description = "Login realizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserResponse.class))),
+	// 		@ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)})
+	// @Transactional
+	// public ResponseEntity<UserResponse> login(
+	// 		@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Dados do login", required = true, content = @Content(schema = @Schema(implementation = LoginRequest.class)))
+	// 		@Valid @RequestBody LoginRequest request) {
+	// 	var loggedUser = LoginController.login(request.getEmail(), request.getPassword(), userDataSource, tokenSource,
+	// 			securitySource);
+	// 	return new ResponseEntity<>(loggedUser, HttpStatus.OK);
+	// }
 
 	/**
 	 * Atualiza um usuário existente
