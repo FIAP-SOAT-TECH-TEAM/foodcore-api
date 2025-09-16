@@ -107,12 +107,6 @@
     default = "foodcore-api"
   }
 
-  variable "apim_api_path" {
-    description = "Caminho da API no API Management"
-    type        = string
-    default     = "/"
-  }
-
   variable "apim_api_version" {
     description = "Versão da API no API Management"
     type        = string
