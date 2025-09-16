@@ -30,6 +30,11 @@
     description = "Chave do arquivo tfstate do foodcore-db"
   }
 
+  variable "foodcore-backend-auth-key" {
+    type        = string
+    description = "Chave do arquivo tfstate do foodcore-auth"
+  }
+
 # HELM
 
   variable "release_name" {
