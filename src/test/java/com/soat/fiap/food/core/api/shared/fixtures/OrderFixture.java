@@ -17,12 +17,12 @@ public class OrderFixture {
 
 	public static Order createValidOrder() {
 		var orderItems = List.of(createValidOrderItem());
-		return new Order(1L, orderItems);
+		return new Order("A23basb3u123", orderItems);
 	}
 
 	public static Order createOrderWithMultipleItems() {
 		var orderItems = List.of(createValidOrderItem(), createBeverageOrderItem(), createDessertOrderItem());
-		return new Order(1L, orderItems);
+		return new Order("A23basb3u123", orderItems);
 	}
 
 	public static Order createOrderWithoutUser() {
@@ -80,19 +80,19 @@ public class OrderFixture {
 
 	public static Order createOrderWithSingleItem() {
 		var orderItems = List.of(createValidOrderItem());
-		return new Order(1L, orderItems);
+		return new Order("A23basb3u123", orderItems);
 	}
 
 	// Input DTOs para testes
 	public static CreateOrderInput createValidCreateOrderInput() {
 		var orderItems = List.of(createValidOrderItemInput());
-		return new CreateOrderInput(1L, orderItems);
+		return new CreateOrderInput("A23basb3u123", orderItems);
 	}
 
 	public static CreateOrderInput createCreateOrderInputWithMultipleItems() {
 		var orderItems = List.of(createValidOrderItemInput(), createBeverageOrderItemInput(),
 				createDessertOrderItemInput());
-		return new CreateOrderInput(1L, orderItems);
+		return new CreateOrderInput("A23basb3u123", orderItems);
 	}
 
 	public static CreateOrderInput createCreateOrderInputWithoutUser() {
@@ -102,7 +102,7 @@ public class OrderFixture {
 
 	public static CreateOrderInput createCreateOrderInputWithObservations() {
 		var orderItems = List.of(createOrderItemInputWithObservations());
-		return new CreateOrderInput(1L, orderItems);
+		return new CreateOrderInput("A23basb3u123", orderItems);
 	}
 
 	public static OrderItemInput createValidOrderItemInput() {

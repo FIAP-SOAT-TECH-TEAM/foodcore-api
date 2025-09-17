@@ -80,7 +80,7 @@ public class OrderGateway {
 	 *            ID do cliente
 	 * @return Lista de pedidos do cliente
 	 */
-	public List<Order> findByUserId(Long userId) {
+	public List<Order> findByUserId(String userId) {
 		return orderDataSource.findByUserId(userId).stream().map(OrderDTOMapper::toDomain).toList();
 	}
 

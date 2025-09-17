@@ -34,7 +34,7 @@ class PaymentOrderEventListenerTest {
 		var event = new OrderCreatedEvent();
 		event.setId(1L);
 		event.setOrderNumber("2024-001");
-		event.setUserId(1L);
+		event.setUserId("as23as3");
 		event.setTotalAmount(BigDecimal.valueOf(29.99));
 
 		var listener = new PaymentOrderEventListener(paymentDataSource, acquirerSource, eventPublisherSource);
@@ -49,7 +49,7 @@ class PaymentOrderEventListenerTest {
 		var event = new OrderCreatedEvent();
 		event.setId(2L);
 		event.setOrderNumber("2024-002");
-		event.setUserId(2L);
+		event.setUserId("as53as3");
 		event.setTotalAmount(BigDecimal.valueOf(199.99));
 
 		var listener = new PaymentOrderEventListener(paymentDataSource, acquirerSource, eventPublisherSource);
@@ -79,7 +79,7 @@ class PaymentOrderEventListenerTest {
 		var event = new OrderCreatedEvent();
 		event.setId(4L);
 		event.setOrderNumber("2024-004");
-		event.setUserId(4L);
+		event.setUserId("1s23as3");
 		event.setTotalAmount(BigDecimal.valueOf(0.01));
 
 		var listener = new PaymentOrderEventListener(paymentDataSource, acquirerSource, eventPublisherSource);
@@ -94,7 +94,7 @@ class PaymentOrderEventListenerTest {
 		var event = new OrderCreatedEvent();
 		event.setId(5L);
 		event.setOrderNumber("2024-005");
-		event.setUserId(5L);
+		event.setUserId("8s23as3");
 		event.setTotalAmount(BigDecimal.valueOf(75.50));
 
 		var listener = new PaymentOrderEventListener(paymentDataSource, acquirerSource, eventPublisherSource);

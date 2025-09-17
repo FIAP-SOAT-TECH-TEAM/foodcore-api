@@ -19,7 +19,7 @@ import lombok.Data;
 @Data
 public class Payment {
 	private Long id;
-	private Long userId;
+	private String userId;
 	private Long orderId;
 	private PaymentMethod type;
 	private LocalDateTime expiresIn = LocalDateTime.now().plusMinutes(30);
@@ -43,7 +43,7 @@ public class Payment {
 	 * @throws NullPointerException
 	 *             se type, expiresIn, tid ou amount forem nulos
 	 */
-	public Payment(Long userId, Long orderId, BigDecimal amount) {
+	public Payment(String userId, Long orderId, BigDecimal amount) {
 
 		validate(userId, orderId, amount);
 
@@ -91,8 +91,12 @@ public class Payment {
 	 * @throws NullPointerException
 	 *             se algum dos parâmetros for {@code null}
 	 */
-	private void validate(Long userId, Long orderId, BigDecimal amount) {
-		Objects.requireNonNull(userId, "O ID do cliente do pedido não pode ser nulo");
+	private void validate(String userId, Long orderId, BigDecimal amount) {
+
+		if (userId == null || userId.isEmpty()) {
+			throw new PaymentException("O id do usuário não pode estar vazio");
+		}
+
 		Objects.requireNonNull(orderId, "O ID do pedido não pode ser nulo");
 		Objects.requireNonNull(amount, "O valor total não pode ser nulo");
 	}

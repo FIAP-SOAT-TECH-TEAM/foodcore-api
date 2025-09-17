@@ -1,21 +1,55 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.common.source;
 
+import java.time.LocalDateTime;
+
 /**
- * Fornecer informaçõe do usuário autenticado no sistema.
+ * Fornece informações do usuário autenticado no sistema.
+ * <p>
+ * Esta interface expõe os dados principais que identificam e caracterizam o
+ * usuário logado, de acordo com os atributos obtidos via Amazon Cognito ou
+ * outro provedor de identidade configurado.
+ * </p>
  */
 public interface AuthenticatedUserSource {
 
 	/**
-	 * Obtém o ID do usuário autenticado.
+	 * Retorna o identificador único do usuário (sub claim do JWT).
 	 *
-	 * @return ID do usuário autenticado.
+	 * @return o identificador único do usuário
 	 */
-	Long getUserId();
+	String getSubject();
 
 	/**
-	 * Obtém o papel (role) do usuário autenticado.
+	 * Retorna o nome completo do usuário.
 	 *
-	 * @return Papel do usuário (ex: ADMIN, CLIENTE).
+	 * @return o nome completo do usuário
 	 */
-	String getUserRole();
+	String getName();
+
+	/**
+	 * Retorna o CPF do usuário.
+	 * <p>
+	 * Este valor geralmente é armazenado como atributo customizado no Cognito.
+	 * </p>
+	 *
+	 * @return o CPF do usuário
+	 */
+	String getCpf();
+
+	/**
+	 * Retorna a role (papel) associada ao usuário.
+	 * <p>
+	 * Esse atributo define permissões e escopos de acesso na aplicação.
+	 * </p>
+	 *
+	 * @return a role do usuário
+	 */
+	String getRole();
+
+	/**
+	 * Retorna a data e hora de criação do usuário no provedor de identidade.
+	 *
+	 * @return a data e hora de criação do usuário
+	 */
+	LocalDateTime getCreationDate();
 }

@@ -108,16 +108,4 @@ class PublishCreateOrderEventUseCaseTest {
 
 		verify(eventPublisherGateway).publishEvent(any());
 	}
-
-	@Test @DisplayName("Deve publicar evento para pedido sem usuário")
-	void shouldPublishEventForOrderWithoutUser() {
-		// Arrange
-		var order = OrderFixture.createOrderWithoutUser();
-
-		// Act
-		assertDoesNotThrow(() -> PublishCreateOrderEventUseCase.publishCreateOrderEvent(order, eventPublisherGateway));
-
-		// Assert
-		verify(eventPublisherGateway).publishEvent(any());
-	}
 }

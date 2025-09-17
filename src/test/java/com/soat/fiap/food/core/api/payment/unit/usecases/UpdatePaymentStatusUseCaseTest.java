@@ -20,7 +20,7 @@ class UpdatePaymentStatusUseCaseTest {
 	@Test @DisplayName("Deve atualizar status do pagamento para APPROVED")
 	void shouldUpdatePaymentStatusToApproved() {
 		// Arrange
-		var payment = new Payment(1L, 1L, new BigDecimal("100.00"));
+		var payment = new Payment("as23a13", 1L, new BigDecimal("100.00"));
 		payment.setStatus(PaymentStatus.PENDING);
 
 		// Act
@@ -37,7 +37,7 @@ class UpdatePaymentStatusUseCaseTest {
 	@Test @DisplayName("Deve atualizar status do pagamento para CANCELLED")
 	void shouldUpdatePaymentStatusToCancelled() {
 		// Arrange
-		var payment = new Payment(2L, 2L, new BigDecimal("50.00"));
+		var payment = new Payment("as5t3as3", 2L, new BigDecimal("50.00"));
 		payment.setStatus(PaymentStatus.PENDING);
 
 		// Act
@@ -53,7 +53,7 @@ class UpdatePaymentStatusUseCaseTest {
 	@Test @DisplayName("Deve atualizar status do pagamento para REJECTED")
 	void shouldUpdatePaymentStatusToRejected() {
 		// Arrange
-		var payment = new Payment(3L, 3L, new BigDecimal("75.00"));
+		var payment = new Payment("1s23as3", 3L, new BigDecimal("75.00"));
 		payment.setStatus(PaymentStatus.PENDING);
 
 		// Act
@@ -68,7 +68,7 @@ class UpdatePaymentStatusUseCaseTest {
 	@Test @DisplayName("Deve manter outras propriedades do pagamento inalteradas")
 	void shouldKeepOtherPaymentPropertiesUnchanged() {
 		// Arrange
-		var payment = new Payment(4L, 4L, new BigDecimal("200.00"));
+		var payment = new Payment("as13as3", 4L, new BigDecimal("200.00"));
 		payment.setId(100L);
 		payment.setStatus(PaymentStatus.PENDING);
 		var originalUserId = payment.getUserId();

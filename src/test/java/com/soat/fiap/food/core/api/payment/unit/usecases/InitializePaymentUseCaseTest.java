@@ -33,8 +33,9 @@ class InitializePaymentUseCaseTest {
 	@Test @DisplayName("Deve retornar pagamento existente quando já inicializado")
 	void shouldReturnExistingPaymentWhenAlreadyInitialized() {
 		// Arrange
-		var orderCreatedInput = new OrderCreatedInput(1L, "ORD-001", 1L, new BigDecimal("50.00"), java.util.List.of());
-		var existingPayment = new Payment(1L, 1L, new BigDecimal("50.00"));
+		var orderCreatedInput = new OrderCreatedInput(1L, "ORD-001", "as23as3", new BigDecimal("50.00"),
+				java.util.List.of());
+		var existingPayment = new Payment("as23as8", 1L, new BigDecimal("50.00"));
 		existingPayment.setId(1L);
 		existingPayment.setStatus(PaymentStatus.PENDING);
 
@@ -53,7 +54,8 @@ class InitializePaymentUseCaseTest {
 	@Test @DisplayName("Deve criar novo pagamento quando não existe")
 	void shouldCreateNewPaymentWhenNotExists() {
 		// Arrange
-		var orderCreatedInput = new OrderCreatedInput(1L, "ORD-002", 1L, new BigDecimal("75.50"), java.util.List.of());
+		var orderCreatedInput = new OrderCreatedInput(1L, "ORD-002", "as23as3", new BigDecimal("75.50"),
+				java.util.List.of());
 		var qrCodeValue = "00020126580014BR.GOV.BCB.PIX0136123e4567-e12b-12d1-a456-426655440000";
 
 		when(paymentGateway.findTopByOrderIdOrderByIdDesc(1L)).thenReturn(Optional.empty());
@@ -65,7 +67,7 @@ class InitializePaymentUseCaseTest {
 
 		// Assert
 		assertNotNull(result);
-		assertEquals(1L, result.getUserId());
+		assertEquals("as23as3", result.getUserId());
 		assertEquals(1L, result.getOrderId());
 		assertEquals(new BigDecimal("75.50"), result.getAmount());
 		assertEquals(PaymentStatus.PENDING, result.getStatus());
@@ -77,7 +79,8 @@ class InitializePaymentUseCaseTest {
 	@Test @DisplayName("Deve criar pagamento com data de expiração correta")
 	void shouldCreatePaymentWithCorrectExpirationDate() {
 		// Arrange
-		var orderCreatedInput = new OrderCreatedInput(2L, "ORD-003", 2L, new BigDecimal("100.00"), java.util.List.of());
+		var orderCreatedInput = new OrderCreatedInput(2L, "ORD-003", "as238s3", new BigDecimal("100.00"),
+				java.util.List.of());
 		var qrCodeValue = "00020126580014BR.GOV.BCB.PIX0136987f6543-e21b-21d1-a654-426655440001";
 
 		when(paymentGateway.findTopByOrderIdOrderByIdDesc(2L)).thenReturn(Optional.empty());

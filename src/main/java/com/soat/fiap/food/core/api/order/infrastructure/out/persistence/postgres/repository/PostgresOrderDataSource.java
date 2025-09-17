@@ -50,7 +50,7 @@ public class PostgresOrderDataSource implements OrderDataSource {
 	}
 
 	@Override @Transactional(readOnly = true)
-	public List<OrderDTO> findByUserId(Long userId) {
+	public List<OrderDTO> findByUserId(String userId) {
 		List<OrderEntity> orderEntities = springDataOrderRepository.findByUserId(userId);
 		return orderEntities.stream().map(orderEntityMapper::toDTO).toList();
 	}

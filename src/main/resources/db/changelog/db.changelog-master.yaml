@@ -22,17 +22,6 @@ databaseChangeLog:
       file: shared/01-modulith-tables.sql
       relativeToChangelogFile: true
 
-  # User module
-  - include:
-      file: modules/user/01-user-tables.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/user/02-user-indexes.sql
-      relativeToChangelogFile: true
-  - include:
-      file: modules/user/03-user-seed.sql
-      relativeToChangelogFile: true
-
   # Catalog module
   - include:
       file: modules/catalog/01-catalog-tables.sql

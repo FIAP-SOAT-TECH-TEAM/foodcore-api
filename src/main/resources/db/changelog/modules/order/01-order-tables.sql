@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS orders
   PRIMARY
   KEY,
   user_id
-  INT
+  VARCHAR
   NOT
   NULL,
   order_number
@@ -23,15 +23,8 @@ CREATE TABLE IF NOT EXISTS orders
   2
 ) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  CONSTRAINT fk_order_user FOREIGN KEY
-(
-  user_id
-) REFERENCES users
-(
-  id
-)
-  );
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
 
 COMMENT
 ON TABLE orders IS 'Tabela que armazena os pedidos do sistema';

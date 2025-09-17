@@ -17,14 +17,14 @@ import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
 public class PaymentFixture {
 
 	public static Payment createValidPayment() {
-		return new Payment(1L, // userId
+		return new Payment("as23as3", // userId
 				1L, // orderId
 				new BigDecimal("50.00") // amount
 		);
 	}
 
 	public static Payment createPendingPayment() {
-		var payment = new Payment(1L, 1L, new BigDecimal("25.90"));
+		var payment = new Payment("as23as3", 1L, new BigDecimal("25.90"));
 		payment.setId(1L);
 		payment.setStatus(PaymentStatus.PENDING);
 		payment.setQrCode(
@@ -33,7 +33,7 @@ public class PaymentFixture {
 	}
 
 	public static Payment createApprovedPayment() {
-		var payment = new Payment(1L, 1L, new BigDecimal("35.50"));
+		var payment = new Payment("as23as3", 1L, new BigDecimal("35.50"));
 		payment.setId(2L);
 		payment.setStatus(PaymentStatus.APPROVED);
 		payment.setType(PaymentMethod.PIX);
@@ -44,7 +44,7 @@ public class PaymentFixture {
 	}
 
 	public static Payment createCancelledPayment() {
-		var payment = new Payment(1L, 2L, new BigDecimal("18.90"));
+		var payment = new Payment("as23as3", 2L, new BigDecimal("18.90"));
 		payment.setId(3L);
 		payment.setStatus(PaymentStatus.CANCELLED);
 		payment.setType(PaymentMethod.PIX);
@@ -53,7 +53,7 @@ public class PaymentFixture {
 	}
 
 	public static Payment createRejectedPayment() {
-		var payment = new Payment(1L, 3L, new BigDecimal("42.00"));
+		var payment = new Payment("as23as3", 3L, new BigDecimal("42.00"));
 		payment.setId(4L);
 		payment.setStatus(PaymentStatus.REJECTED);
 		payment.setType(PaymentMethod.PIX);
@@ -62,7 +62,7 @@ public class PaymentFixture {
 	}
 
 	public static Payment createExpiredPayment() {
-		var payment = new Payment(1L, 4L, new BigDecimal("29.90"));
+		var payment = new Payment("as23as3", 4L, new BigDecimal("29.90"));
 		payment.setId(5L);
 		payment.setStatus(PaymentStatus.PENDING);
 		payment.setExpiresIn(LocalDateTime.now().minusMinutes(30)); // Expirado há 30 minutos
@@ -70,29 +70,29 @@ public class PaymentFixture {
 	}
 
 	public static Payment createPaymentWithCustomAmount(BigDecimal amount) {
-		return new Payment(1L, 1L, amount);
+		return new Payment("as23as3", 1L, amount);
 	}
 
-	public static Payment createPaymentForUser(Long userId) {
+	public static Payment createPaymentForUser(String userId) {
 		return new Payment(userId, 1L, new BigDecimal("25.00"));
 	}
 
 	public static Payment createPaymentForOrder(Long orderId) {
-		return new Payment(1L, orderId, new BigDecimal("30.00"));
+		return new Payment("as23as3", orderId, new BigDecimal("30.00"));
 	}
 
 	// Input DTOs para testes
 	public static OrderCreatedInput createValidOrderCreatedInput() {
 		return new OrderCreatedInput(1L, // orderId
 				"ORD-001", // orderNumber
-				1L, // userId
+				"as23as3", // userId
 				new BigDecimal("50.00"), // totalAmount
 				List.of() // items
 		);
 	}
 
 	public static OrderCreatedInput createOrderCreatedInputWithCustomAmount(BigDecimal amount) {
-		return new OrderCreatedInput(1L, "ORD-002", 1L, amount, List.of());
+		return new OrderCreatedInput(1L, "ORD-002", "as23as3", amount, List.of());
 	}
 
 	public static AcquirerNotificationInput createValidAcquirerNotificationInput() {

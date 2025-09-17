@@ -29,7 +29,7 @@ import lombok.Data;
 public class Order {
 
 	private Long id;
-	private Long userId;
+	private String userId;
 	private OrderNumber orderNumber = new OrderNumber(LocalDate.now().getYear(), (id == null) ? 0 : id);
 	private OrderStatus orderStatus = OrderStatus.RECEIVED;
 	private BigDecimal amount;
@@ -50,9 +50,10 @@ public class Order {
 	 *             se orderItems for vazio ou se o valor calculado do pedido for
 	 *             menor ou igual a zero
 	 */
-	public Order(Long userId, List<OrderItem> orderItems) {
-		validate(orderItems);
-		this.userId = userId; // Validado via serviço de domínio
+	public Order(String userId, List<OrderItem> orderItems) {
+		validate(userId, orderItems);
+
+		this.userId = userId;
 
 		for (OrderItem orderItem : orderItems) {
 			addItem(orderItem);
@@ -62,6 +63,8 @@ public class Order {
 	/**
 	 * Validação centralizada.
 	 *
+	 * @param userId
+	 *            ID do cliente que realizou o pedido
 	 * @param orderItems
 	 *            Lista de itens do pedido
 	 * @throws NullPointerException
@@ -69,8 +72,12 @@ public class Order {
 	 * @throws OrderException
 	 *             se a lista de itens estiver vazia
 	 */
-	private void validate(List<OrderItem> orderItems) {
+	private void validate(String userId, List<OrderItem> orderItems) {
 		Objects.requireNonNull(orderItems, "A lista de itens do pedido não pode ser nula");
+
+		if (userId == null || userId.isEmpty()) {
+			throw new OrderException("O id do usuário não pode estar vazio");
+		}
 
 		if (orderItems.isEmpty()) {
 			throw new OrderException("O pedido deve conter itens");
@@ -82,7 +89,7 @@ public class Order {
 	 *
 	 * @return ID do cliente ou null se não houver cliente associado
 	 */
-	public Long getUserId() {
+	public String getUserId() {
 		return userId != null ? userId : null;
 	}
 

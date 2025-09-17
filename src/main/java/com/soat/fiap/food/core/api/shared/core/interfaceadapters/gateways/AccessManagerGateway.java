@@ -25,7 +25,7 @@ public class AccessManagerGateway {
 	 * @throws org.springframework.security.access.AccessDeniedException
 	 *             se o usuário não tiver permissão.
 	 */
-	public void validateAccess(Long userId) {
+	public void validateAccess(String userId) {
 		log.debug("Validando acesso para o usuário com ID: {}", userId);
 		accessManagerSource.validateAccess(userId);
 	}

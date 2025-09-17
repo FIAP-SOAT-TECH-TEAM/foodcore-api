@@ -31,7 +31,7 @@ class OrderCreatedMapperTest {
 		OrderCreatedEvent event = new OrderCreatedEvent();
 		event.setId(1L);
 		event.setOrderNumber("ORD-001");
-		event.setUserId(1L);
+		event.setUserId("as23as3");
 		event.setTotalAmount(new BigDecimal("31.00"));
 		event.setItems(List.of(item));
 
@@ -42,7 +42,7 @@ class OrderCreatedMapperTest {
 		assertNotNull(result);
 		assertEquals(1L, result.orderId());
 		assertEquals("ORD-001", result.orderNumber());
-		assertEquals(1L, result.userId());
+		assertEquals("as23as3", result.userId());
 		assertEquals(new BigDecimal("31.00"), result.totalAmount());
 		assertEquals(1, result.items().size());
 
@@ -61,7 +61,7 @@ class OrderCreatedMapperTest {
 		OrderCreatedEvent event = new OrderCreatedEvent();
 		event.setId(2L);
 		event.setOrderNumber("ORD-002");
-		event.setUserId(2L);
+		event.setUserId("3s23as3");
 		event.setTotalAmount(BigDecimal.ZERO);
 		event.setItems(List.of());
 
@@ -72,7 +72,7 @@ class OrderCreatedMapperTest {
 		assertNotNull(result);
 		assertEquals(2L, result.orderId());
 		assertEquals("ORD-002", result.orderNumber());
-		assertEquals(2L, result.userId());
+		assertEquals("3s23as3", result.userId());
 		assertEquals(BigDecimal.ZERO, result.totalAmount());
 		assertTrue(result.items().isEmpty());
 	}
@@ -101,7 +101,7 @@ class OrderCreatedMapperTest {
 		OrderCreatedEvent event = new OrderCreatedEvent();
 		event.setId(3L);
 		event.setOrderNumber("ORD-003");
-		event.setUserId(3L);
+		event.setUserId("as25as3");
 		event.setTotalAmount(new BigDecimal("30.00"));
 		event.setItems(List.of(item1, item2));
 

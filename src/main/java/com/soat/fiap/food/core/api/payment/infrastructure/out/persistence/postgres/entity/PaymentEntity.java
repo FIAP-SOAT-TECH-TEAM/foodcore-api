@@ -27,7 +27,7 @@ public class PaymentEntity {
 	private Integer id;
 
 	@Column(name = "user_id")
-	private Integer userId;
+	private String userId;
 
 	@Column(name = "order_id")
 	private Integer orderId;

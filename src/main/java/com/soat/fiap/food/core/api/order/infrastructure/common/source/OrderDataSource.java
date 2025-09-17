@@ -45,7 +45,7 @@ public interface OrderDataSource {
 	 *            ID do cliente
 	 * @return Lista de pedidos do cliente
 	 */
-	List<OrderDTO> findByUserId(Long userId);
+	List<OrderDTO> findByUserId(String userId);
 
 	/**
 	 * Lista todos os pedidos

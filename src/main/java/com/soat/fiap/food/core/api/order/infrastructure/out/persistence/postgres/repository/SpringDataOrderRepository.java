@@ -31,7 +31,7 @@ public interface SpringDataOrderRepository extends JpaRepository<OrderEntity, Lo
 	 *            ID do usuário
 	 * @return Lista de pedidos do cliente
 	 */
-	List<OrderEntity> findByUserId(Long userId);
+	List<OrderEntity> findByUserId(String userId);
 
 	/**
 	 * Busca pedidos que não estejam finalizados, ordenados por prioridade de status

@@ -67,6 +67,9 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <set-header name="Auth-TokenType" exists-action="override">
         <value>@((string)((JObject)context.Variables["authBody"])["tokenType"])</value>
       </set-header>
+      <set-header name="Auth-CreatedAt" exists-action="override">
+        <value>@((DateTime)((JObject)context.Variables["authBody"])["createdAt"])</value>
+      </set-header>
 
       <!-- 7. Encaminhar para o backend final -->
       <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />

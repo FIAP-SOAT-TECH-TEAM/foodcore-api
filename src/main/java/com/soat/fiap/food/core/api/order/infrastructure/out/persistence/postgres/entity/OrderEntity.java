@@ -27,7 +27,7 @@ public class OrderEntity {
 	private Integer id;
 
 	@Column(name = "user_id")
-	private Integer userId;
+	private String userId;
 
 	@Convert(converter = OrderNumberConverter.class)
 	@Column(name = "order_number", length = 20, nullable = false, unique = true)
