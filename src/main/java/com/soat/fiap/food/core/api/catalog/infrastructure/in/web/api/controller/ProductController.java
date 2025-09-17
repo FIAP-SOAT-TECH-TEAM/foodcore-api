@@ -25,7 +25,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class ProductController {
 	}
 
 	@PostMapping(value = "/{catalogId}/categories/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@Operation(summary = "Criar novo produto", description = "Cria um novo produto vinculado a uma categoria existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Criar novo produto", description = "Cria um novo produto vinculado a uma categoria existente", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Produto criado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),
@@ -69,7 +68,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{catalogId}/categories/{categoryId}/products")
-	@Operation(summary = "Listar produtos por categoria", description = "Retorna todos os produtos de uma determinada categoria dentro de um catálogo", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Listar produtos por categoria", description = "Retorna todos os produtos de uma determinada categoria dentro de um catálogo", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))),
@@ -85,7 +84,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-	@Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico de uma categoria pelo ID do produto", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Buscar produto por ID", description = "Retorna um produto específico de uma categoria pelo ID do produto", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Produto encontrado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),
@@ -102,7 +101,7 @@ public class ProductController {
 	}
 
 	@PutMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-	@Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto existente", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),
@@ -124,7 +123,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{catalogId}/categories/{categoryId}/products/{productId}")
-	@Operation(summary = "Excluir produto", description = "Exclui um produto específico de uma categoria", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Excluir produto", description = "Exclui um produto específico de uma categoria", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Produto excluído com sucesso", content = @Content),
@@ -141,7 +140,7 @@ public class ProductController {
 	}
 
 	@PatchMapping(value = "/{catalogId}/categories/{categoryId}/products/{productId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@Operation(summary = "Atualizar imagem do produto", description = "Atualiza apenas a imagem de um produto existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Atualizar imagem do produto", description = "Atualiza apenas a imagem de um produto existente", tags = {
 			"Produtos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Imagem do produto atualizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),

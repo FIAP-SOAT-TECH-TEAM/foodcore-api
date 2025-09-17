@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class CategoryController {
 	}
 
 	@PostMapping(value = "/categories", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria vinculada a um catálogo existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Criar nova categoria", description = "Cria uma nova categoria vinculada a um catálogo existente", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Categoria criada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CategoryResponse.class))),
@@ -65,7 +64,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{catalogId}/categories")
-	@Operation(summary = "Listar categorias do catálogo", description = "Retorna todas as categorias associadas a um catálogo", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Listar categorias do catálogo", description = "Retorna todas as categorias associadas a um catálogo", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
@@ -79,7 +78,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{catalogId}/categories/{categoryId}")
-	@Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria específica de um catálogo pelo ID da categoria", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria específica de um catálogo pelo ID da categoria", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CategoryResponse.class))),
@@ -95,7 +94,7 @@ public class CategoryController {
 	}
 
 	@PutMapping("/{catalogId}/categories/{categoryId}")
-	@Operation(summary = "Atualizar categoria", description = "Atualiza uma categoria vinculada a um catálogo existente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Atualizar categoria", description = "Atualiza uma categoria vinculada a um catálogo existente", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CategoryResponse.class))),
@@ -115,7 +114,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{catalogId}/categories/{categoryId}")
-	@Operation(summary = "Excluir categoria", description = "Exclui uma categoria específica de um catálogo", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Excluir categoria", description = "Exclui uma categoria específica de um catálogo", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Categoria excluída com sucesso", content = @Content),
@@ -131,7 +130,7 @@ public class CategoryController {
 	}
 
 	@PatchMapping(value = "/{catalogId}/categories/{categoryId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@Operation(summary = "Atualizar imagem do category", description = "Atualiza apenas a imagem de um categoryexistente", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Atualizar imagem do category", description = "Atualiza apenas a imagem de um categoryexistente", tags = {
 			"Categorias"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Imagem da categoria atualizada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CategoryResponse.class))),
