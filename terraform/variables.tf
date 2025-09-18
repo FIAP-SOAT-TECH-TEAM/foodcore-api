@@ -30,6 +30,11 @@
     description = "Chave do arquivo tfstate do foodcore-db"
   }
 
+  variable "foodcore-backend-auth-key" {
+    type        = string
+    description = "Chave do arquivo tfstate do foodcore-auth"
+  }
+
 # HELM
 
   variable "release_name" {
@@ -105,12 +110,6 @@
     description = "Nome da API no API Management"
     type        = string
     default = "foodcore-api"
-  }
-
-  variable "apim_api_path" {
-    description = "Caminho da API no API Management"
-    type        = string
-    default     = "/"
   }
 
   variable "apim_api_version" {

@@ -31,7 +31,7 @@ public class OrderResponse {
 	private String statusDescription;
 
 	@Schema(description = "ID do cliente (opcional)", example = "1")
-	private Long userId;
+	private String userId;
 
 	@Schema(description = "Valor total do pedido", example = "75.90")
 	private BigDecimal totalAmount;

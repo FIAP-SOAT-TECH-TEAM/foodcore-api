@@ -19,6 +19,11 @@
     description = "Chave do arquivo tfstate do foodcore-infra"
   }
 
+  variable "foodcore-backend-auth-key" {
+    type        = string
+    description = "Chave do arquivo tfstate do foodcore-auth"
+  }
+
 variable "apim_api_name" {
   description = "Nome da API no API Management"
   type        = string

@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
+import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException;
 import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
 
 import jakarta.servlet.http.HttpServletRequest;

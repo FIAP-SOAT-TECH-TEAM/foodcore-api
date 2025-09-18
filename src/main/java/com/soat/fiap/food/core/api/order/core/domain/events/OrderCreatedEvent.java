@@ -21,7 +21,7 @@ public class OrderCreatedEvent {
 
 	private String statusDescription;
 
-	private Long userId;
+	private String userId;
 
 	private BigDecimal totalAmount;
 

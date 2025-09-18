@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import com.soat.fiap.food.core.api.order.core.application.inputs.CreateOrderInput;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 
 /**
  * Classe utilitária responsável por mapear objetos entre
@@ -18,11 +19,17 @@ public class CreateOrderMapper {
 	 *
 	 * @param request
 	 *            O DTO da requisição HTTP para criação de pedido.
+	 * @param authenticatedUserGateway
+	 *            Gateway de usuário autenticado
 	 * @return Um objeto {@link CreateOrderInput} com os dados para processar a
 	 *         criação do pedido.
 	 */
-	public static CreateOrderInput toInput(CreateOrderRequest request) {
-		return new CreateOrderInput(request.getUserId(),
+	public static CreateOrderInput toInput(CreateOrderRequest request,
+			AuthenticatedUserGateway authenticatedUserGateway) {
+
+		var userId = authenticatedUserGateway.getSubject();
+
+		return new CreateOrderInput(userId,
 				request.getItems().stream().map(OrderItemMapper::toInput).collect(Collectors.toList()));
 	}
 

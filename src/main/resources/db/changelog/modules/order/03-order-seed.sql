@@ -5,7 +5,7 @@
 
 -- Pedido 1
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
-SELECT (SELECT id FROM users WHERE email = 'maria@email.com' LIMIT 1),
+SELECT 'asdas2332',
     'ORD-2025-00000001',
     'COMPLETED',
     32.80,
@@ -48,7 +48,7 @@ SELECT (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000001'),
 
 -- Pedido 2
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
-SELECT (SELECT id FROM users WHERE email = 'joao@email.com'),
+SELECT 'asd34515232',
        'ORD-2025-00000002',
        'READY',
        79.70,
@@ -104,7 +104,7 @@ SELECT (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000002'),
 
 -- Pedido 3
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
-SELECT (SELECT id FROM users WHERE email = 'joao@email.com'),
+SELECT 'asd34515232',
        'ORD-2025-00000003',
        'RECEIVED',
        19.90,
@@ -145,7 +145,7 @@ SELECT (SELECT id FROM orders WHERE order_number = 'ORD-2025-00000003'),
 
 -- Pedido 4
 INSERT INTO orders (user_id, order_number, status, amount, created_at, updated_at)
-SELECT (SELECT id FROM users WHERE email = 'joao@email.com'),
+SELECT 'asd34515232',
        'ORD-2025-00000004',
        'RECEIVED',
        4.90,

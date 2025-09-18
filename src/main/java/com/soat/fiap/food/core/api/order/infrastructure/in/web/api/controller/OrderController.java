@@ -18,8 +18,8 @@ import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.O
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
-import com.soat.fiap.food.core.api.user.infrastructure.common.source.UserDataSource;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -40,23 +39,23 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	private final OrderDataSource orderDataSource;
-	private final UserDataSource userDataSource;
 	private final CatalogDataSource catalogDataSource;
 	private final PaymentDataSource paymentDataSource;
+	private final AuthenticatedUserSource authenticatedUserSource;
 	private final EventPublisherSource eventPublisherSource;
 
-	public OrderController(OrderDataSource orderDataSource, UserDataSource userDataSource,
-			CatalogDataSource catalogDataSource, PaymentDataSource paymentDataSource,
+	public OrderController(OrderDataSource orderDataSource, CatalogDataSource catalogDataSource,
+			PaymentDataSource paymentDataSource, AuthenticatedUserSource authenticatedUserSource,
 			EventPublisherSource eventPublisherSource) {
 		this.orderDataSource = orderDataSource;
-		this.userDataSource = userDataSource;
 		this.catalogDataSource = catalogDataSource;
 		this.eventPublisherSource = eventPublisherSource;
+		this.authenticatedUserSource = authenticatedUserSource;
 		this.paymentDataSource = paymentDataSource;
 	}
 
 	@PostMapping
-	@Operation(summary = "Criar novo pedido", description = "Cria um novo pedido com os itens, produtos e descontos especificados", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Criar novo pedido", description = "Cria um novo pedido com os itens, produtos e descontos especificados")
 
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Pedido criado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderResponse.class))
@@ -66,13 +65,13 @@ public class OrderController {
 	@Transactional
 	public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
 		log.debug("Requisição para criar novo pedido recebida");
-		OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, orderDataSource, userDataSource,
-				catalogDataSource, eventPublisherSource);
+		OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, orderDataSource,
+				catalogDataSource, authenticatedUserSource, eventPublisherSource);
 		return ResponseEntity.status(201).body(orderResponse);
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar pedido por ID", description = "Retorna um pedido específico pelo seu ID", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Buscar pedido por ID", description = "Retorna um pedido específico pelo seu ID", tags = {
 			"Pedidos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderResponse.class))),
@@ -86,7 +85,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/active")
-	@Operation(summary = "Listar pedidos ativos ordenados", description = "Retorna todos os pedidos com status RECEBIDO, EM_PREPARACAO ou PRONTO, ordenados por prioridade e data de criação", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Listar pedidos ativos ordenados", description = "Retorna todos os pedidos com status RECEBIDO, EM_PREPARACAO ou PRONTO, ordenados por prioridade e data de criação")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Lista de pedidos ativos retornada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderResponse.class)))})
 	@Transactional(readOnly = true)
@@ -99,7 +98,7 @@ public class OrderController {
 	}
 
 	@PatchMapping("/{orderId}/status")
-	@Operation(summary = "Atualizar status do pedido", description = "Atualiza o status de um pedido existente para um dos valores válidos: RECEIVED, PREPARING, READY, COMPLETED", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Atualizar status do pedido", description = "Atualiza o status de um pedido existente para um dos valores válidos: RECEIVED, PREPARING, READY, COMPLETED")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Status do pedido atualizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderStatusResponse.class))),
 			@ApiResponse(responseCode = "400", description = "Status inválido ou dados malformados", content = @Content),

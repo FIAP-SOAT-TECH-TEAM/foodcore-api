@@ -1,10 +1,10 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException;
 
 /**
  * Implementação concreta: DataSource para validação de acesso com base no ID e
@@ -29,12 +29,18 @@ public class DefaultAccessManagerSource implements AccessManagerSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void validateAccess(Long userId) {
-		Long currentUserId = userProvider.getUserId();
-		if (currentUserId == null) {
+	public void validateAccess(String userId) {
+		String currentUserId = userProvider.getSubject();
+
+		if (currentUserId == null || currentUserId.isEmpty()) {
 			throw new AccessDeniedException("Usuário não autenticado.");
 		}
-		String role = userProvider.getUserRole();
+
+		String role = userProvider.getRole();
+
+		if (role == null || role.isEmpty()) {
+			throw new AccessDeniedException("Impossível determinar a função do usuário.");
+		}
 
 		if (!currentUserId.equals(userId) && !"ADMIN".equalsIgnoreCase(role)) {
 			throw new AccessDeniedException("Você não tem permissão para visualizar este recurso.");

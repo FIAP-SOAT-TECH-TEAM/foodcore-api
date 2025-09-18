@@ -20,7 +20,7 @@ import java.util.List;
  * @param items
  *            Lista de itens do pedido.
  */
-public record OrderCreatedInput(Long orderId, String orderNumber, Long userId, BigDecimal totalAmount,
+public record OrderCreatedInput(Long orderId, String orderNumber, String userId, BigDecimal totalAmount,
 		List<OrderCreatedItemInput> items) {
 	/**
 	 * Construtor para inicializar um {@code OrderCreatedInput}.

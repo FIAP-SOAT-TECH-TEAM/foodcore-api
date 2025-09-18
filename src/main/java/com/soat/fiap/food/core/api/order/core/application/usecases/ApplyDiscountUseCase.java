@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
-import com.soat.fiap.food.core.api.user.core.domain.exceptions.UserNotFoundException;
-import com.soat.fiap.food.core.api.user.core.interfaceadapters.gateways.UserGateway;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,20 +23,21 @@ public class ApplyDiscountUseCase {
 	 *
 	 * @param order
 	 *            pedido no qual o desconto será aplicado
-	 * @param gateway
-	 *            Gateway para comunicação com o mundo exterior
+	 * @param authenticatedUserGateway
+	 *            Gateway de usuário autenticado
 	 * @throws OrderException
 	 *             se o cliente do pedido não for encontrado
 	 */
-	public static void applyDiscount(Order order, UserGateway gateway) {
+	public static void applyDiscount(Order order, AuthenticatedUserGateway authenticatedUserGateway) {
 
-		var user = gateway.findById(order.getUserId());
+		var createDate = authenticatedUserGateway.getCreationDate();
 
-		if (user.isEmpty()) {
-			throw new UserNotFoundException("Cliente do pedido não encontrado");
+		if (createDate == null) {
+			throw new OrderException(
+					"A data de criação do usuário informada para cálculo de desconto não pode ser nula");
 		}
 
-		var yearCreateUser = user.get().getCreatedAt().getYear();
+		var yearCreateUser = createDate.getYear();
 		var currentYear = LocalDateTime.now().getYear();
 
 		var percent = (currentYear - yearCreateUser) * 2;

@@ -14,5 +14,5 @@ public interface AccessManagerSource {
 	 * @throws org.springframework.security.access.AccessDeniedException
 	 *             se o acesso não for permitido.
 	 */
-	void validateAccess(Long userId);
+	void validateAccess(String userId);
 }

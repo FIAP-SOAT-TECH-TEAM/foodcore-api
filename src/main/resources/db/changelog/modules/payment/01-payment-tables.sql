@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS payments
   PRIMARY
   KEY,
   user_id
-  INT
+  VARCHAR
   NOT
   NULL,
   order_id
@@ -46,13 +46,6 @@ CREATE TABLE IF NOT EXISTS payments
   observations TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  CONSTRAINT fk_payment_user FOREIGN KEY
-(
-  user_id
-) REFERENCES users
-(
-  id
-),
   CONSTRAINT fk_payment_order FOREIGN KEY
 (
   order_id

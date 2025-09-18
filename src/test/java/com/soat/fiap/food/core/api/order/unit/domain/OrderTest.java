@@ -25,7 +25,7 @@ class OrderTest {
 
 		// Assert
 		assertNotNull(order);
-		assertEquals(1L, order.getUserId());
+		assertEquals("A23basb3u123", order.getUserId());
 		assertEquals(OrderStatus.RECEIVED, order.getOrderStatus());
 		assertEquals(1, order.getOrderItems().size());
 		assertNotNull(order.getOrderNumber());
@@ -108,7 +108,7 @@ class OrderTest {
 	void shouldThrowExceptionForNullItemsList() {
 		// Arrange & Act & Assert
 		NullPointerException exception = assertThrows(NullPointerException.class, () -> {
-			new Order(1L, null);
+			new Order("as23as3", null);
 		});
 
 		assertEquals("A lista de itens do pedido não pode ser nula", exception.getMessage());
@@ -121,7 +121,7 @@ class OrderTest {
 
 		// Act & Assert
 		OrderException exception = assertThrows(OrderException.class, () -> {
-			new Order(1L, emptyItems);
+			new Order("as23as3", emptyItems);
 		});
 
 		assertEquals("O pedido deve conter itens", exception.getMessage());
@@ -327,5 +327,13 @@ class OrderTest {
 
 		// Assert
 		assertNotNull(order.getUpdatedAt());
+	}
+
+	@Test @DisplayName("Não deve criar ordem sem usuário")
+	void shouldNotCreateOrderWithoutUser() {
+		// Act & Assert
+		var exception = assertThrows(OrderException.class, OrderFixture::createOrderWithoutUser);
+
+		assertEquals("O id do usuário não pode estar vazio", exception.getMessage());
 	}
 }

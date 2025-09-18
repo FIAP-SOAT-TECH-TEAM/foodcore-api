@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,7 @@ public class CatalogController {
 	}
 
 	@GetMapping
-	@Operation(summary = "Listar todos os catálogos", description = "Retorna uma lista com todos os catálogos cadastrados", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Listar todos os catálogos", description = "Retorna uma lista com todos os catálogos cadastrados", tags = {
 			"Catálogos"})
 	@ApiResponse(responseCode = "200", description = "Lista de catálogos retornada com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = CatalogResponse.class))))
 	@Tag(name = "Catálogos", description = "Operações para gerenciamento de catálogos de categorias de produtos")
@@ -46,7 +45,7 @@ public class CatalogController {
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar catálogo por ID", description = "Retorna um catálogo específico pelo seu ID", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Buscar catálogo por ID", description = "Retorna um catálogo específico pelo seu ID", tags = {
 			"Catálogos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Catálogo encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CatalogResponse.class))),
@@ -60,7 +59,7 @@ public class CatalogController {
 	}
 
 	@PostMapping
-	@Operation(summary = "Criar novo catálogo", description = "Cria um novo catálogo com os dados fornecidos", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Criar novo catálogo", description = "Cria um novo catálogo com os dados fornecidos", tags = {
 			"Catálogos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Catálogo criado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CatalogResponse.class))),
@@ -77,7 +76,7 @@ public class CatalogController {
 	}
 
 	@PutMapping("/{id}")
-	@Operation(summary = "Atualizar catálogo", description = "Atualiza os dados de um catálogo existente pelo seu ID", security = @SecurityRequirement(name = "bearer-key"), tags = {
+	@Operation(summary = "Atualizar catálogo", description = "Atualiza os dados de um catálogo existente pelo seu ID", tags = {
 			"Catálogos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Catálogo atualizado com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CatalogResponse.class))),
@@ -95,8 +94,7 @@ public class CatalogController {
 	}
 
 	@DeleteMapping("/{id}")
-	@Operation(summary = "Excluir catálogo", description = "Exclui um catálogo pelo seu ID", security = @SecurityRequirement(name = "bearer-key"), tags = {
-			"Catálogos"})
+	@Operation(summary = "Excluir catálogo", description = "Exclui um catálogo pelo seu ID", tags = {"Catálogos"})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Catálogo excluído com sucesso", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Catálogo não encontrado", content = @Content),

@@ -25,7 +25,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +82,7 @@ public class PaymentController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "Buscar pedido no adquirente por ID da merchant_order", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Buscar pedido no adquirente por ID da merchant_order")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Pedido retornado com sucesso", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)})
@@ -98,7 +97,7 @@ public class PaymentController {
 
 	// ========== PAGAMENTOS ==========
 
-	@Operation(summary = "Buscar status do pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Buscar status do pagamento por ID do pedido")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Status do pagamento retornado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentStatusResponse.class))),
 			@ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)})
@@ -112,7 +111,7 @@ public class PaymentController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "Buscar QrCode de pagamento por ID do pedido", security = @SecurityRequirement(name = "bearer-key"))
+	@Operation(summary = "Buscar QrCode de pagamento por ID do pedido")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Qr Code de pagamento retornado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QrCodeResponse.class))),
 			@ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)})
