@@ -72,7 +72,7 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       </set-header>
 
       <!-- 7. Encaminhar para o backend final -->
-      <set-backend-service base-url="https://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />
+      <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />
 
     </inbound>
     <backend>
