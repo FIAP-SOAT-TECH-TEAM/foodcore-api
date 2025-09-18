@@ -20,68 +20,101 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
 
   xml_content = <<XML
   <policies>
-    <inbound>
-      <base />
+      <inbound>
+          <base /> <!-- Herda as policies globais configuradas no API Management -->
 
-      <!-- 1. Se não houver Authorization header -->
-      <choose>
-        <when condition="@(context.Request.Headers.GetValueOrDefault('Authorization','') == '')">
-          <return-response>
-            <set-status code="401" reason="Unauthorized" />
-          </return-response>
-        </when>
-      </choose>
+          <!-- Cria uma variável booleana para verificar se o header Authorization existe e não está vazio -->
+          <set-variable name="hasAuthHeader" value="@(context.Request.Headers.ContainsKey("Authorization") && !string.IsNullOrEmpty(context.Request.Headers.GetValueOrDefault("Authorization", "")))" />
 
-      <!-- 2. Extrair o token do header -->
-      <set-variable name="bearerToken" value="@((string)context.Request.Headers.GetValueOrDefault('Authorization','').Substring(7))" />
+          <!-- Se não existir Authorization header, retorna 401 Unauthorized -->
+          <choose>
+              <when condition="@(!((bool)context.Variables["hasAuthHeader"]))">
+                  <return-response>
+                      <set-status code="401" reason="Unauthorized" />
+                      <set-header name="WWW-Authenticate" exists-action="override">
+                          <value>Bearer error="invalid_token" error_description="Authorization header is missing or empty."</value>
+                      </set-header>
+                  </return-response>
+              </when>
+          </choose>
 
-      <!-- 3. Chamar serviço de validação com token na query string -->
-      <send-request mode="new" response-variable-name="authResponse" timeout="10" ignore-error="false">
-        <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables['bearerToken']}")</set-url>
-        <set-method>GET</set-method>
-      </send-request>
+          <!-- Extrai apenas o token (parte após o "Bearer ") do header Authorization -->
+          <set-variable name="bearerToken" value="@(context.Request.Headers.GetValueOrDefault("Authorization", "").Split(' ').Last())" />
 
-      <!-- 4. Se não for 200, retorna resposta da function de auth -->
-      <choose>
-        <when condition="@(context.Variables['authResponse']?.StatusCode != 200)">
-          <return-response response-variable-name="authResponse" />
-        </when>
-      </choose>
+          <!-- Chama um endpoint externo (auth API) para validar o token -->
+          <send-request mode="new" response-variable-name="authResponse" timeout="10">
+              <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables}")</set-url>
+              <set-method>GET</set-method>
+          </send-request>
 
-      <!-- 5. Parse body do authResponse -->
-      <set-variable name="authBody" value="@((IResponse)context.Variables['authResponse']).Body.As<JObject>()" />
+          <!-- Se a resposta da auth API não for 200, retorna diretamente essa resposta -->
+          <choose>
+              <when condition="@(context.Variables.GetValueOrDefault<IResponse>("authResponse")?.StatusCode != 200)">
+                  <return-response response-variable-name="authResponse" />
+              </when>
+          </choose>
+          
+          <!-- Converte o corpo da resposta da auth API para JObject e armazena em authBody -->
+          <set-variable name="authBody" value="@(((IResponse)context.Variables).Body.As<JObject>(true))" />
 
-      <!-- 6. Inserir os headers no request para o backend -->
-      <set-header name="Auth-IdToken" exists-action="override">
-        <value>@((string)((JObject)context.Variables['authBody'])['idToken'])</value>
-      </set-header>
-      <set-header name="Auth-AccessToken" exists-action="override">
-        <value>@((string)((JObject)context.Variables['authBody'])['accessToken'])</value>
-      </set-header>
-      <set-header name="Auth-RefreshToken" exists-action="override">
-        <value>@((string)((JObject)context.Variables['authBody'])['refreshToken'])</value>
-      </set-header>
-      <set-header name="Auth-ExpiresIn" exists-action="override">
-        <value>@((int)((JObject)context.Variables['authBody'])['expiresIn'])</value>
-      </set-header>
-      <set-header name="Auth-TokenType" exists-action="override">
-        <value>@((string)((JObject)context.Variables['authBody'])['tokenType'])</value>
-      </set-header>
-      <set-header name="Auth-CreatedAt" exists-action="override">
-        <value>@(((DateTime)((JObject)context.Variables['authBody'])['createdAt']).ToString('o'))</value>
-      </set-header>
+          <!-- Se authBody não for nulo, propaga os valores retornados no body como headers para o backend -->
+          @{
+              var authBody = context.Variables.GetValueOrDefault<JObject>("authBody");
+              if (authBody != null) {
+                  var headersToSet = new Dictionary<string, JToken>
+                  {
+                      { "Auth-IdToken", authBody },
+                      { "Auth-AccessToken", authBody },
+                      { "Auth-RefreshToken", authBody },
+                      { "Auth-ExpiresIn", authBody["expiresIn"] },
+                      { "Auth-TokenType", authBody },
+                      { "Auth-CreatedAt", authBody["createdAt"] }
+                  };
 
-      <!-- 7. Encaminhar para o backend final -->
-      <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />
+                  foreach (var header in headersToSet) {
+                      <set-header name="@(header.Key)" exists-action="override">
+                          <value>@(header.Value?.ToString())</value>
+                      </set-header>
+                  }
+              }
+          }
 
-    </inbound>
-    <backend>
-      <base />
-    </backend>
-    <outbound>
-      <base />
-    </outbound>
+          <!-- Define o backend real para onde a requisição será roteada -->
+          <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />
+      </inbound>
+      
+      <backend>
+          <base /> <!-- Herda policies globais aplicadas ao backend -->
+      </backend>
+      
+      <outbound>
+          <base /> <!-- Herda policies globais aplicadas à resposta antes de retornar ao cliente -->
+      </outbound>
+      
+      <on-error>
+          <base /> <!-- Herda tratamento de erros globais -->
+          <!-- Se ocorreu erro, retorna resposta 500 com detalhes em JSON -->
+          <choose>
+              <when condition="@(context.LastError != null)">
+                  <return-response>
+                      <set-status code="500" reason="Internal Server Error" />
+                      <set-header name="Content-Type" exists-action="override">
+                          <value>application/json</value>
+                      </set-header>
+                      <set-body>@{
+                          var error = new JObject();
+                          error["source"] = (string)context.LastError.Source;
+                          error["reason"] = (string)context.LastError.Reason;
+                          error["message"] = (string)context.LastError.Message;
+                          error["policyId"] = (string)context.LastError.PolicyId;
+                          return error.ToString(Newtonsoft.Json.Formatting.Indented);
+                      }</set-body>
+                  </return-response>
+              </when>
+          </choose>
+      </on-error>
   </policies>
+
   XML
 }
 
