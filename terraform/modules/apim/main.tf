@@ -29,12 +29,18 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <!-- Retorna 401 se não existir -->
       <choose>
         <when condition="@(!((bool)context.Variables["hasAuthHeader"]))">
-            <return-response>
-                <set-status code="401" reason="Unauthorized" />
-                <set-header name="WWW-Authenticate" exists-action="override">
-                    <value>Bearer error='invalid_token' error_description='Authorization header não informado ou vazio.'</value>
-                </set-header>
-            </return-response>
+          <return-response>
+            <set-status code="401" reason="Unauthorized" />
+            <set-header name="Content-Type" exists-action="override">
+              <value>application/json</value>
+            </set-header>
+            <set-body>@{
+              var error = new JObject();
+              error["reason"] = "invalid_token";
+              error["message"] = "Authorization header não informado ou vazio.";
+              return error.ToString(Newtonsoft.Json.Formatting.Indented);
+            }</set-body>
+          </return-response>
         </when>
       </choose>
 
