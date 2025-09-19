@@ -69,11 +69,11 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
         var headers = new JArray();
         if (authBody != null)
         {
-            headers.Add(new JObject { ["key"] = "Auth-IdToken",      ["value"] = authBody["idToken"] });
-            headers.Add(new JObject { ["key"] = "Auth-AccessToken",  ["value"] = authBody["accessToken"] });
-            headers.Add(new JObject { ["key"] = "Auth-RefreshToken", ["value"] = authBody["refreshToken"] });
-            headers.Add(new JObject { ["key"] = "Auth-ExpiresIn",    ["value"] = authBody["expiresIn"] });
-            headers.Add(new JObject { ["key"] = "Auth-TokenType",    ["value"] = authBody["tokenType"] });
+            headers.Add(new JObject { ["key"] = "Auth-Subject",      ["value"] = authBody["subject"] });
+            headers.Add(new JObject { ["key"] = "Auth-Name",         ["value"] = authBody["name"] });
+            headers.Add(new JObject { ["key"] = "Auth-Email",        ["value"] = authBody["email"] });
+            headers.Add(new JObject { ["key"] = "Auth-Cpf",          ["value"] = authBody["cpf"] });
+            headers.Add(new JObject { ["key"] = "Auth-Role",         ["value"] = authBody["role"] });
             headers.Add(new JObject { ["key"] = "Auth-CreatedAt",    ["value"] = authBody["createdAt"] });
         }
         return headers;

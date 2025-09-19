@@ -27,6 +27,13 @@ public interface AuthenticatedUserSource {
 	String getName();
 
 	/**
+	 * Retorna o email do usuário.
+	 *
+	 * @return o email do usuário
+	 */
+	String getEmail();
+
+	/**
 	 * Retorna o CPF do usuário.
 	 * <p>
 	 * Este valor geralmente é armazenado como atributo customizado no Cognito.
