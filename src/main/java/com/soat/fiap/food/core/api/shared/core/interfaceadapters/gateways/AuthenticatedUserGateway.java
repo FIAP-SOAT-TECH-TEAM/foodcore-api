@@ -47,6 +47,16 @@ public class AuthenticatedUserGateway {
 	}
 
 	/**
+	 * Retorna o email do usuário autenticado.
+	 *
+	 * @return email do usuário
+	 */
+	public String getEmail() {
+		log.debug("Obtendo email do usuário autenticado");
+		return authenticatedUserSource.getEmail();
+	}
+
+	/**
 	 * Retorna o CPF do usuário autenticado.
 	 *
 	 * @return CPF do usuário

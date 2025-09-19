@@ -17,16 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * usuário autenticado a partir dos headers HTTP da requisição atual.
  * <p>
  * Os headers são definidos no API Management, após a autenticação do usuário, e
- * propagados para o backend:
- * <ul>
- * <li><b>Auth-IdToken</b>: Token de identidade (contém o sub e claims do
- * usuário)</li>
- * <li><b>Auth-AccessToken</b>: Token de acesso</li>
- * <li><b>Auth-RefreshToken</b>: Token de renovação</li>
- * <li><b>Auth-ExpiresIn</b>: Tempo de expiração do token</li>
- * <li><b>Auth-TokenType</b>: Tipo do token (ex.: Bearer)</li>
- * <li><b>Auth-CreatedAt</b>: Data/hora de criação do usuário</li>
- * </ul>
+ * propagados para o backend.
  * </p>
  */
 @Component
@@ -46,7 +37,7 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 	 */
 	@Override
 	public String getSubject() {
-		return getCurrentRequest().getHeader("Auth-IdToken");
+		return getCurrentRequest().getHeader("Auth-Subject");
 	}
 
 	/**
@@ -55,6 +46,14 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 	@Override
 	public String getName() {
 		return getCurrentRequest().getHeader("Auth-Name");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getEmail() {
+		return getCurrentRequest().getHeader("Auth-Email");
 	}
 
 	/**
