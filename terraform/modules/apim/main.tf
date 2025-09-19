@@ -35,10 +35,10 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
               <value>application/json</value>
             </set-header>
             <set-body>@{
-                var error = new JObject();
-                error["reason"] = "invalid_token";
-                error["message"] = "Authorization header não informado ou vazio.";
-                return error.ToString(Newtonsoft.Json.Formatting.Indented);
+              var error = new JObject();
+              error["reason"] = "invalid_token";
+              error["message"] = "Authorization header não informado ou vazio.";
+              return error.ToString(Newtonsoft.Json.Formatting.Indented);
             }</set-body>
           </return-response>
         </when>
