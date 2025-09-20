@@ -76,7 +76,7 @@ resource "helm_release" "foodcoreapi" {
 
   set {
     name  = "api.mercadoPago.notificationUrl"
-    value = "${data.terraform_remote_state.infra.outputs.apim_gateway_url}/payments/webhook"
+    value = "${data.terraform_remote_state.infra.outputs.apim_gateway_url}/${var.api_ingress_path}/payments/webhook"
   }
 
   set {
