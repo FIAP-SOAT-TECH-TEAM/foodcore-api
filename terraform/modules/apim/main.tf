@@ -49,7 +49,7 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
 
       <!-- Valida token -->
       <send-request mode="new" response-variable-name="authResponse" timeout="10">
-        <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables["bearerToken"]}&url={context.Operation.UrlTemplate}")</set-url>
+        <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables["bearerToken"]}&url={context.Operation.UrlTemplate}&http_method={context.Operation.Method}")</set-url>
         <set-method>GET</set-method>
       </send-request>
 
