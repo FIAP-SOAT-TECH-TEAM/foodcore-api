@@ -23,27 +23,6 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     <inbound>
       <base /> <!-- Herda as policies globais configuradas no API Management -->
 
-      <!-- Verifica se Authorization header existe -->
-      <set-variable name="hasAuthHeader" value="@(context.Request.Headers.ContainsKey("Authorization") && !string.IsNullOrEmpty(context.Request.Headers.GetValueOrDefault("Authorization", "")))" />
-
-      <!-- Retorna 401 se não existir -->
-      <choose>
-        <when condition="@(!((bool)context.Variables["hasAuthHeader"]))">
-          <return-response>
-            <set-status code="401" reason="Unauthorized" />
-            <set-header name="Content-Type" exists-action="override">
-              <value>application/json</value>
-            </set-header>
-            <set-body>@{
-              var error = new JObject();
-              error["reason"] = "invalid_token";
-              error["message"] = "Authorization header não informado ou vazio.";
-              return error.ToString(Newtonsoft.Json.Formatting.Indented);
-            }</set-body>
-          </return-response>
-        </when>
-      </choose>
-
       <!-- Extrai token -->
       <set-variable name="bearerToken" value="@(context.Request.Headers.GetValueOrDefault("Authorization", "").Split(' ').Last())" />
 
