@@ -26,9 +26,16 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <!-- Extrai token -->
       <set-variable name="bearerToken" value="@(context.Request.Headers.GetValueOrDefault("Authorization", "").Split(' ').Last())" />
 
+      <!-- Normaliza Path (adiciona / se não existir) -->
+      <set-variable name="normalizedPath" value="@{
+          var path = context.Request?.Url?.Path ?? "";
+          var normalizedPath = path.StartsWith("/") ? path : $"/{path}";
+          return normalizedPath;
+      }" />
+
       <!-- Valida token -->
       <send-request mode="new" response-variable-name="authResponse" timeout="10">
-        <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables["bearerToken"]}&url={context.Operation.UrlTemplate}&http_method={context.Operation.Method}")</set-url>
+        <set-url>@($"${data.terraform_remote_state.azfunc.outputs.auth_api_validate_endpoint}?access_token={context.Variables["bearerToken"]}&url={context.Variables["normalizedPath"]}&http_method={context.Operation.Method}")</set-url>
         <set-method>GET</set-method>
       </send-request>
 
@@ -83,25 +90,25 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     </outbound>
 
     <on-error>
-        <choose>
-            <when condition="@(context.LastError != null)">
-                <return-response>
-                    <set-status code="@(context.Response?.StatusCode ?? 500)" 
-                                reason="Other errors" />
-                    <set-header name="Content-Type" exists-action="override">
-                        <value>application/json</value>
-                    </set-header>
-                    <set-body>@{
-                        var error = new JObject();
-                        error["timestamp"] = DateTime.UtcNow.ToString("o"); // ISO 8601
-                        error["status"]    = context.Response?.StatusCode ?? 500;
-                        error["message"]   = context.LastError.Message;
-                        error["path"]      = context.Request?.Url?.Path;
-                        return error.ToString(Newtonsoft.Json.Formatting.Indented);
-                    }</set-body>
-                </return-response>
-            </when>
-        </choose>
+      <choose>
+        <when condition="@(context.LastError != null)">
+          <return-response>
+            <set-status code="@(context.Response?.StatusCode ?? 500)" 
+                        reason="Other errors" />
+            <set-header name="Content-Type" exists-action="override">
+              <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                var error = new JObject();
+                error["timestamp"] = DateTime.UtcNow.ToString("o"); // ISO 8601
+                error["status"]    = context.Response?.StatusCode ?? 500;
+                error["message"]   = context.LastError.Message;
+                error["path"]      = context.Variables.GetValueOrDefault<string>("normalizedPath");
+                return error.ToString(Newtonsoft.Json.Formatting.Indented);
+            }</set-body>
+          </return-response>
+        </when>
+      </choose>
     </on-error>
 
   </policies>

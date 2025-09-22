@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 		log.error("Erro não tratado: {}", ex.getMessage(), ex);
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				ex.getMessage(), request.getRequestURI());
+				ex.getMessage(), request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
 				.forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
 		ValidationErrorResponse errorResponse = new ValidationErrorResponse(LocalDateTime.now(),
-				HttpStatus.BAD_REQUEST.value(), "Erro de validação", request.getRequestURI(), errors);
+				HttpStatus.BAD_REQUEST.value(), "Erro de validação", request.getPathInfo(), errors);
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
 		log.error("Erro de tamanho de arquivo: {}", ex.getMessage());
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.PAYLOAD_TOO_LARGE.value(),
-				"Tamanho máximo de arquivo excedido", request.getRequestURI());
+				"Tamanho máximo de arquivo excedido", request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.PAYLOAD_TOO_LARGE);
 	}
@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
 		log.error("Recurso não encontrado: {}", ex.getMessage());
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
-				ex.getMessage(), request.getRequestURI());
+				ex.getMessage(), request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
 		log.error("Erro de regra de negócio: {}", ex.getMessage());
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-				ex.getMessage(), request.getRequestURI());
+				ex.getMessage(), request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -121,7 +121,7 @@ public class GlobalExceptionHandler {
 		}
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), statusCode, ex.getMessage(),
-				request.getRequestURI());
+				request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
 	}
@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
 		var mensagem = "Operação não permitida: viola regras de integridade de dados";
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), mensagem,
-				request.getRequestURI());
+				request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 	}
@@ -168,7 +168,7 @@ public class GlobalExceptionHandler {
 		}
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), mensagem,
-				request.getRequestURI());
+				request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -181,7 +181,7 @@ public class GlobalExceptionHandler {
 			HttpServletRequest request) {
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.FORBIDDEN.value(),
-				ex.getMessage(), request.getRequestURI());
+				ex.getMessage(), request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
 	}
@@ -203,7 +203,7 @@ public class GlobalExceptionHandler {
 			HttpServletRequest request) {
 
 		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
-				ex.getMessage(), request.getRequestURI());
+				ex.getMessage(), request.getPathInfo());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 	}
