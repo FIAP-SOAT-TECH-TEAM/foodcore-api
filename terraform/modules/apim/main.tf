@@ -83,21 +83,20 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     </outbound>
 
     <on-error>
-        <base /> <!-- Herda tratamento de erros globais -->
         <choose>
             <when condition="@(context.LastError != null)">
                 <return-response>
-                    <set-status code="@(context.LastError.Response?.StatusCode ?? 500)" 
-                                reason="@(context.LastError.Response?.ReasonPhrase ?? "Internal Server Error")" />
+                    <set-status code="@(context.Response?.StatusCode ?? 500)" 
+                                reason="Other errors" />
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/json</value>
                     </set-header>
                     <set-body>@{
                         var error = new JObject();
-                        error["timestamp"] = DateTime.UtcNow.ToString("o"); // formato ISO 8601
-                        error["status"]    = (int?)(context.LastError.Response?.StatusCode) ?? 500;
-                        error["message"]   = (string)context.LastError.Message;
-                        error["path"]      = context.Request?.Url?.AbsolutePath;
+                        error["timestamp"] = DateTime.UtcNow.ToString("o"); // ISO 8601
+                        error["status"]    = context.Response?.StatusCode ?? 500;
+                        error["message"]   = context.LastError.Message;
+                        error["path"]      = context.Request?.Url?.Path;
                         return error.ToString(Newtonsoft.Json.Formatting.Indented);
                     }</set-body>
                 </return-response>
