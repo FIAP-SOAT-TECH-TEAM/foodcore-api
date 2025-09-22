@@ -49,10 +49,10 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <!-- Converte body da auth API para JObject -->
       <set-variable name="authBody" value="@(((IResponse)context.Variables["authResponse"]).Body.As<JObject>(true))" />
 
-      <!-- Constrói o dicionário de headers para enviar ao backend -->
+      <!-- Constrói o objeto de headers para enviar ao backend -->
       <set-variable name="headersToSet" value="@{
         var authBody = context.Variables.GetValueOrDefault<JObject>("authBody");
-        var headers = new Dictionary<string, string>();
+        var headers = new JObject();
         if (authBody != null)
         {
             headers["Auth-Subject"]   = authBody["subject"]?.ToString();
@@ -67,13 +67,13 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
 
       <!-- Aplica headers ao backend -->
       @{
-        var headers = context.Variables.GetValueOrDefault<Dictionary<string, string>>("headersToSet");
+        var headers = context.Variables.GetValueOrDefault<JObject>("headersToSet");
         if (headers != null)
         {
-          foreach (var header in headers)
-          {
-              context.Request.Headers.Set(header.Key, header.Value?.XmlEscape());
-          }
+            foreach (var prop in headers.Properties())
+            {
+                context.Request.Headers.Set(prop.Name, prop.Value?.ToString().XmlEscape());
+            }
         }
       }
 
@@ -93,8 +93,7 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <choose>
         <when condition="@(context.LastError != null)">
           <return-response>
-            <set-status code="@(context.Response?.StatusCode ?? 500)" 
-                        reason="Other errors" />
+            <set-status code="@(context.Response?.StatusCode ?? 500)" reason="Other errors" />
             <set-header name="Content-Type" exists-action="override">
               <value>application/json</value>
             </set-header>
