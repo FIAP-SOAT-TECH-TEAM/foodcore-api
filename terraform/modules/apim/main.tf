@@ -90,6 +90,12 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
     </outbound>
 
     <on-error>
+      <!-- Normaliza Path (adiciona / se não existir) -->
+      <set-variable name="normalizedPath" value="@{
+          var path = context.Request?.Url?.Path ?? "";
+          var normalizedPath = path.StartsWith("/") ? path : $"/{path}";
+          return normalizedPath;
+      }" />
       <choose>
         <when condition="@(context.LastError != null)">
           <return-response>
