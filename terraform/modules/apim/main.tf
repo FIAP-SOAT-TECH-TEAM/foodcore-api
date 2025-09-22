@@ -49,31 +49,31 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <!-- Converte body da auth API para JObject -->
       <set-variable name="authBody" value="@(((IResponse)context.Variables["authResponse"]).Body.As<JObject>(true))" />
 
-      <!-- Constrói a lista de headers para enviar ao backend -->
+      <!-- Constrói o dicionário de headers para enviar ao backend -->
       <set-variable name="headersToSet" value="@{
         var authBody = context.Variables.GetValueOrDefault<JObject>("authBody");
-        var headers = new JArray();
+        var headers = new Dictionary<string, string>();
         if (authBody != null)
         {
-            headers.Add(new JObject { ["key"] = "Auth-Subject",      ["value"] = authBody["subject"] });
-            headers.Add(new JObject { ["key"] = "Auth-Name",         ["value"] = authBody["name"] });
-            headers.Add(new JObject { ["key"] = "Auth-Email",        ["value"] = authBody["email"] });
-            headers.Add(new JObject { ["key"] = "Auth-Cpf",          ["value"] = authBody["cpf"] });
-            headers.Add(new JObject { ["key"] = "Auth-Role",         ["value"] = authBody["role"] });
-            headers.Add(new JObject { ["key"] = "Auth-CreatedAt",    ["value"] = authBody["createdAt"] });
+            headers["Auth-Subject"]   = authBody["subject"]?.ToString();
+            headers["Auth-Name"]      = authBody["name"]?.ToString();
+            headers["Auth-Email"]     = authBody["email"]?.ToString();
+            headers["Auth-Cpf"]       = authBody["cpf"]?.ToString();
+            headers["Auth-Role"]      = authBody["role"]?.ToString();
+            headers["Auth-CreatedAt"] = authBody["createdAt"]?.ToString();
         }
         return headers;
       }" />
 
       <!-- Aplica headers ao backend -->
-      @{ 
-        var headers = context.Variables.GetValueOrDefault<JArray>("headersToSet");
-        if (headers != null && headers.Count > 0)
+      @{
+        var headers = context.Variables.GetValueOrDefault<Dictionary<string, string>>("headersToSet");
+        if (headers != null)
         {
-            foreach (var header in headers)
-            {
-              context.Request.Headers.Set(header["key"]?.ToString(), header["value"]?.ToString()?.XmlEscape());
-            }
+          foreach (var header in headers)
+          {
+              context.Request.Headers.Set(header.Key, header.Value?.XmlEscape());
+          }
         }
       }
 
