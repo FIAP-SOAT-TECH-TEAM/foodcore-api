@@ -1,7 +1,10 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -11,6 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementação de {@link AuthenticatedUserSource} que extrai as informações do
@@ -20,7 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * propagados para o backend.
  * </p>
  */
-@Component
+@Component @Slf4j
 public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 
 	private HttpServletRequest getCurrentRequest() {
@@ -78,9 +82,18 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 	@Override
 	public LocalDateTime getCreationDate() {
 		String createdAt = getCurrentRequest().getHeader("Auth-CreatedAt");
-		if (createdAt == null) {
+
+		if (createdAt == null || createdAt.startsWith("0001-01-01")) {
 			return null;
 		}
-		return LocalDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
+
+		try {
+			OffsetDateTime offsetDateTime = OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
+			return offsetDateTime.atZoneSameInstant(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
+		} catch (DateTimeParseException e) {
+			log.error("Erro ao parsear data '{}': {}", createdAt, e.getMessage());
+			return null;
+		}
 	}
+
 }
