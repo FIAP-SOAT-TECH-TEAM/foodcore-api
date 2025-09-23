@@ -1,8 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -80,7 +78,7 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocalDateTime getCreationDate() {
+	public OffsetDateTime getCreationDate() {
 		String createdAt = getCurrentRequest().getHeader("Auth-CreatedAt");
 
 		if (createdAt == null || createdAt.startsWith("0001-01-01")) {
@@ -88,8 +86,7 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 		}
 
 		try {
-			OffsetDateTime offsetDateTime = OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
-			return offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC).toLocalDateTime();
+			return OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
 		} catch (DateTimeParseException e) {
 			log.error("Erro ao parsear data '{}': {}", createdAt, e.getMessage());
 			return null;

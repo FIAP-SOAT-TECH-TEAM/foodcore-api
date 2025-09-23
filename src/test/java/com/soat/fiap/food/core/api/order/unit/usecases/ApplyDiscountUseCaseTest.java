@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class ApplyDiscountUseCaseTest {
 		var order = OrderFixture.createValidOrder();
 		var originalAmount = order.getAmount(); // 51.80
 
-		when(authenticatedUserGateway.getCreationDate()).thenReturn(LocalDateTime.now().minusYears(5));
+		when(authenticatedUserGateway.getCreationDate()).thenReturn(OffsetDateTime.now().minusYears(5));
 
 		// Act
 		ApplyDiscountUseCase.applyDiscount(order, authenticatedUserGateway);
@@ -50,7 +52,7 @@ class ApplyDiscountUseCaseTest {
 		var order = OrderFixture.createValidOrder();
 		var originalAmount = order.getAmount(); // 51.80
 
-		when(authenticatedUserGateway.getCreationDate()).thenReturn(LocalDateTime.now().minusYears(10));
+		when(authenticatedUserGateway.getCreationDate()).thenReturn(OffsetDateTime.now().minusYears(10));
 
 		// Act
 		ApplyDiscountUseCase.applyDiscount(order, authenticatedUserGateway);
@@ -71,7 +73,7 @@ class ApplyDiscountUseCaseTest {
 
 		// Usuário criado no mesmo ano = diferença de anos = 0
 		var currentYear = LocalDateTime.now().getYear();
-		var sameYearDate = LocalDateTime.of(currentYear, 1, 1, 10, 0);
+		var sameYearDate = OffsetDateTime.of(currentYear, 1, 1, 10, 0, 0, 0, ZoneOffset.UTC);
 
 		when(authenticatedUserGateway.getCreationDate()).thenReturn(sameYearDate);
 
@@ -90,7 +92,7 @@ class ApplyDiscountUseCaseTest {
 		var order = OrderFixture.createValidOrder();
 		var originalAmount = order.getAmount(); // 51.80
 
-		when(authenticatedUserGateway.getCreationDate()).thenReturn(LocalDateTime.now().minusYears(47));
+		when(authenticatedUserGateway.getCreationDate()).thenReturn(OffsetDateTime.now().minusYears(47));
 
 		// Act
 		ApplyDiscountUseCase.applyDiscount(order, authenticatedUserGateway);
@@ -109,7 +111,7 @@ class ApplyDiscountUseCaseTest {
 		var order = OrderFixture.createValidOrder();
 		var originalAmount = order.getAmount(); // 51.80
 
-		when(authenticatedUserGateway.getCreationDate()).thenReturn(LocalDateTime.now().minusYears(50));
+		when(authenticatedUserGateway.getCreationDate()).thenReturn(OffsetDateTime.now().minusYears(50));
 
 		// Act
 		ApplyDiscountUseCase.applyDiscount(order, authenticatedUserGateway);
@@ -141,7 +143,7 @@ class ApplyDiscountUseCaseTest {
 		var order = OrderFixture.createValidOrder();
 		var originalAmount = order.getAmount(); // 51.80
 
-		when(authenticatedUserGateway.getCreationDate()).thenReturn(LocalDateTime.now().minusYears(1));
+		when(authenticatedUserGateway.getCreationDate()).thenReturn(OffsetDateTime.now().minusYears(1));
 
 		// Act
 		ApplyDiscountUseCase.applyDiscount(order, authenticatedUserGateway);
