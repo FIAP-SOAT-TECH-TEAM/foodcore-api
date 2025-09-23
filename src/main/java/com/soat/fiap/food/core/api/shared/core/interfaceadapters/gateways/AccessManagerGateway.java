@@ -22,7 +22,7 @@ public class AccessManagerGateway {
 	 *
 	 * @param userId
 	 *            ID do usuário que está sendo acessado.
-	 * @throws org.springframework.security.access.AccessDeniedException
+	 * @throws com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException
 	 *             se o usuário não tiver permissão.
 	 */
 	public void validateAccess(String userId) {

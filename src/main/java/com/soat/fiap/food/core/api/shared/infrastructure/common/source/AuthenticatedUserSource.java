@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.common.source;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Fornece informações do usuário autenticado no sistema.
@@ -54,9 +54,9 @@ public interface AuthenticatedUserSource {
 	String getRole();
 
 	/**
-	 * Retorna a data e hora de criação do usuário no provedor de identidade.
+	 * Retorna a data e hora de criação do usuário no provedor de identidade, no formato ISO 8601
 	 *
 	 * @return a data e hora de criação do usuário
 	 */
-	LocalDateTime getCreationDate();
+	OffsetDateTime getCreationDate();
 }

@@ -38,12 +38,19 @@ public class ApplyDiscountUseCase {
 					"A data de criação do usuário informada para cálculo de desconto não pode ser nula");
 		}
 
-		var yearCreateUser = createDate.getYear();
+		var localDateTimeCreateDate = createDate.withOffsetSameInstant(ZoneOffset.UTC).toLocalDateTime();
+
+		log.info("Conversão de data realizada para análise de desconto, de: {} para: {}", createDate, localDateTimeCreateDate);
+
+		var yearCreateUser = localDateTimeCreateDate.getYear();
 		int currentYear = LocalDateTime.now(ZoneOffset.UTC).getYear();
 
 		var percent = (currentYear - yearCreateUser) * 2;
 
 		if (percent > 0 && percent < 96) {
+			log.info("Aplicando desconto para o pedido: {}, ano de criação usuário: {}, percentual: {}",
+					order.getOrderNumber(), yearCreateUser, percent);
+
 			order.applyDiscount(percent);
 		}
 

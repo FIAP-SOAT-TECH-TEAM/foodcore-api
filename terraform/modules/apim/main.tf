@@ -69,7 +69,7 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
           <value>@{
               var createdAt = context.Variables.GetValueOrDefault<JObject>("authBody")?["createdAt"]?.ToString();
               return !string.IsNullOrEmpty(createdAt) 
-                  ? DateTime.Parse(createdAt).ToString("o") 
+                  ? DateTimeOffset.Parse(createdAt).ToString("o")
                   : "";
           }</value>
       </set-header>

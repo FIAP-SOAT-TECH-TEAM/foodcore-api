@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways;
 
+import java.time.OffsetDateTime;
+
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +83,7 @@ public class AuthenticatedUserGateway {
 	 *
 	 * @return data de criação do usuário
 	 */
-	public java.time.LocalDateTime getCreationDate() {
+	public OffsetDateTime getCreationDate() {
 		log.debug("Obtendo data de criação do usuário autenticado");
 		return authenticatedUserSource.getCreationDate();
 	}

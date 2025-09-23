@@ -11,7 +11,7 @@ public interface AccessManagerSource {
 	 *
 	 * @param userId
 	 *            ID do usuário relacionado ao recurso sendo acessado.
-	 * @throws org.springframework.security.access.AccessDeniedException
+	 * @throws com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException
 	 *             se o acesso não for permitido.
 	 */
 	void validateAccess(String userId);
