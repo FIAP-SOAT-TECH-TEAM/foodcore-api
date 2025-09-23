@@ -49,33 +49,30 @@ resource "azurerm_api_management_api_policy" "set_backend_api" {
       <!-- Converte body da auth API para JObject -->
       <set-variable name="authBody" value="@(((IResponse)context.Variables["authResponse"]).Body.As<JObject>(true))" />
 
-      <!-- Constrói o objeto de headers para enviar ao backend -->
-      <set-variable name="headersToSet" value="@{
-        var authBody = context.Variables.GetValueOrDefault<JObject>("authBody");
-        var headers = new JObject();
-        if (authBody != null)
-        {
-            headers["Auth-Subject"]   = authBody["subject"]?.ToString();
-            headers["Auth-Name"]      = authBody["name"]?.ToString();
-            headers["Auth-Email"]     = authBody["email"]?.ToString();
-            headers["Auth-Cpf"]       = authBody["cpf"]?.ToString();
-            headers["Auth-Role"]      = authBody["role"]?.ToString();
-            headers["Auth-CreatedAt"] = authBody["createdAt"]?.ToString();
-        }
-        return headers;
-      }" />
-
       <!-- Aplica headers ao backend -->
-      @{
-        var headers = context.Variables.GetValueOrDefault<JObject>("headersToSet");
-        if (headers != null)
-        {
-            foreach (var prop in headers.Properties())
-            {
-                context.Request.Headers.Set(prop.Name, prop.Value?.ToString().XmlEscape());
-            }
-        }
-      }
+      <set-header name="Auth-Subject" exists-action="override">
+        <value>@(context.Variables.GetValueOrDefault<JObject>("authBody")?["subject"]?.ToString())</value>
+      </set-header>
+      <set-header name="Auth-Name" exists-action="override">
+        <value>@(context.Variables.GetValueOrDefault<JObject>("authBody")?["name"]?.ToString())</value>
+      </set-header>
+      <set-header name="Auth-Email" exists-action="override">
+        <value>@(context.Variables.GetValueOrDefault<JObject>("authBody")?["email"]?.ToString())</value>
+      </set-header>
+      <set-header name="Auth-Cpf" exists-action="override">
+        <value>@(context.Variables.GetValueOrDefault<JObject>("authBody")?["cpf"]?.ToString())</value>
+      </set-header>
+      <set-header name="Auth-Role" exists-action="override">
+        <value>@(context.Variables.GetValueOrDefault<JObject>("authBody")?["role"]?.ToString())</value>
+      </set-header>
+      <set-header name="Auth-CreatedAt" exists-action="override">
+          <value>@{
+              var createdAt = context.Variables.GetValueOrDefault<JObject>("authBody")?["createdAt"]?.ToString();
+              return !string.IsNullOrEmpty(createdAt) 
+                  ? DateTime.Parse(createdAt).ToString("o") 
+                  : "";
+          }</value>
+      </set-header>
 
       <!-- Define o backend real -->
       <set-backend-service base-url="http://${data.terraform_remote_state.infra.outputs.api_private_dns_fqdn}/${var.api_ingress_path}" />

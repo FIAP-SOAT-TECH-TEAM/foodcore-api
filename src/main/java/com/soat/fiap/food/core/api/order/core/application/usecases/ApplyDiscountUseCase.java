@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
@@ -38,7 +39,7 @@ public class ApplyDiscountUseCase {
 		}
 
 		var yearCreateUser = createDate.getYear();
-		var currentYear = LocalDateTime.now().getYear();
+		int currentYear = LocalDateTime.now(ZoneOffset.UTC).getYear();
 
 		var percent = (currentYear - yearCreateUser) * 2;
 
