@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -89,7 +89,7 @@ public class DefaultAuthenticatedUserSource implements AuthenticatedUserSource {
 
 		try {
 			OffsetDateTime offsetDateTime = OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
-			return offsetDateTime.atZoneSameInstant(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
+			return offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC).toLocalDateTime();
 		} catch (DateTimeParseException e) {
 			log.error("Erro ao parsear data '{}': {}", createdAt, e.getMessage());
 			return null;
