@@ -1,0 +1,61 @@
+name: Restrict PRs to main
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  enforce-develop-source:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2) Verifica se o PR vem de 'develop' ou 'hotfix/*'
+      - name: Verificar branch de origem
+        id: check
+        run: |
+          if [[ "$BRANCH" == "develop" || "$BRANCH" == hotfix/* ]]; then
+            echo "PR inválido: deve vir de 'develop'"
+            exit 1
+          fi
+        continue-on-error: true
+
+      # 3) Comenta no PR caso não venha de develop
+      - name: Comentar PR inválido
+        if: steps.check.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: "🚫 PR para `main` deve vir de `develop` ou `hotfix/*`. Por favor, ajuste a origem."
+            });
+
+      - name: Fechar PR inválido
+        if: steps.check.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              state: "closed"
+            });
