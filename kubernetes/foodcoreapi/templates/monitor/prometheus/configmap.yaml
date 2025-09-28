@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "prometheus.fullname" . }}-config
+  labels:
+    app: {{ include "prometheus.name" . }}
+  namespace: {{ .Values.namespace.monitor.name }}
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __metrics_path__
+            replacement: /metrics/cadvisor
+            
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+            regex: (.+)
+            target_label: job
+            replacement: $1
+          - source_labels: [__address__]
+            target_label: __metrics_path__
+            replacement: /metrics
+      - job_name: "foodcore-api-metrics"
+        metrics_path: /{{.Values.api.ingress.path}}/actuator/prometheus
+        static_configs:
+          - targets: ["{{ include "api.fullname" . }}:{{ .Values.api.ports.port }}"]

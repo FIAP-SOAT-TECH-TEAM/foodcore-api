@@ -265,6 +265,54 @@ kibana:
       
   serverHost: "0.0.0.0"
 
+grafana:
+  name: grafana
+
+  replicaCount: 1
+
+  image:
+    repository: grafana/grafana 
+    tag: "latest"
+
+  ports:
+    port: 80
+    targetPort: 3000
+    name: http
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+prometheus:
+  name: prometheus
+
+  replicaCount: 1
+
+  image:
+    repository: prom/prometheus
+    tag: "latest"
+  ports:
+    port: 80
+    targetPort: 9090
+    name: http
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+  volumes:
+    prometheusconfig:
+      name: prometheus-config
+      mountPath: /etc/prometheus
+      subPath: prometheus.yml
 
 storageClass:
   name: azure-disk
@@ -281,3 +329,5 @@ namespace:
     name: efk
   api:
     name: api
+  monitor:
+    name: monitor
