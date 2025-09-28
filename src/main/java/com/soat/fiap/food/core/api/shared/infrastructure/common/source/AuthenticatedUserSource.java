@@ -54,7 +54,8 @@ public interface AuthenticatedUserSource {
 	String getRole();
 
 	/**
-	 * Retorna a data e hora de criação do usuário no provedor de identidade, no formato ISO 8601
+	 * Retorna a data e hora de criação do usuário no provedor de identidade, no
+	 * formato ISO 8601
 	 *
 	 * @return a data e hora de criação do usuário
 	 */

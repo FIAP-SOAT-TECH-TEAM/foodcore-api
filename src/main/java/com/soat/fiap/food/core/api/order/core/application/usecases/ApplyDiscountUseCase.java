@@ -40,7 +40,8 @@ public class ApplyDiscountUseCase {
 
 		var localDateTimeCreateDate = createDate.withOffsetSameInstant(ZoneOffset.UTC).toLocalDateTime();
 
-		log.info("Conversão de data realizada para análise de desconto, de: {} para: {}", createDate, localDateTimeCreateDate);
+		log.info("Conversão de data realizada para análise de desconto, de: {} para: {}", createDate,
+				localDateTimeCreateDate);
 
 		var yearCreateUser = localDateTimeCreateDate.getYear();
 		int currentYear = LocalDateTime.now(ZoneOffset.UTC).getYear();
