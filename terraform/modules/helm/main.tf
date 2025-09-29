@@ -221,6 +221,6 @@ resource "helm_release" "foodcoreapi" {
     value = data.terraform_remote_state.db.outputs.pgsql_fqdn
   }
 
-    depends_on = [ helm_release.ingress_nginx_private, helm_release.ingress_nginx_public ]
+  depends_on = [ helm_release.ingress_nginx_private, helm_release.ingress_nginx_public ]
 
 }
