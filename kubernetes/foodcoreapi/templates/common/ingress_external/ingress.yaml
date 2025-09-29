@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "ingress.fullname" . }}-external-ingress
+  name: {{ include "ingressExt.fullname" . }}
   labels:
-    app: {{ include "ingress.name" . }}
+    app: {{ include "ingressExt.name" . }}
   {{- with .Values.ingressExt.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -28,7 +28,7 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- $services := (include "ingress.services" $ | fromYamlArray) }}
+          {{- $services := (include "ingressExt.services" $ | fromYamlArray) }}
           {{- range $svc := $services }}
           - path: {{ $svc.path }}
             pathType: {{ $svc.pathType }}

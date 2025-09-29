@@ -10,6 +10,16 @@ resource "helm_release" "foodcoreapi" {
   force_update    = true
 
   set {
+    name  = "ingress.className"
+    value = var.ingress_class_name
+  }
+
+  set {
+    name  = "ingressExt.className"
+    value = var.ingress_ext_class_name
+  }
+
+  set {
     name  = "api.image.repository"
     value = var.docker_image_uri
   }
@@ -17,11 +27,6 @@ resource "helm_release" "foodcoreapi" {
   set {
     name  = "api.image.tag"
     value = var.docker_image_tag
-  }
-
-  set {
-    name  = "ingress.hosts[0].host"
-    value = data.terraform_remote_state.infra.outputs.api_private_dns_fqdn
   }
 
   set {
@@ -47,11 +52,6 @@ resource "helm_release" "foodcoreapi" {
   set {
     name  = "api.auth.jwt.expirationTime"
     value = var.jwt_expires_time
-  }
-
-  set {
-    name  = "ingress-nginx.controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-ipv4"
-    value = data.terraform_remote_state.infra.outputs.aks_api_private_ip
   }
 
   set {
@@ -99,4 +99,64 @@ resource "helm_release" "foodcoreapi" {
     value = data.terraform_remote_state.db.outputs.pgsql_fqdn
   }
 
+}
+
+resource "helm_release" "ingress_nginx_private" {
+  name       = var.ingress_release_name
+  namespace  = var.ingress_release_namespace
+  repository = var.ingress_repository_url
+  chart      = var.ingress_chart_name
+  version    = var.ingress_chart_version
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
+    value = "/healthz"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-internal"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-ipv4"
+    value = data.terraform_remote_state.infra.outputs.aks_api_private_ip
+  }
+
+  set {
+    name  = "controller.ingressClass"
+    value = var.ingress_class_name
+  }
+
+  depends_on = [ helm_release.foodcoreapi ]
+}
+
+resource "helm_release" "ingress_nginx_public" {
+  name       = "${var.ingress_release_name}-ext"
+  namespace  = var.ingress_release_namespace
+  repository = var.ingress_repository_url
+  chart      = var.ingress_chart_name
+  version    = var.ingress_chart_version
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
+    value = "/healthz"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
+    value = data.terraform_remote_state.infra.outputs.resource_group_name
+  }
+
+  set {
+    name  = "controller.service.loadBalancerIP"
+    value = data.terraform_remote_state.infra.outputs.ext_ingress_public_ip
+  }
+
+  set {
+    name  = "controller.ingressClass"
+    value = var.ingress_ext_class_name
+  }
+
+  depends_on = [ helm_release.foodcoreapi ]
 }

@@ -44,7 +44,7 @@ ingress:
   tls: []
 
 ingressExt:
-  name: ingress
+  name: ingressExt
   enabled: true
   className: "replaced"
   annotations: {
