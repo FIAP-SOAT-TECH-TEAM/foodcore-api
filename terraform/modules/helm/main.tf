@@ -5,10 +5,6 @@ resource "helm_release" "ingress_nginx_private" {
   chart      = var.ingress_chart_name
   version    = var.ingress_chart_version
 
-  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
-  upgrade_install = true
-  force_update    = true
-
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
     value = "/healthz"
@@ -36,10 +32,6 @@ resource "helm_release" "ingress_nginx_public" {
   repository = var.ingress_repository_url
   chart      = var.ingress_chart_name
   version    = var.ingress_chart_version
-
-  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
-  upgrade_install = true
-  force_update    = true
 
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
