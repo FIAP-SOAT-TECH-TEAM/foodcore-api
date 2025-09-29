@@ -124,13 +124,13 @@ variable "ingress_release_namespace" {
   default     = "default"
 }
 
-variabe "ingress_ext_class_name" {
+variable "ingress_ext_class_name" {
   type        = string
   description = "Nome da classe do ingress-nginx externo."
   default     = "nginx-ext"
 }
 
-variabel "ingress_int_class_name" {
+variable "ingress_int_class_name" {
   type        = string
   description = "Nome da classe do ingress-nginx interno."
   default     = "nginx"
