@@ -141,3 +141,39 @@ variable "ingress_int_class_name" {
   description = "Nome da classe do ingress-nginx interno."
   default     = "nginx-int"
 }
+
+variable "cert_manager_email" {
+  type        = string
+  description = "Email para registro no Let's Encrypt."
+}
+
+variable "cert_manager_name" {
+  type        = string
+  description = "Nome do release do Helm do cert-manager."
+  default     = "cert-manager"
+}
+
+variable "cert_manager_namespace" {
+  type        = string
+  description = "Namespace Kubernetes onde o cert-manager será instalado."
+  default     = "cert-manager"
+}
+
+variable "cert_manager_repository_url" {
+  type        = string
+  description = "URL do repositório Helm onde o chart do cert-manager está hospedado."
+  default     = "https://charts.jetstack.io"
+  
+}
+
+variable "cert_manager_chart_name" {
+  type        = string
+  description = "Nome do chart Helm do cert-manager a ser instalado."
+  default     = "cert-manager"
+}
+
+variable "cert_manager_chart_version" {
+  type        = string
+  description = "Versão do chart Helm do cert-manager."
+  default     = "v1.12.0"
+}

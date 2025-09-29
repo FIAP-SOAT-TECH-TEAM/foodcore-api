@@ -128,3 +128,10 @@
     description = "Caminho do arquivo swagger.json"
     type        = string
   }
+
+# Cluster Issuer
+  variable "cert_manager_email" {
+    type        = string
+    description = "Email para registro no Let's Encrypt."
+    default     = "foodcore@email.com"
+  }

@@ -72,6 +72,27 @@ resource "helm_release" "ingress_nginx_public" {
   }
 }
 
+# https://hbayraktar.medium.com/installing-cert-manager-and-nginx-ingress-with-lets-encrypt-on-kubernetes-fe0dff4b1924
+resource "helm_release" "cert_manager" {
+  name       = var.cert_manager_name
+  namespace  = var.cert_manager_namespace
+  repository = var.cert_manager_repository_url
+  chart      = var.cert_manager_chart_name
+  version    = var.cert_manager_chart_version
+
+  create_namespace = true
+
+  set {
+    name  = "installCRDs"
+    value = true
+  }
+
+  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
+  upgrade_install = true
+  force_update    = true
+}
+
+
 resource "helm_release" "foodcoreapi" {
   name            = var.release_name
   repository      = var.repository_url
@@ -82,6 +103,11 @@ resource "helm_release" "foodcoreapi" {
   # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
   upgrade_install = true
   force_update    = true
+
+  set {
+    name = "clusterIssuer.email"
+    value = var.cert_manager_email
+  }
 
   set {
     name  = "ingressInt.name"

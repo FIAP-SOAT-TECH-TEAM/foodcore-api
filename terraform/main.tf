@@ -20,6 +20,7 @@ module "helm" {
   mercadopago_user_id               = var.mercadopago_user_id
   mercadopago_pos_id                = var.mercadopago_pos_id
   api_ingress_path                  = var.api_ingress_path
+  cert_manager_email                = var.cert_manager_email
 }
 
 module "apim" {
