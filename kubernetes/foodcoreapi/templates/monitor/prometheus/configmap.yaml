@@ -31,7 +31,13 @@ data:
           - source_labels: [__address__]
             target_label: __metrics_path__
             replacement: /metrics
-      - job_name: "foodcore-api-metrics"
-        metrics_path: /{{.Values.api.ingress.path}}/actuator/prometheus
-        static_configs:
-          - targets: ["{{ include "api.fullname" . }}:{{ .Values.api.ports.port }}"]
+    - job_name: "foodcore-api-metrics"
+      metrics_path: {{.Values.api.ingress.path}}/actuator/prometheus
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names: ["{{ .Values.namespace.api.name }}"]
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_service_name]
+          regex: {{ include "api.fullname" . }}-service
+          action: keep
