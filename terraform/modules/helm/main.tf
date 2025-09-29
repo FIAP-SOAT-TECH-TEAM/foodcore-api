@@ -1,5 +1,5 @@
 resource "helm_release" "ingress_nginx_private" {
-  name       = var.ingress_release_name
+  name       = var.ingress_int_release_name
   namespace  = var.ingress_release_namespace
   repository = var.ingress_repository_url
   chart      = var.ingress_chart_name
@@ -27,7 +27,7 @@ resource "helm_release" "ingress_nginx_private" {
 }
 
 resource "helm_release" "ingress_nginx_public" {
-  name       = "${var.ingress_release_name}-ext"
+  name       = var.ingress_ext_release_name
   namespace  = var.ingress_release_namespace
   repository = var.ingress_repository_url
   chart      = var.ingress_chart_name
@@ -66,18 +66,18 @@ resource "helm_release" "foodcoreapi" {
   force_update    = true
 
   set {
-    name  = "ingress.name"
-    value = var.ingress_release_name
+    name  = "ingressInt.name"
+    value = var.ingress_int_release_name
   }
 
   set {
     name  = "ingressExt.name"
-    value = "${var.ingress_release_name}-ext"
+    value = var.ingress_ext_release_name
   }
 
   set {
-    name  = "ingress.className"
-    value = var.ingress_class_name
+    name  = "ingressInt.className"
+    value = var.ingress_int_class_name
   }
 
   set {

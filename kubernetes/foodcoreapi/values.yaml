@@ -32,7 +32,7 @@ service:
   type: ClusterIP
   port: 80
 
-ingress:
+ingressInt:
   name: "replaced"
   enabled: true
   className: "replaced"

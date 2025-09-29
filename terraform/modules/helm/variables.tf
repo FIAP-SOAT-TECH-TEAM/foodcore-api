@@ -112,10 +112,16 @@ variable "ingress_chart_version" {
   default     = "4.13.2"
 }
 
-variable "ingress_release_name" {
+variable "ingress_int_release_name" {
   type        = string
-  description = "Nome do release do Helm do ingress-nginx."
-  default     = "ingress-nginx"
+  description = "Nome do release do Helm do ingress-nginx interno."
+  default     = "ingress-nginx-int"
+}
+
+variable "ingress_ext_release_name" {
+  type        = string
+  description = "Nome do release do Helm do ingress-nginx externo."
+  default     = "ingress-nginx-ext"
 }
 
 variable "ingress_release_namespace" {
