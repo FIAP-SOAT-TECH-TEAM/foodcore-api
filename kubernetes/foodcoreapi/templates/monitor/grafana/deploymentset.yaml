@@ -25,6 +25,10 @@ spec:
             - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
               mountPath: {{ .Values.grafana.volumes.grafanaconfig.mountPath }}
               subPath: {{ .Values.grafana.volumes.grafanaconfig.subPath }}
+            - name: {{ .Values.grafana.volumes.grafanadatasources.name }}
+              mountPath: {{ .Values.grafana.volumes.grafanadatasources.mountPath }}
+            - name: {{ .Values.grafana.volumes.grafanadashboards.name }}
+              mountPath: {{ .Values.grafana.volumes.grafanadashboards.mountPath }}
           resources:
             limits:
               cpu: {{ .Values.grafana.resources.limits.cpu }}
@@ -36,3 +40,9 @@ spec:
         - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
           configMap:
             name: {{ include "grafana.fullname" . }}-config
+        - name: {{ .Values.grafana.volumes.grafanadatasources.name }}
+          configMap:
+            name: {{ include "grafana.fullname" . }}-config-ds
+        - name: {{ .Values.grafana.volumes.grafanadashboards.name }}
+          configMap:
+            name: {{ include "grafana.fullname" . }}-config-dashs

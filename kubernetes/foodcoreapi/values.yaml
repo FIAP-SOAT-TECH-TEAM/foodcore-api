@@ -295,6 +295,12 @@ grafana:
       name: grafana-config
       mountPath: /etc/grafana/grafana.ini
       subPath: grafana.ini
+    grafanadatasources:
+      name: grafana-datasources
+      mountPath: /etc/grafana/provisioning/datasources
+    grafanadashboards:
+      name: grafana-dashboards
+      mountPath: /etc/grafana/provisioning/dashboards
 
   ports:
     port: 80
