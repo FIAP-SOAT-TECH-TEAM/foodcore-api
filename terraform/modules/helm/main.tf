@@ -89,8 +89,18 @@ resource "helm_release" "foodcoreapi" {
   }
 
   set {
+    name  = "ingressInt.hosts[0].host"
+    value = data.terraform_remote_state.infra.outputs.api_private_dns_fqdn
+  }
+
+  set {
     name  = "ingressExt.name"
     value = var.ingress_ext_release_name
+  }
+
+  set {
+    name  = "ingressExt.hosts[0].host"
+    value = data.terraform_remote_state.infra.outputs.ext_ingress_public_ip_fqdn
   }
 
   set {
