@@ -4,16 +4,13 @@ API de gerenciamento de pedidos para restaurantes fast-food com Clean Architectu
 DDD e monólitos modulares usando Spring Modulith.
 
 Acesse as URLs da aplicação:
-{{- if $.Values.ingress.enabled }}
-{{- range $host := $.Values.ingress.hosts }}
 
-🖥️  {{ $host.host }}:
 🍔 Food Core API: consulte Gateway URL do APIM
-📊 Kibana (Monitoramento EFK): consulte Public IP do SVC LoadBalancer
-🗄️  Adminer (Gerenciador de BD): consulte Public IP do SVC LoadBalancer
+🔎 Kibana (Monitoramento EFK): consulte FQDN do Ingress Público
+🗄️ Adminer (Gerenciador de BD): consulte FQDN do Ingress Público
+📡 Prometheus (Métricas de Aplicação): consulte FQDN do Ingress Público
+📊 Grafana (Dashboards de Monitoramento): consulte FQDN do Ingress Público
 
-{{- end }}
-{{- end }}
 
 🚀 A aplicação Food Core API foi implantada com sucesso!
 📖 Documentação completa: https://github.com/FIAP-SOAT-TECH-TEAM/food-core-api

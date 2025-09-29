@@ -22,7 +22,7 @@ resource "helm_release" "ingress_nginx_private" {
 
   set {
     name  = "controller.ingressClass"
-    value = var.ingress_class_name
+    value = var.ingress_int_class_name
   }
 }
 

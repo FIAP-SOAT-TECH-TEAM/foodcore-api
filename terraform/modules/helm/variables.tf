@@ -130,8 +130,8 @@ variable "ingress_ext_class_name" {
   default     = "nginx-ext"
 }
 
-variable "ingress_class_name" {
+variable "ingress_int_class_name" {
   type        = string
   description = "Nome da classe do ingress-nginx interno."
-  default     = "nginx"
+  default     = "nginx-int"
 }
