@@ -48,6 +48,7 @@ ingressExt:
   enabled: true
   className: "replaced"
   annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   }
   hosts:
     - host: "replaced"
@@ -361,6 +362,10 @@ storageClass:
   volumeBindingMode: WaitForFirstConsumer
   allowVolumeExpansion: true
   fsType: ext4
+
+clusterIssuer:
+  email: "replaced"
+  server: "https://acme-v02.api.letsencrypt.org/directory"
 
 namespace:
   efk:
