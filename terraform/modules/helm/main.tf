@@ -35,6 +35,26 @@ resource "helm_release" "ingress_nginx_private" {
   }
 }
 
+# https://hbayraktar.medium.com/installing-cert-manager-and-nginx-ingress-with-lets-encrypt-on-kubernetes-fe0dff4b1924
+resource "helm_release" "cert_manager" {
+  name       = var.cert_manager_name
+  namespace  = var.cert_manager_namespace
+  repository = var.cert_manager_repository_url
+  chart      = var.cert_manager_chart_name
+  version    = var.cert_manager_chart_version
+
+  create_namespace = true
+
+  set {
+    name  = "installCRDs"
+    value = true
+  }
+
+  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
+  upgrade_install = true
+  force_update    = true
+}
+
 resource "helm_release" "ingress_nginx_public" {
   name       = var.ingress_ext_release_name
   namespace  = var.ingress_release_namespace
@@ -70,26 +90,8 @@ resource "helm_release" "ingress_nginx_public" {
     name  = "controller.ingressClassResource.name"
     value = var.ingress_ext_class_name
   }
-}
 
-# https://hbayraktar.medium.com/installing-cert-manager-and-nginx-ingress-with-lets-encrypt-on-kubernetes-fe0dff4b1924
-resource "helm_release" "cert_manager" {
-  name       = var.cert_manager_name
-  namespace  = var.cert_manager_namespace
-  repository = var.cert_manager_repository_url
-  chart      = var.cert_manager_chart_name
-  version    = var.cert_manager_chart_version
-
-  create_namespace = true
-
-  set {
-    name  = "installCRDs"
-    value = true
-  }
-
-  # Permitir upgrade e reinstalação do release automaticamente (apenas para fins da atividade)
-  upgrade_install = true
-  force_update    = true
+  depends_on = [ helm_release.cert_manager ]
 }
 
 
