@@ -28,6 +28,11 @@ resource "helm_release" "ingress_nginx_private" {
     name  = "controller.ingressClass"
     value = var.ingress_int_class_name
   }
+
+  set {
+    name  = "controller.ingressClassResource.name"
+    value = var.ingress_int_class_name
+  }
 }
 
 resource "helm_release" "ingress_nginx_public" {
@@ -58,6 +63,11 @@ resource "helm_release" "ingress_nginx_public" {
 
   set {
     name  = "controller.ingressClass"
+    value = var.ingress_ext_class_name
+  }
+
+  set {
+    name  = "controller.ingressClassResource.name"
     value = var.ingress_ext_class_name
   }
 }
