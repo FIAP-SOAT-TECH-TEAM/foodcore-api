@@ -15,6 +15,7 @@ spec:
       labels:
         app: {{ include "prometheus.name" . }}
     spec:
+      serviceAccountName: {{ include "prometheus.fullname" . }}-serviceaccount
       containers:
         - name: {{ include "prometheus.name" . }}
           image: "{{ .Values.prometheus.image.repository }}:{{ .Values.prometheus.image.tag }}"
