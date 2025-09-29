@@ -338,7 +338,7 @@ prometheus:
   volumes:
     prometheusconfig:
       name: prometheus-config
-      mountPath: /etc/prometheus/prometheus.yml
+      mountPath: /prometheus/prometheus.yml
       subPath: prometheus.yml
 
 storageClass:
