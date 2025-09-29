@@ -27,6 +27,7 @@ spec:
               mountPath: {{ .Values.prometheus.volumes.prometheusconfig.mountPath }}
               subPath: {{ .Values.prometheus.volumes.prometheusconfig.subPath }}
           args:
+            - "--web.route-prefix={{ .Values.prometheus.ingress.path }}"
             - "--web.external-url={{ .Values.prometheus.ingress.path }}"
           resources:
             limits:
