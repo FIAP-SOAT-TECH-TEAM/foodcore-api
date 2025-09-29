@@ -10,6 +10,16 @@ resource "helm_release" "foodcoreapi" {
   force_update    = true
 
   set {
+    name  = "ingress.name"
+    value = var.ingress_release_name
+  }
+
+  set {
+    name  = "ingressExt.name"
+    value = "${var.ingress_release_name}-ext"
+  }
+
+  set {
     name  = "ingress.className"
     value = var.ingress_class_name
   }

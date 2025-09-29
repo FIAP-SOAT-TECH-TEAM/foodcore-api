@@ -33,7 +33,7 @@ service:
   port: 80
 
 ingress:
-  name: ingress
+  name: "replaced"
   enabled: true
   className: "replaced"
   annotations: {
@@ -44,7 +44,7 @@ ingress:
   tls: []
 
 ingressExt:
-  name: ingressExt
+  name: "replaced"
   enabled: true
   className: "replaced"
   annotations: {
