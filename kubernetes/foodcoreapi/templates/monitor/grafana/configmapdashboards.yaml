@@ -7,4 +7,4 @@ metadata:
   namespace: {{ .Values.namespace.monitor.name }}
 data:
   jvm_micrometer_dash.json: |-
-{{ .Files.Get "jvm_micrometer_dash.json" | toJson | indent 4 }}
+{{ .Files.Get "jvm_micrometer_dash.json" | indent 4 }}
