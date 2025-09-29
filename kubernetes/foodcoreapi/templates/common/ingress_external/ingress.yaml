@@ -5,24 +5,20 @@ metadata:
   name: {{ include "ingressExt.fullname" . }}
   labels:
     app: {{ include "ingressExt.name" . }}
-  {{- with .Values.ingressExt.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.api.server.profilesActive }}
+
 spec:
   {{- if .Values.ingressExt.className }}
   ingressClassName: {{ .Values.ingressExt.className }}
   {{- end }}
-  {{- if .Values.ingressExt.tls }}
   tls:
-    {{- range .Values.ingressExt.tls }}
+    {{- range .Values.ingressExt.hosts }}
     - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
+        - {{ .host | quote }}
+      secretName: {{ include "ingressExt.fullname" $ }}-tls
     {{- end }}
-  {{- end }}
   rules:
     {{- range .Values.ingressExt.hosts }}
     - host: {{ .host | quote }}

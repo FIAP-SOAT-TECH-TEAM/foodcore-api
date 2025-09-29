@@ -47,14 +47,9 @@ ingressExt:
   name: "replaced"
   enabled: true
   className: "replaced"
-  annotations: {
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  }
   hosts:
     - host: "replaced"
-
-  tls: []
-
+    
 resources:
   {}
 
