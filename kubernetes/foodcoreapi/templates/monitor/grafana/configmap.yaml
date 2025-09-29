@@ -12,3 +12,15 @@ data:
     root_url = %(protocol)s://%(domain)s:%(http_port)s{{ .Values.grafana.ingress.path }}
     # Serve Grafana a partir de um subpath
     serve_from_sub_path = true
+  provider.yaml: |
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        updateIntervalSeconds: 10
+        options:
+          path: {{ .Values.grafana.volumes.grafanadashboards.mountPath }}

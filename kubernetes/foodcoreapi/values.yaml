@@ -293,14 +293,19 @@ grafana:
   volumes:
     grafanaconfig:
       name: grafana-config
-      mountPath: /etc/grafana/grafana.ini
-      subPath: grafana.ini
+      items:
+        - mountPath: /etc/grafana/grafana.ini
+          subPath: grafana.ini
+        - mountPath: /etc/grafana/provisioning/dashboards/provider.yaml
+          subPath: provider.yaml
+
     grafanadatasources:
       name: grafana-datasources
       mountPath: /etc/grafana/provisioning/datasources
+    
     grafanadashboards:
       name: grafana-dashboards
-      mountPath: /etc/grafana/provisioning/dashboards
+      mountPath: /var/lib/grafana/dashboards
 
   ports:
     port: 80

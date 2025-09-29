@@ -12,5 +12,5 @@ data:
       - name: DS_PROMETHEUS
         type: prometheus
         access: proxy
-        url: http://{{ printf "%s-service" (include "prometheus.fullname" .) }}.{{ .Values.namespace.monitor.name }}.svc.cluster.local:{{ .Values.prometheus.ports.port }}
+        url: http://{{ printf "%s-service" (include "prometheus.fullname" .) }}.{{ .Values.namespace.monitor.name }}.svc.cluster.local:{{ .Values.prometheus.ports.port }}{{ .Values.prometheus.ingress.path }}
         isDefault: true

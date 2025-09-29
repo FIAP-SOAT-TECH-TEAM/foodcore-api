@@ -23,8 +23,11 @@ spec:
               name: {{ .Values.grafana.ports.name }}
           volumeMounts:
             - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
-              mountPath: {{ .Values.grafana.volumes.grafanaconfig.mountPath }}
-              subPath: {{ .Values.grafana.volumes.grafanaconfig.subPath }}
+              mountPath: {{ (index .Values.grafana.volumes.grafanaconfig.items 0).mountPath }}
+              subPath: {{ (index .Values.grafana.volumes.grafanaconfig.items 0).subPath }}
+            - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
+              mountPath: {{ (index .Values.grafana.volumes.grafanaconfig.items 1).mountPath }}
+              subPath: {{ (index .Values.grafana.volumes.grafanaconfig.items 1).subPath }}
             - name: {{ .Values.grafana.volumes.grafanadatasources.name }}
               mountPath: {{ .Values.grafana.volumes.grafanadatasources.mountPath }}
             - name: {{ .Values.grafana.volumes.grafanadashboards.name }}
