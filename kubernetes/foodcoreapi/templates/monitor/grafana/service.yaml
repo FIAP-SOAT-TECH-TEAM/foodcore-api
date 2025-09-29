@@ -6,7 +6,6 @@ metadata:
     app: {{ include "grafana.name" . }}
   namespace: {{ .Values.namespace.monitor.name }}
 spec:
-  type: LoadBalancer
   selector:
     app: {{ include "grafana.name" . }}
   ports:

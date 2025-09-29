@@ -35,7 +35,7 @@ service:
 ingress:
   name: ingress
   enabled: true
-  className: "nginx"
+  className: "replaced"
   annotations: {
   }
   hosts:
@@ -43,13 +43,16 @@ ingress:
 
   tls: []
 
-ingress-nginx:
-  controller:
-    service:
-      annotations:
-        service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
-        service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-        service.beta.kubernetes.io/azure-load-balancer-ipv4: "replaced"
+ingressExt:
+  name: ingress
+  enabled: true
+  className: "replaced"
+  annotations: {
+  }
+  hosts:
+    - host: "replaced"
+
+  tls: []
 
 resources:
   {}
@@ -151,6 +154,10 @@ adminer:
     repository: adminer
     tag: latest
     pullPolicy: IfNotPresent
+  
+  ingress:
+    path: /adminer
+    pathType: Prefix
 
   ports:
     port: 80
@@ -248,6 +255,10 @@ kibana:
     port: 80
     targetPort: 5601
     name: http
+  
+  ingress:
+    path: /kibana
+    pathType: Prefix
 
   resources:
     requests:
@@ -262,7 +273,8 @@ kibana:
       name: kibana-config
       mountPath: /usr/share/kibana/config/kibana.yml
       subPath: kibana.yml
-      
+
+  serverRewriteBasePath: true
   serverHost: "0.0.0.0"
 
 grafana:
@@ -273,6 +285,16 @@ grafana:
   image:
     repository: grafana/grafana 
     tag: "latest"
+
+  ingress:
+    path: /grafana
+    pathType: Prefix
+
+  volumes:
+    grafanaconfig:
+      name: grafana-config
+      mountPath: /etc/grafana/grafana.ini
+      subPath: grafana.ini
 
   ports:
     port: 80
@@ -295,6 +317,11 @@ prometheus:
   image:
     repository: prom/prometheus
     tag: "latest"
+
+  ingress:
+    path: /prometheus
+    pathType: Prefix
+
   ports:
     port: 80
     targetPort: 9090

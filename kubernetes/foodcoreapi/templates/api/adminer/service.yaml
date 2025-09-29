@@ -6,7 +6,6 @@ metadata:
     app: {{ include "adminer.name" . }}
   namespace: {{ .Values.namespace.api.name }}
 spec:
-  type: LoadBalancer
   ports:
     - port: {{ .Values.adminer.ports.port }}
       targetPort: {{ .Values.adminer.ports.targetPort }}

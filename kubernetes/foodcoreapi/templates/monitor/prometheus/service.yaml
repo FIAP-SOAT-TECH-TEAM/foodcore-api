@@ -6,7 +6,6 @@ metadata:
     app: {{ include "prometheus.name" . }}
   namespace: {{ .Values.namespace.monitor.name }}
 spec:
-  type: LoadBalancer
   selector:
     app: {{ include "prometheus.name" . }}
   ports:

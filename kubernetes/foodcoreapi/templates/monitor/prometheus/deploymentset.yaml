@@ -26,6 +26,8 @@ spec:
             - name: {{ .Values.prometheus.volumes.prometheusconfig.name }}
               mountPath: {{ .Values.prometheus.volumes.prometheusconfig.mountPath }}
               subPath: {{ .Values.prometheus.volumes.prometheusconfig.subPath }}
+          args:
+            - "--web.external-url={{ .Values.prometheus.ingress.path }}"
           resources:
             limits:
               cpu: {{ .Values.prometheus.resources.limits.cpu }}

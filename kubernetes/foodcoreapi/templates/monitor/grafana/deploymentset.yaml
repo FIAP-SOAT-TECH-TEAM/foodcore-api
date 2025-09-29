@@ -21,6 +21,10 @@ spec:
           ports:
             - containerPort: {{ .Values.grafana.ports.port }}
               name: {{ .Values.grafana.ports.name }}
+          volumeMounts:
+            - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
+              mountPath: {{ .Values.grafana.volumes.grafanaconfig.mountPath }}
+              subPath: {{ .Values.grafana.volumes.grafanaconfig.subPath }}
           resources:
             limits:
               cpu: {{ .Values.grafana.resources.limits.cpu }}
@@ -28,3 +32,7 @@ spec:
             requests:
               cpu: {{ .Values.grafana.resources.requests.cpu }}
               memory: {{ .Values.grafana.resources.requests.memory }}
+      volumes:
+        - name: {{ .Values.grafana.volumes.grafanaconfig.name }}
+          configMap:
+            name: {{ include "grafana.fullname" . }}-config
