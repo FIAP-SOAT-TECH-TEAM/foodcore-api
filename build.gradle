@@ -55,6 +55,8 @@ dependencies {
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 
 	// Liquibase para migrações de banco de dados
 	implementation 'org.liquibase:liquibase-core'

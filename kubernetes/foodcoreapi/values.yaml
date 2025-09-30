@@ -352,6 +352,32 @@ prometheus:
       mountPath: /prometheus/prometheus.yml
       subPath: prometheus.yml
 
+zipkin:
+  name: zipkin
+
+  replicaCount: 1
+
+  image:
+    repository: openzipkin/zipkin
+    tag: "latest"
+
+  ingress:
+    path: /zipkin
+    pathType: Prefix
+  
+  ports:
+    port: 80
+    targetPort: 9411
+    name: http
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
 storageClass:
   name: azure-disk
   skuName: Standard_LRS
