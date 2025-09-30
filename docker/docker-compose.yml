@@ -7,7 +7,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     image: foodcoreapi-monolito-cleanarch:latest
-    container_name: foodcoreapi
+    container_name: foodcore-api
     ports:
       - "80:${SERVER_PORT}"
     env_file:
@@ -34,7 +34,7 @@ services:
   # Banco de dados PosgreSQL
   db:
     image: postgres:16-alpine
-    container_name: food-core-db
+    container_name: foodcore-db
     ports:
       - "${DB_PORT}:${DB_PORT}"
     env_file:
@@ -69,6 +69,19 @@ services:
       - "8081:8080"
     depends_on:
       - db
+    networks:
+      - fastfood-network
+    restart: unless-stopped
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: foodcore-zipkin
+    ports:
+      - "${ZIPKIN_PORT}:${ZIPKIN_PORT}"
+    env_file:
+      - .env
+    environment:
+      - SERVER_PORT=${ZIPKIN_PORT}
     networks:
       - fastfood-network
     restart: unless-stopped

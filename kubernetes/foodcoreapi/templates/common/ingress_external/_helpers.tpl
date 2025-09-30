@@ -30,5 +30,11 @@
   port: {{ .Values.prometheus.ports.port }}
   path: {{ .Values.prometheus.ingress.path }}
   pathType: {{ .Values.prometheus.ingress.pathType }}
+
+- name: {{ printf "%s-service" (include "zipkin.fullname" .) }}
+  namespace: {{ .Values.namespace.monitor.name }}
+  port: {{ .Values.zipkin.ports.port }}
+  path: {{ .Values.zipkin.ingress.path }}
+  pathType: {{ .Values.zipkin.ingress.pathType }}
 {{- end }}
 

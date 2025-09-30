@@ -36,8 +36,8 @@ spring:
       mime-types: application/json,application/xml,text/html,text/plain
       min-response-size: 2048
 
-# Actuator (endpoints restritos)
 management:
+  # Actuator (endpoints restritos)
   endpoints:
     web:
       exposure:
@@ -45,6 +45,14 @@ management:
     endpoint:
       health:
         show-details: when_authorized
+  # Tracing Distribuído
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}/api/v2/spans
 
 # Logging (níveis reduzidos)
 logging:

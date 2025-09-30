@@ -79,6 +79,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "api.fullname" . }}-config
                   key: MERCADO_PAGO_NOTIFICATION_URL
+            - name: ZIPKIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api.fullname" . }}-config
+                  key: ZIPKIN_URL
             # SECRET
             - name: SPRING_DATASOURCE_URL
               valueFrom:
