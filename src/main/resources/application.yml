@@ -55,6 +55,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 15MB
 
+# Tracing Distribuído
 management:
   tracing:
     enabled: false
