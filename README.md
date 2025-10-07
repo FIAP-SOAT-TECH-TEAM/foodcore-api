@@ -32,9 +32,7 @@ da FIAP (Tech Challenge).
   <a href="#contribuicao-e-licenca">Contribuição e Licença</a>
 </div><br>
 
-
 > 📽️ Vídeo de demonstração da arquitetura: [https://www.youtube.com/watch?v=soaATSbSRPc](https://www.youtube.com/watch?v=XgUpOKJjqak)<br>
-
 
 <h2 id="visao-geral">📋 Visão Geral</h2>
 
@@ -104,39 +102,43 @@ A infraestrutura do projeto é baseada em containers Docker, orquestrados com Ku
 
 A infraestrutura é provisionada de forma automatizada e reprodutível usando o **Terraform**, uma ferramenta de infraestrutura como código (IaC). O fluxo é organizado em etapas que garantem a criação segura e modular dos recursos no Azure.
 
-![Terraform Infraestrutura](docs/diagrams/terraform.png) 
+![Terraform Infraestrutura](docs/diagrams/terraform.png)
 
 ---
 
 ### 🔄 Fluxo de Execução
 
 #### 1. **Inicialização**
+
 - Carrega a configuração do backend remoto (para manter o estado do Terraform) e os provedores necessários.
 
 #### 2. **Carregamento de Variáveis**
+
 - As variáveis são separadas por responsabilidade:
-    - `Common Variables`: configurações compartilhadas.
-    - `AKS Variables`: definições específicas do cluster Kubernetes.
-    - `Blob Storage Variables`: informações do armazenamento de blobs.
-    - `Public IP Variables`: configurações de IP público.
+  - `Common Variables`: configurações compartilhadas.
+  - `AKS Variables`: definições específicas do cluster Kubernetes.
+  - `Blob Storage Variables`: informações do armazenamento de blobs.
+  - `Public IP Variables`: configurações de IP público.
 
 #### 3. **Provisionamento de Recursos**
+
 - Criação dos principais recursos de infraestrutura:
-    - **Resource Group**: grupo de recursos principal do Azure.
-    - **Public IP**: IP público para serviços de entrada.
-    - **Blob Storage**:
-        - `Storage Account`: conta de armazenamento no Azure.
-        - `Storage Container`: container para armazenar arquivos (ex: estado do Terraform ou imagens).
-    - **AKS Cluster**: cluster do Azure Kubernetes Service.
-    - **Assign Network Role**: atribui as permissões de rede necessárias ao AKS.
+  - **Resource Group**: grupo de recursos principal do Azure.
+  - **Public IP**: IP público para serviços de entrada.
+  - **Blob Storage**:
+    - `Storage Account`: conta de armazenamento no Azure.
+    - `Storage Container`: container para armazenar arquivos (ex: estado do Terraform ou imagens).
+  - **AKS Cluster**: cluster do Azure Kubernetes Service.
+  - **Assign Network Role**: atribui as permissões de rede necessárias ao AKS.
 
 #### 4. **Coleta de Outputs**
+
 - Ao final da execução, o Terraform retorna informações essenciais:
-    - Nome e ID do Resource Group
-    - Nome do cluster AKS
-    - IP público (FQDN e endereço)
-    - Nome e conexão do Storage Account
-    - Nome do container no Blob Storage
+  - Nome e ID do Resource Group
+  - Nome do cluster AKS
+  - IP público (FQDN e endereço)
+  - Nome e conexão do Storage Account
+  - Nome do container no Blob Storage
 
 ---
 
@@ -149,48 +151,53 @@ A infraestrutura é provisionada de forma automatizada e reprodutível usando o 
 
 ---
 
-
 ## ⚙️ Infraestrutura e Arquitetura no Kubernetes
 
 A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando práticas modernas de escalabilidade, observabilidade e isolamento de responsabilidades para garantir alta disponibilidade, segurança e performance.
 
 ### 📌 Visão Geral
 
-![Diagrama da Kubernets](docs/diagrams/kubernetsDiagram.png) 
+![Diagrama da Kubernets](docs/diagrams/kubernetsDiagram.png)
 
 ---
 
 ### 🧩 Componentes Principais
 
 #### 🧑‍💻 Usuário Web/Mobile
+
 - A interação começa com o usuário via navegador ou aplicativo.
 - Todo o tráfego HTTPS passa pelo **NGINX Ingress Controller**, responsável pelo roteamento.
 
 #### 🌐 Ingress NGINX Controller
+
 - Atua como gateway de entrada do cluster.
 - Roteia requisições conforme o caminho:
-    - `/api` → **Order Management API**
-    - `/adminer` → **Interface do banco**
-    - `/kibana` → **Dashboard de observabilidade**
+  - `/api` → **Order Management API**
+  - `/adminer` → **Interface do banco**
+  - `/kibana` → **Dashboard de observabilidade**
 
 ---
 
 ### 🧱 API Namespace
 
 #### 🚀 Order API Pod
+
 - Core da aplicação: processa pedidos, persiste dados e integra com o **MercadoPago**.
 - Gera logs de aplicação e banco, enviados ao namespace de observabilidade.
 
 #### ⚖️ Horizontal Pod Autoscaler (HPA)
+
 - Escala automaticamente os pods com base em **uso de CPU e memória**.
 - Monitora continuamente os pods e ajusta a quantidade conforme a carga do sistema.
 
 ##### 🧪 Probes e Configurações de Saúde
+
 - **Liveness Probe**: reinicia o pod se estiver travado.
 - **Readiness Probe**: verifica se o pod está pronto para receber requisições.
 - **Startup Probe**: usada na inicialização para garantir que o pod esteja saudável antes de ativar as outras probes.
 
 ##### 📊 Políticas de Recursos
+
 - **Requests & Limits**: define recursos mínimos e máximos para o pod.
 - **Node Affinity**: aloca pods em nós apropriados para melhor performance.
 
@@ -199,14 +206,17 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 ### 🗃️ Armazenamento e Dados
 
 #### Order Database
+
 - Banco relacional que armazena os dados dos pedidos e transações.
 
 #### Image Storage
+
 - Serviço de armazenamento de imagens de produtos ou comprovantes de pedidos.
 
 ---
 
 ### 📡 Integração com MercadoPago
+
 - A **Order API** comunica-se diretamente com a API de pagamentos.
 - Processa **QR Codes**, escuta **webhooks** e confirma **transações em tempo real**.
 
@@ -221,20 +231,14 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 ---
 
 ### ✅ Benefícios da Arquitetura
+
 - **Escalabilidade automática com HPA**
 - **Observabilidade centralizada com EFK**
 - **Roteamento seguro e flexível via NGINX**
 - **Separação clara de responsabilidades por namespace**
 - **Alta disponibilidade e performance no AKS**
 
-
-
-
-
 </details>
-
-
-
 
 <h2 id="tecnologias">🔧 Tecnologias</h2>
 
@@ -281,7 +285,7 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 
 ### Modelo de Domínio
 
-![Diagrama Modelo de Domínio](docs/diagrams/domain-model.svg)
+![Diagrama Modelo de Domínio](docs/diagrams/domain_model.svg)
 
 ---
 
@@ -290,6 +294,7 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 ![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
 
 #### 🎯 Fluxo Clean Arch
+
 ![Fluxo do Usuário - Criação de Pedido](docs/diagrams/UserFlow.png)
 
 ---
@@ -299,6 +304,7 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 ![Eventos de domínio - Preparação e Entrega do Pedido](docs/diagrams/order-preparing.svg)
 
 #### 🎯 Fluxo Clean Arch
+
 ![Fluxo do Restaurante - Preparação e Entrega](docs/diagrams/AdminFlow.png)
 
 ---
@@ -306,8 +312,8 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 ### 💳 Fluxo de Compra e Pagamento
 
 #### 📈 Diagrama Sequencial
-![Diagrama Sequencial - Compra e Pagamento](docs/diagrams/sequencialDiagram.png)
 
+![Diagrama Sequencial - Compra e Pagamento](docs/diagrams/sequencialDiagram.png)
 
 </details>
 
@@ -317,12 +323,11 @@ A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando
 
 ### Event Storming Miro
 
-- https://miro.com/app/board/uXjVIAFD_zg=/?share_link_id=933422566141
+- <https://miro.com/app/board/uXjVIAFD_zg=/?share_link_id=933422566141>
 
 ![image](https://github.com/user-attachments/assets/1c5261a3-60ab-45de-ae4c-86b3afe28db9)
 ![image](https://github.com/user-attachments/assets/29611638-e684-4244-b3b6-6ae19e725bc4)
 </details>
-
 
 <h2 id="taskboard"> 📌Task Board</h2>
 <details>
@@ -454,7 +459,6 @@ O projeto utiliza um script centralizador `food` para gerenciar todas as operaç
 
 ### Iniciando o Ambiente do Zero
 
-
 ### 🛠️ Como configurar o ambiente local com Ngrok
 
 Para que sua aplicação local receba os webhooks de forma funcional (especialmente em endpoints que estão em `localhost`), é necessário utilizar o [Ngrok](https://ngrok.com/).
@@ -465,10 +469,12 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
     - Acesse: [https://ngrok.com/download](https://ngrok.com/download) e faça o download de acordo com seu sistema operacional.
 
 2. **Instale e autentique o Ngrok (apenas na primeira vez):**
+
    ```bash
    ngrok config add-authtoken SEU_TOKEN_DO_NGROK
 
 3. **Exponha a porta da aplicação:**
+
    ```bash
    ngrok http 80
    ```
@@ -478,6 +484,7 @@ Para que sua aplicação local receba os webhooks de forma funcional (especialme
 
 5. **Atualize o .env:**
     - No arquivo `docker\.env`, adicione a URL do Ngrok como base para os webhooks (não esqueça de adicionar o caminho `/api/payments/webhook` para que o webhook funcione corretamente):
+
    ```properties
    MERCADO_PAGO_NOTIFICATION_URL=https://abc123.ngrok.io/api/payments/webhook
    ```
@@ -546,12 +553,11 @@ chmod +x food scripts/*.sh
 - **API**: <http://localhost/api>
 - **Swagger/OpenAPI**: <http://localhost/api/swagger-ui.html>
 - **Adminer (gerenciador de banco de dados)**: <http://localhost:8081>
-    - Sistema: PostgreSQL
-    - Servidor: db
-    - Usuário: postgres
-    - Senha: postgres
-    - Banco: fastfood
-
+  - Sistema: PostgreSQL
+  - Servidor: db
+  - Usuário: postgres
+  - Senha: postgres
+  - Banco: fastfood
 
 ### Testando a Aplicação (Fluxo de compra 🛒)
 
@@ -562,6 +568,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 1. **Identificação do cliente** (Opcional):
    Você pode se identificar criando um usuário ou seguir como um convidado:
    - Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
+
    ```http
    POST /users
    Content-Type: application/json
@@ -573,7 +580,9 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      "document": "929.924.370-00"
    }
     ```
+
    - Caso queira seguir como convidado, envie o payload vazio ou com o campo `guest = true`:
+
    ```http
    POST /users
    Content-Type: application/json
@@ -581,17 +590,21 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
       "guest": true
    }
     ```
+
    ou
+
     ```http
    POST /users
    Content-Type: application/json
    {
    }
     ```
+
    > ⚠️ Reenviar o mesmo payload irá retornar o usuário já existente.
 
 2. **Realizar Pedido**:
    - Crie um pedido com os produtos disponíveis:
+
    ```http
    POST /orders
    Content-Type: application/json
@@ -615,50 +628,61 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
      ]
    }
    ```
+
    - Se o pedido for criado com sucesso, o status retornado será RECEIVED.
 
 3. **Acessar QrCode para Pagamento**:
    - Após criar o pedido, você receberá o id do pedido que será utilizado nessa rota para gerar o QrCode.
+
    ```
     GET /orders/{orderId}/qrCode
     ```
+
    - Com o retorno, você poderá copiar o valor de qrCode e utiliza-lo no site [QRCode Monkey](https://www.qrcode-monkey.com/) para gerar o QrCode.
 
 4. **Escaneie o QrCode com o aplicativo do Mercado Pago**:
    - Abra o aplicativo do Mercado Pago e escaneie o QrCode gerado.
    - Siga as instruções para concluir o pagamento.
    - Após o pagamento ser efetuado, o Mercado Pago notificará a aplicação via webhook:
+
    ```http
    POST /payments/webhook
     ```
+
    - Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
 
 5. **Acompanhar o Status do pagamento do pedido**:
    - Você pode acompanhar o status do pagamento do seu pedido a qualquer momento:
+
    ```
     GET /payments/{orderId}/status
     ```
+
    - Caso o status do pagamento seja `APPROVED`, o pedido foi confirmado e já estará sendo preparado pelo restaurante.
 
 6. **Preparação do Pedido (Admin/Restaurante)**:
    - Logue com o usuário admin.
+
     ```http
     POST /users/login
     Content-Type: application/json
     {
-	  "email": "admin@fastfood.com",
-	  "password": "admin123"
+   "email": "admin@fastfood.com",
+   "password": "admin123"
     }
     ```
+
    - Após o login, busque todas os pedidos ativos ou busque seu pedido pelo id dele:
-   ``` 
+
+   ```
     GET /orders/active
     GET /orders/{orderId}
     ```
+
     > ⚠️ O pedido foi alterado para `PREPARING` automaticamente após aprovação do pagamento.
 7. **Marcar o pedido como pronto (Admin/Restaurante)**:
     - Quando o pedido estiver pronto, você poderá marca-lo como pronto para que o usuário possa retira-lo:
-   
+
     ```http
     PATCH /orders/{orderId}/status
     Content-Type: application/json
@@ -666,10 +690,12 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
       "status": "READY"
     }
     ```
+
     > ⚠️ Futuramente, o usuário será notificado quando o pedido dele estiver pronto.
 
 8. **Finalizar Pedido (Admin/Restaurante)**:
    - Quando o pedido for retirado pelo cliente, você poderá finalizar o pedido:
+
     ```http
     PATCH /orders/{orderId}/status
     Content-Type: application/json
@@ -677,13 +703,17 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
       "status": "COMPLETED"
     }
     ```
+
 9. **Verificar pedido finalizado (Admin/Restaurante)**:
    - Você pode verificar o status do pedido a qualquer momento:
+
     ```
     GET /orders/{orderId}
     ```
+
    - O status final será `COMPLETED` quando o pedido for retirado pelo cliente.
    - O pedido finalizado também não aparecerá mais na lista de pedidos ativos:
+
     ```
     GET /orders/active
     ```
@@ -697,6 +727,7 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 Este projeto utiliza **infraestrutura como código** com Terraform para provisionamento no Azure, e Helm para deploy no AKS.
 
 ### Requisitos
+
 - **Azure CLI**: Para interagir com o Azure ([instalação](#1-azure-cli))
 - **Terraform**: Para provisionamento da infraestrutura ([instalação](#2-terraform))
 - **Helm**: Para gerenciar o Kubernetes ([instalação](#3-helm))
@@ -711,6 +742,7 @@ Siga os passos abaixo para instalar as ferramentas necessárias no seu ambiente:
 ---
 
 #### 1. Azure CLI
+
 ```bash
 # Windows (via PowerShell)
 Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
@@ -726,6 +758,7 @@ az --version
 ```
 
 #### 2. Terraform
+
 ```bash
 # macOS/Linux
 brew tap hashicorp/tap
@@ -739,6 +772,7 @@ terraform -v
 ```
 
 #### 3. Helm
+
 ```bash
 # macOS
 brew install helm
@@ -754,6 +788,7 @@ helm version --short
 ```
 
 #### 4. Kubectl
+
 ```bash
 # macOS
 brew install kubectl
@@ -771,6 +806,7 @@ kubectl version --client
 ```
 
 #### 5. Docker
+
 ```bash
 # macOS
 brew install --cask docker
@@ -790,6 +826,7 @@ docker --version
 ```
 
 #### 6. K6
+
 ```bash
 # macOS
 brew install k6
@@ -820,6 +857,7 @@ az storage container create --account-name nomeDaConta --name tfstate
 ```
 
 ### 2. Crie o arquivo terraform.tfvars
+
 Crie um arquivo `terraform.tfvars` na raiz do projeto com as seguintes variáveis:
 
 ```hcl
@@ -827,6 +865,7 @@ subscription_id = "SUA_SUBSCRIPTION_ID_AZURE"
 ```
 
 ### 3. Faça login na sua conta Azure
+
 Instale o Azure CLI e faça login na sua conta:
 
 ```bash
@@ -834,6 +873,7 @@ az login
 ```
 
 ### 4. Execute o Terraform
+
 ```bash
 terraform init
 terraform plan -var-file=terraform.tfvars
@@ -853,12 +893,14 @@ terraform output
 >```
 
 ### 5. Faça build da imagem Docker e dê push para o Docker Hub
+
 ```bash
 docker build -t seu-usuario/seu-app:tag .
 docker push seu-usuario/seu-app:tag
 ```
 
 ### 6. Configure os valores do Helm com os outputs do Terraform
+
 Após executar o Terraform, copie os valores de saída necessários (resource group, IP público, connection string e nome do container do Azure Storage) e atualize o arquivo values.yaml do Helm Chart com essas informações:
 
 ```yaml
@@ -869,11 +911,13 @@ containerName: "SEU_CONTAINER_NAME"
 ```
 
 ### 7. Atualize o kubeconfig para se conectar ao novo cluster AKS
+
 ```bash
 az aks get-credentials --resource-group seu-grupo --name seu-cluster
 ```
 
 ### 8. Empacote e instale o Helm chart
+
 ```bash
 cd kubernetes
 helm package foodcoreapi
@@ -881,11 +925,12 @@ helm install foodcoreapi ./foodcoreapi-0.1.0.tgz
 ```
 
 ### 9. Execute teste de estresse com K6
+
 ```bash
 k6 run stress-test.js
 ```
-</details>
 
+</details>
 
 <h2 id="estrutura-do-projeto">📁 Estrutura do Projeto</h2>
 
@@ -915,11 +960,11 @@ food-core-api/
 │   │   │   ├── order                           # Módulo responsável pelos pedidos
 │   │   │   │     ├── core                      # Lógica de domínio e regras de negócio
 │   │   │   │     └── infrastructure            # Implementações de persistência, web e eventos
-│   │   │   │ 
+│   │   │   │
 │   │   │   ├── payment                         # Módulo responsável pelos pagamentos e integração com Mercado Pago
 │   │   │   │   ├── core                        # Casos de uso, entidades, eventos e VOs de pagamento
 │   │   │   │   └── infrastructure              # Web, integração externa (Mercado Pago) e persistência
-│   │   │   │ 
+│   │   │   │
 │   │   │   ├── user                            # Módulo responsável pela gestão de usuários e autenticação
 │   │   │   │   ├── core                        # Casos de uso, modelo de domínio e validações
 │   │   │   │   └── infrastructure              # Controllers e persistência
@@ -961,8 +1006,8 @@ food-core-api/
 │               ├── fluentd/                    # DaemonSet + RBAC
 │               ├── kibana/                     # Interface Kibana
 │               └── namespace.yaml
-│   
-│ 
+│
+│
 ├── terraform/
 │   ├── backend.tf                              # Configuração do backend remoto (ex: Azure Storage para o state)
 │   ├── main.tf                                 # Composição dos módulos e recursos
@@ -973,7 +1018,7 @@ food-core-api/
 │       ├── aks/                                # Criação do cluster AKS (Kubernetes)
 │       ├── blob/                               # Storage Account e Containers
 │       ├── public_ip/                          # Endereços IP públicos
-│       └── resource_group/                     # Resource Group base do ambiente  
+│       └── resource_group/                     # Resource Group base do ambiente
 │
 ├── scripts/                                    # Scripts de gerenciamento
 │
@@ -982,7 +1027,6 @@ food-core-api/
 ├── food                                        # Script centralizador
 └── README.md                                   # Este arquivo
 ```
-
 
 ### 🧱 Estrutura Modular (Clean Architecture)
 
@@ -996,13 +1040,13 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
 │   │   │   └── mappers/                # Mapeadores Input -> Domínio
 │   │   └── usecases/                   # Casos de uso (Application Business Rules)
 │   ├── domain/                         # Camada de domínio (Domain Business Rules)
-│   │   ├── model/                      # Entidades de domínio 
+│   │   ├── model/                      # Entidades de domínio
 │   │   ├── events/                     # Eventos de domínio
 │   │   ├── exceptions/                 # Exceções de domínio
 │   │   └── vo/                         # Objetos de valor
 │   └── interfaceadapters/              # Camada de adaptação (Interface Adapters)
 │       ├── bff/                        # Camada de interface web (BFF - Backend for Frontend)
-│       │   └── controller/web/api      # Controllers REST (BFF)           
+│       │   └── controller/web/api      # Controllers REST (BFF)
 │       ├── presenter/web/api           # Saídas dos casos de uso (Presenter -> ViewModel)
 │       ├── dto/                        # DTOs intermediários
 │       │   └── mappers/                # Mapeadores DTO <-> Domínio
@@ -1022,7 +1066,6 @@ módulo/                                 # Módulo da aplicação (ex: catalog)
     │           └── repository/         # Implementações de repositórios
     └── config/                         # Configurações específicas do módulo
 ```
-
 
 </details>
 
@@ -1233,13 +1276,13 @@ Para contribuir com o projeto, siga estas etapas:
 
 - A branch principal de desenvolvimento é a `main`
 - Para novas funcionalidades, crie uma branch a partir da `main` seguindo o padrão:
-    - `feature/nome-da-funcionalidade`
+  - `feature/nome-da-funcionalidade`
 - Para correções de bugs, use o padrão:
-    - `fix/descricao-do-bug`
+  - `fix/descricao-do-bug`
 - Para documentação:
-    - `docs/descricao-da-documentacao`
+  - `docs/descricao-da-documentacao`
 - Para melhorias de performance ou refatoração:
-    - `refactor/descricao-da-mudanca`
+  - `refactor/descricao-da-mudanca`
 
 #### Commits
 
@@ -1284,13 +1327,3 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
-
-
-
-
-
-
-
-
-
-
