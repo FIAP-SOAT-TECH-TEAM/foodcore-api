@@ -1,47 +1,24 @@
-
+---
+config:
+  look: classic
+  theme: dark
+---
 erDiagram
-    USERS ||--o{ ORDERS : places
-    USERS ||--o{ PAYMENTS : makes
-    ROLES ||--o{ USERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
     PRODUCTS ||--o{ ORDER_ITEMS : includes
     PRODUCTS ||--|| STOCK : stored_in
     CATALOG ||--o{ CATEGORIES : has
     CATEGORIES ||--o{ PRODUCTS : categorizes
     ORDERS ||--o{ PAYMENTS : has
-    USERS {
-        int id PK "ID único do usuário"
-        string name "Nome do usuário"
-        string username "Nome de usuário"
-        string email "e-mail do usuário"
-        string password "Hash da senha do usuário"
-        string document "Documento do usuário"
-        boolean active "Indica se o usuário está ativo"
-        boolean guest "Indica se o usuário é convidado"
-        int role_id "ID da role do usuário"
-        timestamp last_login "Data do último login"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
-    }
-
-    ROLES {
-        int id PK "ID único da Role"
-        string name "Nome único da role"
-        string description "Descrição das permissões do role"
-        timestamp created_at "Data de criação do registro"
-        timestamp updated_at "Data da última atualização do registro"
-    }
-
     ORDERS {
         int id PK "ID único da order"
-        int user_id FK "ID do usuário que criou o pedido"
+        int user_id "ID do usuário que criou o pedido"
         varchar order_number "hash aleatoria para identificar o pedido"
         varchar status "status do pedido"
         decimal amount "preço do pedido"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     ORDER_ITEMS {
         int id PK "ID único da order_item"
         int order_id FK "ID do pedido"
@@ -53,14 +30,12 @@ erDiagram
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     CATALOG{
         int id PK "ID único da catálogo"
         string name "Nome do catálogo"
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     CATEGORIES{
         int id PK "ID único da categoria"
         int catalog_id FK
@@ -72,7 +47,6 @@ erDiagram
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     PRODUCTS {
         bigint id PK "ID único do produto"
         bigint category_id FK "ID da categoria do produto"
@@ -85,7 +59,6 @@ erDiagram
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     STOCK {
         bigint id PK "ID único do stock"
         bigint product_id FK "ID do produto"
@@ -93,7 +66,6 @@ erDiagram
         timestamp created_at "Informações de auditoria"
         timestamp updated_at "Informações de auditoria"
     }
-
     PAYMENTS {
         int id PK "ID único do pagamento"
         int user_id FK "ID do usuário que criou o pagamento"
