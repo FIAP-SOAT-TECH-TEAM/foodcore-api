@@ -33,7 +33,7 @@ da FIAP (Tech Challenge).
 </div><br>
 
 
-> 📽️ Vídeo de demonstração da arquitetura: https://www.youtube.com/watch?v=soaATSbSRPc<br>
+> 📽️ Vídeo de demonstração da arquitetura: [https://www.youtube.com/watch?v=soaATSbSRPc](https://www.youtube.com/watch?v=XgUpOKJjqak)<br>
 
 
 <h2 id="visao-geral">📋 Visão Geral</h2>
@@ -1284,6 +1284,7 @@ Este projeto é mantido por:
 ### Licença
 
 Este projeto está licenciado sob a licença MIT.
+
 
 
 
