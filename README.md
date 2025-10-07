@@ -41,7 +41,7 @@ pedidos e acompanhem o status em tempo real sem a necessidade de interação com
 Além disso, um painel administrativo permite o gerenciamento de produtos, categorias e acompanhamento operacional dos pedidos.
 
 Agora, o **gerenciamento de usuários e autenticação** foi completamente extraído da aplicação principal, sendo delegado
-a uma **Lambda Function em .NET 9** que se integra com o **Amazon Cognito** para autenticação, autorização e emissão de tokens JWT.
+a uma **Azure Function em .NET 9** que se integra com o **Amazon Cognito** para autenticação, autorização e emissão de tokens JWT.
 
 ### Principais recursos
 
@@ -67,7 +67,7 @@ A **FoodCore API** mantém o domínio puro seguindo **Clean Architecture**, enqu
 
 - O **core** permanece independente de frameworks e regras de autenticação
 - **Azure APIM** atua como **API Gateway**, validando tokens e redirecionando chamadas
-- **Lambda Function (.NET 9)** realiza a **autenticação via Cognito** e gera JWTs
+- **Azure Function (.NET 9)** realiza a **autenticação via Cognito** e gera JWTs
 - **Amazon Cognito** centraliza **identidade, roles e permissões**
 - **JWT** carrega as claims necessárias (CPF, e-mail, role, data de criação)
 - **Implicit deny**: qualquer falha de autenticação ou permissão resulta em bloqueio imediato
@@ -92,9 +92,7 @@ de detalhes de autenticação e infraestrutura.
 ### Monolito Modular (Spring Modulith)
 
 A aplicação é estruturada como um monolito modular usando Spring Modulith, com contextos limitados (bounded contexts)
-bem definidos para cada domínio de negócio:
-
-![Diagrama Monolito Modular](docs/diagrams/monolito-modular.svg)
+bem definidos para cada domínio de negócio.
 
 Cada módulo:
 
@@ -116,124 +114,110 @@ O sistema utiliza eventos de domínio assíncronos entre módulos, permitindo:
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-A infraestrutura do projeto é baseada em containers Docker, orquestrados com Kubernetes e provisionados via Terraform. A aplicação é dividida em módulos, cada um com suas próprias responsabilidades e adaptadores.
-
-## ☁️ Provisionamento de Infraestrutura com Terraform
-
-A infraestrutura é provisionada de forma automatizada e reprodutível usando o **Terraform**, uma ferramenta de infraestrutura como código (IaC). O fluxo é organizado em etapas que garantem a criação segura e modular dos recursos no Azure.
-
-![Terraform Infraestrutura](docs/diagrams/terraform.png)
+A infraestrutura da aplicação agora é **modularizada em múltiplos repositórios**, cada um com uma responsabilidade específica no ciclo de provisionamento e deploy. Essa separação garante **maior isolamento, governança e segurança** entre os diferentes domínios do sistema.
 
 ---
 
-### 🔄 Fluxo de Execução
+## 🧩 Estrutura de Repositórios
 
-#### 1. **Inicialização**
-
-- Carrega a configuração do backend remoto (para manter o estado do Terraform) e os provedores necessários.
-
-#### 2. **Carregamento de Variáveis**
-
-- As variáveis são separadas por responsabilidade:
-  - `Common Variables`: configurações compartilhadas.
-  - `AKS Variables`: definições específicas do cluster Kubernetes.
-  - `Blob Storage Variables`: informações do armazenamento de blobs.
-  - `Public IP Variables`: configurações de IP público.
-
-#### 3. **Provisionamento de Recursos**
-
-- Criação dos principais recursos de infraestrutura:
-  - **Resource Group**: grupo de recursos principal do Azure.
-  - **Public IP**: IP público para serviços de entrada.
-  - **Blob Storage**:
-    - `Storage Account`: conta de armazenamento no Azure.
-    - `Storage Container`: container para armazenar arquivos (ex: estado do Terraform ou imagens).
-  - **AKS Cluster**: cluster do Azure Kubernetes Service.
-  - **Assign Network Role**: atribui as permissões de rede necessárias ao AKS.
-
-#### 4. **Coleta de Outputs**
-
-- Ao final da execução, o Terraform retorna informações essenciais:
-  - Nome e ID do Resource Group
-  - Nome do cluster AKS
-  - IP público (FQDN e endereço)
-  - Nome e conexão do Storage Account
-  - Nome do container no Blob Storage
+| Repositório | Responsabilidade Principal | Tecnologias Utilizadas |
+|--------------|-----------------------------|--------------------------|
+| **foodcore-infra** | Provisionamento de infraestrutura base (Resource Groups, VNET, AKS, Storage, etc.) | Terraform, Azure CLI |
+| **foodcore-db** | Criação e configuração do banco de dados (PostgreSQL, schemas e secrets) | Terraform, Azure Database for PostgreSQL |
+| **foodcore-auth** | Criação da Azure function e suas dependências | Terraform, Azure CLI |
+| **foodcore-api** *(este repositório)* | Gerenciamento de recursos Kubernetes (Deployments, Services, ConfigMaps, Secrets, Ingress, etc.) | Kubernetes, Helm, YAML Manifests |
 
 ---
 
-### ✅ Vantagens do Provisionamento com Terraform
+## ☁️ Provisionamento de Infraestrutura (Repositório `foodcore-infra`)
 
-- **Reprodutibilidade**: qualquer ambiente (dev, staging, prod) pode ser recriado com exatidão.
-- **Automação**: reduz intervenção manual, evita erros e melhora consistência.
-- **Modularização**: separação de variáveis e responsabilidades torna o código mais limpo e reutilizável.
-- **Infra como Código**: o estado da infraestrutura é versionado e auditável via Git.
+A camada de infraestrutura é provisionada em um **repositório dedicado**, que utiliza o **Terraform** para criação automatizada dos recursos fundamentais no **Microsoft Azure**.
 
----
+### Recursos Criados
 
-## ⚙️ Infraestrutura e Arquitetura no Kubernetes
+- **Resource Group** principal
+- **Azure Kubernetes Service (AKS)**
+- **Blob Storage** para persistência de arquivos
+- **Public IP** e DNS para acesso externo
+- **Network Roles e VNET** para comunicação interna
 
-A aplicação está implantada no **Azure Kubernetes Service (AKS)**, utilizando práticas modernas de escalabilidade, observabilidade e isolamento de responsabilidades para garantir alta disponibilidade, segurança e performance.
-
-### 📌 Visão Geral
-
-![Diagrama da Kubernets](docs/diagrams/kubernetsDiagram.png)
+O **estado do Terraform** é armazenado remotamente no Blob Storage, garantindo **controle de versão** e **reprodutibilidade dos ambientes**.
 
 ---
 
-### 🧩 Componentes Principais
+## 🗃️ Banco de Dados (Repositório `foodcore-db`)
 
-#### 🧑‍💻 Usuário Web/Mobile
+Um segundo repositório é responsável exclusivamente pela **criação e configuração do banco de dados** utilizado pela aplicação.
 
-- A interação começa com o usuário via navegador ou aplicativo.
-- Todo o tráfego HTTPS passa pelo **NGINX Ingress Controller**, responsável pelo roteamento.
+### Responsabilidades
 
-#### 🌐 Ingress NGINX Controller
-
-- Atua como gateway de entrada do cluster.
-- Roteia requisições conforme o caminho:
-  - `/api` → **Order Management API**
-  - `/adminer` → **Interface do banco**
-  - `/kibana` → **Dashboard de observabilidade**
+- Criação do **servidor PostgreSQL no Azure**
+- Configuração de **usuários, roles e permissões**
+- Aplicação de **scripts de schema e migrations iniciais**
+- Geração e armazenamento de **secrets** para consumo via Kubernetes
 
 ---
 
-### 🧱 API Namespace
+## 🌐 Banco de Dados (Repositório `foodcore-auth`)
 
-#### 🚀 Order API Pod
+Um terceiro repositório é responsável exclusivamente pela **criação e configuração da Azure Function** que fará a autenticação e gerenciamento dos usuários.
 
-- Core da aplicação: processa pedidos, persiste dados e integra com o **MercadoPago**.
-- Gera logs de aplicação e banco, enviados ao namespace de observabilidade.
+### Responsabilidades
+
+- Criação da **Azure function**
+- Configuração da **Azure function e cognito**
+- Emissão e validação de **tokens JWT**
+
+---
+
+## ⚙️ Repositório Atual — `foodcore-api`
+
+Este repositório contém apenas os **recursos relacionados ao Kubernetes**, utilizados para executar e manter a aplicação dentro do cluster AKS.
+
+### Componentes Principais
+
+#### 🧱 Deployments
+
+- Define os **pods** da aplicação principal (`order-api`), configurando:
+  - Probes de saúde (`liveness`, `readiness`, `startup`)
+  - Limites e requisições de CPU/memória
+  - Variáveis de ambiente (via Secrets e ConfigMaps)
+
+#### 🌐 Services & Ingress
+
+- **Services** expõem os pods internamente no cluster
+- **Ingress Controller (NGINX)** roteia o tráfego externo:
+  - `/api` → Order API
+  - `/kibana` → Observabilidade
+  - `/adminer` → Interface de banco de dados
+
+#### 🧭 ConfigMaps & Secrets
+
+- **ConfigMaps** armazenam configurações não sensíveis (como endpoints externos e parâmetros de execução)
+- **Secrets** contêm credenciais criptografadas, como chaves JWT, conexões com banco e tokens de API.
 
 #### ⚖️ Horizontal Pod Autoscaler (HPA)
 
-- Escala automaticamente os pods com base em **uso de CPU e memória**.
-- Monitora continuamente os pods e ajusta a quantidade conforme a carga do sistema.
-
-##### 🧪 Probes e Configurações de Saúde
-
-- **Liveness Probe**: reinicia o pod se estiver travado.
-- **Readiness Probe**: verifica se o pod está pronto para receber requisições.
-- **Startup Probe**: usada na inicialização para garantir que o pod esteja saudável antes de ativar as outras probes.
-
-##### 📊 Políticas de Recursos
-
-- **Requests & Limits**: define recursos mínimos e máximos para o pod.
-- **Node Affinity**: aloca pods em nós apropriados para melhor performance.
+- Ajusta dinamicamente o número de pods com base no uso de **CPU e memória**
+- Garante **alta disponibilidade e eficiência de custo**
 
 ---
 
-### 🗃️ Armazenamento e Dados
+## 🔍 Observabilidade
 
-#### Order Database
-
-- Banco relacional que armazena os dados dos pedidos e transações.
-
-#### Image Storage
-
-- Serviço de armazenamento de imagens de produtos ou comprovantes de pedidos.
+A aplicação envia logs e métricas para o namespace de observabilidade, utilizando a stack **EFK (Elasticsearch, Fluentd, Kibana)**.
+Isso permite monitorar o comportamento da aplicação em tempo real, detectar falhas e gerar alertas proativos.
 
 ---
+
+## ✅ Benefícios da Nova Estrutura
+
+- **Separação de responsabilidades clara** entre infraestrutura, banco e aplicação
+- **Segurança aprimorada**, com permissões limitadas por repositório
+- **Escalabilidade modular**, permitindo atualizações independentes
+- **Ciclos de deploy simplificados**, especialmente em pipelines CI/CD
+
+</details>
 
 ### 📡 Integração com MercadoPago
 
