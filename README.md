@@ -126,47 +126,6 @@ A infraestrutura da aplicação agora é **modularizada em múltiplos repositór
 
 ---
 
-## ☁️ Provisionamento de Infraestrutura (Repositório `foodcore-infra`)
-
-A camada de infraestrutura é provisionada em um **repositório dedicado**, que utiliza o **Terraform** para criação automatizada dos recursos fundamentais no **Microsoft Azure**.
-
-### Recursos Criados
-
-- **Resource Group** principal
-- **Azure Kubernetes Service (AKS)**
-- **Blob Storage** para persistência de arquivos
-- **Public IP** e DNS para acesso externo
-- **Network Roles e VNET** para comunicação interna
-
-O **estado do Terraform** é armazenado remotamente no Blob Storage, garantindo **controle de versão** e **reprodutibilidade dos ambientes**.
-
----
-
-## 🗃️ Banco de Dados (Repositório `foodcore-db`)
-
-Um segundo repositório é responsável exclusivamente pela **criação e configuração do banco de dados** utilizado pela aplicação.
-
-### Responsabilidades
-
-- Criação do **servidor PostgreSQL no Azure**
-- Configuração de **usuários, roles e permissões**
-- Aplicação de **scripts de schema e migrations iniciais**
-- Geração e armazenamento de **secrets** para consumo via Kubernetes
-
----
-
-## 🌐 Banco de Dados (Repositório `foodcore-auth`)
-
-Um terceiro repositório é responsável exclusivamente pela **criação e configuração da Azure Function** que fará a autenticação e gerenciamento dos usuários.
-
-### Responsabilidades
-
-- Criação da **Azure function**
-- Configuração da **Azure function e cognito**
-- Emissão e validação de **tokens JWT**
-
----
-
 ## ⚙️ Repositório Atual — `foodcore-api`
 
 Este repositório contém apenas os **recursos relacionados ao Kubernetes**, utilizados para executar e manter a aplicação dentro do cluster AKS.
