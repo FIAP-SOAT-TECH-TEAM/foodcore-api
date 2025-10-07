@@ -142,10 +142,14 @@ Este repositório contém apenas os **recursos relacionados ao Kubernetes**, uti
 #### 🌐 Services & Ingress
 
 - **Services** expõem os pods internamente no cluster
-- **Ingress Controller (NGINX)** roteia o tráfego externo:
-  - `/api` → Order API
-  - `/kibana` → Observabilidade
+- **Internal Ingress Controller (NGINX)** expõe a API internamente:
+  - `/api` → Foocore API
+- **Public Ingress Controller (NGINX)** expõe serviços de observabilidade publicamente:
+  - `/kibana` → Logging
   - `/adminer` → Interface de banco de dados
+  - `/prometehus` → Coleta de métricas
+  - `/grafana` → Dashboard de métricas
+  - `/zipkin` → Tracing
 
 #### 🧭 ConfigMaps & Secrets
 
