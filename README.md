@@ -36,38 +36,58 @@ da FIAP (Tech Challenge).
 
 <h2 id="visao-geral">📋 Visão Geral</h2>
 
-O sistema implementa um serviço de auto-atendimento para uma lanchonete de fast-food, permitindo que os clientes façam
-pedidos e acompanhem o status do seu pedido sem a necessidade de interação com um atendente. A aplicação também inclui
-um painel administrativo para gerenciamento de produtos, clientes e acompanhamento de pedidos.
+O sistema implementa um serviço de autoatendimento para uma lanchonete de fast-food, permitindo que os clientes façam
+pedidos e acompanhem o status em tempo real sem a necessidade de interação com um atendente.
+Além disso, um painel administrativo permite o gerenciamento de produtos, categorias e acompanhamento operacional dos pedidos.
+
+Agora, o **gerenciamento de usuários e autenticação** foi completamente extraído da aplicação principal, sendo delegado
+a uma **Lambda Function em .NET 9** que se integra com o **Amazon Cognito** para autenticação, autorização e emissão de tokens JWT.
 
 ### Principais recursos
 
-- **Auto-atendimento**: Interface para clientes realizarem pedidos
-- **Identificação de cliente**: Por CPF ou cadastro com nome e e-mail
-- **Pagamento integrado**: Via QRCode do Mercado Pago
+- **Autoatendimento**: Interface para clientes realizarem pedidos
+- **Identificação de cliente**: Via CPF, e-mail ou modo guest (não identificado)
+- **Autenticação e Permissão**: Baseadas em roles do Cognito (ADMIN, CLIENT, GUEST)
+- **Integração com Azure APIM**: Intermedia requisições, valida tokens e repassa chamadas à API
+- **Pagamentos via QRCode do Mercado Pago**
 - **Acompanhamento de pedido**: Status em tempo real (Recebido, Em preparação, Pronto, Finalizado)
 - **Painel administrativo**: Gerenciamento de produtos, categorias e pedidos
+
+---
 
 <h2 id="arquitetura">🧱 Arquitetura</h2>
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-Este projeto segue os princípios da **Arquitetura Limpa (Clean Architecture)** com o objetivo de manter um core de negócio independente, purista e facilmente testável. O desenho modular segue uma separação clara de responsabilidades entre camadas, respeitando dependências unidirecionais e regras de isolamento.
+O sistema foi reestruturado para **desacoplar completamente a autenticação e autorização do core da aplicação**, adotando
+uma arquitetura orientada a eventos e serviços externos.
+A **FoodCore API** mantém o domínio puro seguindo **Clean Architecture**, enquanto a autenticação ocorre antes da chegada da requisição — no **APIM + Lambda + Cognito**.
 
 ### 🎯 Princípios Adotados
 
-- O **core** (domain, application e interface adapters) **não possui dependências de frameworks**
-- O uso de bibliotecas externas (como Spring, MapStruct ou JPA) está **restrito à infraestrutura**
-- Todas as interfaces de entrada e saída são representadas por **portas (interfaces)** no core
-- O fluxo é baseado em **casos de uso (UseCases)** acionados por adaptadores de interface
-- As comunicações são feitas por **gateways**, permitindo **inversão de dependência**
-- A arquitetura permite **extração futura para microsserviços**, sem acoplamento com tecnologias específicas
+- O **core** permanece independente de frameworks e regras de autenticação
+- **Azure APIM** atua como **API Gateway**, validando tokens e redirecionando chamadas
+- **Lambda Function (.NET 9)** realiza a **autenticação via Cognito** e gera JWTs
+- **Amazon Cognito** centraliza **identidade, roles e permissões**
+- **JWT** carrega as claims necessárias (CPF, e-mail, role, data de criação)
+- **Implicit deny**: qualquer falha de autenticação ou permissão resulta em bloqueio imediato
+- As **rotas públicas** são controladas pelo APIM, que decide o acesso conforme o **role do usuário**
 
 ---
 
-### 📐 Diagrama de Fluxo
+### 🧩 Fluxo de Autenticação e Autorização
 
+![Diagrama de autenticação](docs/diagrams/auth-user-flow.svg)
+
+---
+
+⚙️ Camadas da FoodCore API
+
+A aplicação principal segue os princípios da Arquitetura Limpa (Clean Architecture), mantendo o domínio independente
+de detalhes de autenticação e infraestrutura.
 ![Diagrama de Fluxo](docs/diagrams/user-flowchart.svg)
+
+--
 
 ### Monolito Modular (Spring Modulith)
 

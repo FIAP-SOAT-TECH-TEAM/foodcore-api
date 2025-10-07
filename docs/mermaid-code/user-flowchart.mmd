@@ -1,13 +1,18 @@
 flowchart TD
     UI["Cliente / Frontend"]
+    APIM["Azure APIM<br/>(API Gateway)"]
+    LAMBDA["Lambda Auth (.NET 9)<br/>+ AWS Cognito"]
     CONTROLLER["Controller de Entrada<br/>(Web Adapter)"]
     USECASE["Caso de Uso<br/>(Application Core)"]
     GATEWAY["Gateway / Interface<br/>(Interface Adapter)"]
     DATASOURCE["DataSource / Repositório<br/>(Infraestrutura)"]
-    DB["Banco de Dados / API Externa"]
+    DB["Banco de Dados / APIs Externas"]
     PRESENTER["Presenter / Mapper<br/>(Interface Adapter)"]
 
-    UI --> CONTROLLER
+    UI --> APIM
+    APIM --> LAMBDA
+    LAMBDA --> APIM
+    APIM --> CONTROLLER
     CONTROLLER --> USECASE
     USECASE --> GATEWAY
     GATEWAY --> DATASOURCE
@@ -20,8 +25,10 @@ flowchart TD
     classDef core fill:#2E7D32,stroke:#A5D6A7,stroke-width:1px
     classDef db fill:#F9A825,stroke:#FFF176,stroke-width:1px
     classDef user fill:#AD1457,stroke:#F48FB1,stroke-width:1px
+    classDef gateway fill:#00838F,stroke:#4DD0E1,stroke-width:1px
 
     class UI user
+    class APIM,LAMBDA gateway
     class CONTROLLER,PRESENTER adapter
     class USECASE core
     class GATEWAY adapter
