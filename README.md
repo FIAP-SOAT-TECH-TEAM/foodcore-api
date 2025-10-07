@@ -208,6 +208,12 @@ Este repositório contém apenas os **recursos relacionados ao Kubernetes**, uti
 A aplicação envia logs e métricas para o namespace de observabilidade, utilizando a stack **EFK (Elasticsearch, Fluentd, Kibana)**.
 Isso permite monitorar o comportamento da aplicação em tempo real, detectar falhas e gerar alertas proativos.
 
+Os seguintes módulos são criados pelo kubernets para lidar com a observabilidade do sistema:
+
+- **Fluentd**: coleta e roteia logs de aplicação e banco.
+- **Elasticsearch**: armazena os logs com capacidade de pesquisa.
+- **Kibana**: interface para visualização e análise de logs via `/kibana`.
+
 ---
 
 ## ✅ Benefícios da Nova Estrutura
@@ -216,8 +222,11 @@ Isso permite monitorar o comportamento da aplicação em tempo real, detectar fa
 - **Segurança aprimorada**, com permissões limitadas por repositório
 - **Escalabilidade modular**, permitindo atualizações independentes
 - **Ciclos de deploy simplificados**, especialmente em pipelines CI/CD
-
-</details>
+- **Escalabilidade automática com HPA**
+- **Observabilidade centralizada com EFK**
+- **Roteamento seguro e flexível via NGINX**
+- **Separação clara de responsabilidades por namespace**
+- **Alta disponibilidade e performance no AKS**
 
 ### 📡 Integração com MercadoPago
 
@@ -225,22 +234,6 @@ Isso permite monitorar o comportamento da aplicação em tempo real, detectar fa
 - Processa **QR Codes**, escuta **webhooks** e confirma **transações em tempo real**.
 
 ---
-
-### 📊 Observabilidade com EFK Stack (EFK Namespace)
-
-- **Fluentd**: coleta e roteia logs de aplicação e banco.
-- **Elasticsearch**: armazena os logs com capacidade de pesquisa.
-- **Kibana**: interface para visualização e análise de logs via `/kibana`.
-
----
-
-### ✅ Benefícios da Arquitetura
-
-- **Escalabilidade automática com HPA**
-- **Observabilidade centralizada com EFK**
-- **Roteamento seguro e flexível via NGINX**
-- **Separação clara de responsabilidades por namespace**
-- **Alta disponibilidade e performance no AKS**
 
 </details>
 
