@@ -69,7 +69,6 @@ A **FoodCore API** mantém o domínio puro seguindo **Clean Architecture**, enqu
 - **Amazon Cognito** centraliza **identidade, roles e permissões**
 - **JWT** carrega as claims necessárias (CPF, e-mail, role, data de criação)
 - **Implicit deny**: qualquer falha de autenticação ou permissão resulta em bloqueio imediato
-- As **rotas públicas** são controladas pelo APIM, que decide o acesso conforme o **role do usuário**
 
 ---
 
