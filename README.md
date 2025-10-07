@@ -119,10 +119,10 @@ A infraestrutura da aplicação agora é **modularizada em múltiplos repositór
 
 | Repositório | Responsabilidade Principal | Tecnologias Utilizadas |
 |--------------|-----------------------------|--------------------------|
-| **foodcore-infra** | Provisionamento de infraestrutura base (Resource Groups, VNET, AKS, Storage, etc.) | Terraform, Azure CLI |
-| **foodcore-db** | Criação e configuração do banco de dados (PostgreSQL, schemas e secrets) | Terraform, Azure Database for PostgreSQL |
-| **foodcore-auth** | Criação da Azure function e suas dependências | Terraform, Azure CLI |
-| **foodcore-api** *(este repositório)* | Gerenciamento de recursos Kubernetes (Deployments, Services, ConfigMaps, Secrets, Ingress, etc.) | Kubernetes, Helm, YAML Manifests |
+| **[foodcore-infra](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-infra/tree/main)**| Provisionamento de infraestrutura base (Resource Groups, VNET, AKS, Storage, etc.) | Terraform, Azure CLI |
+| **[foodcore-db](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-db/tree/main)** | Criação e configuração do banco de dados (PostgreSQL) | Terraform, Azure Database for PostgreSQL |
+| **[foodcore-auth](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-auth/tree/main)** | Gerenciamento do código, publicação da Azure function e importação no APIM | Terraform, Azure CLI |
+| **foodcore-api** *(este repositório)* | Gerenciamento de código, publicação manifestos Kubernetes (Deployments, Services, ConfigMaps, Secrets, Ingress, etc.) e importação no APIM | Kubernetes, Helm, YAML Manifests |
 
 ---
 
