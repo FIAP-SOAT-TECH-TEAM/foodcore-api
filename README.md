@@ -84,7 +84,7 @@ A aplicação principal segue os princípios da Arquitetura Limpa (Clean Archite
 de detalhes de autenticação e infraestrutura.
 ![Diagrama de Fluxo](docs/diagrams/user-flowchart.svg)
 
---
+---
 
 ### Monolito Modular (Spring Modulith)
 
