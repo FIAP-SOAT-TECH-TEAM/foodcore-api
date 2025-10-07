@@ -154,7 +154,7 @@ Este repositório contém apenas os **recursos relacionados ao Kubernetes**, uti
 #### 🧭 ConfigMaps & Secrets
 
 - **ConfigMaps** armazenam configurações não sensíveis (como endpoints externos e parâmetros de execução)
-- **Secrets** contêm credenciais criptografadas, como chaves JWT, conexões com banco e tokens de API.
+- **Secrets** contêm credenciais criptografadas, como tokens de APIs externas (Mercado Pago).
 
 #### ⚖️ Horizontal Pod Autoscaler (HPA)
 
@@ -165,14 +165,13 @@ Este repositório contém apenas os **recursos relacionados ao Kubernetes**, uti
 
 ## 🔍 Observabilidade
 
-A aplicação envia logs e métricas para o namespace de observabilidade, utilizando a stack **EFK (Elasticsearch, Fluentd, Kibana)**.
+A aplicação envia logs e métricas para o namespace de observabilidade, utilizando as stacks:
+
+- **EFK (Elasticsearch, Fluentd, Kibana)**
+- **Prometheus e Grafana**
+- **Zipkin**
+
 Isso permite monitorar o comportamento da aplicação em tempo real, detectar falhas e gerar alertas proativos.
-
-Os seguintes módulos são criados pelo kubernets para lidar com a observabilidade do sistema:
-
-- **Fluentd**: coleta e roteia logs de aplicação e banco.
-- **Elasticsearch**: armazena os logs com capacidade de pesquisa.
-- **Kibana**: interface para visualização e análise de logs via `/kibana`.
 
 ---
 
@@ -187,11 +186,6 @@ Os seguintes módulos são criados pelo kubernets para lidar com a observabilida
 - **Roteamento seguro e flexível via NGINX**
 - **Separação clara de responsabilidades por namespace**
 - **Alta disponibilidade e performance no AKS**
-
-### 📡 Integração com MercadoPago
-
-- A **Order API** comunica-se diretamente com a API de pagamentos.
-- Processa **QR Codes**, escuta **webhooks** e confirma **transações em tempo real**.
 
 ---
 
