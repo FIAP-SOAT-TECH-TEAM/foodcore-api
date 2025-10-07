@@ -47,8 +47,6 @@ a uma **Azure Function em .NET 9** que se integra com o **Amazon Cognito** para 
 
 - **Autoatendimento**: Interface para clientes realizarem pedidos
 - **Identificação de cliente**: Via CPF, e-mail ou modo guest (não identificado)
-- **Autenticação e Permissão**: Baseadas em roles do Cognito (ADMIN, CLIENT, GUEST)
-- **Integração com Azure APIM**: Intermedia requisições, valida tokens e repassa chamadas à API
 - **Pagamentos via QRCode do Mercado Pago**
 - **Acompanhamento de pedido**: Status em tempo real (Recebido, Em preparação, Pronto, Finalizado)
 - **Painel administrativo**: Gerenciamento de produtos, categorias e pedidos
@@ -61,7 +59,7 @@ a uma **Azure Function em .NET 9** que se integra com o **Amazon Cognito** para 
 
 O sistema foi reestruturado para **desacoplar completamente a autenticação e autorização do core da aplicação**, adotando
 uma arquitetura orientada a eventos e serviços externos.
-A **FoodCore API** mantém o domínio puro seguindo **Clean Architecture**, enquanto a autenticação ocorre antes da chegada da requisição — no **APIM + Lambda + Cognito**.
+A **FoodCore API** mantém o domínio puro seguindo **Clean Architecture**, enquanto a autenticação ocorre antes da chegada da requisição — no **APIM + Azure Function + Cognito**.
 
 ### 🎯 Princípios Adotados
 
