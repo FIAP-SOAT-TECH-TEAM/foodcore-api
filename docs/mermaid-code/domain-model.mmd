@@ -6,7 +6,7 @@ config:
 classDiagram
     class Order {
         -Long id
-        -User user
+        -Long userId
         -String orderNumber
         -OrderStatus status
         -BigDecimal totalAmount
@@ -18,6 +18,7 @@ classDiagram
         +calculateTotalAmount()
         +updateStatus(OrderStatus)
     }
+
     class OrderItem {
         -Long id
         -Product product
@@ -29,12 +30,14 @@ classDiagram
         -LocalDateTime updatedAt
         +calculateSubtotal()
     }
+
     class Catalog {
         -Long id
         -String name
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
     }
+
     class Category {
         -Long id
         -Catalog catalog
@@ -46,6 +49,7 @@ classDiagram
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
     }
+
     class Product {
         -Long id
         -Category category
@@ -58,6 +62,7 @@ classDiagram
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
     }
+
     class Stock {
         -Long id
         -Product product
@@ -65,30 +70,10 @@ classDiagram
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
     }
-    class User {
-        -Long id
-        -String name
-        -String username
-        -String email
-        -String password
-        -String document
-        -Boolean active
-        -Boolean guest
-        -Role role
-        -LocalDateTime lastLogin
-        -LocalDateTime createdAt
-        -LocalDateTime updatedAt
-    }
-    class Role {
-        -Long id
-        -String name
-        -String description
-        -LocalDateTime createdAt
-        -LocalDateTime updatedAt
-    }
+
     class Payment {
         -Long id
-        -User user
+        -Long userId
         -Order order
         -PaymentType paymentType
         -LocalDateTime expiresIn
@@ -101,6 +86,7 @@ classDiagram
         -LocalDateTime createdAt
         -LocalDateTime updatedAt
     }
+
     class OrderStatus {
         <<enumeration>>
         RECEIVED
@@ -110,25 +96,25 @@ classDiagram
         COMPLETED
         CANCELLED
     }
+
     class PaymentStatus {
         <<enumeration>>
         PENDING
         PAID
         CANCELLED
     }
+
     class PaymentType {
         <<enumeration>>
         PIX
         CREDIT_CARD
         DEBIT
     }
+
     Order "1" *-- "many" OrderItem
-    Order "many" -- "1" User
     OrderItem "many" -- "1" Product
     Catalog "1" *-- "many" Category
     Category "1" *-- "many" Product
     Product "1" *-- "1" Stock
     Order "1" *-- "many" Payment
-    Payment "1" -- "1" User
     Payment "1" -- "1" Order
-    User "1" -- "1" Role
