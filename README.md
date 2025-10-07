@@ -255,7 +255,6 @@ Isso permite monitorar o comportamento da aplicação em tempo real, detectar fa
 - **Spring Boot 3.4**: Framework base
 - **Spring Modulith**: Para organização modular da aplicação
 - **Spring Data JPA**: Persistência e acesso a dados
-- **Spring Security**: Segurança e autenticação
 - **MapStruct**: Mapeamento entre DTOs e entidades
 - **Lombok**: Redução de código boilerplate
 
@@ -969,9 +968,6 @@ food-core-api/
 │   │   │   │   ├── core                        # Casos de uso, entidades, eventos e VOs de pagamento
 │   │   │   │   └── infrastructure              # Web, integração externa (Mercado Pago) e persistência
 │   │   │   │
-│   │   │   ├── user                            # Módulo responsável pela gestão de usuários e autenticação
-│   │   │   │   ├── core                        # Casos de uso, modelo de domínio e validações
-│   │   │   │   └── infrastructure              # Controllers e persistência
 │   │   │   ├── shared/                         # Componentes compartilhados
 │   │   │   │   ├── core                        # VOs e exceções genéricas
 │   │   │   │   ├── interfaceadapters           # Gateways genéricos e DTOs utilitários
@@ -1085,14 +1081,6 @@ O sistema expõe duas interfaces principais de API:
 
 ### Endpoints Principais
 
-#### Usuários
-
-```
-POST /api/users                         # Cadastrar usuário
-GET /api/users/{id}                     # Obter usuário por id
-GET /api/users                          # Listar usuários
-```
-
 #### Catálogo
 
 ```
@@ -1150,7 +1138,6 @@ src/main/resources/db/changelog/
 │   │   ├── 01-order-tables.sql
 │   │   ├── 02-order-indexes.sql
 │   │   └── 03-order-seed.sql
-│   ├── user/
 │   ├── catalog/
 │   └── payment/
 └── shared/
