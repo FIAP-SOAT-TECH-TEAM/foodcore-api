@@ -218,7 +218,7 @@ Isso permite monitorar o comportamento da aplicação em tempo real, detectar fa
 - **Terraform**: Provisionamento de infraestrutura como código
 - **Gradle**: Gerenciamento de dependências e builds
 - **SonarQube/SonarCloud**: Análise estática de código
-- **Azure DevOps**: Armazenamento de imagens com o Azure Blob Storage
+- **Azure Blob Storage**: Armazenamento de imagens com o Azure Blob Storage
 - **GitHub Actions**: CI/CD
 - **Swagger/OpenAPI**: Documentação de API
 
