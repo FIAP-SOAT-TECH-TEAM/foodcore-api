@@ -519,42 +519,43 @@ chmod +x food scripts/*.sh
 
 Para realizar um fluxo de compra na aplicação, você pode seguir os passos abaixo:
 
-1. **Identificação do cliente** (Opcional):
-   Você pode se identificar criando um usuário ou seguir como um convidado:
-   - Caso queria se identificar, crie um usuário com os dados abaixo. Informe `nome + email`, apenas `CPF` ou ambos:
+1. **Identificação do cliente**:
+   O fluxo de autenticação e autorização do cliente foi isolado em uma [Azure Function](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-auth/tree/main).
+   A API tem conhecimento do usúario autenticado atráves de Headers HTTP que o APIM acrescenta após receber uma resposta de validação do token vinda da Azure Function (Foodcore-auth).
+   Para simular localmente, em toda requisição, inclua os seguintes Headers contendo detalhes sobre o usúario:
 
-   ```http
-   POST /users
-   Content-Type: application/json
-   {
-     "guest": false,
-     "name": "João da Silva",
-     "username": "Jão3",
-     "email": "joao@example.com",
-     "document": "929.924.370-00"
-   }
-    ```
+  Cliente identificado:
 
-   - Caso queira seguir como convidado, envie o payload vazio ou com o campo `guest = true`:
+  ```bash
+  Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+  Auth-Name: "João da Silva"
+  Auth-Email: "joao.silva@exemplo.com"
+  Auth-Cpf: "91259416070"
+  Auth-Role: "CUSTOMER"
+  Auth-CreatedAt: "2025-10-07T02:00:00Z"
+  ```
 
-   ```http
-   POST /users
-   Content-Type: application/json
-   {
-      "guest": true
-   }
-    ```
+  Cliente não identificado (GUEST):
 
-   ou
+  ```bash
+  Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+  Auth-Name: "Guest"
+  Auth-Email: "guest@foodcore.com"
+  Auth-Cpf: ""
+  Auth-Role: "CUSTOMER"
+  Auth-CreatedAt: "2025-10-07T02:00:00Z"
+  ```
 
-    ```http
-   POST /users
-   Content-Type: application/json
-   {
-   }
-    ```
+  Admin:
 
-   > ⚠️ Reenviar o mesmo payload irá retornar o usuário já existente.
+  ```bash
+  Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+  Auth-Name: "Admin boladão"
+  Auth-Email: "admin@foodcore.com"
+  Auth-Cpf: "866.756.240-83"
+  Auth-Role: "ADMIN"
+  Auth-CreatedAt: "2025-10-07T02:00:00Z"
+  ```
 
 2. **Realizar Pedido**:
    - Crie um pedido com os produtos disponíveis:
@@ -562,6 +563,12 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    ```http
    POST /orders
    Content-Type: application/json
+   Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+   Auth-Name: "João da Silva"
+   Auth-Email: "joao.silva@exemplo.com"
+   Auth-Cpf: "91259416070"
+   Auth-Role: "CUSTOMER"
+   Auth-CreatedAt: "2025-10-07T02:00:00Z"
    {
      "userId": 1,
      "items": [
@@ -590,6 +597,13 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
    ```
     GET /orders/{orderId}/qrCode
+
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "João da Silva"
+    Auth-Email: "joao.silva@exemplo.com"
+    Auth-Cpf: "91259416070"
+    Auth-Role: "CUSTOMER"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     ```
 
    - Com o retorno, você poderá copiar o valor de qrCode e utiliza-lo no site [QRCode Monkey](https://www.qrcode-monkey.com/) para gerar o QrCode.
@@ -603,43 +617,38 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    POST /payments/webhook
     ```
 
-   - Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
+  > ⚠️ O endpoint de webhook é público, portanto, não precisa de headers.
+
+- Este webhook atualizará automaticamente o status do pedido para APPROVED. Se o pagamento não for concluído no tempo limite, o status será alterado para CANCELED.
 
 5. **Acompanhar o Status do pagamento do pedido**:
    - Você pode acompanhar o status do pagamento do seu pedido a qualquer momento:
 
    ```
     GET /payments/{orderId}/status
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "João da Silva"
+    Auth-Email: "joao.silva@exemplo.com"
+    Auth-Cpf: "91259416070"
+    Auth-Role: "CUSTOMER"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     ```
 
    - Caso o status do pagamento seja `APPROVED`, o pedido foi confirmado e já estará sendo preparado pelo restaurante.
 
-6. **Preparação do Pedido (Admin/Restaurante)**:
-   - Logue com o usuário admin.
+   > ⚠️ O pedido foi alterado para `PREPARING` automaticamente após aprovação do pagamento.
 
-    ```http
-    POST /users/login
-    Content-Type: application/json
-    {
-   "email": "admin@fastfood.com",
-   "password": "admin123"
-    }
-    ```
-
-   - Após o login, busque todas os pedidos ativos ou busque seu pedido pelo id dele:
-
-   ```
-    GET /orders/active
-    GET /orders/{orderId}
-    ```
-
-    > ⚠️ O pedido foi alterado para `PREPARING` automaticamente após aprovação do pagamento.
-7. **Marcar o pedido como pronto (Admin/Restaurante)**:
+6. **Marcar o pedido como pronto (Admin/Restaurante)**:
     - Quando o pedido estiver pronto, você poderá marca-lo como pronto para que o usuário possa retira-lo:
 
     ```http
     PATCH /orders/{orderId}/status
-    Content-Type: application/json
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "Admin boladão"
+    Auth-Email: "admin@foodcore.com"
+    Auth-Cpf: "866.756.240-83"
+    Auth-Role: "ADMIN"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     {
       "status": "READY"
     }
@@ -647,22 +656,34 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
     > ⚠️ Futuramente, o usuário será notificado quando o pedido dele estiver pronto.
 
-8. **Finalizar Pedido (Admin/Restaurante)**:
+7. **Finalizar Pedido (Admin/Restaurante)**:
    - Quando o pedido for retirado pelo cliente, você poderá finalizar o pedido:
 
     ```http
     PATCH /orders/{orderId}/status
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "João da Silva"
+    Auth-Email: "joao.silva@exemplo.com"
+    Auth-Cpf: "91259416070"
+    Auth-Role: "CUSTOMER"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     Content-Type: application/json
     {
       "status": "COMPLETED"
     }
     ```
 
-9. **Verificar pedido finalizado (Admin/Restaurante)**:
+8. **Verificar pedido finalizado (Admin/Restaurante)**:
    - Você pode verificar o status do pedido a qualquer momento:
 
     ```
     GET /orders/{orderId}
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "Admin boladão"
+    Auth-Email: "admin@foodcore.com"
+    Auth-Cpf: "866.756.240-83"
+    Auth-Role: "ADMIN"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     ```
 
    - O status final será `COMPLETED` quando o pedido for retirado pelo cliente.
@@ -670,6 +691,12 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
     ```
     GET /orders/active
+    Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
+    Auth-Name: "Admin boladão"
+    Auth-Email: "admin@foodcore.com"
+    Auth-Cpf: "866.756.240-83"
+    Auth-Role: "ADMIN"
+    Auth-CreatedAt: "2025-10-07T02:00:00Z"
     ```
 
 </details>
