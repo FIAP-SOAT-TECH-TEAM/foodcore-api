@@ -713,8 +713,6 @@ Para subir o projeto completamente, acesse a documentação dos repositórios na
 
 </details>
 
----
-
 <h3 id="cicd-infra">🔐 Governança e Fluxo de Deploy de Infraestrutura</h3>
 <details>
 <summary>Expandir para mais detalhes</summary>
