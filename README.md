@@ -27,7 +27,7 @@ da FIAP (Tech Challenge).
   <a href="#provisionamento-na-nuvem">Provisionar o projeto na nuvem</a> •
   <a href="#cicd-infra">Governança e Fluxo de Deploy</a> •
   <a href="#teste-de-carga">Testes de carga</a> •
-  <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
+  <a href="#estrutura-do-projeto">Estrutura do Projeto</a> •
   <a href="#apis">APIs</a> •
   <a href="#banco-de-dados">Banco de Dados</a> •
   <a href="#resolucao-de-problemas">Resolução de Problemas</a> •
