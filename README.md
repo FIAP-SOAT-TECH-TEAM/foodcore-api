@@ -690,6 +690,8 @@ Para subir o projeto completamente, acesse a documentação dos repositórios na
 ---
 
 <h3 id="cicd-infra">🔐 Governança e Fluxo de Deploy de Infraestrutura</h3>
+<details>
+<summary>Expandir para mais detalhes</summary>
 
 A gestão da infraestrutura segue um processo **automatizado, auditável e controlado** via **Pull Requests** no repositório de provisionamento.
 Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qualquer mudança aplicada em produção.
@@ -730,6 +732,7 @@ Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qua
 
    - O **Terraform Apply** aplica as alterações descritas no `plan` aprovado, provisionando ou atualizando os recursos no Azure.
 
+</details>
 ---
 
 ### 🚀 Benefícios do Processo
