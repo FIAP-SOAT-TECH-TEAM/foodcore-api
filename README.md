@@ -768,15 +768,11 @@ Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qua
 - **Automação completa**: sem necessidade de execuções manuais
 - **Aprovação obrigatória dupla**, reduzindo risco de erro humano
 
----
-
 📘 *Esse fluxo assegura que qualquer modificação de infraestrutura passe por revisão técnica e aprovação explícita, mantendo a conformidade e a integridade dos ambientes.*
 
 </details>
 
----
-
-<h2 id="teste-de-carga">☁️ Teste de carga</h2>
+<h2 id="teste-de-carga">🔋 Teste de carga</h2>
 <details>
 <summary>Expandir para mais detalhes</summary>
 
@@ -804,86 +800,7 @@ sudo apt install k6
 k6 version
 ```
 
-## 🚀 Passo a passo
-
-### 1. Crie uma conta de Armazenamento e um Container no Azure
-
-Essa conta será usada para armazenar o `terraform.tfstate`. Você pode criar isso pelo portal do Azure ou com os comandos CLI abaixo:
-
-```bash
-az storage account create --name nomeDaConta --resource-group nomeDoGrupo --location brazilsouth --sku Standard_LRS
-az storage container create --account-name nomeDaConta --name tfstate
-```
-
-### 2. Crie o arquivo terraform.tfvars
-
-Crie um arquivo `terraform.tfvars` na raiz do projeto com as seguintes variáveis:
-
-```hcl
-subscription_id = "SUA_SUBSCRIPTION_ID_AZURE"
-```
-
-### 3. Faça login na sua conta Azure
-
-Instale o Azure CLI e faça login na sua conta:
-
-```bash
-az login
-```
-
-### 4. Execute o Terraform
-
-```bash
-terraform init
-terraform plan -var-file=terraform.tfvars
-terraform apply -var-file=terraform.tfvars
- ```
-
-Consulte os outputs gerados:
-
-```bash
-terraform output
-```
-
-> ⚠️ A connection string é um valor sensível, logo, será exibida de forma mascarada com `<sensitive>`. Para recuperá-la, use o comando:
->
-> ```bash
-> terraform output -raw storage_account_connection_string
->```
-
-### 5. Faça build da imagem Docker e dê push para o Docker Hub
-
-```bash
-docker build -t seu-usuario/seu-app:tag .
-docker push seu-usuario/seu-app:tag
-```
-
-### 6. Configure os valores do Helm com os outputs do Terraform
-
-Após executar o Terraform, copie os valores de saída necessários (resource group, IP público, connection string e nome do container do Azure Storage) e atualize o arquivo values.yaml do Helm Chart com essas informações:
-
-```yaml
-service.beta.kubernetes.io/azure-load-balancer-resource-group: "SEU_RESOURCE_GROUP"
-loadBalancerIP: "SEU_IP_PUBLICO"
-connectionString: "SEU_STORAGE_CONNECTION_STRING"
-containerName: "SEU_CONTAINER_NAME"
-```
-
-### 7. Atualize o kubeconfig para se conectar ao novo cluster AKS
-
-```bash
-az aks get-credentials --resource-group seu-grupo --name seu-cluster
-```
-
-### 8. Empacote e instale o Helm chart
-
-```bash
-cd kubernetes
-helm package foodcoreapi
-helm install foodcoreapi ./foodcoreapi-0.1.0.tgz
-```
-
-### 9. Execute teste de estresse com K6
+### Execute teste de estresse com K6
 
 ```bash
 k6 run stress-test.js
