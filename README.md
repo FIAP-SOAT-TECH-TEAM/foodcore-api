@@ -801,7 +801,7 @@ k6 version
 ### Execute teste de estresse com K6
 
 ```bash
-k6 run stress-test.js
+k6 run foodcore-api/scripts/stress/stress-test.js
 ```
 
 </details>
