@@ -500,7 +500,7 @@ chmod +x food scripts/*.sh
 
 > ⚠️ O pacote `dos2unix` é necessário pois os scripts foram criados em ambiente Windows e podem conter quebras de linha no formato `CRLF`, incompatíveis com sistemas `Unix`.
 
-> ⚠️ Para testar todos os recursos da API é necessário criar um azure blob storage e configura-lo no application properties antes de iniciar a aplicação, mas isso não impede de seguir com o fluxo de realização de pedidos.
+> ⚠️ Para testar todos os recursos da API é necessário criar um azure blob storage e configura-lo no .env do docker compose (AZURE_STORAGE_CONNECTION_STRING) antes de iniciar a aplicação, mas isso não impede de seguir com o fluxo de realização de pedidos.
 
 ### Acessando a Aplicação
 
