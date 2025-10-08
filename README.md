@@ -25,6 +25,8 @@ da FIAP (Tech Challenge).
   <a href="#dicionario">Dicionário de linguagem ubíqua</a> •
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#provisionamento-na-nuvem">Provisionar o projeto na nuvem</a> •
+  <a href="#cicd-infra">Governança e Fluxo de Deploy</a> •
+  <a href="#teste-de-carga">Testes de carga</a> •
   <a href="#estrutura-do-projeto">Estrutura do Projeto</a> • <br/>
   <a href="#apis">APIs</a> •
   <a href="#banco-de-dados">Banco de Dados</a> •
@@ -498,6 +500,8 @@ chmod +x food scripts/*.sh
 
 > ⚠️ O pacote `dos2unix` é necessário pois os scripts foram criados em ambiente Windows e podem conter quebras de linha no formato `CRLF`, incompatíveis com sistemas `Unix`.
 
+> ⚠️ Para testar todos os recursos da API é necessário criar um azure blob storage e configura-lo no application properties antes de iniciar a aplicação, mas isso não impede de seguir com o fluxo de realização de pedidos.
+
 ### Acessando a Aplicação
 
 - **API**: <http://localhost/api>
@@ -670,112 +674,84 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
 
 </details>
 
-<h2 id="provisionamento-na-nuvem">☁️ Como provisionar o projeto na nuvem</h2>
+<h2 id="provisionamento-na-nuvem">☁️ Como provisionar todo o projeto (ordem de execução)</h2>
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-Este projeto utiliza **infraestrutura como código** com Terraform para provisionamento no Azure, e Helm para deploy no AKS.
+Para subir o projeto completamente, acesse a documentação dos repositórios na sequencia abaixo e siga o passo a passo de cada um deles.
 
-### Requisitos
+1. [Foodcore-infra](batata.com)
+2. [Foodcore-db](batata.com)
+3. [Foodcore-auth](batata.com)
+4. [Este repositório](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-api/tree/main#cicd-infra).
 
-- **Azure CLI**: Para interagir com o Azure ([instalação](#1-azure-cli))
-- **Terraform**: Para provisionamento da infraestrutura ([instalação](#2-terraform))
-- **Helm**: Para gerenciar o Kubernetes ([instalação](#3-helm))
-- **Kubectl**: Para interagir com o cluster Kubernetes ([instalação](#4-kubectl))
-- **Docker**: Para construir e enviar imagens ([instalação](#5-docker))
-- **K6**: Para testes de carga ([instalação](#6-k6))
-
-### 🔧 Instalação dos Requisitos
-
-Siga os passos abaixo para instalar as ferramentas necessárias no seu ambiente:
+</details>
 
 ---
 
-#### 1. Azure CLI
+<h3 id="cicd-infra">🔐 Governança e Fluxo de Deploy de Infraestrutura</h3>
 
-```bash
-# Windows (via PowerShell)
-Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
+A gestão da infraestrutura segue um processo **automatizado, auditável e controlado** via **Pull Requests** no repositório de provisionamento.
+Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qualquer mudança aplicada em produção.
 
-# macOS (Homebrew)
-brew install azure-cli
+---
 
-# Linux (APT)
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+### ⚙️ Processo de Alterações
 
-# Verifique a instalação
-az --version
-```
+1. **Criação de Pull Request**
+   - Todas as alterações de infraestrutura (novos recursos, updates, ou ajustes de configuração) devem ser propostas via **Pull Request (PR)**.
+   - O PR contém os arquivos `.tf` modificados e uma descrição detalhando o impacto da mudança.
 
-#### 2. Terraform
+2. **Execução Automática do Terraform Plan**
+   - Ao abrir o PR, o pipeline de CI executa automaticamente o comando:
 
-```bash
-# macOS/Linux
-brew tap hashicorp/tap
-brew install hashicorp/tap/terraform
+     ```
+     terraform plan
+     ```
 
-# Windows (choco)
-choco install terraform
+   - Esse passo gera uma **prévia das alterações** que seriam aplicadas (criações, destruições, atualizações).
+   - O resultado do `plan` é exibido diretamente nos logs do pipeline, permitindo revisão técnica pelos aprovadores.
 
-# Verifique a instalação
-terraform -v
-```
+3. **Revisão e Aprovação**
+   - O repositório é **protegido**, exigindo no mínimo **2 aprovações** antes do merge.
+   - Nenhum usuário pode aplicar alterações diretamente na branch principal (`main` ou `master`).
+   - Revisores devem garantir:
+     - Que o `plan` não tenha destruições indevidas (`destroy`)
+     - Que as variáveis e roles estejam corretas
+     - Que os módulos sigam o padrão organizacional
 
-#### 3. Helm
+4. **Aplicação no Merge**
+   - Após aprovação e merge do PR, o pipeline executa automaticamente:
 
-```bash
-# macOS
-brew install helm
+     ```
+     terraform apply -auto-approve
+     ```
 
-# Windows (choco)
-choco install kubernetes-helm
+   - O **Terraform Apply** aplica as alterações descritas no `plan` aprovado, provisionando ou atualizando os recursos no Azure.
 
-# Linux
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+---
 
-# Verifique a instalação
-helm version --short
-```
+### 🚀 Benefícios do Processo
 
-#### 4. Kubectl
+- **Segurança e controle total** sobre modificações de infraestrutura
+- **Auditoria completa**: todo histórico de mudanças é versionado no Git
+- **Padronização**: alterações seguem pipeline validado e reproduzível
+- **Automação completa**: sem necessidade de execuções manuais
+- **Aprovação obrigatória dupla**, reduzindo risco de erro humano
 
-```bash
-# macOS
-brew install kubectl
+---
 
-# Windows (choco)
-choco install kubernetes-cli
+📘 *Esse fluxo assegura que qualquer modificação de infraestrutura passe por revisão técnica e aprovação explícita, mantendo a conformidade e a integridade dos ambientes.*
 
-# Linux
-curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/
+<h2 id="teste-de-carga">☁️ Teste de carga</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
 
-# Verifique a instalação
-kubectl version --client
-```
+### Requisitos
 
-#### 5. Docker
+- **K6**: Para testes de carga ([instalação](#6-k6))
 
-```bash
-# macOS
-brew install --cask docker
-
-
-# Windows
-choco install docker-desktop
-
-
-# Linux
-sudo apt-get install docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
-
-# Verifique a instalação
-docker --version
-```
-
-#### 6. K6
+#### Instalação
 
 ```bash
 # macOS
@@ -939,33 +915,22 @@ food-core-api/
 │       ├── Chart.yaml                          # Metadata do chart
 │       ├── Chart.lock                          # Dependências travadas
 │       ├── values.yaml                         # Configurações parametrizáveis do chart
+│       ├── assets/                             # Armazena recursos estaticos como dashboards
 │       └── templates/                          # Templates Helm
 │           ├── api/                            # Subcomponentes da API
-│           │   ├── adminer/                    # Adminer (gerenciador de DB)
-│           │   ├── api/                        # FoodCore API (app principal)
-│           │   ├── postgresql/                 # StatefulSet do banco PostgreSQL
-│           │   └── namespace.yaml              # Namespace da aplicação
 │           ├── common/                         # Componentes reutilizáveis
-│           │   ├── ingress/                    # Ingress + ExternalNames
-│           │   └── volume/                     # StorageClass
-│           └── efk/                            # Stack EFK para logging
-│               ├── elasticsearch/              # StatefulSet e ConfigMap
-│               ├── fluentd/                    # DaemonSet + RBAC
-│               ├── kibana/                     # Interface Kibana
-│               └── namespace.yaml
+│           ├── efk/                            # Stack EFK para logging
+│           └── monitor/                        # Stack de monitoramento (Prometehus, Grafana e Zipkin)
+
 │
 │
 ├── terraform/
-│   ├── backend.tf                              # Configuração do backend remoto (ex: Azure Storage para o state)
 │   ├── main.tf                                 # Composição dos módulos e recursos
-│   ├── provider.tf                             # Configuração do provedor (Azure)
-│   ├── outputs.tf                              # Outputs globais da infraestrutura
+│   ├── datasource.tf                           # Recurso para recuperar valores já provisionados no provedor de nuvem
 │   ├── variables.tf                            # Variáveis globais
 │   └── modules/                                # Módulos reutilizáveis para recursos Azure
-│       ├── aks/                                # Criação do cluster AKS (Kubernetes)
-│       ├── blob/                               # Storage Account e Containers
-│       ├── public_ip/                          # Endereços IP públicos
-│       └── resource_group/                     # Resource Group base do ambiente
+│       ├── apim/                               # Importação da API ao Azure API Gateway
+│       └── helm/                               # Publicação do Helm
 │
 ├── scripts/                                    # Scripts de gerenciamento
 │
@@ -1062,16 +1027,10 @@ Para documentação completa e interativa, consulte o Swagger/OpenAPI disponíve
 
 </details>
 
-<h2 id="banco-de-dados">💾 Banco de Dados</h2>
+<h2 id="banco-de-dados">💾 Gerenciamento de Migrações</h2>
 
 <details>
 <summary>Expandir para mais detalhes</summary>
-
-### Modelo Relacional
-
-O sistema utiliza PostgreSQL como banco de dados principal, com o seguinte esquema:
-
-![Diagrama Entidade e Relacionamento](docs/diagrams/DER.svg)
 
 ### Gerenciamento de Migrações
 
@@ -1098,19 +1057,6 @@ manualmente:
 ./food db:up     # Aplicar migrações
 ./food db:reset  # Resetar e recriar o banco de dados
 ```
-
-### Acesso ao Banco de Dados
-
-Para acessar o banco de dados durante o desenvolvimento, utilize o Adminer disponível em:
-<http://localhost:8081>
-
-Credenciais:
-
-- Sistema: PostgreSQL
-- Servidor: db
-- Usuário: postgres
-- Senha: postgres
-- Banco: fastfood
 
 </details>
 
