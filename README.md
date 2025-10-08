@@ -732,7 +732,6 @@ Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qua
 
    - O **Terraform Apply** aplica as alterações descritas no `plan` aprovado, provisionando ou atualizando os recursos no Azure.
 
-</details>
 ---
 
 ### 🚀 Benefícios do Processo
@@ -746,6 +745,10 @@ Esse fluxo garante segurança, rastreabilidade e aprovação formal antes de qua
 ---
 
 📘 *Esse fluxo assegura que qualquer modificação de infraestrutura passe por revisão técnica e aprovação explícita, mantendo a conformidade e a integridade dos ambientes.*
+
+</details>
+
+---
 
 <h2 id="teste-de-carga">☁️ Teste de carga</h2>
 <details>
