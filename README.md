@@ -570,7 +570,6 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
    Auth-Role: "CUSTOMER"
    Auth-CreatedAt: "2025-10-07T02:00:00Z"
    {
-     "userId": 1,
      "items": [
        {
          "productId": 1,
@@ -662,10 +661,10 @@ Para realizar um fluxo de compra na aplicação, você pode seguir os passos aba
     ```http
     PATCH /orders/{orderId}/status
     Auth-Subject: "c1a2b3c4-d5e6-7890-abcd-ef1234567890"
-    Auth-Name: "João da Silva"
-    Auth-Email: "joao.silva@exemplo.com"
-    Auth-Cpf: "91259416070"
-    Auth-Role: "CUSTOMER"
+    Auth-Name: "Admin boladão"
+    Auth-Email: "admin@foodcore.com"
+    Auth-Cpf: "866.756.240-83"
+    Auth-Role: "ADMIN"
     Auth-CreatedAt: "2025-10-07T02:00:00Z"
     Content-Type: application/json
     {
