@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.DefaultEventPublisher;
+import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.RabbitMqEventPublisher;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("EventPublisherSource - Testes Unitários")
 class EventPublisherSourceTest {
@@ -21,7 +21,7 @@ class EventPublisherSourceTest {
 	@Test @DisplayName("Deve publicar evento com sucesso")
 	void shouldPublishEventSuccessfully() {
 		// Arrange
-		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var eventPublisher = new RabbitMqEventPublisher(applicationEventPublisher);
 		var event = new TestEvent("Test Event");
 
 		// Act & Assert
@@ -33,7 +33,7 @@ class EventPublisherSourceTest {
 	@Test @DisplayName("Deve publicar evento string com sucesso")
 	void shouldPublishStringEventSuccessfully() {
 		// Arrange
-		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var eventPublisher = new RabbitMqEventPublisher(applicationEventPublisher);
 		var event = "String Event";
 
 		// Act & Assert
@@ -45,7 +45,7 @@ class EventPublisherSourceTest {
 	@Test @DisplayName("Deve publicar múltiplos eventos com sucesso")
 	void shouldPublishMultipleEventsSuccessfully() {
 		// Arrange
-		var eventPublisher = new DefaultEventPublisher(applicationEventPublisher);
+		var eventPublisher = new RabbitMqEventPublisher(applicationEventPublisher);
 		var event1 = new TestEvent("Event 1");
 		var event2 = new TestEvent("Event 2");
 

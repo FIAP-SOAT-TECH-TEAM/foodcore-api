@@ -22,6 +22,6 @@ public class PublishPaymentInitializationErrorEventUseCase {
 	public static void publishPaymentInitializationErrorEvent(Long orderId, String errorMessage,
 			EventPublisherGateway gateway) {
 		var paymentInitializationErrorEvent = new PaymentInitializationErrorEvent(orderId, errorMessage);
-		gateway.publishEvent(paymentInitializationErrorEvent);
+		gateway.publishPaymentInitializationErrorEvent(paymentInitializationErrorEvent);
 	}
 }

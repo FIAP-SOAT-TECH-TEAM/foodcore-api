@@ -63,6 +63,55 @@ if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
     echo "AVISO: Tempo limite excedido aguardando o PostgreSQL inicializar"
 fi
 
+# Iniciar RabbitMQ
+echo "-> Iniciando RabbitMQ..."
+docker-compose up -d rabbitmq
+
+# Verificar se o RabbitMQ está pronto
+echo "-> Verificando status do RabbitMQ..."
+MAX_RETRIES=30
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    STATUS=$(docker exec -i $(docker ps -qf "name=rabbitmq") rabbitmqctl status 2>/dev/null | grep -ic "pid")
+    if [ "$STATUS" -gt 0 ]; then
+        echo "-> RabbitMQ está pronto!"
+        break
+    fi
+
+    RETRY_COUNT=$((RETRY_COUNT+1))
+    echo "Aguardando RabbitMQ inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
+    sleep 2
+done
+
+if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+    echo "AVISO: Tempo limite excedido aguardando o RabbitMQ inicializar"
+fi
+
+# Iniciar Zipkin
+echo "-> Iniciando Zipkin..."
+docker-compose up -d zipkin
+
+# Verificar se o Zipkin está rodando
+echo "-> Verificando status do Zipkin..."
+MAX_RETRIES=30
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if curl -s "http://localhost:9411/health" | grep -q "UP"; then
+        echo "-> Zipkin está pronto!"
+        break
+    fi
+
+    RETRY_COUNT=$((RETRY_COUNT+1))
+    echo "Aguardando Zipkin inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
+    sleep 2
+done
+
+if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+    echo "AVISO: Tempo limite excedido aguardando o Zipkin inicializar"
+fi
+
 # Agora que os serviços principais estão prontos, iniciar o Adminer
 echo "-> Iniciando serviços adicionais (Adminer)..."
 docker-compose up -d adminer
@@ -75,4 +124,6 @@ echo "  Sistema: PostgreSQL"
 echo "  Servidor: db"
 echo "  Usuário: postgres"
 echo "  Senha: postgres"
-echo "  Banco de dados: fastfood" 
+echo "  Banco de dados: fastfood"
+echo "- RabbitMQ (painel): http://localhost:15672  (usuário: guest / senha: guest)"
+echo "- Zipkin (tracing): http://localhost:9411"

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Aplicação principal
   app:
@@ -21,17 +19,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - fastfood-network
-    # Limite de recursos para evitar consumo excessivo
     deploy:
       resources:
         limits:
           cpus: '1.0'
           memory: 1G
 
-  # Banco de dados PosgreSQL
+  # Banco de dados PostgreSQL
   db:
     image: postgres:16-alpine
     container_name: foodcore-db
@@ -61,7 +60,7 @@ services:
     networks:
       - fastfood-network
 
-  # Ferramenta para gerenciar banco de dados (aepnas local)
+  # Ferramenta para gerenciar banco de dados
   adminer:
     image: adminer:latest
     container_name: foodcore-adminer
@@ -73,6 +72,7 @@ services:
       - fastfood-network
     restart: unless-stopped
 
+  # Serviço de tracing (Zipkin)
   zipkin:
     image: openzipkin/zipkin
     container_name: foodcore-zipkin
@@ -86,9 +86,33 @@ services:
       - fastfood-network
     restart: unless-stopped
 
+  # RabbitMQ com management UI
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: foodcore-rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"             # Porta AMQP
+      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}" # Painel de administração
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - fastfood-network
+    restart: unless-stopped
+
 networks:
   fastfood-network:
     driver: bridge
 
 volumes:
   postgres_data:
+  rabbitmq_data:

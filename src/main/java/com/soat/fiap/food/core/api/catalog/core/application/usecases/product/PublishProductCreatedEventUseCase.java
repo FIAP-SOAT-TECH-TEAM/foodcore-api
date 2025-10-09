@@ -20,6 +20,6 @@ public class PublishProductCreatedEventUseCase {
 	public static void publishProductCreatedEvent(Product product, EventPublisherGateway gateway) {
 		var event = ProductCreatedEvent.of(product.getId(), product.getName(), product.getPrice(),
 				product.getCategoryId());
-		gateway.publishEvent(event);
+		gateway.publishProductCreatedEvent(event);
 	}
 }

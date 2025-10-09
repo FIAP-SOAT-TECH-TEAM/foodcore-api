@@ -8,6 +8,7 @@ import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.Acqui
 import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 
@@ -31,8 +32,8 @@ public class InitializePaymentController {
 	 * @param eventPublisherSource
 	 *            Origem de publicação de eventos
 	 */
-	public static void initializePayment(OrderCreatedEvent event, PaymentDataSource paymentDataSource,
-			AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
+	public static void initializePayment(OrderCreatedEventDto event, PaymentDataSource paymentDataSource,
+										 AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
 		try {
 			log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 

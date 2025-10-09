@@ -24,7 +24,7 @@ public class PublishPaymentApprovedEventUseCase {
 	public static void publishPaymentApprovedEvent(Payment payment, EventPublisherGateway gateway) {
 		log.info("Pagamento aprovado: {}, Publicando evento!", payment.getId());
 
-		gateway.publishEvent(PaymentApprovedEvent.of(payment.getId(), payment.getOrderId(), payment.getAmount(),
-				payment.getTypeName()));
+		gateway.publishPaymentApprovedEvent(PaymentApprovedEvent.of(payment.getId(), payment.getOrderId(),
+				payment.getAmount(), payment.getTypeName()));
 	}
 }

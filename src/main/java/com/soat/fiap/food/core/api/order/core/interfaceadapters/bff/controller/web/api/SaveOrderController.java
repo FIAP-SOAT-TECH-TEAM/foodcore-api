@@ -54,7 +54,7 @@ public class SaveOrderController {
 
 		var savedOrder = orderGateway.save(order);
 
-		PublishCreateOrderEventUseCase.publishCreateOrderEvent(savedOrder, eventPublisherGateway);
+		PublishOrderCreatedEventUseCase.publishCreateOrderEvent(savedOrder, eventPublisherGateway);
 
 		var saveOrderToResponse = OrderPresenter.toOrderResponse(savedOrder);
 

@@ -3,8 +3,9 @@ package com.soat.fiap.food.core.api.payment.core.application.inputs.mappers;
 import java.util.List;
 
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
 
 /**
  * Classe utilitária responsável por mapear {@link OrderCreatedEvent} para o DTO
@@ -13,13 +14,13 @@ import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedI
 public class OrderCreatedMapper {
 
 	/**
-	 * Converte um {@link OrderCreatedEvent} em um {@link OrderCreatedInput}.
+	 * Converte um {@link OrderCreatedEventDto} em um {@link OrderCreatedInput}.
 	 *
 	 * @param event
 	 *            Evento de criação de pedido.
 	 * @return Input com os dados necessários para inicialização de pagamento.
 	 */
-	public static OrderCreatedInput toInput(OrderCreatedEvent event) {
+	public static OrderCreatedInput toInput(OrderCreatedEventDto event) {
 		List<OrderCreatedInput.OrderCreatedItemInput> itemInputs = event.getItems()
 				.stream()
 				.map(OrderCreatedMapper::toItemInput)
@@ -29,7 +30,7 @@ public class OrderCreatedMapper {
 				itemInputs);
 	}
 
-	private static OrderCreatedInput.OrderCreatedItemInput toItemInput(OrderItemCreatedEvent itemEvent) {
+	private static OrderCreatedInput.OrderCreatedItemInput toItemInput(OrderItemCreatedEventDto itemEvent) {
 		return new OrderCreatedInput.OrderCreatedItemInput(itemEvent.getProductId(), itemEvent.getName(),
 				itemEvent.getQuantity(), itemEvent.getUnitPrice(), itemEvent.getSubtotal(),
 				itemEvent.getObservations());

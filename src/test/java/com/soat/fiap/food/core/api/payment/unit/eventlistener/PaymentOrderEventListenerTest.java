@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.api.payment.infrastructure.in.event.listener.PaymentOrderEventListener;
+import com.soat.fiap.food.core.api.payment.infrastructure.in.event.listener.rabbitmq.PaymentOrderEventListener;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("PaymentOrderEventListener - Testes Unitários")

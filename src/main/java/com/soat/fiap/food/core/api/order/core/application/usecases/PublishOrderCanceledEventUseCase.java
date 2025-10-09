@@ -29,6 +29,6 @@ public class PublishOrderCanceledEventUseCase {
 
 		log.info("Publicando evento de pedido cancelado {}", order.getId());
 
-		gateway.publishEvent(event);
+		gateway.publishOrderCanceledEvent(event);
 	}
 }

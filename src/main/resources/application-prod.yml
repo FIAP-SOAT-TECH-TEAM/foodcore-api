@@ -62,10 +62,11 @@ logging:
     org.springframework.web: WARN
     org.hibernate: WARN
 
-# JWT
-jwt:
-  secret_key: ${JWT_SECRET}
-  expiration: 3600
+rabbitmq:
+  host: ${SPRING_RABBITMQ_HOST}
+  port: ${SPRING_RABBITMQ_PORT}
+  username: ${SPRING_RABBITMQ_USERNAME}
+  password: ${SPRING_RABBITMQ_PASSWORD}
 
 # Mercado Pago
 mercado-pago:

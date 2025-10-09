@@ -24,7 +24,7 @@ public class PublishPaymentExpiredEventUseCase {
 	public static void publishPaymentExpiredEvent(Payment expiredPayment, EventPublisherGateway gateway) {
 		var expiredEvent = new PaymentExpiredEvent(expiredPayment.getId(), expiredPayment.getOrderId(),
 				expiredPayment.getExpiresIn());
-		gateway.publishEvent(expiredEvent);
+		gateway.publishPaymentExpiredEvent(expiredEvent);
 		log.info("Evento de pagamento expirado publicado: {}", expiredPayment.getId());
 	}
 }

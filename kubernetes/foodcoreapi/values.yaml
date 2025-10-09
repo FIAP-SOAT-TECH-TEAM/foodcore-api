@@ -124,11 +124,6 @@ api:
       connectionString: "replaced"
       containerName: "replaced"
 
-  auth:
-    jwt:
-      secret: "replaced"
-      expirationTime: "replaced"
-
   hpa:
     minReplicas: 1
     maxReplicas: 3

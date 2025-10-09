@@ -7,6 +7,7 @@ import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.Catal
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCanceledEvent;
 
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCanceledEventDto;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,8 +25,8 @@ public class UpdateProductStockForCanceledItemsController {
 	 * @param catalogDataSource
 	 *            Origem de dados para o gateway
 	 */
-	public static void updateProductStockForCanceledItems(OrderCanceledEvent orderCanceledEvent,
-			CatalogDataSource catalogDataSource) {
+	public static void updateProductStockForCanceledItems(OrderCanceledEventDto orderCanceledEvent,
+														  CatalogDataSource catalogDataSource) {
 		var catalogGateway = new CatalogGateway(catalogDataSource);
 		var productStockUpdateInput = ProductStockUpdateMapper.toInputFromCanceled(orderCanceledEvent.getItems());
 
