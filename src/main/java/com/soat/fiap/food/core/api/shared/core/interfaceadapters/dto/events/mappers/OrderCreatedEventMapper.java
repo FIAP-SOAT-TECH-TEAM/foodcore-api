@@ -1,23 +1,25 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.mappers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Classe utilitária responsável por mapear {@link OrderCreatedEvent} para o DTO
- * {@link OrderCreatedEventDto}, utilizado para transporte de dados do evento de pedido criado.
+ * {@link OrderCreatedEventDto}, utilizado para transporte de dados do evento de
+ * pedido criado.
  */
 public class OrderCreatedEventMapper {
 
 	/**
 	 * Converte um {@link OrderCreatedEvent} em um {@link OrderCreatedEventDto}.
 	 *
-	 * @param event Evento de criação de pedido.
+	 * @param event
+	 *            Evento de criação de pedido.
 	 * @return DTO com os dados do pedido criado.
 	 */
 	public static OrderCreatedEventDto toDto(OrderCreatedEvent event) {
@@ -39,9 +41,11 @@ public class OrderCreatedEventMapper {
 	}
 
 	/**
-	 * Converte um item do evento {@link OrderItemCreatedEvent} em seu respectivo DTO {@link OrderItemCreatedEventDto}.
+	 * Converte um item do evento {@link OrderItemCreatedEvent} em seu respectivo
+	 * DTO {@link OrderItemCreatedEventDto}.
 	 *
-	 * @param item Evento de item do pedido criado.
+	 * @param item
+	 *            Evento de item do pedido criado.
 	 * @return DTO representando o item criado.
 	 */
 	private static OrderItemCreatedEventDto toItemDto(OrderItemCreatedEvent item) {

@@ -39,9 +39,9 @@ public class ProductStockUpdateMapper {
 	}
 
 	/**
-	 * Converte uma lista de {@link OrderItemCanceledEventDto} (evento de cancelamento
-	 * de item de pedido) em um {@link ProductStockUpdateInput} (input da
-	 * aplicação).
+	 * Converte uma lista de {@link OrderItemCanceledEventDto} (evento de
+	 * cancelamento de item de pedido) em um {@link ProductStockUpdateInput} (input
+	 * da aplicação).
 	 * <p>
 	 * Usado para repor a quantidade de produtos em estoque.
 	 *

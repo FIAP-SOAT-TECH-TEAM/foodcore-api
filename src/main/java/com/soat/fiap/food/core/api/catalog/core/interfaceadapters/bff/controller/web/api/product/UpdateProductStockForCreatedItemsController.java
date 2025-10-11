@@ -5,9 +5,8 @@ import com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers.Produ
 import com.soat.fiap.food.core.api.catalog.core.application.usecases.product.UpdateProductStockForCreatedItemsUseCase;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
-
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,7 +25,7 @@ public class UpdateProductStockForCreatedItemsController {
 	 *            Origem de dados para o gateway
 	 */
 	public static void updateProductStockForCreatedItems(OrderCreatedEventDto orderCreatedEvent,
-														 CatalogDataSource catalogDataSource) {
+			CatalogDataSource catalogDataSource) {
 		var catalogGateway = new CatalogGateway(catalogDataSource);
 		var productStockUpdateInput = ProductStockUpdateMapper.toInput(orderCreatedEvent.getItems());
 

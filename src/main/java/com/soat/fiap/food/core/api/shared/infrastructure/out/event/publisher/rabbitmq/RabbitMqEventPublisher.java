@@ -1,11 +1,12 @@
 package com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq;
 
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqConfig;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.*;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqQueueConfig;
 
 /**
  * Implementação do {@link EventPublisherSource} usando RabbitMQ.
@@ -17,18 +18,15 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPubl
 @Component
 public class RabbitMqEventPublisher implements EventPublisherSource {
 
-	private final RabbitTemplate rabbitTemplate;
-
-	public RabbitMqEventPublisher(RabbitTemplate rabbitTemplate) {
-		this.rabbitTemplate = rabbitTemplate;
-	}
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void publishOrderCreatedEvent(OrderCreatedEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.ORDER_CREATED_STREAM, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.ORDER_CREATED_FANOUT_EXCHANGE, "", event);
 	}
 
 	/**
@@ -36,7 +34,7 @@ public class RabbitMqEventPublisher implements EventPublisherSource {
 	 */
 	@Override
 	public void publishOrderCanceledEvent(OrderCanceledEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.ORDER_CANCELED_QUEUE, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.ORDER_CANCELED_QUEUE, event);
 	}
 
 	/**
@@ -44,7 +42,7 @@ public class RabbitMqEventPublisher implements EventPublisherSource {
 	 */
 	@Override
 	public void publishProductCreatedEvent(ProductCreatedEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.PRODUCT_CREATED_QUEUE, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.PRODUCT_CREATED_QUEUE, event);
 	}
 
 	/**
@@ -52,7 +50,7 @@ public class RabbitMqEventPublisher implements EventPublisherSource {
 	 */
 	@Override
 	public void publishPaymentApprovedEvent(PaymentApprovedEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.PAYMENT_APPROVED_QUEUE, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.PAYMENT_APPROVED_QUEUE, event);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public class RabbitMqEventPublisher implements EventPublisherSource {
 	 */
 	@Override
 	public void publishPaymentExpiredEvent(PaymentExpiredEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.PAYMENT_EXPIRED_QUEUE, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.PAYMENT_EXPIRED_QUEUE, event);
 	}
 
 	/**
@@ -68,6 +66,6 @@ public class RabbitMqEventPublisher implements EventPublisherSource {
 	 */
 	@Override
 	public void publishPaymentInitializationErrorEvent(PaymentInitializationErrorEventDto event) {
-		rabbitTemplate.convertAndSend(RabbitMqConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE, event);
+		rabbitTemplate.convertAndSend(RabbitMqQueueConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE, event);
 	}
 }

@@ -4,15 +4,17 @@ import com.soat.fiap.food.core.api.payment.core.domain.events.PaymentExpiredEven
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
 
 /**
- * Classe utilitária responsável por mapear {@link PaymentExpiredEvent} para o DTO
- * {@link PaymentExpiredEventDto}, utilizado para transporte de dados do evento de pagamento expirado.
+ * Classe utilitária responsável por mapear {@link PaymentExpiredEvent} para o
+ * DTO {@link PaymentExpiredEventDto}, utilizado para transporte de dados do
+ * evento de pagamento expirado.
  */
 public class PaymentExpiredEventMapper {
 
 	/**
 	 * Converte um {@link PaymentExpiredEvent} em um {@link PaymentExpiredEventDto}.
 	 *
-	 * @param event Evento de pagamento expirado.
+	 * @param event
+	 *            Evento de pagamento expirado.
 	 * @return DTO com os dados do pagamento expirado.
 	 */
 	public static PaymentExpiredEventDto toDto(PaymentExpiredEvent event) {

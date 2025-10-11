@@ -1,8 +1,5 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.event.listener.rabbitmq;
 
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +8,11 @@ import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.w
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqConfig;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqQueueConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +52,7 @@ public class OrderPaymentEventListener {
 	 * @param event
 	 *            Evento de pagamento aprovado
 	 */
-	@RabbitListener(queues = RabbitMqConfig.PAYMENT_APPROVED_QUEUE)
+	@RabbitListener(queues = RabbitMqQueueConfig.PAYMENT_APPROVED_QUEUE)
 	public void handlePaymentApprovedEvent(PaymentApprovedEventDto event) {
 		log.info("Módulo Order: Recebido evento de pagamento aprovado para o pedido: {}, valor: {}", event.getOrderId(),
 				event.getAmount());
@@ -73,7 +73,7 @@ public class OrderPaymentEventListener {
 	 * @param event
 	 *            Evento de erro na inicialização do pagamento
 	 */
-	@RabbitListener(queues = RabbitMqConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
+	@RabbitListener(queues = RabbitMqQueueConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
 	public void handlePaymentInitializationErrorEvent(PaymentInitializationErrorEventDto event) {
 		log.info("Módulo Order: Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
 
@@ -91,7 +91,7 @@ public class OrderPaymentEventListener {
 	 * @param event
 	 *            Evento de pagamento expirado
 	 */
-	@RabbitListener(queues = RabbitMqConfig.PAYMENT_EXPIRED_QUEUE)
+	@RabbitListener(queues = RabbitMqQueueConfig.PAYMENT_EXPIRED_QUEUE)
 	public void handlePaymentExpiredEvent(PaymentExpiredEventDto event) {
 		log.info("Módulo Order: Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(),
 				event.getPaymentId());

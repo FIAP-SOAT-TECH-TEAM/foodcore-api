@@ -26,6 +26,11 @@ spring:
       enabled: true
       path: /h2-console
 
+# Tracing Distribuído
+management:
+  tracing:
+    enabled: false
+
 # Configurações de log para testes
 logging:
   level:

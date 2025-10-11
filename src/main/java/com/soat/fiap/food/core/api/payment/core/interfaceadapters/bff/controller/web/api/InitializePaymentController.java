@@ -33,7 +33,7 @@ public class InitializePaymentController {
 	 *            Origem de publicação de eventos
 	 */
 	public static void initializePayment(OrderCreatedEventDto event, PaymentDataSource paymentDataSource,
-										 AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
+			AcquirerSource acquirerSource, EventPublisherSource eventPublisherSource) {
 		try {
 			log.info("Inicializando pagamento para o pedido {} no valor de {}", event.getId(), event.getTotalAmount());
 
