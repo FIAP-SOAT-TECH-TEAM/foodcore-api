@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.controller.web.api.product.*;
 import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
+import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.requests.ProductRequest;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.FileUploadDTO;
@@ -33,12 +34,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductController {
 
 	private final CatalogDataSource catalogDataSource;
+	private final ProductDataSource productDataSource;
 	private final ImageDataSource imageDataSource;
 	private final EventPublisherSource eventPublisherSource;
 
-	public ProductController(CatalogDataSource catalogDataSource, ImageDataSource imageDataSource,
-			EventPublisherSource eventPublisherSource) {
+	public ProductController(CatalogDataSource catalogDataSource, ProductDataSource productDataSource,
+			ImageDataSource imageDataSource, EventPublisherSource eventPublisherSource) {
 		this.catalogDataSource = catalogDataSource;
+		this.productDataSource = productDataSource;
 		this.imageDataSource = imageDataSource;
 		this.eventPublisherSource = eventPublisherSource;
 	}
@@ -98,6 +101,21 @@ public class ProductController {
 		ProductResponse response = GetProductByIdController.getProductById(catalogId, categoryId, productId,
 				catalogDataSource);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/categories/products")
+	@Operation(summary = "Buscar produtos por IDs", description = "Retorna uma lista de produtos correspondentes aos IDs informados", tags = {
+			"Produtos"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Produtos encontrados com sucesso", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductResponse.class))),
+			@ApiResponse(responseCode = "404", description = "Nenhum produto encontrado para os IDs fornecidos", content = @Content)})
+	@Tag(name = "Produtos", description = "Operações para gerenciamento de produtos") @Transactional(readOnly = true)
+	public ResponseEntity<List<ProductResponse>> getProductsByIds(
+			@Parameter(description = "Lista de IDs dos produtos a serem buscados", example = "[101, 102, 103]", required = true)
+			@RequestParam List<Long> productIds) {
+		log.debug("Requisição para buscar produtos com os IDs: {}", productIds);
+		List<ProductResponse> responses = GetProductsByIdsController.getProductsByIds(productIds, productDataSource);
+		return ResponseEntity.ok(responses);
 	}
 
 	@PutMapping("/{catalogId}/categories/{categoryId}/products/{productId}")

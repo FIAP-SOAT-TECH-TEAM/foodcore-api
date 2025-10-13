@@ -83,6 +83,18 @@ public interface ProductEntityMapper {
 		return toDomainList(entities, new CycleAvoidingMappingContext());
 	}
 
+	/**
+	 * Converte uma lista de entidades JPA para uma lista de DTOs.
+	 *
+	 * @param entities
+	 *            Lista de entidades JPA
+	 * @return Lista de DTOs correspondentes
+	 */
+	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
+	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
+	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
+	List<ProductDTO> toDTOList(List<ProductEntity> entities);
+
 	@DoIgnore
 	default ProductEntity toEntity(ProductDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());

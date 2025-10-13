@@ -1,6 +1,8 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
@@ -57,5 +59,18 @@ public class ProductDTOMapper {
 		return new ProductDTO(product.getId(), product.getDetails(), product.getImageUrlValue(), product.getPrice(),
 				stockDTO, product.getDisplayOrder(), product.isActive(), product.getCreatedAt(),
 				product.getUpdatedAt());
+	}
+
+	/**
+	 * Converte uma lista de ProductDTO para uma lista de objetos Product.
+	 *
+	 * @param dtoList
+	 *            a lista de ProductDTO a ser convertida
+	 * @return uma lista de objetos Product correspondentes
+	 */
+	public static List<Product> toDomainList(List<ProductDTO> dtoList) {
+		Objects.requireNonNull(dtoList, "A lista de DTOs de produtos não pode ser nula");
+
+		return dtoList.stream().filter(Objects::nonNull).map(ProductDTOMapper::toDomain).collect(Collectors.toList());
 	}
 }
