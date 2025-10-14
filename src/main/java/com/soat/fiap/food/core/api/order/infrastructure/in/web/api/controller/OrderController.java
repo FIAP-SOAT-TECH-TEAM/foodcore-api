@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.api.order.infrastructure.in.web.api.controller;
 
 import java.util.List;
 
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,6 @@ import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.C
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
-import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 

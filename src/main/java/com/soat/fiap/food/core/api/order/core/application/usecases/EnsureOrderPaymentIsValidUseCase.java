@@ -1,10 +1,10 @@
 package com.soat.fiap.food.core.api.order.core.application.usecases;
 
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderNotFoundException;
+import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderPaymentNotFoundException;
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
-import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentNotFoundException;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.PaymentGateway;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class EnsureOrderPaymentIsValidUseCase {
 	 *            Gateway de pagamento para comunicação com o mundo exterior
 	 * @param orderGateway
 	 *            Gateway de pedido para comunicação com o mundo exterior
-	 * @throws PaymentNotFoundException
+	 * @throws OrderPaymentNotFoundException
 	 *             se o pagamento não existir
 	 * @throws OrderNotFoundException
 	 *             se o pedido não existir
@@ -32,12 +32,12 @@ public class EnsureOrderPaymentIsValidUseCase {
 	public static void ensureOrderPaymentIsValid(Long id, PaymentGateway paymentGateway, OrderGateway orderGateway) {
 
 		var order = orderGateway.findById(id);
-		var payment = paymentGateway.findTopByOrderIdOrderByIdDesc(id);
+		var payment = paymentGateway.getOrderStatus(id);
 
 		if (order.isEmpty()) {
 			throw new OrderNotFoundException("Pedido", id);
-		} else if (payment.isEmpty() && order.get().getOrderStatus() != OrderStatus.RECEIVED) {
-			throw new PaymentNotFoundException("O pagamento do pedido não existe");
+		} else if (payment != null && order.get().getOrderStatus() != OrderStatus.RECEIVED) {
+			throw new OrderPaymentNotFoundException("O pagamento do pedido não existe");
 		}
 	}
 }

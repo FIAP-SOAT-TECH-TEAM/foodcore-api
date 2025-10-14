@@ -8,11 +8,11 @@ import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderAlreadyHasS
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.OrderGateway;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
-import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 
