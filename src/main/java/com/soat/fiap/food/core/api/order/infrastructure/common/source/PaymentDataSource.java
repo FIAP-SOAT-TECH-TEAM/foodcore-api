@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.common.source;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.payment.PaymentStatusOutput;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.payment.PaymentStatusDTO;
 
 /**
  * DataSource para obtenção de Pagamento.
@@ -13,5 +13,5 @@ public interface PaymentDataSource {
 	 * @param orderId
 	 *            ID do pedido
 	 */
-	PaymentStatusOutput getOrderStatus(Long orderId);
+	PaymentStatusDTO getOrderStatus(Long orderId);
 }

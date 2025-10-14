@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.infrastructure.out.payment.entity;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.payment.StatusEntity;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.payment.StatusDTO;
 
 import lombok.Data;
 
@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class PaymentStatusEntity {
 	private Long orderId;
-	private StatusEntity status;
+	private StatusDTO status;
 }

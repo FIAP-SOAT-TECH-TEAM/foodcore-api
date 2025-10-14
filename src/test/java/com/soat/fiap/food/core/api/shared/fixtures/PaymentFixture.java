@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.AcquirerNotificationInput;
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
 import com.soat.fiap.food.core.api.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.api.payment.core.domain.vo.PaymentStatus;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 
 /**
  * Fixture para criação de objetos do módulo Payment para testes unitários
@@ -107,17 +107,17 @@ public class PaymentFixture {
 		);
 	}
 
-	public static AcquirerPaymentOutput createValidAcquirerPaymentOutput() {
-		return new AcquirerPaymentOutput("12345678", // tid
+	public static AcquirerPaymentDTO createValidAcquirerPaymentOutput() {
+		return new AcquirerPaymentDTO("12345678", // tid
 				PaymentStatus.APPROVED, 1L, // externalReference (orderId)
 				PaymentMethod.PIX);
 	}
 
-	public static AcquirerPaymentOutput createRejectedAcquirerPaymentOutput() {
-		return new AcquirerPaymentOutput("87654321", PaymentStatus.REJECTED, 1L, PaymentMethod.PIX);
+	public static AcquirerPaymentDTO createRejectedAcquirerPaymentOutput() {
+		return new AcquirerPaymentDTO("87654321", PaymentStatus.REJECTED, 1L, PaymentMethod.PIX);
 	}
 
-	public static AcquirerPaymentOutput createCancelledAcquirerPaymentOutput() {
-		return new AcquirerPaymentOutput("11223344", PaymentStatus.CANCELLED, 1L, PaymentMethod.PIX);
+	public static AcquirerPaymentDTO createCancelledAcquirerPaymentOutput() {
+		return new AcquirerPaymentDTO("11223344", PaymentStatus.CANCELLED, 1L, PaymentMethod.PIX);
 	}
 }

@@ -10,13 +10,13 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Component;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.config.MercadoPagoProperties;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.entity.MercadoPagoQrCodeEntity;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.exceptions.MercadoPagoException;
 import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.request.GenerateQrCodeRequestMapper;
-import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.response.MercadoPagoPaymentOutputMapper;
+import com.soat.fiap.food.core.api.payment.infrastructure.out.mercadopago.mapper.response.MercadoPagoPaymentDTOMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Response;
@@ -36,15 +36,14 @@ public class MercadoPagoSource implements AcquirerSource {
 			.toFormatter();
 	private final MercadoPagoClient client;
 	private final GenerateQrCodeRequestMapper generateQrCodeRequestMapper;
-	private final MercadoPagoPaymentOutputMapper mercadoPagoPaymentOutputMapper;
+	private final MercadoPagoPaymentDTOMapper mercadoPagoPaymentDTOMapper;
 	private final MercadoPagoProperties properties;
 
 	public MercadoPagoSource(MercadoPagoClient client, GenerateQrCodeRequestMapper generateQrCodeRequestMapper,
-			MercadoPagoPaymentOutputMapper mercadoPagoPaymentOutputMapper,
-			MercadoPagoProperties mercadoPagoProperties) {
+			MercadoPagoPaymentDTOMapper mercadoPagoPaymentDTOMapper, MercadoPagoProperties mercadoPagoProperties) {
 		this.client = client;
 		this.generateQrCodeRequestMapper = generateQrCodeRequestMapper;
-		this.mercadoPagoPaymentOutputMapper = mercadoPagoPaymentOutputMapper;
+		this.mercadoPagoPaymentDTOMapper = mercadoPagoPaymentDTOMapper;
 		this.properties = mercadoPagoProperties;
 	}
 
@@ -82,7 +81,7 @@ public class MercadoPagoSource implements AcquirerSource {
 	}
 
 	@Override
-	public AcquirerPaymentOutput getAcquirerPayments(String id) {
+	public AcquirerPaymentDTO getAcquirerPayments(String id) {
 		try {
 			var response = client.getMercadoPagoPayments(id).execute();
 
@@ -90,7 +89,7 @@ public class MercadoPagoSource implements AcquirerSource {
 
 				var mercadoPagoPaymentEntity = response.body();
 
-				return mercadoPagoPaymentOutputMapper.toOutput(mercadoPagoPaymentEntity);
+				return mercadoPagoPaymentDTOMapper.toDto(mercadoPagoPaymentEntity);
 			} else {
 				log.warn("Erro ao contatar API do mercado pago para obter dados do pagamento");
 

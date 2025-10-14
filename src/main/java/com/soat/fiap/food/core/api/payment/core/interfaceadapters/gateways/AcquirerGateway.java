@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways;
 import java.time.LocalDateTime;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 
 /**
@@ -41,7 +41,7 @@ public class AcquirerGateway {
 	 *            Identificador do pagamento no adquirente.
 	 * @return Resposta com os detalhes dos pagamentos.
 	 */
-	public AcquirerPaymentOutput getAcquirerPayments(String id) {
+	public AcquirerPaymentDTO getAcquirerPayments(String id) {
 		return acquirerSource.getAcquirerPayments(id);
 	}
 

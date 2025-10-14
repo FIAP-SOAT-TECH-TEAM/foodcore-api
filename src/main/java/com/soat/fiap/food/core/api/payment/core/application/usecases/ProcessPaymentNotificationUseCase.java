@@ -29,15 +29,15 @@ public class ProcessPaymentNotificationUseCase {
 	public static Payment processPaymentNotification(AcquirerNotificationInput acquirerNotificationInput,
 			AcquirerGateway acquirerGateway, PaymentGateway paymentGateway) {
 
-		var acquirerPaymentOutput = acquirerGateway.getAcquirerPayments(acquirerNotificationInput.dataId());
-		var payment = paymentGateway.findTopByOrderIdOrderByIdDesc(acquirerPaymentOutput.externalReference());
+		var acquirerPaymentDto = acquirerGateway.getAcquirerPayments(acquirerNotificationInput.dataId());
+		var payment = paymentGateway.findTopByOrderIdOrderByIdDesc(acquirerPaymentDto.externalReference());
 
 		if (payment.isEmpty()) {
 			log.warn("Pagamento não foi encontrado a partir da external_reference! {}",
-					acquirerPaymentOutput.externalReference());
-			throw new PaymentNotFoundException("Pagamento", acquirerPaymentOutput.externalReference());
+					acquirerPaymentDto.externalReference());
+			throw new PaymentNotFoundException("Pagamento", acquirerPaymentDto.externalReference());
 		} else if (payment.get().getStatus() == PaymentStatus.APPROVED) {
-			log.info("Pagamento já aprovado {}!", acquirerPaymentOutput.externalReference());
+			log.info("Pagamento já aprovado {}!", acquirerPaymentDto.externalReference());
 			return payment.get();
 		}
 		// Indica que se trata de uma segunda tentativa de pagamento
@@ -45,8 +45,8 @@ public class ProcessPaymentNotificationUseCase {
 			payment.get().setId(null);
 		}
 
-		payment.get().setStatus(acquirerPaymentOutput.status());
-		payment.get().setType(acquirerPaymentOutput.type());
+		payment.get().setStatus(acquirerPaymentDto.status());
+		payment.get().setType(acquirerPaymentDto.type());
 		payment.get().setTid(acquirerNotificationInput.dataId());
 
 		return payment.get();

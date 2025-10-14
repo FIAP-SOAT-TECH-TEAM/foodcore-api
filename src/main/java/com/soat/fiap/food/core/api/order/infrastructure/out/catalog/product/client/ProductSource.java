@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.product.ProductDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.exceptions.ProductException;
-import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.mapper.response.ProductOutputMapper;
+import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.mapper.response.ProductDTOMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,16 +24,16 @@ public class ProductSource implements ProductDataSource {
 	private ProductClient client;
 
 	@Autowired
-	private ProductOutputMapper productOutputMapper;
+	private ProductDTOMapper productDTOMapper;
 
 	@Override
-	public List<ProductOutput> findByProductIds(List<Long> productIds) {
+	public List<ProductDTO> findByProductIds(List<Long> productIds) {
 		try {
 			var response = client.getProductsByIds(productIds);
 
 			if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
 				var productEntities = response.getBody();
-				return productOutputMapper.toOutputList(productEntities);
+				return productDTOMapper.toDtoList(productEntities);
 			} else {
 				String errorMsg = "Erro do microsserviço de catálogo (Product) | Status code: "
 						+ response.getStatusCode().value();

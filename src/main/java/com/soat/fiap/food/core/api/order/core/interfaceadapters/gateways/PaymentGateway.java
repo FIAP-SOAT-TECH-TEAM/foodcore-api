@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.payment.PaymentStatusOutput;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.payment.PaymentStatusDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 
 /**
@@ -20,7 +20,7 @@ public class PaymentGateway {
 	 * @param orderId
 	 *            ID do pedido
 	 */
-	public PaymentStatusOutput getOrderStatus(Long orderId) {
+	public PaymentStatusDTO getOrderStatus(Long orderId) {
 		return paymentDataSource.getOrderStatus(orderId);
 	}
 

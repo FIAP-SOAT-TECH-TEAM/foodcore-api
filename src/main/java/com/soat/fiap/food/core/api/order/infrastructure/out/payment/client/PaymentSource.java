@@ -3,10 +3,10 @@ package com.soat.fiap.food.core.api.order.infrastructure.out.payment.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.payment.PaymentStatusOutput;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.payment.PaymentStatusDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.payment.exceptions.PaymentException;
-import com.soat.fiap.food.core.api.order.infrastructure.out.payment.mapper.response.PaymentStatusOutputMapper;
+import com.soat.fiap.food.core.api.order.infrastructure.out.payment.mapper.response.PaymentStatusDTOMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +22,16 @@ public class PaymentSource implements PaymentDataSource {
 	private PaymentClient client;
 
 	@Autowired
-	private PaymentStatusOutputMapper paymentStatusOutputMapper;
+	private PaymentStatusDTOMapper paymentStatusDTOMapper;
 
 	@Override
-	public PaymentStatusOutput getOrderStatus(Long orderId) {
+	public PaymentStatusDTO getOrderStatus(Long orderId) {
 		try {
 			var response = client.getOrderStatus(orderId);
 
 			if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
 				var paymentStatusEntity = response.getBody();
-				return paymentStatusOutputMapper.toOutput(paymentStatusEntity);
+				return paymentStatusDTOMapper.toDto(paymentStatusEntity);
 			} else {
 				String errorMsg = "Erro do microsserviço de pagamento | Status code: "
 						+ response.getStatusCode().value();

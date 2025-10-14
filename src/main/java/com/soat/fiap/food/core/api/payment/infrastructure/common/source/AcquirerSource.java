@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.api.payment.infrastructure.common.source;
 import java.time.LocalDateTime;
 
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.api.payment.core.application.outputs.AcquirerPaymentOutput;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 
 /**
  * DataSource para comunicação com o adquirente
@@ -25,7 +25,7 @@ public interface AcquirerSource {
 	 * @param id
 	 *            Identificador do pagamento.
 	 */
-	AcquirerPaymentOutput getAcquirerPayments(String id);
+	AcquirerPaymentDTO getAcquirerPayments(String id);
 
 	/**
 	 * Consulta um pedido (order) do adquirente pelo seu ID.

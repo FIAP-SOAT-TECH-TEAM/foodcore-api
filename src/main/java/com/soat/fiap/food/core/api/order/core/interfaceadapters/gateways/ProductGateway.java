@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways;
 
 import java.util.List;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
+import com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.product.ProductDTO;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.ProductDataSource;
 
 /**
@@ -22,7 +22,7 @@ public class ProductGateway {
 	 * @param productIds
 	 *            IDs do produtos
 	 */
-	public List<ProductOutput> findByProductIds(List<Long> productIds) {
+	public List<ProductDTO> findByProductIds(List<Long> productIds) {
 		return productDataSource.findByProductIds(productIds);
 	}
 
