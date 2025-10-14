@@ -10,8 +10,8 @@ import org.mapstruct.ReportingPolicy;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CatalogDTO;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CatalogEntity;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
+import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.DoIgnore;
 

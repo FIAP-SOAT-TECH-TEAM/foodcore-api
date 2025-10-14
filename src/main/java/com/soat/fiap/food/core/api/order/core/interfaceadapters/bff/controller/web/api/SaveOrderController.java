@@ -38,8 +38,8 @@ public class SaveOrderController {
 	 * @return Pedido salvo com identificadores atualizados
 	 */
 	public static OrderResponse saveOrder(CreateOrderRequest createOrderRequest, OrderDataSource orderDataSource,
-										  ProductDataSource productDataSource, AuthenticatedUserSource authenticatedUserSource,
-										  EventPublisherSource eventPublisherSource) {
+			ProductDataSource productDataSource, AuthenticatedUserSource authenticatedUserSource,
+			EventPublisherSource eventPublisherSource) {
 
 		var orderGateway = new OrderGateway(orderDataSource);
 		var productGateway = new ProductGateway(productDataSource);
