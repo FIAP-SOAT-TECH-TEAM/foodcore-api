@@ -1,6 +1,5 @@
 package com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api;
 
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.core.application.inputs.mappers.OrderCreatedMapper;
 import com.soat.fiap.food.core.api.payment.core.application.usecases.InitializePaymentUseCase;
 import com.soat.fiap.food.core.api.payment.core.application.usecases.PublishPaymentInitializationErrorEventUseCase;
@@ -21,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InitializePaymentController {
 	/**
 	 * Inicializa o pagamento de um pedido a partir do evento
-	 * {@link OrderCreatedEvent}.
+	 * {@link OrderCreatedEventDto}.
 	 *
 	 * @param event
 	 *            Evento que representa um pedido criado

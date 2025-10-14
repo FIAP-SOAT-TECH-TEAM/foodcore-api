@@ -2,14 +2,13 @@ package com.soat.fiap.food.core.api.payment.core.application.inputs.mappers;
 
 import java.util.List;
 
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
 
 /**
- * Classe utilitária responsável por mapear {@link OrderCreatedEvent} para o DTO
- * {@link OrderCreatedInput}, utilizado na inicialização de pagamento.
+ * Classe utilitária responsável por mapear {@link OrderCreatedEventDto} para o
+ * DTO {@link OrderCreatedInput}, utilizado na inicialização de pagamento.
  */
 public class OrderCreatedMapper {
 

@@ -1,11 +1,11 @@
 package com.soat.fiap.food.core.api.order.infrastructure.out.payment.client;
 
-import com.soat.fiap.food.core.api.order.infrastructure.out.payment.entity.PaymentStatusEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.soat.fiap.food.core.api.order.infrastructure.out.payment.entity.PaymentStatusEntity;
 
 /**
  * Cliente de conexão com a API do microsserviço de Pagamento

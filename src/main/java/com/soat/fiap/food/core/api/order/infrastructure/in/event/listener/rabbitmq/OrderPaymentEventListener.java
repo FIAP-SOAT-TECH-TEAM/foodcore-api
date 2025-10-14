@@ -1,12 +1,12 @@
 package com.soat.fiap.food.core.api.order.infrastructure.in.event.listener.rabbitmq;
 
-import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.OrderDataSource;
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentExpiredEventDto;

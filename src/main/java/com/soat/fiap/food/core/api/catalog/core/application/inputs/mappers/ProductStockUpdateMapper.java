@@ -3,7 +3,6 @@ package com.soat.fiap.food.core.api.catalog.core.application.inputs.mappers;
 import java.util.List;
 
 import com.soat.fiap.food.core.api.catalog.core.application.inputs.ProductStockUpdateInput;
-import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCanceledEvent;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderItemCanceledEventDto;
 import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
 
@@ -13,8 +12,8 @@ import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.Orde
  * da aplicação para atualização de estoque de produtos.
  * <p>
  * Atua como um tradutor entre {@link OrderItemCreatedEventDto} ou
- * {@link OrderItemCanceledEvent} e {@link ProductStockUpdateInput}, utilizado
- * para descontar ou repor quantidades em estoque.
+ * {@link OrderItemCanceledEventDto} e {@link ProductStockUpdateInput},
+ * utilizado para descontar ou repor quantidades em estoque.
  */
 public class ProductStockUpdateMapper {
 
