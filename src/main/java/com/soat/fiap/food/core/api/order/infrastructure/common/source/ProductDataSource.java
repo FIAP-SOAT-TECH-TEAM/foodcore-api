@@ -1,9 +1,8 @@
 package com.soat.fiap.food.core.api.order.infrastructure.common.source;
 
-import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
+import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * DataSource para obtenção de Produto.
@@ -16,6 +15,6 @@ public interface ProductDataSource {
 	 * @param productIds
 	 *            IDs do produtos
 	 */
-	Optional<List<ProductDTO>> findByProductIds(List<Long> productIds);
+	List<ProductOutput> findByProductIds(List<Long> productIds);
 
 }

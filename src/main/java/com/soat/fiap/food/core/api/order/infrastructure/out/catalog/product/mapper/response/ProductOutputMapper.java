@@ -1,0 +1,50 @@
+package com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.mapper.response;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
+
+import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
+import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.StockOutput;
+import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.entity.ProductEntity;
+import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.entity.StockEntity;
+
+/**
+ * Mapper responsável por converter {@link ProductEntity} em {@link ProductOutput}
+ * e {@link StockEntity} em {@link StockOutput}.
+ * <p>
+ * Esse mapper é utilizado para extrair apenas os dados relevantes das entidades
+ * de catálogo que serão utilizados na lógica de aplicação (caso de uso).
+ */
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ProductOutputMapper {
+
+	/**
+	 * Converte uma entidade de produto em um output contendo apenas os dados necessários
+	 * para a lógica de aplicação.
+	 *
+	 * @param entity entidade de produto retornada pela API do catálogo
+	 * @return objeto de saída da camada de aplicação com os dados mapeados
+	 */
+	@Mapping(target = "stock", source = "stock")
+	ProductOutput toOutput(ProductEntity entity);
+
+	/**
+	 * Converte uma lista de entidades de produto em uma lista de outputs.
+	 *
+	 * @param entities lista de entidades de produto
+	 * @return lista de objetos de saída da camada de aplicação com os dados mapeados
+	 */
+	List<ProductOutput> toOutputList(List<ProductEntity> entities);
+
+	/**
+	 * Converte uma entidade de estoque em um output contendo apenas os dados necessários
+	 * para a lógica de aplicação.
+	 *
+	 * @param entity entidade de estoque retornada pela API do catálogo
+	 * @return objeto de saída da camada de aplicação com os dados mapeados
+	 */
+	StockOutput toOutput(StockEntity entity);
+}

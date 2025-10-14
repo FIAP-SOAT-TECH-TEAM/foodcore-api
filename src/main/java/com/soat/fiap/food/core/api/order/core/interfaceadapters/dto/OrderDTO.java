@@ -11,5 +11,5 @@ import com.soat.fiap.food.core.api.order.core.domain.vo.OrderStatus;
  * transferência entre o domínio e o mundo externo (DataSource).
  */
 public record OrderDTO(Long id, String userId, String orderNumber, OrderStatus status, BigDecimal amount,
-		List<OrderItemDTO> items, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                       List<OrderItemDTO> items, LocalDateTime createdAt, LocalDateTime updatedAt) {
 }
