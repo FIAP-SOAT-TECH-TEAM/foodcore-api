@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.ProductResponse;
 
@@ -23,9 +23,12 @@ public class ProductPresenter {
 	 *         para resposta HTTP.
 	 */
 	public static ProductResponse toProductResponse(Product product) {
+		Category category = product.getCategory();
+
 		return new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice(),
-				product.getImageUrlValue(), product.isActive(), product.getDisplayOrder(),
-				StockPresenter.toStockResponse(product.getStock()), product.getCreatedAt(), product.getUpdatedAt());
+				product.getImageUrlValue(), product.isActive(), category != null && category.isActive(),
+				product.getDisplayOrder(), StockPresenter.toStockResponse(product.getStock()), product.getCreatedAt(),
+				product.getUpdatedAt());
 	}
 
 	/**
@@ -39,6 +42,6 @@ public class ProductPresenter {
 	 *         formatados para resposta HTTP.
 	 */
 	public static List<ProductResponse> toListProductResponse(List<Product> products) {
-		return products.stream().map(ProductPresenter::toProductResponse).collect(Collectors.toList());
+		return products.stream().map(ProductPresenter::toProductResponse).toList();
 	}
 }

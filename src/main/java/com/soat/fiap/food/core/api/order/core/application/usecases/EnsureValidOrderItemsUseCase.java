@@ -6,8 +6,8 @@ import java.util.Objects;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.api.order.core.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
-
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways.ProductGateway;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +22,8 @@ public class EnsureValidOrderItemsUseCase {
 	 * @param orderItems
 	 *            Lista de itens do pedido
 	 * @param gateway
-	 *            Gateway para comunicação com o mundo exterior (microsserviço de Catalog (Product))
+	 *            Gateway para comunicação com o mundo exterior (microsserviço de
+	 *            Catalog (Product))
 	 * @throws OrderException
 	 *             se o produto não for encontrado
 	 * @throws OrderItemException
@@ -30,10 +31,7 @@ public class EnsureValidOrderItemsUseCase {
 	 */
 	public static void ensureValidOrderItems(List<OrderItem> orderItems, ProductGateway gateway) {
 
-		var productIds = orderItems
-				.stream()
-				.map(OrderItem::getProductId)
-				.toList();
+		var productIds = orderItems.stream().map(OrderItem::getProductId).toList();
 
 		var products = gateway.findByProductIds(productIds);
 
@@ -50,7 +48,7 @@ public class EnsureValidOrderItemsUseCase {
 				throw new OrderItemException("O preço unitário do item do pedido diverge do preço do produto");
 			} else if (!productOrderItem.active()) {
 				throw new OrderItemException("O pedido não pode possuir produtos inativos");
-			} else if (!productOrderItem.categoryisActive()) {
+			} else if (!productOrderItem.categoryIsActive()) {
 				throw new OrderItemException("A categoria do produto do pedido não pode estar inativa");
 			} else if (productOrderItem.stock().quantity() < orderItem.getQuantity()) {
 				throw new OrderItemException(String.format("Quantidade insuficiente em estoque para o produto: %s",

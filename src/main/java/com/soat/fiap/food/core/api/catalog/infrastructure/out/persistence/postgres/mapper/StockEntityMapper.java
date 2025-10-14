@@ -29,7 +29,7 @@ public interface StockEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Entidade de domínio
 	 */
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	Stock toDomain(StockEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**
@@ -41,7 +41,7 @@ public interface StockEntityMapper {
 	 *            Contexto para evitar ciclos
 	 * @return Lista de entidades de domínio
 	 */
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entities.getAuditInfo().getCreatedAt(), entities.getAuditInfo().getUpdatedAt()))")
 	List<Stock> toDomainList(List<StockEntity> entities,
 			@Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
@@ -52,7 +52,7 @@ public interface StockEntityMapper {
 	 *            Entidade de domínio
 	 * @return Entidade JPA
 	 */
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(domain.getAuditInfo().getCreatedAt(), domain.getAuditInfo().getUpdatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(domain.getAuditInfo().getCreatedAt(), domain.getAuditInfo().getUpdatedAt()))")
 	StockEntity toEntity(Stock domain, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	/**

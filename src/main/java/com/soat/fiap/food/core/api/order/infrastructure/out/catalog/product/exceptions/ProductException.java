@@ -3,7 +3,8 @@ package com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.exc
 import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
 
 /**
- * Exceção lançada quando existe um erro de retorno da API do microsserviço de Catalog (Product)
+ * Exceção lançada quando existe um erro de retorno da API do microsserviço de
+ * Catalog (Product)
  */
 public class ProductException extends APIException {
 

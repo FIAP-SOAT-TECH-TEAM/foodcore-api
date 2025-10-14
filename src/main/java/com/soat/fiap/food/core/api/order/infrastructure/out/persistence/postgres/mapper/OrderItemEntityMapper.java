@@ -20,19 +20,19 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoi
 public interface OrderItemEntityMapper {
 
 	@Mapping(target = "order", ignore = true)
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	OrderItem toDomain(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
 
 	List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "order", ignore = true)
 	@Mapping(target = "orderItemPrice", source = ".", qualifiedByName = "fromQuantityAndPrice")
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	OrderItemEntity toEntity(OrderItemDTO dto, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "order", ignore = true)
 	@Mapping(target = "orderItemPrice", source = ".", qualifiedByName = "mapToOrderItemPrice")
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	List<OrderItemEntity> toEntityList(List<OrderItemDTO> dto, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "quantity", source = "orderItemPrice", qualifiedByName = "extractQuantity")

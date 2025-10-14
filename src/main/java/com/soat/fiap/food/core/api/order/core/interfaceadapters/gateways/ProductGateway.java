@@ -1,9 +1,9 @@
 package com.soat.fiap.food.core.api.order.core.interfaceadapters.gateways;
 
+import java.util.List;
+
 import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.ProductDataSource;
-
-import java.util.List;
 
 /**
  * Gateway para comunicação com o microsserviço de catálogo (Product)

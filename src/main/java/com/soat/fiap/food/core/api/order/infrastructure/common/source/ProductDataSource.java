@@ -1,8 +1,8 @@
 package com.soat.fiap.food.core.api.order.infrastructure.common.source;
 
-import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
-
 import java.util.List;
+
+import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
 
 /**
  * DataSource para obtenção de Produto.

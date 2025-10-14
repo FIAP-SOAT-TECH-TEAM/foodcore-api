@@ -23,21 +23,14 @@ import java.time.LocalDateTime;
  *            Ordem de exibição do produto.
  * @param active
  *            Indica se o produto está ativo.
+ * @param categoryIsActive
+ *            Indica se a categoria do produto está ativa.
  * @param createdAt
  *            Data e hora de criação do produto.
  * @param updatedAt
  *            Data e hora da última atualização do produto.
  */
-public record ProductOutput(
-		Long id,
-		String name,
-		String description,
-		String imageUrl,
-		BigDecimal price,
-		StockOutput stock,
-		Integer displayOrder,
-		boolean active,
-		LocalDateTime createdAt,
-		LocalDateTime updatedAt
-) {
+public record ProductOutput(Long id, String name, String description, String imageUrl, BigDecimal price,
+		StockOutput stock, Integer displayOrder, boolean active, boolean categoryIsActive, LocalDateTime createdAt,
+		LocalDateTime updatedAt) {
 }

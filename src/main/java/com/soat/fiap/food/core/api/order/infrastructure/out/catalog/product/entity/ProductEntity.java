@@ -1,8 +1,9 @@
 package com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.entity;
 
-import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 /**
  * Representa a entidade de Product na API do microsserviço de catálogo.
@@ -21,6 +22,8 @@ public class ProductEntity {
 	private String imageUrl;
 
 	private boolean active;
+
+	private boolean categoryIsActive;
 
 	private Integer displayOrder;
 

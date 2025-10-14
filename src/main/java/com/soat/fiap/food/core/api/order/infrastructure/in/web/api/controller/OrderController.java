@@ -2,12 +2,12 @@ package com.soat.fiap.food.core.api.order.infrastructure.in.web.api.controller;
 
 import java.util.List;
 
+import com.soat.fiap.food.core.api.order.infrastructure.common.source.ProductDataSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import com.soat.fiap.food.core.api.catalog.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.GetActiveOrdersSortedController;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.GetOrderByIdController;
 import com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.controller.web.api.SaveOrderController;
@@ -39,16 +39,16 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	private final OrderDataSource orderDataSource;
-	private final CatalogDataSource catalogDataSource;
+	private final ProductDataSource productDataSource;
 	private final PaymentDataSource paymentDataSource;
 	private final AuthenticatedUserSource authenticatedUserSource;
 	private final EventPublisherSource eventPublisherSource;
 
-	public OrderController(OrderDataSource orderDataSource, CatalogDataSource catalogDataSource,
+	public OrderController(OrderDataSource orderDataSource, ProductDataSource productDataSource,
 			PaymentDataSource paymentDataSource, AuthenticatedUserSource authenticatedUserSource,
 			EventPublisherSource eventPublisherSource) {
 		this.orderDataSource = orderDataSource;
-		this.catalogDataSource = catalogDataSource;
+		this.productDataSource = productDataSource;
 		this.eventPublisherSource = eventPublisherSource;
 		this.authenticatedUserSource = authenticatedUserSource;
 		this.paymentDataSource = paymentDataSource;
@@ -66,7 +66,7 @@ public class OrderController {
 	public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
 		log.debug("Requisição para criar novo pedido recebida");
 		OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, orderDataSource,
-				catalogDataSource, authenticatedUserSource, eventPublisherSource);
+				productDataSource, authenticatedUserSource, eventPublisherSource);
 		return ResponseEntity.status(201).body(orderResponse);
 	}
 

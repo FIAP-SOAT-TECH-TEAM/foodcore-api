@@ -1,22 +1,23 @@
 package com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.client;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.soat.fiap.food.core.api.order.core.application.outputs.catalog.product.ProductOutput;
 import com.soat.fiap.food.core.api.order.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.exceptions.ProductException;
 import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.mapper.response.ProductOutputMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
- * Implementação concreta: DataSource para comunicação com o microsserviço de Catalog (Product)
+ * Implementação concreta: DataSource para comunicação com o microsserviço de
+ * Catalog (Product)
  */
-@Component
-@Slf4j
-@RequiredArgsConstructor
+@Component @Slf4j @RequiredArgsConstructor
 public class ProductSource implements ProductDataSource {
 
 	@Autowired
@@ -34,7 +35,8 @@ public class ProductSource implements ProductDataSource {
 				var productEntities = response.getBody();
 				return productOutputMapper.toOutputList(productEntities);
 			} else {
-				String errorMsg = "Erro do microsserviço de catálogo (Product) | Status code: " + response.getStatusCode().value();
+				String errorMsg = "Erro do microsserviço de catálogo (Product) | Status code: "
+						+ response.getStatusCode().value();
 				log.warn(errorMsg);
 				throw new ProductException(errorMsg, null, response.getStatusCode().value());
 			}

@@ -34,6 +34,9 @@ public class ProductResponse {
 	@Schema(description = "Indica se o produto está ativo", example = "true")
 	private boolean active;
 
+	@Schema(description = "Indica se a categoria do produto está ativa", example = "false")
+	private boolean categoryIsActive;
+
 	@Schema(description = "Ordem de exibição no catálogo", example = "1")
 	private Integer displayOrder;
 
