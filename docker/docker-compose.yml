@@ -72,20 +72,6 @@ services:
       - fastfood-network
     restart: unless-stopped
 
-  # Serviço de tracing (Zipkin)
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: foodcore-zipkin
-    ports:
-      - "${ZIPKIN_PORT}:${ZIPKIN_PORT}"
-    env_file:
-      - .env
-    environment:
-      - SERVER_PORT=${ZIPKIN_PORT}
-    networks:
-      - fastfood-network
-    restart: unless-stopped
-
   # RabbitMQ com management UI
   rabbitmq:
     image: rabbitmq:3.13-management

@@ -21,7 +21,7 @@ fi
 cd "$PROJECT_ROOT/docker"
 
 # Verificar quais contêineres de infraestrutura estão rodando
-INFRA_CONTAINERS=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq|zipkin)" --format "{{.Names}}")
+INFRA_CONTAINERS=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq)" --format "{{.Names}}")
 
 if [ -z "$INFRA_CONTAINERS" ]; then
   echo "Nenhum contêiner de infraestrutura em execução."
@@ -33,11 +33,11 @@ echo "$INFRA_CONTAINERS"
 echo
 
 # Parar os contêineres de infraestrutura
-echo "-> Parando serviços de infraestrutura (DB, Adminer, RabbitMQ, Zipkin)..."
-docker-compose stop db adminer rabbitmq zipkin
+echo "-> Parando serviços de infraestrutura (DB, Adminer, RabbitMQ)..."
+docker-compose stop db adminer rabbitmq
 
 # Verificar se todos os contêineres foram parados
-STILL_RUNNING=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq|zipkin)" --format "{{.Names}}")
+STILL_RUNNING=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq)" --format "{{.Names}}")
 if [ -z "$STILL_RUNNING" ]; then
   echo "===== Infraestrutura parada com sucesso! ====="
 else
@@ -46,9 +46,9 @@ else
   echo
   echo "Forçando a parada de todos os contêineres..."
   docker-compose down
-  
+
   # Verificação final
-  STILL_RUNNING=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq|zipkin)" --format "{{.Names}}")
+  STILL_RUNNING=$(docker ps --filter "name=foodcore-(db|adminer|rabbitmq)" --format "{{.Names}}")
   if [ -z "$STILL_RUNNING" ]; then
     echo "===== Infraestrutura parada com sucesso! ====="
   else

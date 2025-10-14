@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.modulith.Modulith;
 
 @Modulith @SpringBootApplication
+@EnableFeignClients
+@EnableDiscoveryClient
 public class FoodCoreApiApplication {
 
 	public static void main(String[] args) {

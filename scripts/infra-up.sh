@@ -26,7 +26,7 @@ RUNNING_CONTAINERS=$(docker ps --filter "name=food-core" --format "{{.Names}}")
 if [ -n "$RUNNING_CONTAINERS" ]; then
   echo "AVISO: Existem containers da aplicação em execução:"
   echo "$RUNNING_CONTAINERS"
-  
+
   if [ "$1" != "--force" ]; then
     read -p "Deseja parar os containers existentes e iniciar novamente? (s/n): " resposta
     if [[ ! "$resposta" =~ ^[Ss]$ ]]; then
@@ -34,7 +34,7 @@ if [ -n "$RUNNING_CONTAINERS" ]; then
       exit 0
     fi
   fi
-  
+
   echo "-> Parando containers existentes..."
   docker-compose down
 fi
@@ -53,7 +53,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
         echo "-> PostgreSQL está pronto!"
         break
     fi
-    
+
     RETRY_COUNT=$((RETRY_COUNT+1))
     echo "Aguardando PostgreSQL inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
     sleep 2
@@ -88,30 +88,6 @@ if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
     echo "AVISO: Tempo limite excedido aguardando o RabbitMQ inicializar"
 fi
 
-# Iniciar Zipkin
-echo "-> Iniciando Zipkin..."
-docker-compose up -d zipkin
-
-# Verificar se o Zipkin está rodando
-echo "-> Verificando status do Zipkin..."
-MAX_RETRIES=30
-RETRY_COUNT=0
-
-while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if curl -s "http://localhost:9411/health" | grep -q "UP"; then
-        echo "-> Zipkin está pronto!"
-        break
-    fi
-
-    RETRY_COUNT=$((RETRY_COUNT+1))
-    echo "Aguardando Zipkin inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
-    sleep 2
-done
-
-if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-    echo "AVISO: Tempo limite excedido aguardando o Zipkin inicializar"
-fi
-
 # Agora que os serviços principais estão prontos, iniciar o Adminer
 echo "-> Iniciando serviços adicionais (Adminer)..."
 docker-compose up -d adminer
@@ -126,4 +102,3 @@ echo "  Usuário: postgres"
 echo "  Senha: postgres"
 echo "  Banco de dados: fastfood"
 echo "- RabbitMQ (painel): http://localhost:15672  (usuário: guest / senha: guest)"
-echo "- Zipkin (tracing): http://localhost:9411"

@@ -54,6 +54,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+    // Spring Cloud
+    implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-discovery'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	// Micrometer
 	implementation 'io.micrometer:micrometer-registry-prometheus'
