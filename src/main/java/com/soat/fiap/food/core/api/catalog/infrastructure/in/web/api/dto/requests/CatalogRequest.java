@@ -17,6 +17,6 @@ public class CatalogRequest {
 
 	@NotBlank(message = "O nome do catálogo é obrigatório")
 	@Size(max = 100, message = "O nome do catálogo deve ter no máximo 100 caracteres")
-	@Schema(description = "Nome do catálogo", example = "Promoções", required = true)
+	@Schema(description = "Nome do catálogo", example = "Promoções", requiredMode = Schema.RequiredMode.REQUIRED)
 	private String name;
 }

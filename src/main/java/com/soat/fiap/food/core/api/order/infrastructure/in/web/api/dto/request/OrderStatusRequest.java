@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor @Schema(description = "Requisição para atualização de status de um pedido")
 public class OrderStatusRequest {
 
-	@NotNull(message = "O status é obrigatório") @Schema(description = "Novo status do pedido", example = "PREPARING", required = true)
+	@NotNull(message = "O status é obrigatório") @Schema(description = "Novo status do pedido", example = "PREPARING", requiredMode = Schema.RequiredMode.REQUIRED)
 	private OrderStatus status;
 }

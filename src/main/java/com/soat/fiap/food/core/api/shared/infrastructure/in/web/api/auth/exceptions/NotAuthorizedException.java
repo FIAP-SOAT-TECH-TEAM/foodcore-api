@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.except
 
 /**
  * Exceção lançada quando um usuário tenta acessar um recurso ou executar uma
- * operação para a qual não possui as permissões necessárias.
+ * operação sem estar autenticado.
  * <p>
  * Esta exceção é verificada em tempo de execução e geralmente está associada a
  * falhas de autenticação/autorização no contexto de segurança da aplicação.
@@ -14,22 +14,22 @@ package com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.except
  *
  * <pre>{@code
  * if (!usuario.temPermissao(recurso)) {
- * 	throw new AccessDeniedException("Acesso negado ao recurso solicitado.");
+ * 	throw new NotAuthorizedException("Usuário não autenticado.");
  * }
  * }</pre>
  *
  */
-public class AccessDeniedException extends RuntimeException {
+public class NotAuthorizedException extends RuntimeException {
 
 	/**
-	 * Cria uma nova instância da exceção com a mensagem detalhando o motivo do
-	 * acesso negado.
+	 * Cria uma nova instância da exceção com a mensagem detalhando o motivo da não
+	 * autorização.
 	 *
 	 * @param message
 	 *            mensagem explicativa da exceção, geralmente descrevendo qual
-	 *            recurso ou operação foi negada.
+	 *            recurso ou operação foi não autorizada.
 	 */
-	public AccessDeniedException(String message) {
+	public NotAuthorizedException(String message) {
 		super(message);
 	}
 }

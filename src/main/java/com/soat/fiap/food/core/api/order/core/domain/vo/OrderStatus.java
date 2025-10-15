@@ -7,12 +7,24 @@ import lombok.Getter;
  */
 @Getter
 public enum OrderStatus {
-	RECEIVED("Recebido"), PREPARING("Em Preparação"), READY("Pronto"), COMPLETED("Finalizado"), CANCELLED("Cancelado");
 
+	RECEIVED(1, "Recebido"), PREPARING(2, "Em Preparação"), READY(3, "Pronto"), COMPLETED(4, "Finalizado"), CANCELLED(5,
+			"Cancelado");
+
+	private final int code;
 	private final String description;
 
-	OrderStatus(String description) {
+	OrderStatus(int code, String description) {
+		this.code = code;
 		this.description = description;
 	}
 
+	public static OrderStatus fromCode(int code) {
+		for (OrderStatus status : values()) {
+			if (status.code == code) {
+				return status;
+			}
+		}
+		throw new IllegalArgumentException("Código inválido para OrderStatus: " + code);
+	}
 }

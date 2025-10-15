@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
  * DTO para resposta após atualização do status de um pedido
  */
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Schema(description = "Resposta de atualização do status de um pedido")
 public class OrderStatusResponse {
 	@Schema(description = "ID do pedido")
 	private Long orderId;

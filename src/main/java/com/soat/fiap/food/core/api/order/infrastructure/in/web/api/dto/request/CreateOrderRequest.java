@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 public class CreateOrderRequest {
 
 	@NotEmpty(message = "A lista de itens não pode estar vazia") @Valid
-	@Schema(description = "Lista de itens do pedido", required = true)
+	@Schema(description = "Lista de itens do pedido", requiredMode = Schema.RequiredMode.REQUIRED)
 	private List<OrderItemRequest> items;
 }

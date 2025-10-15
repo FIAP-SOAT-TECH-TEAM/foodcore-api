@@ -19,6 +19,7 @@ import com.soat.fiap.food.core.api.shared.core.domain.exceptions.BusinessExcepti
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceConflictException;
 import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
 import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException;
+import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.NotAuthorizedException;
 import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -176,6 +177,15 @@ public class GlobalExceptionHandler {
 	/**
 	 * Trata erros de acesso inválido
 	 */
+	@ExceptionHandler(NotAuthorizedException.class)
+	public ResponseEntity<ErrorResponse> handleNotAuthorizedException(NotAuthorizedException ex,
+			HttpServletRequest request) {
+
+		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+				ex.getMessage(), request.getServletPath());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+	}
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
 			HttpServletRequest request) {

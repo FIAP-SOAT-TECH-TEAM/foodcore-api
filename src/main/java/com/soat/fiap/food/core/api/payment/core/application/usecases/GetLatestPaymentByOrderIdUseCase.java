@@ -22,6 +22,7 @@ public class GetLatestPaymentByOrderIdUseCase {
 	 *            Gateway responsável por acessar os dados de pagamento.
 	 * @param accessManagerGateway
 	 *            Gateway responsável por validações de autenticação e autorização.
+	 *            Se não informado, nada acontecerá.
 	 * @return Instância de {@link Payment} com o status mais recente.
 	 * @throws PaymentNotFoundException
 	 *             caso nenhum pagamento seja encontrado para o pedido.
@@ -35,7 +36,9 @@ public class GetLatestPaymentByOrderIdUseCase {
 			throw new PaymentNotFoundException("Pagamento", orderId);
 		}
 
-		accessManagerGateway.validateAccess(payment.get().getUserId());
+		if (accessManagerGateway != null) {
+			accessManagerGateway.validateAccess(payment.get().getUserId());
+		}
 
 		return payment.get();
 	}

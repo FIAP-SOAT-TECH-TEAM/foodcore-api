@@ -48,7 +48,8 @@ public class UpdateOrderStatusController {
 		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 
 		try {
-			EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, paymentGateway, orderGateway);
+			EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, orderStatusRequest.getStatus(),
+					paymentGateway, orderGateway);
 
 			log.info("Atualizando status do pedido {} para {}", id, orderStatusRequest.getStatus());
 

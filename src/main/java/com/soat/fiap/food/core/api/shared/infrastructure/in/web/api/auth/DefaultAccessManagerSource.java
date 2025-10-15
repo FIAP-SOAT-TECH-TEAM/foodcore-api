@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.AccessDeniedException;
+import com.soat.fiap.food.core.api.shared.infrastructure.in.web.api.auth.exceptions.NotAuthorizedException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +37,7 @@ public class DefaultAccessManagerSource implements AccessManagerSource {
 
 		if (currentUserId == null || currentUserId.isEmpty()) {
 			log.info("Negando acesso pois usuário não está autenticado, no recurso cujo dono é: {}", userId);
-			throw new AccessDeniedException("Usuário não autenticado.");
+			throw new NotAuthorizedException("Usuário não autenticado.");
 		}
 
 		String role = userProvider.getRole();

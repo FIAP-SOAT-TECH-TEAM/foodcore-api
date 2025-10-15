@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
  * DTO para resposta de obtenção do qrcode de um pedido
  */
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Schema(description = "Resposta de obtenção do QrCode de um pagamento")
 public class QrCodeResponse {
 	@Schema(description = "ID do pedido")
 	private String orderId;

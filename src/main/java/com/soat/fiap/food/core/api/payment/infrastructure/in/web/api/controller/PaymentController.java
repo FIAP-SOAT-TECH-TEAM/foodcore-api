@@ -4,14 +4,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetAcquirerOrderController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetOrderPaymentQrCodeController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.GetOrderPaymentStatusController;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.ProcessPaymentNotificationController;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.bff.controller.web.api.*;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.request.AcquirerTopicNotificationRequest;
+import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.api.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AccessManagerSource;
@@ -108,6 +106,20 @@ public class PaymentController {
 		log.info("Recebida requisição para obter status do pagamento para orderId {}", orderId);
 		var response = GetOrderPaymentStatusController.getOrderPaymentStatus(orderId, paymentDataSource,
 				accessManagerSource);
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "Buscar pagamento mais recente por ID do pedido")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Pagamento retornado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentResponse.class))),
+			@ApiResponse(responseCode = "404", description = "Pagamento não encontrado", content = @Content)})
+	@GetMapping("/{orderId}/latest") @Transactional(readOnly = true)
+	public ResponseEntity<PaymentResponse> getLatestOrderPayment(@PathVariable Long orderId) {
+		log.info("Recebida requisição para obter o pagamento mais recente para orderId {}", orderId);
+
+		var response = GetLatestOrderPaymentByOrderIdController.getLatestOrderPaymentByOrderId(orderId,
+				paymentDataSource);
+
 		return ResponseEntity.ok(response);
 	}
 

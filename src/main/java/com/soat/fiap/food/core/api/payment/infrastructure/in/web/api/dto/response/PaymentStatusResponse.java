@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
  * DTO para resposta de checagem de pagamento
  */
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Schema(description = "Resposta de checagem do status de pagamento")
 public class PaymentStatusResponse {
 	@Schema(description = "ID do pedido")
 	private Long orderId;
