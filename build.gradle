@@ -38,7 +38,7 @@ ext {
 	set('springdocVersion', "2.8.4")
 	set('jjwtVersion', "0.11.5")
 	set('picoli', "4.7.5")
-	set('springCloudVersion', "2025.0.0")
+	set('springCloudVersion', "2024.0.0")
 	set('retrofit', "3.0.0")
 	set('converterGson', "3.0.0")
 	set('azureBlobSdk', "12.25.0")

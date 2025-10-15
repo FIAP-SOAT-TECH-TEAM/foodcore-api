@@ -15,6 +15,6 @@ import com.soat.fiap.food.core.api.order.infrastructure.out.catalog.product.enti
 @FeignClient(name = "${catalog.service.name}", url = "${catalog.service.url}")
 public interface ProductClient {
 
-	@GetMapping("/categories/products")
+	@GetMapping("/catalogs/categories/products")
 	ResponseEntity<List<ProductEntity>> getProductsByIds(@RequestParam List<Long> productIds);
 }
