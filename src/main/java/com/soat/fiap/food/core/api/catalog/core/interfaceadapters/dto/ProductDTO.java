@@ -10,5 +10,5 @@ import com.soat.fiap.food.core.api.catalog.core.domain.vo.Details;
  * de transferência entre o domínio e o mundo externo (DataSource).
  */
 public record ProductDTO(Long id, Details details, String imageUrl, BigDecimal price, StockDTO stock,
-		Integer displayOrder, boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		CategoryDTO category, Integer displayOrder, boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
 }

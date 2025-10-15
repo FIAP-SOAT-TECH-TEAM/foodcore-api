@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CategoryResponse;
@@ -41,6 +40,6 @@ public class CategoryPresenter {
 	 *         categorias formatados para resposta HTTP.
 	 */
 	public static List<CategoryResponse> toListCategoryResponse(List<Category> categories) {
-		return categories.stream().map(CategoryPresenter::toCategoryResponse).collect(Collectors.toList());
+		return categories.stream().map(CategoryPresenter::toCategoryResponse).toList();
 	}
 }

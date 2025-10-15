@@ -1,7 +1,5 @@
 package com.soat.fiap.food.core.api.order.core.application.inputs.mappers;
 
-import java.util.stream.Collectors;
-
 import com.soat.fiap.food.core.api.order.core.application.inputs.CreateOrderInput;
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
@@ -29,8 +27,7 @@ public class CreateOrderMapper {
 
 		var userId = authenticatedUserGateway.getSubject();
 
-		return new CreateOrderInput(userId,
-				request.getItems().stream().map(OrderItemMapper::toInput).collect(Collectors.toList()));
+		return new CreateOrderInput(userId, request.getItems().stream().map(OrderItemMapper::toInput).toList());
 	}
 
 	/**
@@ -43,7 +40,6 @@ public class CreateOrderMapper {
 	 *         persistência e regras de negócio.
 	 */
 	public static Order toDomain(CreateOrderInput input) {
-		return new Order(input.userId(),
-				input.items().stream().map(OrderItemMapper::toDomain).collect(Collectors.toList()));
+		return new Order(input.userId(), input.items().stream().map(OrderItemMapper::toDomain).toList());
 	}
 }

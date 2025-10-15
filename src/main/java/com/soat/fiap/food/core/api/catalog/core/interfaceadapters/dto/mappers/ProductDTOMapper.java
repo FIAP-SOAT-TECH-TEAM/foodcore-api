@@ -2,10 +2,8 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
-import com.soat.fiap.food.core.api.catalog.core.domain.model.Stock;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.StockDTO;
@@ -32,8 +30,13 @@ public class ProductDTOMapper {
 		Product product = new Product(dto.details(), dto.price(), imageUrl, dto.displayOrder());
 		product.setId(dto.id());
 
+		if (dto.category() != null) {
+			var category = CategoryDTOMapper.toDomain(dto.category());
+			product.setCategory(category);
+		}
+
 		if (dto.stock() != null) {
-			Stock stock = StockDTOMapper.toDomain(dto.stock());
+			var stock = StockDTOMapper.toDomain(dto.stock());
 			product.setStock(stock);
 		} else {
 			product.setStockQuantity(0);
@@ -57,7 +60,7 @@ public class ProductDTOMapper {
 	public static ProductDTO toDTO(Product product) {
 		StockDTO stockDTO = StockDTOMapper.toDTO(product.getStock());
 		return new ProductDTO(product.getId(), product.getDetails(), product.getImageUrlValue(), product.getPrice(),
-				stockDTO, product.getDisplayOrder(), product.isActive(), product.getCreatedAt(),
+				stockDTO, null, product.getDisplayOrder(), product.isActive(), product.getCreatedAt(),
 				product.getUpdatedAt());
 	}
 
@@ -71,6 +74,6 @@ public class ProductDTOMapper {
 	public static List<Product> toDomainList(List<ProductDTO> dtoList) {
 		Objects.requireNonNull(dtoList, "A lista de DTOs de produtos não pode ser nula");
 
-		return dtoList.stream().filter(Objects::nonNull).map(ProductDTOMapper::toDomain).collect(Collectors.toList());
+		return dtoList.stream().filter(Objects::nonNull).map(ProductDTOMapper::toDomain).toList();
 	}
 }

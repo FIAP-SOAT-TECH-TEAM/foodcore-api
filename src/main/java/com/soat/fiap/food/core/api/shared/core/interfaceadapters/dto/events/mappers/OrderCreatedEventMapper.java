@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCreatedEvent;
@@ -26,7 +25,7 @@ public class OrderCreatedEventMapper {
 		List<OrderItemCreatedEventDto> itemDtos = event.getItems()
 				.stream()
 				.map(OrderCreatedEventMapper::toItemDto)
-				.collect(Collectors.toList());
+				.toList();
 
 		OrderCreatedEventDto dto = new OrderCreatedEventDto();
 		dto.setId(event.getId());

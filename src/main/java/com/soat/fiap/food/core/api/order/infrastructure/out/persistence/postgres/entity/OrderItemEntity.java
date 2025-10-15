@@ -13,7 +13,7 @@ public class OrderItemEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne @JoinColumn(name = "order_id", nullable = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY) @JoinColumn(name = "order_id", nullable = false)
 	private OrderEntity order;
 
 	@Column(name = "product_id", nullable = false)

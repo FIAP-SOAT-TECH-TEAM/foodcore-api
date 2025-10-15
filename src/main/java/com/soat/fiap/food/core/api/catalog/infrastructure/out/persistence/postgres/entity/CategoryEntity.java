@@ -22,7 +22,7 @@ public class CategoryEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "catalog_id", foreignKey = @ForeignKey(name = "fk_category_catalog"))
 	private CatalogEntity catalog;
 

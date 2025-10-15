@@ -2,7 +2,6 @@ package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Category;
 import com.soat.fiap.food.core.api.catalog.core.domain.vo.ImageUrl;
@@ -52,10 +51,7 @@ public class CategoryDTOMapper {
 	 * @return o CategoryDTO correspondente
 	 */
 	public static CategoryDTO toDTO(Category category) {
-		List<ProductDTO> products = category.getProducts()
-				.stream()
-				.map(ProductDTOMapper::toDTO)
-				.collect(Collectors.toList());
+		List<ProductDTO> products = category.getProducts().stream().map(ProductDTOMapper::toDTO).toList();
 
 		return new CategoryDTO(category.getId(), category.getDetails(), category.getImageUrlValue(),
 				category.getDisplayOrder(), category.isActive(), products, category.getCreatedAt(),

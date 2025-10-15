@@ -2,7 +2,6 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postg
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +94,7 @@ public class PostgresCatalogDataSource implements CatalogDataSource {
 	@Override @Transactional(readOnly = true)
 	public List<CatalogDTO> findAll() {
 		List<CatalogEntity> catalogsEntities = springDataCatalogRepository.findAll();
-		return catalogsEntities.stream().map(catalogEntityMapper::toDTO).collect(Collectors.toList());
+		return catalogsEntities.stream().map(catalogEntityMapper::toDTO).toList();
 	}
 
 	/**

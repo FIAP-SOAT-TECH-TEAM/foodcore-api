@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.application.inputs.mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.api.order.core.domain.events.OrderItemCanceledEvent;
@@ -33,7 +32,7 @@ public class OrderCanceledEventMapper {
 		List<OrderItemCanceledEvent> itemEvents = order.getOrderItems()
 				.stream()
 				.map(OrderCanceledEventMapper::toItemEvent)
-				.collect(Collectors.toList());
+				.toList();
 
 		event.setItems(itemEvents);
 

@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.catalog.core.interfaceadapters.bff.presenter.web.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Catalog;
 import com.soat.fiap.food.core.api.catalog.infrastructure.in.web.api.dto.responses.CatalogResponse;
@@ -42,6 +41,6 @@ public class CatalogPresenter {
 		return catalogs.stream()
 				.map(catalog -> new CatalogResponse(catalog.getId(), catalog.getName(), catalog.getCreatedAt(),
 						catalog.getUpdatedAt()))
-				.collect(Collectors.toList());
+				.toList();
 	}
 }

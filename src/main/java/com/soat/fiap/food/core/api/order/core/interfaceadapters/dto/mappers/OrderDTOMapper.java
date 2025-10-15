@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.interfaceadapters.dto.mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.Order;
 import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
@@ -24,7 +23,7 @@ public class OrderDTOMapper {
 	 * @return Instância de um Order{@link Order}
 	 */
 	public static Order toDomain(OrderDTO dto) {
-		List<OrderItem> items = dto.items().stream().map(OrderItemDTOMapper::toDomain).collect(Collectors.toList());
+		List<OrderItem> items = dto.items().stream().map(OrderItemDTOMapper::toDomain).toList();
 
 		Order order = new Order(dto.userId(), items);
 
@@ -55,7 +54,7 @@ public class OrderDTOMapper {
 				.map(item -> new OrderItemDTO(item.getId(), item.getProductId(), item.getName(),
 						item.getOrderItemPrice().quantity(), item.getOrderItemPrice().unitPrice(),
 						item.getObservations(), item.getCreatedAt(), item.getUpdatedAt()))
-				.collect(Collectors.toList());
+				.toList();
 
 		return new OrderDTO(order.getId(), order.getUserId(), order.getOrderNumber(), order.getOrderStatus(),
 				order.getAmount(), itemDTOs, order.getCreatedAt(), order.getUpdatedAt());

@@ -2,13 +2,12 @@ package com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postg
 
 import java.util.List;
 
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import com.soat.fiap.food.core.api.catalog.core.domain.model.Product;
+import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.CategoryDTO;
 import com.soat.fiap.food.core.api.catalog.core.interfaceadapters.dto.ProductDTO;
+import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.CategoryEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.entity.ProductEntity;
 import com.soat.fiap.food.core.api.catalog.infrastructure.out.persistence.postgres.mapper.shared.ImageURLMapper;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
@@ -32,7 +31,31 @@ public interface ProductEntityMapper {
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapImageUrlToString")
 	@Mapping(source = "auditInfo.createdAt", target = "createdAt")
 	@Mapping(source = "auditInfo.updatedAt", target = "updatedAt")
+	@Mapping(target = "category", source = "category", qualifiedByName = "mapCategory")
 	ProductDTO toDTO(ProductEntity entity);
+
+	/**
+	 * Mapeia uma entidade {@link CategoryEntity} para um {@link CategoryDTO}.
+	 *
+	 * <p>
+	 * Este método tem como finalidade evitar o carregamento completo da entidade
+	 * {@link CategoryEntity} e suas associações durante o processo de mapeamento,
+	 * reduzindo o acoplamento e o custo de consulta no banco de dados
+	 * (LazyLoading).
+	 * </p>
+	 *
+	 * @param category
+	 *            Entidade de categoria associada ao produto
+	 * @return DTO da categoria
+	 */
+	@Named("mapCategory")
+	default CategoryDTO mapCategory(CategoryEntity category) {
+		var categoryIsActive = category.getActive();
+		var categoryDetails = category.getDetails();
+		var categoryDisplayOrder = category.getDisplayOrder();
+
+		return new CategoryDTO(null, categoryDetails, null, categoryDisplayOrder, categoryIsActive, null, null, null);
+	}
 
 	/**
 	 * Converte uma entidade JPA para uma entidade de domínio
@@ -71,6 +94,7 @@ public interface ProductEntityMapper {
 	@Mapping(target = "imageUrl", source = "imageUrl", qualifiedByName = "mapStringToImageUrl")
 	@Mapping(target = "stock", source = "stock")
 	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	@Mapping(target = "category", ignore = true)
 	ProductEntity toEntity(ProductDTO dto, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
 	@DoIgnore

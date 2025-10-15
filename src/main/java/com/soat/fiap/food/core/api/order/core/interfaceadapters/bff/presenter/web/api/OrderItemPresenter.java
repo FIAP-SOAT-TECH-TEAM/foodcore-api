@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.api.order.core.interfaceadapters.bff.presenter.web.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.soat.fiap.food.core.api.order.core.domain.model.OrderItem;
 import com.soat.fiap.food.core.api.order.infrastructure.in.web.api.dto.response.OrderItemResponse;
@@ -38,6 +37,6 @@ public class OrderItemPresenter {
 	 *         para resposta HTTP.
 	 */
 	public static List<OrderItemResponse> toListOrderItemResponse(List<OrderItem> items) {
-		return items.stream().map(OrderItemPresenter::toOrderItemResponse).collect(Collectors.toList());
+		return items.stream().map(OrderItemPresenter::toOrderItemResponse).toList();
 	}
 }

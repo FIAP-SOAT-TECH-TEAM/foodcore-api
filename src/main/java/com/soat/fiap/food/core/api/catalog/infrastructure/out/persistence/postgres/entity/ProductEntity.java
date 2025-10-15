@@ -21,7 +21,7 @@ public class ProductEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_product_category"))
 	private CategoryEntity category;
 
