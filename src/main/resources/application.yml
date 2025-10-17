@@ -1,6 +1,6 @@
 spring:
   application:
-    name: food-core-api
+    name: foodcore-api
 
   # Perfil padrão (development)
   profiles:
@@ -8,9 +8,9 @@ spring:
 
   # Configurações de banco de dados
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/fastfood}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -71,10 +71,10 @@ logging:
     org.springdoc: DEBUG
 
 server:
-  address: ${SERVER_ADDRESS:0.0.0.0}
-  port: ${SERVER_PORT:8085}
+  address: ${SERVER_ADDRESS}
+  port: ${SERVER_PORT}
   servlet:
-    context-path: ${SERVER_CONTEXT_PATH:/api}
+    context-path: ${SERVER_CONTEXT_PATH}
   compression:
     enabled: true
   error:
@@ -82,10 +82,10 @@ server:
     include-binding-errors: always
 
 rabbitmq:
-  host: ${SPRING_RABBITMQ_HOST:rabbitmq}
-  port: ${SPRING_RABBITMQ_PORT:5672}
-  username: ${SPRING_RABBITMQ_USERNAME:guest}
-  password: ${SPRING_RABBITMQ_PASSWORD:guest}
+  host: ${SPRING_RABBITMQ_HOST}
+  port: ${SPRING_RABBITMQ_PORT}
+  username: ${SPRING_RABBITMQ_USERNAME}
+  password: ${SPRING_RABBITMQ_PASSWORD}
   virtual-host: /
   publisher-confirm-type: correlated
   template:
@@ -98,25 +98,25 @@ rabbitmq:
 
 # Mercado Pago Configuration
 mercado-pago:
-  base-url: ${MERCADO_PAGO_BASE_URL:https://api.mercadopago.com/}
-  token: ${MERCADO_PAGO_TOKEN:APP_USR-6067894635102235-051018-411ad7e519a24f5652d328ba205a2b9a-2430659417}
-  user-id: ${MERCADO_PAGO_USER_ID:2430659417}
-  pos-id: ${MERCADO_PAGO_POS_ID:POCMP001POS001}
-  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL:https://major-jaguar-usable.ngrok-free.app/api/payments/webhook}
+  base-url: ${MERCADO_PAGO_BASE_URL}
+  token: ${MERCADO_PAGO_TOKEN}
+  user-id: ${MERCADO_PAGO_USER_ID}
+  pos-id: ${MERCADO_PAGO_POS_ID}
+  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL}
 
 # Azure Storage Configuration
 azure:
   storage:
-    connection-string: ${AZURE_STORAGE_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=fastfoodcoreapi;AccountKey=zdptHpyapo/jatHe2DdaajF1zUv7UzC6T81NAWtKCHoEL4NJNOEqiJ7iFxyjutnaAwlUL5i7Ri4P+ASt9KfI4g==;EndpointSuffix=core.windows.net}
-    container-name: ${AZURE_STORAGE_CONTAINER_NAME:images}
+    connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
+    container-name: ${AZURE_STORAGE_CONTAINER_NAME}
 
 # Microsserviços
 catalog:
   service:
-    name: ${CATALOG_MS_SERVICE_NAME:catalog-ms}
-    url: http://${CATALOG_MS_HOSTNAME:localhost}:${server.port}${server.servlet.context-path}
+    name: ${CATALOG_MS_SERVICE_NAME}
+    url: http://${CATALOG_MS_HOSTNAME}:${server.port}${server.servlet.context-path}
 
 payment:
   service:
-    name: ${PAYMENT_MS_SERVICE_NAME:payment-ms}
-    url: http://${PAYMENT_MS_HOSTNAME:localhost}:${server.port}${server.servlet.context-path}
+    name: ${PAYMENT_MS_SERVICE_NAME}
+    url: http://${PAYMENT_MS_HOSTNAME}:${server.port}${server.servlet.context-path}

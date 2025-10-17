@@ -210,7 +210,7 @@ tasks.named('build') {
 // Configuração do SonarQube
 sonar {
 	properties {
-		property 'sonar.projectKey', 'com.soat.fiap.food-core-api'
+		property 'sonar.projectKey', 'com.soat.fiap.foodcore-api'
 		property 'sonar.projectName', 'Food Core API'
 		property 'sonar.sources', 'src/main/java'
 		property 'sonar.tests', 'src/test/java'

@@ -44,12 +44,12 @@ if check_port "$APP_PORT"; then
   elif command -v netstat >/dev/null 2>&1; then
     netstat -tuln | grep ":$APP_PORT "
   fi
-  
+
   read -p "Deseja tentar finalizar estes processos? (s/n): " resposta
   if [[ "$resposta" =~ ^[Ss]$ ]]; then
     echo "Tentando finalizar processos na porta $APP_PORT..."
     if command -v lsof >/dev/null 2>&1; then
-      # Obter PIDs e matá-los um a um para garantir 
+      # Obter PIDs e matá-los um a um para garantir
       PIDs=$(lsof -i :"$APP_PORT" -t)
       for PID in $PIDs; do
         # Verificar se o processo pertence ao Docker
@@ -64,7 +64,7 @@ if check_port "$APP_PORT"; then
           kill -9 "$PID" 2>/dev/null
         fi
       done
-      
+
       # Verificar se os processos foram realmente finalizados
       sleep 2
       if check_port "$APP_PORT"; then
@@ -86,7 +86,7 @@ if check_port "$APP_PORT"; then
 fi
 
 # Verificar se já existe um container com o mesmo nome rodando
-EXISTING_CONTAINER=$(docker ps -a -q -f "name=food-core-api")
+EXISTING_CONTAINER=$(docker ps -a -q -f "name=foodcore-api")
 if [ -n "$EXISTING_CONTAINER" ]; then
   echo "-> Removendo container existente..."
   docker rm -f "$EXISTING_CONTAINER" > /dev/null
@@ -103,7 +103,7 @@ echo "-> Iniciando o container da aplicação..."
 docker-compose up -d app
 
 # Verificar status
-APP_CONTAINER=$(docker ps -q -f "name=food-core-api")
+APP_CONTAINER=$(docker ps -q -f "name=foodcore-api")
 if [ -z "$APP_CONTAINER" ]; then
   echo "ERRO: Falha ao iniciar o container da aplicação."
   echo "Verifique os logs com: docker-compose logs app"
@@ -116,7 +116,7 @@ RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
   HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$APP_CONTAINER")
-  
+
   if [ "$HEALTH_STATUS" == "healthy" ]; then
     APP_PORT=$(docker ps --filter "id=$APP_CONTAINER" --format "{{.Ports}}" | grep -oP '\d+(?=->)' | head -n 1)
     echo "===== Aplicação iniciada com sucesso! ====="
@@ -124,7 +124,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     echo "- Documentação Swagger: http://localhost:$APP_PORT/api/swagger-ui.html"
     exit 0
   fi
-  
+
   RETRY_COUNT=$((RETRY_COUNT+1))
   echo "Aguardando aplicação inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
   sleep 2
@@ -134,4 +134,4 @@ echo "AVISO: Tempo limite excedido, mas o container foi iniciado."
 echo "Verifique o status da aplicação manualmente."
 echo "- Container: $APP_CONTAINER"
 echo "- URL: http://localhost:$APP_PORT"
-echo "- Logs: docker logs $APP_CONTAINER" 
+echo "- Logs: docker logs $APP_CONTAINER"

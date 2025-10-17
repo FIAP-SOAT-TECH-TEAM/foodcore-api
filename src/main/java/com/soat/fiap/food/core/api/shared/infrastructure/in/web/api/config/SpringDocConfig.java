@@ -35,7 +35,7 @@ public class SpringDocConfig {
 						.version("1.0.0")
 						.contact(new Contact().name("Equipe FIAP/SOAT")
 								.email("suporte@foodcoreapi.com")
-								.url("https://github.com/FIAP-SOAT-TECH-TEAM/food-core-api"))
+								.url("https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-api"))
 						.license(new License().name("Apache 2.0")
 								.url("https://www.apache.org/licenses/LICENSE-2.0.html")))
 				.servers(List.of(new Server().url(contextPath).description("API Server")));

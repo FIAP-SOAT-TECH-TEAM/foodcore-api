@@ -1,2 +1,2 @@
-rootProject.name = 'food-core-api'
+rootProject.name = 'foodcore-api'
 System.setProperty("sonar.gradle.skipCompile", "true")

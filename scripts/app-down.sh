@@ -21,7 +21,7 @@ fi
 cd "$PROJECT_ROOT/docker"
 
 # Verificar se a aplicação está rodando
-APP_CONTAINER=$(docker ps -q -f "name=food-core-api")
+APP_CONTAINER=$(docker ps -q -f "name=foodcore-api")
 if [ -z "$APP_CONTAINER" ]; then
   echo "Nenhum container da aplicação em execução."
   exit 0
@@ -32,20 +32,20 @@ echo "-> Parando o container da aplicação..."
 docker-compose stop app
 
 # Verificar se o container foi parado
-STILL_RUNNING=$(docker ps -q -f "name=food-core-api")
+STILL_RUNNING=$(docker ps -q -f "name=foodcore-api")
 if [ -z "$STILL_RUNNING" ]; then
   echo "===== Aplicação parada com sucesso! ====="
 else
   echo "AVISO: O container ainda está em execução."
   echo "Forçando a parada do container..."
   docker rm -f "$STILL_RUNNING"
-  
+
   # Verificação final
-  STILL_RUNNING=$(docker ps -q -f "name=food-core-api")
+  STILL_RUNNING=$(docker ps -q -f "name=foodcore-api")
   if [ -z "$STILL_RUNNING" ]; then
     echo "===== Aplicação parada com sucesso! ====="
   else
     echo "ERRO: Não foi possível parar o container."
     echo "Por favor, verifique e pare manualmente com: docker ps"
   fi
-fi 
+fi
