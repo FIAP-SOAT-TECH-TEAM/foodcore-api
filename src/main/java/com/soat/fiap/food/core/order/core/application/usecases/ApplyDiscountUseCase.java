@@ -5,7 +5,7 @@ import java.time.ZoneOffset;
 
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.order.core.domain.model.Order;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -9,7 +9,7 @@ import com.soat.fiap.food.core.order.core.interfaceadapters.dto.OrderItemDTO;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.entity.OrderItemEntity;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.mapper.shared.OrderItemPriceMapper;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.mapper.shared.OrderNumberMapper;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 
 /**
  * Mapper que converte entre a entidade de domínio OrderItem e a entidade JPA
@@ -20,19 +20,19 @@ import com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.CycleAvoi
 public interface OrderItemEntityMapper {
 
 	@Mapping(target = "order", ignore = true)
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
 	OrderItem toDomain(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
 
 	List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "order", ignore = true)
 	@Mapping(target = "orderItemPrice", source = ".", qualifiedByName = "fromQuantityAndPrice")
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	OrderItemEntity toEntity(OrderItemDTO dto, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "order", ignore = true)
 	@Mapping(target = "orderItemPrice", source = ".", qualifiedByName = "mapToOrderItemPrice")
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.api.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
 	List<OrderItemEntity> toEntityList(List<OrderItemDTO> dto, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "quantity", source = "orderItemPrice", qualifiedByName = "extractQuantity")

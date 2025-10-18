@@ -7,7 +7,7 @@ import com.soat.fiap.food.core.order.core.domain.model.OrderItem;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.OrderDTO;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.OrderItemDTO;
-import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.shared.core.domain.vo.AuditInfo;
 
 /**
  * Mapper responsável por mapear entre a entidade de domínio Order e seu

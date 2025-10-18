@@ -12,7 +12,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderNumber;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.converter.OrderNumberConverter;
-import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.shared.core.domain.vo.AuditInfo;
 
 import jakarta.persistence.*;
 import lombok.Getter;

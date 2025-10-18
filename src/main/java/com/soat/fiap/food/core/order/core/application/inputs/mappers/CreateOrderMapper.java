@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.order.core.application.inputs.mappers;
 import com.soat.fiap.food.core.order.core.application.inputs.CreateOrderInput;
 import com.soat.fiap.food.core.order.core.domain.model.Order;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 
 /**
  * Classe utilitária responsável por mapear objetos entre

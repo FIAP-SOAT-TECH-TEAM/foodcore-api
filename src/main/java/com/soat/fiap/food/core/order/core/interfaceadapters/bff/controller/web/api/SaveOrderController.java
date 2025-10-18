@@ -1,22 +1,21 @@
 package com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api;
 
 import com.soat.fiap.food.core.order.core.application.inputs.mappers.CreateOrderMapper;
-import com.soat.fiap.food.core.api.order.core.application.usecases.*;
 import com.soat.fiap.food.core.order.core.application.usecases.ApplyDiscountUseCase;
 import com.soat.fiap.food.core.order.core.application.usecases.CreateOrderUseCase;
 import com.soat.fiap.food.core.order.core.application.usecases.EnsureValidOrderItemsUseCase;
 import com.soat.fiap.food.core.order.core.application.usecases.PublishOrderCreatedEventUseCase;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
+import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.ProductGateway;
+import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderResponse;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
+import com.soat.fiap.food.core.shared.infrastructure.common.source.AuthenticatedUserSource;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.order.core.domain.exceptions;
 
-import com.soat.fiap.food.core.api.shared.core.domain.exceptions.ResourceNotFoundException;
+import com.soat.fiap.food.core.shared.core.domain.exceptions.ResourceNotFoundException;
 
 /**
  * Exceção lançada quando um pedido não é encontrado

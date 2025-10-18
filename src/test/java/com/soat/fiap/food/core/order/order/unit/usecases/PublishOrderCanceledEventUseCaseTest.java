@@ -10,10 +10,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.order.core.application.usecases.PublishOrderCanceledEventUseCase;
 import com.soat.fiap.food.core.order.core.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.order.shared.fixtures.OrderFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("PublishOrderCanceledEventUseCase - Testes Unitários")

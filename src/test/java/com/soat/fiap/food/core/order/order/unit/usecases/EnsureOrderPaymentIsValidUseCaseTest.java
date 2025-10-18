@@ -13,12 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentNotFoundException;
+import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.order.core.application.usecases.EnsureOrderPaymentIsValidUseCase;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderNotFoundException;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGateway;
-import com.soat.fiap.food.core.api.payment.core.domain.exceptions.PaymentNotFoundException;
-import com.soat.fiap.food.core.api.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.order.shared.fixtures.OrderFixture;
 import com.soat.fiap.food.core.order.shared.fixtures.PaymentFixture;
 

@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.a
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.GetOrderByIdController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.SaveOrderController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.ProductDataSource;
@@ -18,8 +19,7 @@ import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.Creat
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.AuthenticatedUserSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
+import com.soat.fiap.food.core.shared.infrastructure.common.source.AuthenticatedUserSource;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

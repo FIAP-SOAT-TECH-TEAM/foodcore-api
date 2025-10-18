@@ -16,9 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 import com.soat.fiap.food.core.order.core.application.usecases.ApplyDiscountUseCase;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderException;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 import com.soat.fiap.food.core.order.shared.fixtures.OrderFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("ApplyDiscountUseCase - Testes Unitários")

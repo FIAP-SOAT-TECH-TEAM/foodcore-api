@@ -7,14 +7,14 @@ import com.soat.fiap.food.core.order.core.application.usecases.UpdateOrderStatus
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderAlreadyHasStatusException;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
+import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.PaymentGateway;
+import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderStatusResponse;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 
 import lombok.extern.slf4j.Slf4j;
 

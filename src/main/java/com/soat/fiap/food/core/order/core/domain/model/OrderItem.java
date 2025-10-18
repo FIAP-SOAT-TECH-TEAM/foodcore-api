@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderItemPrice;
-import com.soat.fiap.food.core.api.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.shared.core.domain.vo.AuditInfo;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.order.infrastructure.out.payment.exceptions;
 
-import com.soat.fiap.food.core.api.shared.infrastructure.out.exceptions.APIException;
+import com.soat.fiap.food.core.shared.infrastructure.out.exceptions.APIException;
 
 /**
  * Exceção lançada quando existe um erro de retorno da API do microsserviço de

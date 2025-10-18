@@ -4,7 +4,7 @@ import com.soat.fiap.food.core.order.core.application.inputs.mappers.OrderCreate
 import com.soat.fiap.food.core.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.order.core.domain.model.Order;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.EventPublisherGateway;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -5,14 +5,14 @@ import org.springframework.stereotype.Component;
 
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
+import com.soat.fiap.food.core.order.infrastructure.common.event.rabbitmq.config.RabbitMqQueueConfig;
+import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
-import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
-import com.soat.fiap.food.core.api.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqQueueConfig;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -10,12 +10,12 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 import com.soat.fiap.food.core.order.core.application.inputs.CreateOrderInput;
 import com.soat.fiap.food.core.order.core.application.inputs.mappers.CreateOrderMapper;
 import com.soat.fiap.food.core.order.core.domain.model.Order;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderItemRequest;
-import com.soat.fiap.food.core.api.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
 import com.soat.fiap.food.core.order.shared.fixtures.OrderFixture;
 
 @DisplayName("CreateOrderMapper - Testes Unitários")
