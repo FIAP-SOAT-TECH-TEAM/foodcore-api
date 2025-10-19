@@ -29,9 +29,9 @@ public class SpringDocConfig {
 		return new OpenAPI()
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
-				.info(new Info().title("Food Core API")
+				.info(new Info().title("Food Core API - Order")
 						.description(
-								"API de gerenciamento de pedidos para restaurantes fast-food com Clean Architecture, DDD e monólitos modulares usando Spring Modulith.")
+								"Microsserviço de gerenciamento de pedidos, implementado com Clean Architecture e DDD.")
 						.version("1.0.0")
 						.contact(new Contact().name("Equipe FIAP/SOAT")
 								.email("suporte@foodcoreapi.com")
@@ -39,15 +39,6 @@ public class SpringDocConfig {
 						.license(new License().name("Apache 2.0")
 								.url("https://www.apache.org/licenses/LICENSE-2.0.html")))
 				.servers(List.of(new Server().url(contextPath).description("API Server")));
-	}
-
-	@Bean
-	public GroupedOpenApi catalogApi() {
-		return GroupedOpenApi.builder()
-				.group("catálogos")
-				.packagesToScan("com.soat.fiap.food.core.api.catalog")
-				.pathsToMatch("/catalogs/**")
-				.build();
 	}
 
 	@Bean
@@ -59,12 +50,4 @@ public class SpringDocConfig {
 				.build();
 	}
 
-	@Bean
-	public GroupedOpenApi paymentApi() {
-		return GroupedOpenApi.builder()
-				.group("pagamentos")
-				.packagesToScan("com.soat.fiap.food.core.api.payment")
-				.pathsToMatch("/payments/**")
-				.build();
-	}
 }
