@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script centralizador para o projeto Food Core Infra
+# Script centralizador para o projeto Food Core API
 # Uso: ./food [comando] [opções]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -8,18 +8,20 @@ SCRIPTS_DIR="$SCRIPT_DIR/scripts"
 
 # Função de ajuda
 show_help() {
-  echo "Food Core Infra - CLI"
+  echo "Food Core API (Order) - CLI"
   echo
   echo "Uso: ./food [comando] [opções]"
   echo
   echo "Comandos disponíveis:"
-  echo "  start:infra      Inicia a infraestrutura"
-  echo "  stop:infra       Para a infraestrutura"
-  echo "  restart:infra    Reinicia a infraestrutura"
-  echo "  help             Exibe esta ajuda"
+  echo "  db:up          Aplica migrações no banco"
+  echo "  db:reset       Reseta o banco de dados"
+  echo "  start:infra    Inicia apenas a infraestrutura (banco)"
+  echo "  stop:infra     Para apenas a infraestrutura"
+  echo "  restart:all    Reinicia todos os serviços da infraestrutura"
+  echo "  help           Exibe esta ajuda"
   echo
   echo "Opções:"
-  echo "  --force, -f      Força execução sem confirmação"
+  echo "  --force, -f    Força execução sem confirmação"
   echo
   echo "Exemplo:"
   echo "  ./food start:infra --force"
@@ -62,9 +64,31 @@ done
 
 # Executar comandos
 case "$COMMAND" in
+  db:up)
+    echo "Aplicando migrações..."
+    "$SCRIPTS_DIR/apply-migrations.sh"
+    ;;
+
+  db:reset)
+    if [ "$FORCE_FLAG" != "--force" ]; then
+      read -p "ATENÇÃO: Isso irá resetar o banco de dados. Tem certeza? (s/n): " resp
+      if [[ ! "$resp" =~ ^[Ss]$ ]]; then
+        echo "Operação cancelada."
+        exit 0
+      fi
+    fi
+    echo "Resetando o banco de dados..."
+    "$SCRIPTS_DIR/reset-db.sh"
+    ;;
+
   start:infra)
     echo "Iniciando a infraestrutura..."
     "$SCRIPTS_DIR/infra-up.sh" $FORCE_FLAG
+    # Verificar se a rede fastfood-network existe, se não, criar
+    if ! docker network ls | grep -q fastfood-network; then
+      echo "Criando rede compartilhada fastfood-network..."
+      docker network create fastfood-network
+    fi
     ;;
 
   stop:infra)
@@ -72,7 +96,7 @@ case "$COMMAND" in
     "$SCRIPTS_DIR/infra-down.sh"
     ;;
 
-  restart:infra)
+  restart:all)
     echo "Reiniciando a infraestrutura..."
     "$SCRIPTS_DIR/infra-restart.sh" $FORCE_FLAG
     ;;
