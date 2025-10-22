@@ -34,7 +34,6 @@ public class EnsureOrderPaymentIsValidUseCase {
 	 */
 	public static void ensureOrderPaymentIsValid(Long id, OrderStatus status, PaymentGateway paymentGateway,
 			OrderGateway orderGateway) {
-
 		var order = orderGateway.findById(id);
 		var payment = paymentGateway.getOrderStatus(id);
 

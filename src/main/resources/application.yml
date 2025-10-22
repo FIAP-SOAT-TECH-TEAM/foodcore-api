@@ -105,7 +105,7 @@ rabbitmq:
 catalog:
   service:
     name: ${CATALOG_MS_SERVICE_NAME}
-    url: http://${CATALOG_MS_HOSTNAME}{server.servlet.context-path}
+    url: http://${CATALOG_MS_HOSTNAME}${server.servlet.context-path}
 
 payment:
   service:

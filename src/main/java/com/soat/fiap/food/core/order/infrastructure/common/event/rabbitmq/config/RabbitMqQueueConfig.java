@@ -109,4 +109,37 @@ public class RabbitMqQueueConfig {
 	public Binding bindingOrderCatalog(Queue orderCatalogCreatedQueue, FanoutExchange orderFanoutExchange) {
 		return BindingBuilder.bind(orderCatalogCreatedQueue).to(orderFanoutExchange);
 	}
+
+	/**
+	 * Declara a fila de pagamentos aprovados no RabbitMQ.
+	 *
+	 * @return objeto Queue configurado como durável para eventos de pagamento
+	 *         aprovado.
+	 */
+	@Bean
+	public Queue paymentApprovedQueue() {
+		return new Queue(PAYMENT_APPROVED_QUEUE, true);
+	}
+
+	/**
+	 * Declara a fila de pagamentos expirados no RabbitMQ.
+	 *
+	 * @return objeto Queue configurado como durável para eventos de pagamento
+	 *         expirado.
+	 */
+	@Bean
+	public Queue paymentExpiredQueue() {
+		return new Queue(PAYMENT_EXPIRED_QUEUE, true);
+	}
+
+	/**
+	 * Declara a fila de erros na inicialização de pagamento no RabbitMQ.
+	 *
+	 * @return objeto Queue configurado como durável para eventos de erro na
+	 *         inicialização de pagamento.
+	 */
+	@Bean
+	public Queue paymentInitializationErrorQueue() {
+		return new Queue(PAYMENT_INITIALIZATION_ERROR_QUEUE, true);
+	}
 }
