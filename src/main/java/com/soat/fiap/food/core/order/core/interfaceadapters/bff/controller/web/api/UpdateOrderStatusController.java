@@ -49,7 +49,6 @@ public class UpdateOrderStatusController {
 
 		try {
 
-
 			EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, orderStatusRequest.getStatus(),
 					paymentGateway, orderGateway);
 

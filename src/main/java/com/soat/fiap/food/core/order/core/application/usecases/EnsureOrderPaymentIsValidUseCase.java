@@ -4,6 +4,7 @@ import com.soat.fiap.food.core.order.core.domain.exceptions.OrderNotFoundExcepti
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderPaymentException;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderPaymentNotFoundException;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.payment.PaymentStatusDTO;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.payment.StatusDTO;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.PaymentGateway;
@@ -35,11 +36,18 @@ public class EnsureOrderPaymentIsValidUseCase {
 	public static void ensureOrderPaymentIsValid(Long id, OrderStatus status, PaymentGateway paymentGateway,
 			OrderGateway orderGateway) {
 		var order = orderGateway.findById(id);
-		var payment = paymentGateway.getOrderStatus(id);
+		PaymentStatusDTO payment = null;
+
+		try {
+			payment = paymentGateway.getOrderStatus(id);
+		} catch (Exception ex) {
+			log.info("Não foi possível obter o pagamento do pedido: {}, causa: {}", id, ex.getMessage());
+		}
 
 		if (order.isEmpty()) {
 			throw new OrderNotFoundException("Pedido", id);
-		} else if (payment != null && order.get().getOrderStatus() != OrderStatus.RECEIVED) {
+		} else if (payment == null && order.get().getOrderStatus() != OrderStatus.RECEIVED) {
+			log.info("Pagamento do pedido de ID: {}, de status: {} não encontrado", id, order.get().getOrderStatus());
 			throw new OrderPaymentNotFoundException("O pagamento do pedido não existe");
 		}
 
