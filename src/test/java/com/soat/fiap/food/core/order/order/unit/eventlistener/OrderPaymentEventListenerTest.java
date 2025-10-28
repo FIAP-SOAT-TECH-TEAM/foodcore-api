@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.soat.fiap.food.core.api.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.api.shared.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
-import com.soat.fiap.food.core.order.infrastructure.in.event.listener.rabbitmq.OrderPaymentEventListener;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("OrderPaymentEventListener - Testes Unitários")
 class OrderPaymentEventListenerTest {
