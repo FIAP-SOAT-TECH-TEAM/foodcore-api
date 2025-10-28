@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.order.core.interfaceadapters.dto.events;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import lombok.Data;
  */
 @Data
 public class PaymentExpiredEventDto {
-	public Long paymentId;
+	public UUID paymentId;
 	public Long orderId;
 	public LocalDateTime expiredIn;
 }

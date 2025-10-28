@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.order.core.interfaceadapters.dto.events;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -12,7 +13,7 @@ import lombok.Data;
  */
 @Data
 public class PaymentApprovedEventDto {
-	public Long paymentId;
+	public UUID paymentId;
 	public Long orderId;
 	public BigDecimal amount;
 	public String paymentMethod;
