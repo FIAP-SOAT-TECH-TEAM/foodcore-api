@@ -1,7 +1,8 @@
 package com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.payment;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * {@link PaymentExpiredEventDto}, atualizando o status do pedido como CANCELLED
  * e publicando eventos relacionados.
  */
-@Component @Slf4j
+@Configuration @Slf4j
 public class PaymentExpiredListener {
 
 	private final Gson gson = new Gson();
@@ -43,11 +44,12 @@ public class PaymentExpiredListener {
 	 * @param connectionString
 	 *            connection string do Azure Service Bus
 	 */
-	public PaymentExpiredListener(OrderDataSource orderDataSource, PaymentDataSource paymentDataSource,
-			EventPublisherSource eventPublisherSource,
+	@Bean
+	public ServiceBusProcessorClient paymentExpiredServiceBusProcessorClient(OrderDataSource orderDataSource,
+			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource,
 			@Value("${azsvcbus.connection-string}") String connectionString) {
 
-		try (ServiceBusProcessorClient processor = new ServiceBusClientBuilder().connectionString(connectionString)
+		return new ServiceBusClientBuilder().connectionString(connectionString)
 				.processor()
 				.queueName(ServiceBusConfig.PAYMENT_EXPIRED_QUEUE)
 				.receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
@@ -57,13 +59,7 @@ public class PaymentExpiredListener {
 					handle(event, orderDataSource, paymentDataSource, eventPublisherSource);
 				})
 				.processError(context -> log.error("Erro no listener de pagamento expirado", context.getException()))
-				.buildProcessorClient()) {
-
-			processor.start();
-
-		} catch (Exception e) {
-			log.error("Falha ao iniciar PaymentExpiredListener", e);
-		}
+				.buildProcessorClient();
 	}
 
 	/**

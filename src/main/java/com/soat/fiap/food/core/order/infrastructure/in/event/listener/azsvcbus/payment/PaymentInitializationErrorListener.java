@@ -1,7 +1,8 @@
 package com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.payment;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * eventos {@link PaymentInitializationErrorEventDto}, atualizando o status do
  * pedido como CANCELLED e publicando eventos relacionados.
  */
-@Component @Slf4j
+@Configuration @Slf4j
 public class PaymentInitializationErrorListener {
 
 	private final Gson gson = new Gson();
@@ -43,11 +44,13 @@ public class PaymentInitializationErrorListener {
 	 * @param connectionString
 	 *            connection string do Azure Service Bus
 	 */
-	public PaymentInitializationErrorListener(OrderDataSource orderDataSource, PaymentDataSource paymentDataSource,
+	@Bean
+	public ServiceBusProcessorClient paymentInitializationErrorServiceBusProcessorClient(
+			OrderDataSource orderDataSource, PaymentDataSource paymentDataSource,
 			EventPublisherSource eventPublisherSource,
 			@Value("${azsvcbus.connection-string}") String connectionString) {
 
-		try (ServiceBusProcessorClient processor = new ServiceBusClientBuilder().connectionString(connectionString)
+		return new ServiceBusClientBuilder().connectionString(connectionString)
 				.processor()
 				.queueName(ServiceBusConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
 				.receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
@@ -58,13 +61,7 @@ public class PaymentInitializationErrorListener {
 				})
 				.processError(
 						context -> log.error("Erro no listener de inicialização de pagamento", context.getException()))
-				.buildProcessorClient()) {
-
-			processor.start();
-
-		} catch (Exception e) {
-			log.error("Falha ao iniciar PaymentInitializationErrorListener", e);
-		}
+				.buildProcessorClient();
 	}
 
 	/**
