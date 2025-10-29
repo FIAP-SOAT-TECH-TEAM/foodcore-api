@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
+import com.nimbusds.jose.shaded.gson.Gson;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCanceledEventDto;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.order.infrastructure.common.event.azsvcbus.config.ServiceBusConfig;
@@ -26,6 +27,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 
 	private final ServiceBusSenderClient orderCreatedSender;
 	private final ServiceBusSenderClient orderCanceledSender;
+	private final Gson gson = new Gson();
 
 	/**
 	 * Construtor que inicializa os clients do Azure Service Bus usando a connection
@@ -57,7 +59,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	@Override
 	public void publishOrderCreatedEvent(OrderCreatedEventDto event) {
 		try {
-			orderCreatedSender.sendMessage(new ServiceBusMessage(event.toString()));
+			orderCreatedSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
 			log.info("Evento de pedido criado publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de pedido criado", ex);
@@ -74,7 +76,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	@Override
 	public void publishOrderCanceledEvent(OrderCanceledEventDto event) {
 		try {
-			orderCanceledSender.sendMessage(new ServiceBusMessage(event.toString()));
+			orderCanceledSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
 			log.info("Evento de pedido cancelado publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de pedido cancelado", ex);

@@ -20,30 +20,19 @@ import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.Order
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Listener para eventos de erro na inicialização de pagamento.
+ * Listener responsável por processar eventos de erro na inicialização de
+ * pagamento.
+ *
  * <p>
- * Este listener consome mensagens da fila
- * {@link ServiceBusConfig#PAYMENT_INITIALIZATION_ERROR_QUEUE} e processa
- * eventos {@link PaymentInitializationErrorEventDto}, atualizando o status do
- * pedido como CANCELLED e publicando eventos relacionados.
+ * Atualiza o status do pedido e executa o tratamento necessário para eventos
+ * relacionados.
+ * </p>
  */
 @Configuration @Slf4j
-public class PaymentInitializationErrorListener {
+public class PaymentInitializationErrorListenerConfig {
 
 	private final Gson gson = new Gson();
 
-	/**
-	 * Construtor do listener.
-	 *
-	 * @param orderDataSource
-	 *            fonte de dados de pedidos
-	 * @param paymentDataSource
-	 *            fonte de dados de pagamentos
-	 * @param eventPublisherSource
-	 *            publicador de eventos
-	 * @param connectionString
-	 *            connection string do Azure Service Bus
-	 */
 	@Bean
 	public ServiceBusProcessorClient paymentInitializationErrorServiceBusProcessorClient(
 			OrderDataSource orderDataSource, PaymentDataSource paymentDataSource,
@@ -59,33 +48,20 @@ public class PaymentInitializationErrorListener {
 							PaymentInitializationErrorEventDto.class);
 					handle(event, orderDataSource, paymentDataSource, eventPublisherSource);
 				})
-				.processError(
-						context -> log.error("Erro no listener de inicialização de pagamento", context.getException()))
+				.processError(context -> log.error("Erro ao processar erro de inicialização de pagamento",
+						context.getException()))
 				.buildProcessorClient();
 	}
 
-	/**
-	 * Processa o evento de erro na inicialização do pagamento.
-	 *
-	 * @param event
-	 *            evento de erro na inicialização do pagamento
-	 * @param orderDataSource
-	 *            fonte de dados de pedidos
-	 * @param paymentDataSource
-	 *            fonte de dados de pagamentos
-	 * @param eventPublisherSource
-	 *            publicador de eventos
-	 */
 	private void handle(PaymentInitializationErrorEventDto event, OrderDataSource orderDataSource,
 			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource) {
 
-		log.info("Recebido evento de erro na inicialização do pagamento. Pedido: {}", event.getOrderId());
+		log.info("Evento de erro na inicialização do pagamento recebido: {}", event.getOrderId());
 
 		var orderUpdateStatusRequest = new OrderStatusRequest(OrderStatus.CANCELLED);
 		UpdateOrderStatusController.updateOrderStatus(event.getOrderId(), orderUpdateStatusRequest, orderDataSource,
 				paymentDataSource, eventPublisherSource);
 
-		log.info("Pedido {} atualizado para status CANCELLED após erro na inicialização do pagamento",
-				event.getOrderId());
+		log.info("Status do pedido atualizado após erro na inicialização do pagamento: {}", event.getOrderId());
 	}
 }

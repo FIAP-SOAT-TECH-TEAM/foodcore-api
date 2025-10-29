@@ -20,30 +20,18 @@ import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.Order
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Listener para eventos de pagamento expirado.
+ * Listener responsável por processar eventos de pagamento expirado.
+ *
  * <p>
- * Este listener consome mensagens da fila
- * {@link ServiceBusConfig#PAYMENT_EXPIRED_QUEUE} e processa eventos
- * {@link PaymentExpiredEventDto}, atualizando o status do pedido como CANCELLED
- * e publicando eventos relacionados.
+ * Atualiza o status do pedido e executa o tratamento necessário para eventos
+ * relacionados.
+ * </p>
  */
 @Configuration @Slf4j
-public class PaymentExpiredListener {
+public class PaymentExpiredListenerConfig {
 
 	private final Gson gson = new Gson();
 
-	/**
-	 * Construtor do listener.
-	 *
-	 * @param orderDataSource
-	 *            fonte de dados de pedidos
-	 * @param paymentDataSource
-	 *            fonte de dados de pagamentos
-	 * @param eventPublisherSource
-	 *            publicador de eventos
-	 * @param connectionString
-	 *            connection string do Azure Service Bus
-	 */
 	@Bean
 	public ServiceBusProcessorClient paymentExpiredServiceBusProcessorClient(OrderDataSource orderDataSource,
 			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource,
@@ -58,32 +46,19 @@ public class PaymentExpiredListener {
 							PaymentExpiredEventDto.class);
 					handle(event, orderDataSource, paymentDataSource, eventPublisherSource);
 				})
-				.processError(context -> log.error("Erro no listener de pagamento expirado", context.getException()))
+				.processError(context -> log.error("Erro ao processar pagamento expirado", context.getException()))
 				.buildProcessorClient();
 	}
 
-	/**
-	 * Processa o evento de pagamento expirado.
-	 *
-	 * @param event
-	 *            evento de pagamento expirado
-	 * @param orderDataSource
-	 *            fonte de dados de pedidos
-	 * @param paymentDataSource
-	 *            fonte de dados de pagamentos
-	 * @param eventPublisherSource
-	 *            publicador de eventos
-	 */
 	private void handle(PaymentExpiredEventDto event, OrderDataSource orderDataSource,
 			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource) {
 
-		log.info("Recebido evento de pagamento expirado. Pedido: {}, Pagamento: {}", event.getOrderId(),
-				event.getPaymentId());
+		log.info("Evento de pagamento expirado recebido: {}", event.getOrderId());
 
 		var orderUpdateStatusRequest = new OrderStatusRequest(OrderStatus.CANCELLED);
 		UpdateOrderStatusController.updateOrderStatus(event.getOrderId(), orderUpdateStatusRequest, orderDataSource,
 				paymentDataSource, eventPublisherSource);
 
-		log.info("Pedido {} atualizado para status CANCELLED após pagamento expirado", event.getOrderId());
+		log.info("Status do pedido atualizado após pagamento expirado: {}", event.getOrderId());
 	}
 }
