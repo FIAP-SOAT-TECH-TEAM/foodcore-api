@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
-import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
+import com.azure.messaging.servicebus.models.SubQueue;
 import com.google.gson.Gson;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
-import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.order.infrastructure.common.event.azsvcbus.config.ServiceBusConfig;
 import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * Atualiza o status do pedido e executa o tratamento necessário para eventos
  * relacionados.
  * </p>
+ * @see <a href="https://learn.microsoft.com/pt-br/java/api/overview/azure/messaging-servicebus-readme?view=azure-java-stable#create-a-dead-letter-queue-receiver">Create a dead-letter queue Receiver - Azure Service Bus</a>
  */
 @Configuration @Slf4j @RequiredArgsConstructor
 public class PaymentInitializationErrorListenerConfig {
@@ -42,11 +43,12 @@ public class PaymentInitializationErrorListenerConfig {
 
 		return new ServiceBusClientBuilder().connectionString(connectionString)
 				.processor()
-				.queueName(ServiceBusConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
-				.receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
+				.topicName(ServiceBusConfig.ORDER_CREATED_TOPIC)
+				.subscriptionName(ServiceBusConfig.PAYMENT_ORDER_CREATED_TOPIC_SUBSCRIPTION)
+				.subQueue(SubQueue.DEAD_LETTER_QUEUE)
 				.processMessage(context -> {
-					PaymentInitializationErrorEventDto event = gson.fromJson(context.getMessage().getBody().toString(),
-							PaymentInitializationErrorEventDto.class);
+					OrderCreatedEventDto event = gson.fromJson(context.getMessage().getBody().toString(),
+							OrderCreatedEventDto.class);
 					handle(event, orderDataSource, paymentDataSource, eventPublisherSource);
 				})
 				.processError(context -> log.error("Erro ao processar erro de inicialização de pagamento",
@@ -54,15 +56,15 @@ public class PaymentInitializationErrorListenerConfig {
 				.buildProcessorClient();
 	}
 
-	private void handle(PaymentInitializationErrorEventDto event, OrderDataSource orderDataSource,
+	private void handle(OrderCreatedEventDto event, OrderDataSource orderDataSource,
 			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource) {
 
-		log.info("Evento de erro na inicialização do pagamento recebido: {}", event.getOrderId());
+		log.info("Evento de erro na inicialização do pagamento recebido: {}", event.getId());
 
 		var orderUpdateStatusRequest = new OrderStatusRequest(OrderStatus.CANCELLED);
-		UpdateOrderStatusController.updateOrderStatus(event.getOrderId(), orderUpdateStatusRequest, orderDataSource,
+		UpdateOrderStatusController.updateOrderStatus(event.getId(), orderUpdateStatusRequest, orderDataSource,
 				paymentDataSource, eventPublisherSource);
 
-		log.info("Status do pedido atualizado após erro na inicialização do pagamento: {}", event.getOrderId());
+		log.info("Status do pedido atualizado após erro na inicialização do pagamento: {}", event.getId());
 	}
 }
