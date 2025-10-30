@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.google.gson.Gson;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
@@ -17,6 +17,7 @@ import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSourc
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
  * relacionados.
  * </p>
  */
-@Configuration @Slf4j
+@Configuration @Slf4j @RequiredArgsConstructor
 public class PaymentExpiredListenerConfig {
 
-	private final Gson gson = new Gson();
+	private final Gson gson;
 
 	@Bean
 	public ServiceBusProcessorClient paymentExpiredServiceBusProcessorClient(OrderDataSource orderDataSource,
