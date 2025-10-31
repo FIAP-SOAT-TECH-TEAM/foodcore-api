@@ -21,6 +21,9 @@ public class ServiceBusConfig {
 	/** Fila para eventos de pagamento expirado. */
 	public static final String PAYMENT_EXPIRED_QUEUE = "payment.expired.queue";
 
-	/** Nome da subscription para eventos de pedido criado. */
-	public static final String PAYMENT_ORDER_CREATED_TOPIC_SUBSCRIPTION = "payment.order.created.topic.subscription";
+	/** Fila para eventos de estoque estornado. */
+	public static final String STOCK_REVERSAL_QUEUE = "stock.reversal.queue";
+
+	/** Fila para eventos de pagamento estornado. */
+	public static final String PAYMENT_REVERSAL_QUEUE = "payment.reversal.queue";
 }

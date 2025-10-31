@@ -20,12 +20,10 @@ public class PaymentListener {
 
 	private final ServiceBusProcessorClient paymentApprovedServiceBusProcessorClient;
 	private final ServiceBusProcessorClient paymentExpiredServiceBusProcessorClient;
-	private final ServiceBusProcessorClient paymentInitializationErrorServiceBusProcessorClient;
 
 	@PostConstruct
 	public void run() {
 		paymentApprovedServiceBusProcessorClient.start();
 		paymentExpiredServiceBusProcessorClient.start();
-		paymentInitializationErrorServiceBusProcessorClient.start();
 	}
 }

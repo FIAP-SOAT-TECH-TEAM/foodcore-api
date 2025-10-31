@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.payment;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * atualização do pedido e publicação de eventos relacionados.
  * </p>
  */
-@Configuration @Slf4j @RequiredArgsConstructor
+@Configuration @Slf4j @RequiredArgsConstructor @Transactional
 public class PaymentApprovedListenerConfig {
 
 	private final Gson gson;
