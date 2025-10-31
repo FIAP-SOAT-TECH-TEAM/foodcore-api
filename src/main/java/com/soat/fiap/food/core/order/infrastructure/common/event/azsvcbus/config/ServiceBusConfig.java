@@ -1,6 +1,11 @@
 package com.soat.fiap.food.core.order.infrastructure.common.event.azsvcbus.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.azure.messaging.servicebus.ServiceBusClientBuilder;
+import com.azure.messaging.servicebus.ServiceBusSenderClient;
 
 /**
  * Classe de configuração do Azure Service Bus.
@@ -9,11 +14,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ServiceBusConfig {
 
+	@Value("${azsvcbus.connection-string}")
+	private String connectionString;
+
 	/** Nome do tópico para eventos de pedido criado. */
 	public static final String ORDER_CREATED_TOPIC = "order.created.topic";
 
-	/** Fila para eventos de pedido cancelado. */
-	public static final String ORDER_CANCELED_QUEUE = "order.canceled.queue";
+	/** Nome do tópico para eventos de pedido cancelado. */
+	public static final String ORDER_CANCELED_TOPIC = "order.canceled.topic";
 
 	/** Fila para eventos de pagamento aprovado. */
 	public static final String PAYMENT_APPROVED_QUEUE = "payment.approved.queue";
@@ -24,6 +32,21 @@ public class ServiceBusConfig {
 	/** Fila para eventos de estoque estornado. */
 	public static final String STOCK_REVERSAL_QUEUE = "stock.reversal.queue";
 
-	/** Fila para eventos de pagamento estornado. */
-	public static final String PAYMENT_REVERSAL_QUEUE = "payment.reversal.queue";
+	/** Nome da subscription para eventos de pedido criado. */
+	public static final String CATALOG_ORDER_CREATED_TOPIC_SUBSCRIPTION = "catalog.order.created.topic.subscription";
+
+	@Bean
+	public ServiceBusClientBuilder serviceBusClientBuilder() {
+		return new ServiceBusClientBuilder().connectionString(connectionString);
+	}
+
+	@Bean
+	public ServiceBusSenderClient orderCreatedSender(ServiceBusClientBuilder builder) {
+		return builder.sender().topicName(ORDER_CREATED_TOPIC).buildClient();
+	}
+
+	@Bean
+	public ServiceBusSenderClient orderCanceledSender(ServiceBusClientBuilder builder) {
+		return builder.sender().queueName(ORDER_CANCELED_TOPIC).buildClient();
+	}
 }

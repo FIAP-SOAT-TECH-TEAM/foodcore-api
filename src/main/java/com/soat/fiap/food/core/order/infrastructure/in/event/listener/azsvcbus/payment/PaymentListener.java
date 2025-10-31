@@ -20,10 +20,12 @@ public class PaymentListener {
 
 	private final ServiceBusProcessorClient paymentApprovedServiceBusProcessorClient;
 	private final ServiceBusProcessorClient paymentExpiredServiceBusProcessorClient;
+	private final ServiceBusProcessorClient paymentReversalServiceBusProcessorClient;
 
 	@PostConstruct
 	public void run() {
 		paymentApprovedServiceBusProcessorClient.start();
 		paymentExpiredServiceBusProcessorClient.start();
+		paymentReversalServiceBusProcessorClient.start();
 	}
 }

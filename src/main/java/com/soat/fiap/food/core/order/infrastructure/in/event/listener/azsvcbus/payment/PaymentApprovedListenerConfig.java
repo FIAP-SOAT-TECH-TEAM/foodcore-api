@@ -1,7 +1,5 @@
 package com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.payment;
 
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,15 +7,11 @@ import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
 import com.google.gson.Gson;
-import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
-import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
 import com.soat.fiap.food.core.order.infrastructure.common.event.azsvcbus.config.ServiceBusConfig;
-import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
-import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
-import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
+import com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.payment.handlers.PaymentApprovedHandler;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,34 +27,20 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentApprovedListenerConfig {
 
 	private final Gson gson;
+	private final PaymentApprovedHandler paymentApprovedHandler;
 
 	@Bean
-	public ServiceBusProcessorClient paymentApprovedServiceBusProcessorClient(OrderDataSource orderDataSource,
-			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource,
-			@Value("${azsvcbus.connection-string}") String connectionString) {
+	public ServiceBusProcessorClient paymentApprovedServiceBusProcessorClient(ServiceBusClientBuilder builder) {
 
-		return new ServiceBusClientBuilder().connectionString(connectionString)
-				.processor()
+		return builder.processor()
 				.queueName(ServiceBusConfig.PAYMENT_APPROVED_QUEUE)
 				.receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
 				.processMessage(context -> {
 					PaymentApprovedEventDto event = gson.fromJson(context.getMessage().getBody().toString(),
 							PaymentApprovedEventDto.class);
-					handle(event, orderDataSource, paymentDataSource, eventPublisherSource);
+					paymentApprovedHandler.handle(event);
 				})
 				.processError(context -> log.error("Erro ao processar pagamento aprovado", context.getException()))
 				.buildProcessorClient();
-	}
-
-	private void handle(PaymentApprovedEventDto event, OrderDataSource orderDataSource,
-			PaymentDataSource paymentDataSource, EventPublisherSource eventPublisherSource) {
-
-		log.info("Evento de pagamento aprovado recebido: {}", event.getOrderId());
-
-		var orderUpdateStatusRequest = new OrderStatusRequest(OrderStatus.PREPARING);
-		UpdateOrderStatusController.updateOrderStatus(event.getOrderId(), orderUpdateStatusRequest, orderDataSource,
-				paymentDataSource, eventPublisherSource);
-
-		log.info("Status do pedido atualizado após pagamento aprovado: {}", event.getOrderId());
 	}
 }

@@ -8,6 +8,7 @@ import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGatewa
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,8 +36,8 @@ public class ChargebackOrderController {
 
 			var chargebackOrderStatus = OrderStatus.CANCELLED;
 
-			EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, chargebackOrderStatus,
-					paymentGateway, orderGateway);
+			EnsureOrderPaymentIsValidUseCase.ensureOrderPaymentIsValid(id, chargebackOrderStatus, paymentGateway,
+					orderGateway);
 
 			log.info("Atualizando status do pedido {} para {}", id, chargebackOrderStatus);
 
