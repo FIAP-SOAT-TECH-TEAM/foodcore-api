@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
-import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
 import com.azure.messaging.servicebus.models.SubQueue;
 import com.google.gson.Gson;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCreatedEventDto;
@@ -36,7 +35,6 @@ public class StockDebitErrorListenerConfig {
 				.topicName(ServiceBusConfig.ORDER_CREATED_TOPIC)
 				.subscriptionName(ServiceBusConfig.CATALOG_ORDER_CREATED_TOPIC_SUBSCRIPTION)
 				.subQueue(SubQueue.DEAD_LETTER_QUEUE)
-				.receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
 				.processMessage(context -> {
 					OrderCreatedEventDto event = gson.fromJson(context.getMessage().getBody().toString(),
 							OrderCreatedEventDto.class);

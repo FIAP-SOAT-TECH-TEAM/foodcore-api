@@ -19,9 +19,11 @@ import lombok.RequiredArgsConstructor;
 public class StockListener {
 
 	private final ServiceBusProcessorClient stockReversalServiceBusProcessorClient;
+	private final ServiceBusProcessorClient stockDebitErrorServiceBusProcessorClient;
 
 	@PostConstruct
 	public void run() {
 		stockReversalServiceBusProcessorClient.start();
+		stockDebitErrorServiceBusProcessorClient.start();
 	}
 }
