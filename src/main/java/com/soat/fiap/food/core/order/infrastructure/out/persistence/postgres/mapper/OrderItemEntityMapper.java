@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.mapstruct.*;
 
-import com.soat.fiap.food.core.order.core.domain.model.OrderItem;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.OrderItemDTO;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.entity.OrderItemEntity;
 import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.mapper.shared.OrderItemPriceMapper;
@@ -18,12 +17,6 @@ import com.soat.fiap.food.core.shared.infrastructure.common.mapper.CycleAvoiding
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {OrderNumberMapper.class,
 		OrderItemPriceMapper.class})
 public interface OrderItemEntityMapper {
-
-	@Mapping(target = "order", ignore = true)
-	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(entity.getAuditInfo().getCreatedAt(), entity.getAuditInfo().getUpdatedAt()))")
-	OrderItem toDomain(OrderItemEntity entity, @Context CycleAvoidingMappingContext context);
-
-	List<OrderItem> toDomainList(List<OrderItemEntity> entities, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "order", ignore = true)
 	@Mapping(target = "orderItemPrice", source = ".", qualifiedByName = "fromQuantityAndPrice")
