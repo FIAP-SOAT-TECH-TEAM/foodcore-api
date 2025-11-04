@@ -2,8 +2,10 @@ package com.soat.fiap.food.core.order.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.order.core.domain.events.OrderCanceledEvent;
 import com.soat.fiap.food.core.order.core.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.order.core.domain.events.OrderReadyEvent;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.mappers.OrderCanceledEventMapper;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.mappers.OrderCreatedEventMapper;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.mappers.OrderReadyEventMapper;
 import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 
 /**
@@ -43,5 +45,17 @@ public class EventPublisherGateway {
 		var eventDto = OrderCanceledEventMapper.toDto(event);
 
 		eventPublisherSource.publishOrderCanceledEvent(eventDto);
+	}
+
+	/**
+	 * Publica um evento de pedido pronto.
+	 *
+	 * @param event
+	 *            Evento contendo informações do pedido pronto.
+	 */
+	public void publishOrderReadyEvent(OrderReadyEvent event) {
+		var eventDto = OrderReadyEventMapper.toDto(event);
+
+		eventPublisherSource.publishOrderReadyEvent(eventDto);
 	}
 }

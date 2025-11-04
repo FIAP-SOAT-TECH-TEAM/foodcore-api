@@ -17,6 +17,9 @@ public class ServiceBusConfig {
 	@Value("${azsvcbus.connection-string}")
 	private String connectionString;
 
+	/** Fila para eventos de pedido pronto. */
+	public static final String ORDER_READY_QUEUE = "order.ready.queue";
+
 	/** Nome do tópico para eventos de pedido criado. */
 	public static final String ORDER_CREATED_TOPIC = "order.created.topic";
 
@@ -48,5 +51,10 @@ public class ServiceBusConfig {
 	@Bean
 	public ServiceBusSenderClient orderCanceledSender(ServiceBusClientBuilder builder) {
 		return builder.sender().queueName(ORDER_CANCELED_TOPIC).buildClient();
+	}
+
+	@Bean
+	public ServiceBusSenderClient orderReadySender(ServiceBusClientBuilder builder) {
+		return builder.sender().queueName(ORDER_READY_QUEUE).buildClient();
 	}
 }

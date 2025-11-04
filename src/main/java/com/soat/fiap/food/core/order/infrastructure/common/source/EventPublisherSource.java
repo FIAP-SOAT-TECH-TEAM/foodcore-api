@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.order.infrastructure.common.source;
 
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCanceledEventDto;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderReadyEventDto;
 
 /**
  * Interface para publicação de eventos no sistema.
@@ -28,5 +29,13 @@ public interface EventPublisherSource {
 	 *            evento contendo informações do pedido cancelado.
 	 */
 	void publishOrderCanceledEvent(OrderCanceledEventDto orderCanceledEventDto);
+
+	/**
+	 * Publica um evento de pedido quando ele está pronto.
+	 *
+	 * @param orderReadyEventDto
+	 *            evento contendo informações do pedido quando ele está pronto.
+	 */
+	void publishOrderReadyEvent(OrderReadyEventDto orderReadyEventDto);
 
 }

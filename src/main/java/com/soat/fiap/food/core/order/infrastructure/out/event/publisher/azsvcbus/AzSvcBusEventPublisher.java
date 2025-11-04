@@ -6,6 +6,7 @@ import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import com.google.gson.Gson;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCanceledEventDto;
 import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+import com.soat.fiap.food.core.order.core.interfaceadapters.dto.events.OrderReadyEventDto;
 import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 
 	private final ServiceBusSenderClient orderCreatedSender;
 	private final ServiceBusSenderClient orderCanceledSender;
+	private final ServiceBusSenderClient orderReadySender;
 	private final Gson gson;
 
 	/**
@@ -56,6 +58,23 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 			log.info("Evento de pedido cancelado publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de pedido cancelado", ex);
+		}
+	}
+
+	/**
+	 * Publica um evento de pedido pronto na fila correspondente do Azure Service
+	 * Bus.
+	 *
+	 * @param event
+	 *            Evento de pedido pronto
+	 */
+	@Override
+	public void publishOrderReadyEvent(OrderReadyEventDto event) {
+		try {
+			orderReadySender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
+			log.info("Evento de pedido pronto publicado com sucesso: {}", event);
+		} catch (Exception ex) {
+			log.error("Erro ao publicar evento de pedido pronto", ex);
 		}
 	}
 }

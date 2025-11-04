@@ -1,9 +1,6 @@
 package com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api;
 
-import com.soat.fiap.food.core.order.core.application.usecases.EnsureOrderPaymentIsValidUseCase;
-import com.soat.fiap.food.core.order.core.application.usecases.GetOrderByIdUseCase;
-import com.soat.fiap.food.core.order.core.application.usecases.PublishOrderCanceledEventUseCase;
-import com.soat.fiap.food.core.order.core.application.usecases.UpdateOrderStatusUseCase;
+import com.soat.fiap.food.core.order.core.application.usecases.*;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderAlreadyHasStatusException;
 import com.soat.fiap.food.core.order.core.domain.vo.OrderStatus;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
@@ -61,6 +58,8 @@ public class UpdateOrderStatusController {
 
 			if (updatedOrder.getOrderStatus() == OrderStatus.CANCELLED) {
 				PublishOrderCanceledEventUseCase.publishOrderCanceledEvent(updatedOrder, eventPublisherGateway);
+			} else if (updatedOrder.getOrderStatus() == OrderStatus.READY) {
+				PublishOrderReadyEventUseCase.publishCreateOrderEvent(updatedOrder, eventPublisherGateway);
 			}
 
 			return OrderPresenter.toOrderStatusResponse(updatedOrder);
