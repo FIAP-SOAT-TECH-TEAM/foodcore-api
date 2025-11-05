@@ -33,7 +33,7 @@ public class OrderEntity {
 	@Column(name = "order_number", length = 20, nullable = false, unique = true)
 	private OrderNumber orderNumber;
 
-	@Enumerated(EnumType.STRING) @Column(name = "status", nullable = false, columnDefinition = "order_status_enum ")
+	@Enumerated(EnumType.STRING) @Column(name = "status", nullable = false, columnDefinition = "order_status_enum")
 	@JdbcTypeCode(NAMED_ENUM)
 	private OrderStatus orderStatus = OrderStatus.RECEIVED;
 

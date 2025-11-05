@@ -8,9 +8,9 @@ spring:
 
   # Configurações de banco de dados
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -52,23 +52,23 @@ spring:
 
   # Spring SMTP
   mail:
-    host: ${SPRING_MAIL_HOST}
-    port: ${SPRING_MAIL_PORT}
-    username: ${SPRING_MAIL_USERNAME}
-    password: ${SPRING_MAIL_PASSWD}
+    host: ${SPRING_MAIL_HOST:}
+    port: ${SPRING_MAIL_PORT:}
+    username: ${SPRING_MAIL_USERNAME:}
+    password: ${SPRING_MAIL_PASSWD:}
     properties:
-      mail.smtp.auth: ${SPRING_MAIL_AUTH_ENABLED}
-      mail.smtp.starttls.enable: ${SPRING_MAIL_TLS_ENABLED}
+      mail.smtp.auth: ${SPRING_MAIL_AUTH_ENABLED:}
+      mail.smtp.starttls.enable: ${SPRING_MAIL_TLS_ENABLED:}
 
 
 aws:
   cognito:
-    aws-credentials: ${AWS_CREDENTIALS}
-    userPoolId: ${AWS_COGNITO_USER_POOL_ID}
-    endpoint: ${AWS_COGNITO_ENDPOINT}
+    aws-credentials: ${AWS_CREDENTIALS:}
+    userPoolId: ${AWS_COGNITO_USER_POOL_ID:}
+    endpoint: ${AWS_COGNITO_ENDPOINT:}
 
 azsvcbus:
-  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING}
+  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING:}
 
 management:
   # Tracing Distribuído
@@ -78,7 +78,7 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: ${ZIPKIN_URL}/api/v2/spans
+      endpoint: ${ZIPKIN_URL:}/api/v2/spans
 
 # Configurações de logging
 logging:
@@ -91,10 +91,10 @@ logging:
     org.springdoc: DEBUG
 
 server:
-  address: ${SERVER_ADDRESS}
-  port: ${SERVER_PORT}
+  address: ${SERVER_ADDRESS:}
+  port: ${SERVER_PORT:}
   servlet:
-    context-path: ${SERVER_CONTEXT_PATH}
+    context-path: ${SERVER_CONTEXT_PATH:}
   compression:
     enabled: true
   error:
@@ -104,10 +104,10 @@ server:
 # Microsserviços
 catalog:
   service:
-    name: ${CATALOG_MS_SERVICE_NAME}
-    url: http://${CATALOG_MS_HOSTNAME}${server.servlet.context-path}
+    name: ${CATALOG_MS_SERVICE_NAME:}
+    url: http://${CATALOG_MS_HOSTNAME:}${server.servlet.context-path}
 
 payment:
   service:
-    name: ${PAYMENT_MS_SERVICE_NAME}
-    url: http://${PAYMENT_MS_HOSTNAME}${server.servlet.context-path}
+    name: ${PAYMENT_MS_SERVICE_NAME:}
+    url: http://${PAYMENT_MS_HOSTNAME:}${server.servlet.context-path}
