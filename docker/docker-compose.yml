@@ -9,7 +9,7 @@ services:
     image: foodcore-order-ms:latest
     container_name: foodcore-order-ms
     ports:
-      - "80:${SERVER_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     env_file:
       - .env
     healthcheck:
