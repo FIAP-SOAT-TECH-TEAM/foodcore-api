@@ -6,12 +6,12 @@ import com.soat.fiap.food.core.order.core.application.usecases.CreateOrderUseCas
 import com.soat.fiap.food.core.order.core.application.usecases.EnsureValidOrderItemsUseCase;
 import com.soat.fiap.food.core.order.core.application.usecases.PublishOrderCreatedEventUseCase;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.presenter.web.api.OrderPresenter;
+import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.CatalogGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.OrderGateway;
-import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.ProductGateway;
+import com.soat.fiap.food.core.order.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
-import com.soat.fiap.food.core.order.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderResponse;
 import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AuthenticatedUserGateway;
@@ -32,7 +32,7 @@ public class SaveOrderController {
 	 *            Pedido a ser salvo
 	 * @param orderDataSource
 	 *            Origem de dados para o gateway de pedido
-	 * @param productDataSource
+	 * @param catalogDatasource
 	 *            Origem de dados para o gateway de produto
 	 * @param authenticatedUserSource
 	 *            Origem de dados para o gateway de usuário autenticado
@@ -41,11 +41,11 @@ public class SaveOrderController {
 	 * @return Pedido salvo com identificadores atualizados
 	 */
 	public static OrderResponse saveOrder(CreateOrderRequest createOrderRequest, OrderDataSource orderDataSource,
-			ProductDataSource productDataSource, AuthenticatedUserSource authenticatedUserSource,
+			CatalogDataSource catalogDatasource, AuthenticatedUserSource authenticatedUserSource,
 			EventPublisherSource eventPublisherSource) {
 
 		var orderGateway = new OrderGateway(orderDataSource);
-		var productGateway = new ProductGateway(productDataSource);
+		var productGateway = new CatalogGateway(catalogDatasource);
 		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 		var authenticatedUserGateway = new AuthenticatedUserGateway((authenticatedUserSource));
 

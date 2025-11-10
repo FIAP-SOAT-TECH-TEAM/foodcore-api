@@ -6,7 +6,7 @@ import java.util.Objects;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderException;
 import com.soat.fiap.food.core.order.core.domain.exceptions.OrderItemException;
 import com.soat.fiap.food.core.order.core.domain.model.OrderItem;
-import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.ProductGateway;
+import com.soat.fiap.food.core.order.core.interfaceadapters.gateways.CatalogGateway;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,7 @@ public class EnsureValidOrderItemsUseCase {
 	 * @throws OrderItemException
 	 *             se houver divergência nos dados dos produtos
 	 */
-	public static void ensureValidOrderItems(List<OrderItem> orderItems, ProductGateway gateway) {
+	public static void ensureValidOrderItems(List<OrderItem> orderItems, CatalogGateway gateway) {
 
 		var productIds = orderItems.stream().map(OrderItem::getProductId).toList();
 

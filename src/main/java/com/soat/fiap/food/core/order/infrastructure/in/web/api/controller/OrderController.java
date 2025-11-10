@@ -11,10 +11,10 @@ import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.a
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.GetOrderByIdController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.SaveOrderController;
 import com.soat.fiap.food.core.order.core.interfaceadapters.bff.controller.web.api.UpdateOrderStatusController;
+import com.soat.fiap.food.core.order.infrastructure.common.source.CatalogDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.OrderDataSource;
 import com.soat.fiap.food.core.order.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.order.infrastructure.common.source.ProductDataSource;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.CreateOrderRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.request.OrderStatusRequest;
 import com.soat.fiap.food.core.order.infrastructure.in.web.api.dto.response.OrderResponse;
@@ -39,16 +39,16 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	private final OrderDataSource orderDataSource;
-	private final ProductDataSource productDataSource;
+	private final CatalogDataSource catalogDatasource;
 	private final PaymentDataSource paymentDataSource;
 	private final AuthenticatedUserSource authenticatedUserSource;
 	private final EventPublisherSource eventPublisherSource;
 
-	public OrderController(OrderDataSource orderDataSource, ProductDataSource productDataSource,
+	public OrderController(OrderDataSource orderDataSource, CatalogDataSource catalogDatasource,
 			PaymentDataSource paymentDataSource, AuthenticatedUserSource authenticatedUserSource,
 			EventPublisherSource eventPublisherSource) {
 		this.orderDataSource = orderDataSource;
-		this.productDataSource = productDataSource;
+		this.catalogDatasource = catalogDatasource;
 		this.eventPublisherSource = eventPublisherSource;
 		this.authenticatedUserSource = authenticatedUserSource;
 		this.paymentDataSource = paymentDataSource;
@@ -66,7 +66,7 @@ public class OrderController {
 	public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
 		log.debug("Requisição para criar novo pedido recebida");
 		OrderResponse orderResponse = SaveOrderController.saveOrder(createOrderRequest, orderDataSource,
-				productDataSource, authenticatedUserSource, eventPublisherSource);
+				catalogDatasource, authenticatedUserSource, eventPublisherSource);
 		return ResponseEntity.status(201).body(orderResponse);
 	}
 
