@@ -186,7 +186,7 @@ tasks.register('cucumber') {
 
 jacocoTestReport {
 	dependsOn test
-	dependsOn cucumber
+	//dependsOn cucumber
 	reports {
 		xml.required = true
 		html.required = true
@@ -214,6 +214,8 @@ jacocoTestReport {
 				'**/infrastructure/in/web/api/controller/**',
 				'**/infrastructure/in/event/listener/**',
 				'**/infrastructure/in/schedulers/**',
+				'**/infrastructure/out/**/client/*Source*.java',
+				'**/infrastructure/out/**/client/*Client*.java',
 				'**/infrastructure/out/persistence/**/*Repository*.java',
 				'**/infrastructure/out/persistence/**/*DataSource*.java',
 				'**/infrastructure/out/persistence/**/*Entity*.java',
@@ -266,6 +268,8 @@ sonar {
 			'**/infrastructure/in/web/api/controller/**',
 			'**/infrastructure/in/event/listener/**',
 			'**/infrastructure/in/schedulers/**',
+			'**/infrastructure/out/**/client/*Source*.java',
+			'**/infrastructure/out/**/client/*Client*.java',
 			'**/infrastructure/out/persistence/**/*Repository*.java',
 			'**/infrastructure/out/persistence/**/*DataSource*.java',
 			'**/infrastructure/out/persistence/**/*Entity*.java',

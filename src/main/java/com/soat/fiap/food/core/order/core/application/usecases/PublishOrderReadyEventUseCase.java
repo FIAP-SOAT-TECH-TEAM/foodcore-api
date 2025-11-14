@@ -1,5 +1,8 @@
 package com.soat.fiap.food.core.order.core.application.usecases;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.soat.fiap.food.core.order.core.application.inputs.mappers.OrderReadyEventMapper;
 import com.soat.fiap.food.core.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.order.core.domain.events.OrderReadyEvent;
@@ -25,6 +28,8 @@ public class PublishOrderReadyEventUseCase {
 	 */
 	public static void publishCreateOrderEvent(Order order, EventPublisherGateway gateway) {
 		var event = OrderReadyEventMapper.toEvent(order);
+		var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		event.setReadyAt(LocalDateTime.now().format(formatter));
 
 		log.info("Publicando evento de pedido pronto {}", order.getId());
 

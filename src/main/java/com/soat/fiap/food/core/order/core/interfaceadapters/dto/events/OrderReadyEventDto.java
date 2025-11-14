@@ -1,7 +1,6 @@
 package com.soat.fiap.food.core.order.core.interfaceadapters.dto.events;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import com.soat.fiap.food.core.order.core.domain.events.OrderReadyEvent;
 
@@ -17,5 +16,5 @@ public class OrderReadyEventDto {
 	private String clientId;
 	private String orderNumber;
 	private BigDecimal amount;
-	private LocalDateTime readyAt;
+	private String readyAt;
 }

@@ -69,11 +69,13 @@ public class NotificarUsuarioSteps extends CucumberSpringConfiguration {
 	 */
 	@Quando("um pedido estiver pronto")
 	public void umPedidoEstiverPronto() {
+		var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
 		orderReadyEventDto = new OrderReadyEventDto();
 		orderReadyEventDto.setClientId(clientId);
 		orderReadyEventDto.setOrderNumber("ORD-2025-00001");
 		orderReadyEventDto.setAmount(new BigDecimal("79.70"));
-		orderReadyEventDto.setReadyAt(LocalDateTime.now());
+		orderReadyEventDto.setReadyAt(LocalDateTime.now().format(formatter));
 
 		azSvcBusEventPublisher.publishOrderReadyEvent(orderReadyEventDto);
 	}
@@ -137,11 +139,10 @@ public class NotificarUsuarioSteps extends CucumberSpringConfiguration {
 	/**
 	 * Verifica se o e-mail enviado contém o momento em que o pedido ficou pronto.
 	 */
-	@Entao("o email deve conter o momento em que o pedido ficou pronto formatado para {string}")
-	public void oEmailDeveConterOMomentoEmQueOPedidoFicouProntoFormatadoPara(String format) {
+	@Entao("o email deve conter o momento em que o pedido ficou pronto")
+	public void oEmailDeveConterOMomentoEmQueOPedidoFicouPronto() {
 		var body = mailResponse.getString("[0].html");
-		var dateTimeFormatter = DateTimeFormatter.ofPattern(format);
-		var readyAtFormatted = orderReadyEventDto.getReadyAt().format(dateTimeFormatter);
+		var readyAtFormatted = orderReadyEventDto.getReadyAt();
 
 		assertThat(body).as("O e-mail deve conter o momento em que o pedido ficou pronto: %s", readyAtFormatted)
 				.contains(readyAtFormatted);

@@ -95,7 +95,7 @@ public class EventFixture {
 	 * @return instância de OrderReadyEventDto
 	 */
 	public static OrderReadyEventDto createOrderReadyEventDto(String clientId, String orderNumber, BigDecimal amount,
-			LocalDateTime readyAt) {
+			String readyAt) {
 		OrderReadyEventDto event = new OrderReadyEventDto();
 		event.setClientId(clientId);
 		event.setOrderNumber(orderNumber);

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +81,8 @@ class AzSvcBusEventPublisherTest {
 	@Test @DisplayName("Deve publicar evento de pedido pronto com sucesso")
 	void shouldPublishOrderReadyEventSuccessfully() {
 		// Arrange
-		var now = LocalDateTime.now();
+		var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		var now = LocalDateTime.now().format(formatter);
 		var event = EventFixture.createOrderReadyEventDto("USR-ABC", "ORD-456", new BigDecimal("120.00"), now);
 		when(gson.toJson(event)).thenReturn(String.format(
 				"{\"clientId\":\"USR-ABC\",\"orderNumber\":\"ORD-456\",\"amount\":120.00,\"readyAt\":\"%s\"}", now));
@@ -95,9 +97,10 @@ class AzSvcBusEventPublisherTest {
 	@Test @DisplayName("Deve publicar múltiplos eventos com sucesso")
 	void shouldPublishMultipleEventsSuccessfully() {
 		// Arrange
+		var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		var createdEvent = EventFixture.createOrderCreatedEventDto(10L, "ORD-999", "USR-XYZ", new BigDecimal("200.00"));
 		var canceledEvent = EventFixture.createOrderCanceledEventDto(11L, new BigDecimal("80.00"));
-		var now = LocalDateTime.now();
+		var now = LocalDateTime.now().format(formatter);
 		var readyEvent = EventFixture.createOrderReadyEventDto("USR-QWE", "ORD-777", new BigDecimal("300.00"), now);
 
 		when(gson.toJson(readyEvent)).thenReturn(String.format(

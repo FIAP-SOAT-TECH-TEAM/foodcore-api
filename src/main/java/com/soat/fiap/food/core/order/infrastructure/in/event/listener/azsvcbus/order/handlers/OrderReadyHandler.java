@@ -1,7 +1,5 @@
 package com.soat.fiap.food.core.order.infrastructure.in.event.listener.azsvcbus.order.handlers;
 
-import java.time.format.DateTimeFormatter;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +37,6 @@ public class OrderReadyHandler {
 
 		if (client != null && !client.getEmail().isEmpty() && !client.getName().isEmpty()) {
 			var subject = String.format("🍔 Seu pedido #%s está pronto!", event.getOrderNumber());
-			var dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-			var formatedReadyAt = event.getReadyAt().format(dateTimeFormatter);
 
 			var body = String.format(
 					"<div style='font-family:Arial,sans-serif; color:#333;'>"
@@ -49,7 +45,7 @@ public class OrderReadyHandler {
 							+ "<p><b>Valor do pedido:</b> R$ %.2f</p>" + "<p><b>Pronto às:</b> %s</p>"
 							+ "<hr style='border:none; border-top:1px solid #eee;'/>"
 							+ "<p>Equipe <b>Food Core</b> agradece sua preferência! 👨‍🍳</p>" + "</div>",
-					client.getName(), event.getOrderNumber(), event.getAmount(), formatedReadyAt);
+					client.getName(), event.getOrderNumber(), event.getAmount(), event.getReadyAt());
 
 			try {
 				mailDataSource.sendEmail(client.getEmail(), subject, body);
