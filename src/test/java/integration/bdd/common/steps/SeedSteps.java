@@ -1,44 +1,44 @@
 package integration.bdd.common.steps;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soat.fiap.food.core.order.infrastructure.out.persistence.postgres.repository.PostgresOrderDataSource;
-import io.cucumber.java.pt.Dado;
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import java.io.IOException;
-import java.util.List;
+import integration.bdd.common.config.CucumberSpringConfiguration;
+import io.cucumber.java.pt.Dado;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 
 /**
  * Classe responsável por definir Steps comuns relacionados a Seed de banco de
  * dados
  */
-public class SeedSteps {
+public class SeedSteps extends CucumberSpringConfiguration {
 
 	private static final Logger log = LoggerFactory.getLogger(SeedSteps.class);
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private DataSource dataSource;
 
-	@Autowired
-	protected PostgresOrderDataSource postgresOrderDataSource;
-
-	/**
-	 * Carrega pagamentos de um arquivo JSON e os insere no banco.
-	 *
-	 * @throws IOException
-	 *             se ocorrer erro na leitura do arquivo de dados.
-	 */
 	@Dado("que existem pedidos")
-	public void queExistemPedidos() throws IOException {
-		log.debug("Inserindo pagamentos no banco de dados");
+	public void queExistemPedidos() throws Exception {
+		log.debug("Inserindo pedidos no banco de dados");
 
-		var resource = new ClassPathResource("seeder/data.json");
-		List<PaymentEntity> payments = objectMapper.readValue(resource.getInputStream(), new TypeReference<>() {
-		});
-		postgresOrderDataSource.save(payments);
+		var connection = DataSourceUtils.getConnection(dataSource);
+		var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+		var liquibase = new Liquibase("db/changelog/db.changelog-master.yaml", new ClassLoaderResourceAccessor(),
+				database);
+
+		liquibase.update(new Contexts("local,dev"), new LabelExpression());
+
+		connection.close();
 	}
 }

@@ -2,7 +2,7 @@
 spring:
   datasource:
     # https://stackoverflow.com/questions/7988599/how-to-fake-enum-columns-in-the-h2-database-for-play-unit-testing
-    url: jdbc:h2:mem:testdb;INIT=CREATE DOMAIN IF NOT EXISTS order_status_enum as VARCHAR(255);DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
@@ -10,7 +10,7 @@ spring:
   # Configuração do JPA para testes
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
       properties:
         hibernate:
           dialect: org.hibernate.dialect.H2Dialect
@@ -58,6 +58,7 @@ management:
 logging:
   level:
     root: WARN
+    integration.bdd: DEBUG
     com.fastfood: DEBUG
     org.springframework.test: INFO
     org.hibernate.SQL: DEBUG

@@ -49,6 +49,6 @@ public class OrderEntity {
 
 	@PrePersist
 	public void generateOrderNumber() {
-		this.orderNumber = new OrderNumber(LocalDate.now().getYear(), this.id.intValue());
+		this.orderNumber = new OrderNumber(LocalDate.now().getYear(), this.id);
 	}
 }
