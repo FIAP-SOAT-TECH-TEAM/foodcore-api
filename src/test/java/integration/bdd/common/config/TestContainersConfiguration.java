@@ -96,7 +96,7 @@ public abstract class TestContainersConfiguration {
 	static String azSvcBusConnectionString;
 
 	@Container @ServiceConnection
-	private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:16-alpine");
+	private static final PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:16-alpine");
 
 	@Container
 	private static final MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(
